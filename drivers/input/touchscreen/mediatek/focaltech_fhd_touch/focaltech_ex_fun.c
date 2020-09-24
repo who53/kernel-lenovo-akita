@@ -297,14 +297,14 @@ static const struct file_operations fts_proc_fops = {
 static int fts_debug_write(
     struct file *filp, const char __user *buff, unsigned long len, void *data)
 {
-    u8 *writebuf = NULL;
-    u8 tmpbuf[PROC_BUF_SIZE] = { 0 };
-    int buflen = count;
-    int writelen = 0;
-    int ret = 0;
-    char tmp[25];
-    struct fts_ts_data *ts_data = fts_data;
-    struct ftxxxx_proc *proc = &ts_data->proc;
+	u8 *writebuf = NULL;
+	u8 tmpbuf[PROC_BUF_SIZE] = {0};
+	int buflen = len;
+	int writelen = 0;
+	int ret = 0;
+	char tmp[25];
+	struct fts_ts_data *ts_data = fts_data;
+	struct ftxxxx_proc *proc = &ts_data->proc;
 
     if ((buflen <= 1) || (buflen > PAGE_SIZE)) {
         FTS_ERROR("apk proc wirte count(%d>%d) fail", buflen, (int)PAGE_SIZE);
