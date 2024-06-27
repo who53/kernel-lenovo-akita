@@ -152,7 +152,7 @@ zinstall install:
 	$(Q)$(MAKE) $(build)=$(boot) $@
 
 %.dtb: scripts $(DRVGEN_FILE_LIST)
-	$(Q)$(MAKE) $(build)=$(boot)/dts mediatek/$@
+	$(Q)$(MAKE) $(build)=$(boot)/dts mediatek/$(notdir $@)
 
 PHONY += dtbs dtbs_install
 
