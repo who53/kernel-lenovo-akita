@@ -3177,6 +3177,12 @@ mipi_rx_ana_csi0b: mipi_rx_ana_csi0b@11c11000 {
 
 	led_pinctrl: led_pinctrl{
 		compatible = "mediatek,led_pinctrl";		
+	};  
+        md_auxadc:md_auxadc {
+		compatible = "mediatek,md_auxadc";
+		io-channels = <&auxadc 2>;
+		io-channel-names = "md-channel",
+			"md-battery";
 	};
 
 };
