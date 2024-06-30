@@ -3184,6 +3184,7 @@ mipi_rx_ana_csi0b: mipi_rx_ana_csi0b@11c11000 {
 		io-channel-names = "md-channel",
 			"md-battery";
 	};
+};
 
 #include "cust_mt6761_msdc.dtsi"
 #include "mt6357.dtsi"
