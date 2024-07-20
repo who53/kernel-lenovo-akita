@@ -168,7 +168,7 @@ FLASH_INFO_MODEL = Lenovo TB-8505X
 # we're running on the specific device. Note this is a last-resort
 # method, specifying FLASH_INFO_MANUFACTURER and FLASH_INFO_MODEL is
 # recommended.
-FLASH_INFO_CPU = MT8766B
+# FLASH_INFO_CPU = MT8766B
 
 # Space-separated list of supported device ids as reported by fastboot
 FLASH_INFO_DEVICE_IDS = akita_row_call
