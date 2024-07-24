@@ -561,3 +561,10 @@ CONFIG_RFKILL=y
 CONFIG_WLAN=y
 CONFIG_VIRT_WIFI=y
 CONFIG_OVERLAY_FS=y
+# CONFIG_FB_SYS_FILLRECT is not set
+# CONFIG_FB_SYS_COPYAREA is not set
+# CONFIG_FB_SYS_IMAGEBLIT is not set
+# CONFIG_FB_SYS_FOPS is not set
+# CONFIG_FB_VIRTUAL is not set
+CONFIG_SW_SYNC_USER=y
+CONFIG_ANDROID_BINDER_DEVICES="binder,hwbinder,vndbinder,anbox-binder,anbox-hwbinder,anbox-vndbinder"
