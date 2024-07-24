@@ -157,18 +157,18 @@ FLASH_USE_TELNET = 0
 # Device manufacturer. This must match the `ro.product.vendor.manufacturer`
 # Android property. If you don't want to specify this, leave it undefined,
 # FLASH_INFO_CPU will be checked instead.
-FLASH_INFO_MANUFACTURER = LENOVO
+# FLASH_INFO_MANUFACTURER = LENOVO
 
 # Device model. This must match the `ro.product.vendor.model`
 # Android property. If you don't want to specify this, leave it undefined,
 # FLASH_INFO_CPU will be checked instead.
-FLASH_INFO_MODEL = Lenovo TB-8505X
+# FLASH_INFO_MODEL = Lenovo TB-8505X
 
 # Device CPU. This will be grepped against /proc/cpuinfo to check if
 # we're running on the specific device. Note this is a last-resort
 # method, specifying FLASH_INFO_MANUFACTURER and FLASH_INFO_MODEL is
 # recommended.
-# FLASH_INFO_CPU = MT8766B
+FLASH_INFO_CPU = MT8766B
 
 # Space-separated list of supported device ids as reported by fastboot
 FLASH_INFO_DEVICE_IDS = akita_row_call
