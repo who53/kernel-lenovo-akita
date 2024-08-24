@@ -512,7 +512,7 @@ int vpu_unlock_set_power(struct vpu_lock_power *vpu_lock_power);
 #else
 #define LOG_DBG(format, args...)
 #endif
-#define LOG_INF(format, args...)    pr_info(VPU_TAG " " format, ##args)
+#define LOG_DBG(format, args...)    pr_info(VPU_TAG " " format, ##args)
 #define LOG_WRN(format, args...)    pr_info(VPU_TAG "[warn] " format, ##args)
 #define LOG_ERR(format, args...)    pr_info(VPU_TAG "[error] " format, ##args)
 
