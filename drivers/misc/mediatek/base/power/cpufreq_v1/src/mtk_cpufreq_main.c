@@ -1750,7 +1750,7 @@ static int __init _mt_cpufreq_pdrv_init(void)
 		arch_get_cluster_cpus(&cpu_mask, i);
 #endif
 		cpu_dvfs[i].cpu_id = cpumask_first(&cpu_mask);
-		tag_pr_info("cluster_id = %d, cluster_cpuid = %d\n",
+		tag_pr_debug("cluster_id = %d, cluster_cpuid = %d\n",
 		i, cpu_dvfs[i].cpu_id);
 	}
 
