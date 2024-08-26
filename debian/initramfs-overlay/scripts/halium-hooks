@@ -1,5 +1,3 @@
 halium_hook_recovery_ready() {
-    dd if=/dev/droidian/droidian-persistent of=/dev/disk/by-partlabel/boot bs=1M
-    echo "Droidian persistent boot copy completed" > /dev/kmsg
     reboot
 }
