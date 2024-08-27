@@ -50,7 +50,7 @@ jobs:
         rm -f linux*
         cp ../../kernel/*.deb .
         git add .
-        git commit -m "Update kernel packages"
+        git commit -m "Update kernel packages:${GITHUB_SHA::7}"
         git push
       env:
         PAT: ${{ secrets.PAT }}
