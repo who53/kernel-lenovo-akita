@@ -277,7 +277,7 @@ static int thub_polling_thread(void *arg)
 	        } else if (i_ACA_type == CURRENT_OTG ) {
 		   if(ACA_get_current_type_status(1,CURRENT_OTG)){
 			    vbus = battery_get_vbus();
-			    pr_info("thub detect[%d]:vbus (%d %d),ACA_type (%d %d)\n",__LINE__,THUB_BASE_VBUS,vbus,i_ACA_type,current_status);
+			    pr_debug("thub detect[%d]:vbus (%d %d),ACA_type (%d %d)\n",__LINE__,THUB_BASE_VBUS,vbus,i_ACA_type,current_status);
 			    if((current_status!=CURRENT_OTG)&&(vbus<THUB_BASE_VBUS)){
 			    	pr_info("thub detect:Adaptor plug out\n");
  #ifdef CONFIG_MTK_CHARGER
@@ -304,7 +304,7 @@ static int thub_polling_thread(void *arg)
 	        } else if (i_ACA_type == CURRENT_PLUG_OUT) {
 		    if(ACA_get_current_type_status(1,CURRENT_PLUG_OUT)){
 			    vbus = battery_get_vbus();
-			    pr_info("thub detect[%d]:vbus (%d %d),ACA_type (%d %d)\n",__LINE__,THUB_BASE_VBUS,vbus,i_ACA_type,current_status);
+			    pr_debug("thub detect[%d]:vbus (%d %d),ACA_type (%d %d)\n",__LINE__,THUB_BASE_VBUS,vbus,i_ACA_type,current_status);
 			    if((current_status!=CURRENT_PLUG_OUT)&&(vbus >THUB_BASE_VBUS)){
 			        pr_info("thub detect:OTG plug out\n");
 				current_status =  CURRENT_PLUG_OUT;
