@@ -3,8 +3,6 @@ name: Build Kernel Packages
 on:
   workflow_dispatch:
   push:
-    branches:
-      - droidian
 
 env:
   PACKAGES_DIR : /home/runner/pkg
