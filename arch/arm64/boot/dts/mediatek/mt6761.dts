@@ -1040,6 +1040,13 @@ firmware_class.path=/vendor/firmware";
 			"infra-ccif2-md";
 	};
 
+    md_auxadc:md_auxadc {
+		compatible = "mediatek,md_auxadc";
+		io-channels = <&auxadc 2>;
+		io-channel-names = "md-channel",
+			"md-battery";
+	};
+
 	bpi_bsi_slv0@1021e000 {
 		compatible = "mediatek,bpi_bsi_slv0";
 		reg = <0 0x1021e000 0 0x1000>;
