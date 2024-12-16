@@ -209,7 +209,6 @@ static GED_KPI g_asKPI[GED_KPI_TOTAL_ITEMS];
 static int g_i32Pos;
 static GED_THREAD_HANDLE ghThread;
 static unsigned int gx_dfps; /* variable to fix FPS*/
-static unsigned int gx_frc_mode; /* variable to fix FRC mode*/
 #ifdef GED_KPI_CPU_BOOST
 static unsigned int enable_cpu_boost = 1;
 #endif
@@ -220,7 +219,6 @@ static unsigned int ap_self_frc_detection_rate = 20;
 static unsigned int g_force_gpu_dvfs_fallback;
 #endif
 module_param(gx_dfps, uint, 0644);
-module_param(gx_frc_mode, uint, 0644);
 #ifdef GED_KPI_CPU_BOOST
 module_param(enable_cpu_boost, uint, 0644);
 #endif
