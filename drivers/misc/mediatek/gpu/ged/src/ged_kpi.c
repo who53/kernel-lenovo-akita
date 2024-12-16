@@ -268,9 +268,6 @@ static int boost_accum_cpu;
 static long target_t_cpu_remained = 16000000; /* for non-GED_KPI_MAX_FPS-FPS cases */
 /* static long target_t_cpu_remained_min = 8300000; */ /* default 0.5 vsync period */
 static int cpu_boost_policy;
-static int boost_extra;
-static int boost_amp;
-static int deboost_reduce;
 static int boost_upper_bound = 100;
 static void (*ged_kpi_cpu_boost_policy_fp)(GED_KPI_HEAD *psHead,
 	GED_KPI *psKPI);
@@ -278,9 +275,6 @@ module_param(target_t_cpu_remained, long, 0644);
 module_param(gx_force_cpu_boost, int, 0644);
 module_param(gx_top_app_pid, int, 0644);
 module_param(cpu_boost_policy, int, 0644);
-module_param(boost_extra, int, 0644);
-module_param(boost_amp, int, 0644);
-module_param(deboost_reduce, int, 0644);
 module_param(boost_upper_bound, int, 0644);
 module_param(enable_game_self_frc_detect, int, 0644);
 #endif
