@@ -46,6 +46,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "htbserver.h"
 #include "pvrsrv_apphint.h"
 
+#if !defined(NO_HARDWARE)
+#include <linux/module.h>
+#include <linux/types.h>
+static uint curr_gpu_freq;
+module_param(curr_gpu_freq, uint, 0664);
+#endif
+
 /******************************************************************************
  *
  * - A calibration period is started on power-on and after a DVFS transition,
@@ -426,6 +433,7 @@ static void _RGXGPUFreqCalibrationCalculate(PVRSRV_DEVICE_NODE *psDeviceNode,
 	    RGXFWIF_GET_GPU_CLOCK_FREQUENCY_HZ(psGpuDVFSTable->ui64CalibrationCRTimediff,
 	                                       psGpuDVFSTable->ui64CalibrationOSTimediff,
 	                                       ui32Remainder);
+	curr_gpu_freq = ui32EstCoreClockSpeed;
 
 	/* Update GPU frequency used by the driver for a given system layer frequency */
 	psTrackingData = &psGpuDVFSTable->asTrackingData[psGpuDVFSTable->ui32FreqIndex];
