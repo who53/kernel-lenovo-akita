@@ -558,6 +558,6 @@ config MTK_FD_LEAK_SPECIFIC_DEBUG
 
 config MTK_DM_VERITY_OFF
 	bool "Disable dm-verity"
-	default n
+	default y
 
 endmenu    # Misc
