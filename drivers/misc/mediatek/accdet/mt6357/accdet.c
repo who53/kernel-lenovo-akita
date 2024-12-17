@@ -733,12 +733,8 @@ static void send_accdet_status_event(u32 cable_type, u32 status)
 			status ? "PlugIn" : "PlugOut");
 		break;
 	case HEADSET_MIC:
-		/* when plug 4-pole out, 3-pole plug out should also be
-		 * reported for slow plug-in case
-		 */
-		if (status == 0)
-			input_report_switch(accdet_input_dev,
-				SW_HEADPHONE_INSERT, status);
+		input_report_switch(accdet_input_dev, SW_HEADPHONE_INSERT, 
+			status);
 		input_report_switch(accdet_input_dev, SW_MICROPHONE_INSERT,
 			status);
 		input_sync(accdet_input_dev);
