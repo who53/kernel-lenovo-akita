@@ -12,7 +12,7 @@ config MTK_AEE_FEATURE
 
 config MTK_AEE_AED
 	tristate "Enable AEE Kernel Exception Report Daemon"
-	default y
+	default n
 	help
 	  MTK_AEE_AED is the kernel config of aed, which is the base support for
 	  aee features. Such as:
@@ -22,7 +22,7 @@ config MTK_AEE_AED
 
 config MTK_AEE_IPANIC
 	tristate "Enable AEE Kernel Panic Dump"
-	default y
+	default n
 	help
 	  MTK_AEE_IPANIC is the kernel config of ipanic feature designed by
 	  MTK, which is the enhancement of kernel defaut panic flow, and combine
@@ -32,7 +32,7 @@ config MTK_AEE_IPANIC
 config MTK_AEE_HANG_DETECT
 	bool "hang detect monitor"
 	depends on MTK_AEE_FEATURE
-	default y
+	default n
 	help
 	  MTK_AEE_HANG_DETECT is the kernel config of hang feature
 	  designed by MTK, which is a debug feature for detecting device hang.
