@@ -204,7 +204,9 @@ static int __cache_sync_by_range(struct ion_client *client,
 			 (unsigned int)current->pid,
 			 size, start);
 		IONMSG("%s %s\n", __func__, ion_name);
+		#if defined(CONFIG_MTK_AEE_FEATURE)
 		aee_kernel_warning(ion_name, "[ION]: Wrong Address Range");
+		#endif
 		return -EFAULT;
 	}
 
@@ -233,11 +235,13 @@ static int __cache_sync_by_range(struct ion_client *client,
 			__inval_dcache_area((void *)start, size);
 		break;
 	default:
+		#if defined(CONFIG_MTK_AEE_FEATURE)
 		aee_kernel_warning(
 			"ION",
 			"Pass wrong cache sync type. (%d):clt(%s)cache(%d)\n",
 			(unsigned int)current->pid,
 			client->dbg_name, sync_type);
+		#endif
 		break;
 	}
 
