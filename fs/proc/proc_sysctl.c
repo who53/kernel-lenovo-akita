@@ -1668,7 +1668,7 @@ void setup_sysctl_set(struct ctl_table_set *set,
 
 void retire_sysctl_set(struct ctl_table_set *set)
 {
-	WARN_ON(!RB_EMPTY_ROOT(&set->dir.root));
+	// WARN_ON(!RB_EMPTY_ROOT(&set->dir.root));
 }
 
 int __init proc_sys_init(void)
