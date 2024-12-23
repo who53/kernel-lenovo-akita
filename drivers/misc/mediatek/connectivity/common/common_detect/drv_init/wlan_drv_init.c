@@ -57,6 +57,7 @@ int do_wlan_drv_init(int chip_id)
 	i_ret += ret;
 
 	switch (chip_id) {
+	case 0x6761:
 	case 0x6765:
 	case 0x6632:
 		/* WLAN driver init */
