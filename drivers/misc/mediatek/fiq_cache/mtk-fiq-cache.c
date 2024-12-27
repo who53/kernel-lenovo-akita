@@ -16,7 +16,9 @@
 #include <linux/kernel.h>
 #include <mt-plat/mtk_secure_api.h>
 
+#ifdef CONFIG_MTK_RAM_CONSOLE
 unsigned long *aee_rr_rec_fiq_cache_step_pa(void);
+#endif
 
 #ifdef CONFIG_MACH_MT6763
 DEFINE_SPINLOCK(cache_lock);
@@ -46,9 +48,11 @@ void mt_fiq_cache_flush_all(void)
 static int __init fiq_cache_init(void)
 {
 
+#ifdef CONFIG_MTK_RAM_CONSOLE
 	mt_secure_call(MTK_SIP_KERNEL_CACHE_FLUSH_INIT,
 		(unsigned long)aee_rr_rec_fiq_cache_step_pa(),
 		0, 0, 0);
+#endif
 
 	return 0;
 }
