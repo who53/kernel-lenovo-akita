@@ -82,7 +82,7 @@ static int __cpuinit cpu_callback(struct notifier_block *nfb,
 		if (hotcpu < nr_cpu_ids) {
 			kthread_bind(wk_tsk[hotcpu], hotcpu);
 			wake_up_process(wk_tsk[hotcpu]);
-			pr_notice("[WDK-test]cpu %d plug on ", hotcpu);
+			pr_debug("[WDK-test]cpu %d plug on ", hotcpu);
 		}
 		break;
 #ifdef CONFIG_HOTPLUG_CPU
@@ -90,7 +90,7 @@ static int __cpuinit cpu_callback(struct notifier_block *nfb,
 	case CPU_UP_CANCELED_FROZEN:
 	case CPU_DEAD:
 	case CPU_DEAD_FROZEN:
-		pr_notice("[WDK-test]:start Stop CPU:%d\n", hotcpu);
+		pr_debug("[WDK-test]:start Stop CPU:%d\n", hotcpu);
 
 		break;
 #endif				/* CONFIG_HOTPLUG_CPU */

@@ -24,7 +24,7 @@ struct tkcore_rpmb_request {
 
 #define TEE_RPMB_EMMC_CID_SIZE 16
 
-struct tee_rpmb_dev_info {
+struct tee_rpmb_dev_dbg {
 	uint8_t cid[TEE_RPMB_EMMC_CID_SIZE];
 	uint8_t rpmb_size_mult;
 	uint8_t rel_wr_sec_c;

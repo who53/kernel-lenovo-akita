@@ -279,7 +279,7 @@ static int mtk_dl1_awb_pcm_open(struct snd_pcm_substream *substream)
 		SNDRV_PCM_HW_PARAM_PERIODS);
 
 	if (ret < 0)
-		pr_warn("snd_pcm_hw_constraint_integer failed\n");
+		pr_debug("snd_pcm_hw_constraint_integer failed\n");
 
 	/* here open audio clocks */
 	AudDrv_Clk_On();
@@ -298,7 +298,7 @@ static int mtk_dl1_awb_pcm_open(struct snd_pcm_substream *substream)
 		return -1;
 
 	if (ret < 0) {
-		pr_warn("mtk_dl1_awb_pcm_close\n");
+		pr_debug("mtk_dl1_awb_pcm_close\n");
 		mtk_dl1_awb_pcm_close(substream);
 		return ret;
 	}
@@ -408,7 +408,7 @@ static int mtk_dl1_awb_pcm_copy(struct snd_pcm_substream *substream,
 			substream);
 
 	if (DMA_Read_Ptr >= Awb_Block->u4BufferSize) {
-		pr_warn("AudDrv_MEMIF_Read 1, DMA_Read_Ptr out of bound\n");
+		pr_debug("AudDrv_MEMIF_Read 1, DMA_Read_Ptr out of bound\n");
 		DMA_Read_Ptr %= Awb_Block->u4BufferSize;
 	}
 
@@ -461,7 +461,7 @@ static int mtk_dl1_awb_pcm_copy(struct snd_pcm_substream *substream,
 		Set_Mem_CopySizeByStream(Soc_Aud_Digital_Block_MEM_AWB,
 			substream, size_1);
 		if (DMA_Read_Ptr >= Awb_Block->u4BufferSize) {
-			pr_warn("%s 2, DMA_Read_Ptr out of bound\n", __func__);
+			pr_debug("%s 2, DMA_Read_Ptr out of bound\n", __func__);
 			DMA_Read_Ptr %= Awb_Block->u4BufferSize;
 		}
 		spin_unlock(&auddrv_Dl1AWBInCtl_lock);

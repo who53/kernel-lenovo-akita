@@ -121,7 +121,7 @@ static int wd_cpu_hot_plug_on_notify(int cpu)
 
 	wk_cpu_update_bit_flag(cpu, 1);
 	mtk_wdt_restart(WD_TYPE_NOLOCK);	/* for KICK external wdt */
-	pr_notice("WD wd_cpu_hot_plug_on_notify kick ext wd\n");
+	pr_debug("WD wd_cpu_hot_plug_on_notify kick ext wd\n");
 
 	return res;
 }
@@ -668,13 +668,13 @@ void arch_reset(char mode, const char *cmd)
 	struct wd_api *wd_api = NULL;
 
 	res = get_wd_api(&wd_api);
-	pr_info("arch_reset: cmd = %s\n", cmd ? : "NULL");
+	pr_debug("arch_reset: cmd = %s\n", cmd ? : "NULL");
 	dump_stack();
 	if (console_trylock()) {
-		pr_notice("we can get console_sem\n");
+		pr_debug("we can get console_sem\n");
 		console_unlock();
 	} else {
-		pr_notice("we cannot get console_sem\n");
+		pr_debug("we cannot get console_sem\n");
 	}
 
 	if (cmd && !strcmp(cmd, "charger")) {
@@ -698,7 +698,7 @@ void arch_reset(char mode, const char *cmd)
 		reboot |= WD_SW_RESET_KEEP_DDR_RESERVE;
 
 	if (res) {
-		pr_notice("arch_reset, get wd api error %d\n", res);
+		pr_debug("arch_reset, get wd api error %d\n", res);
 	} else {
 		/* disable dfd count in normal reboot */
 		if (!(reboot & WD_SW_RESET_KEEP_DDR_RESERVE))
@@ -711,9 +711,9 @@ static struct notifier_block mtk_restart_handler;
 static int mtk_arch_reset_handle(struct notifier_block *this,
 	unsigned long mode, void *cmd)
 {
-	pr_info("ARCH_RESET happen!!!\n");
+	pr_debug("ARCH_RESET happen!!!\n");
 	arch_reset(mode, cmd);
-	pr_info("ARCH_RESET end!!!!\n");
+	pr_debug("ARCH_RESET end!!!!\n");
 	return NOTIFY_DONE;
 }
 #ifdef FACTORY_VERSION
@@ -737,7 +737,7 @@ static int mtk_poweroff_notifier(struct notifier_block *nb,
 			chr_type = propval.intval;
 			if (code == SYS_POWER_OFF && (CHARGER_UNKNOWN != chr_type)) {
 				rtc_mark_meta_poweroff();
-				pr_info("mtk_poweroff_notifier\n");
+				pr_debug("mtk_poweroff_notifier\n");
 			}
 		}
 	}
@@ -753,18 +753,18 @@ static int __init mtk_arch_reset_init(void)
 	arm_pm_restart = NULL;
 	mtk_restart_handler.notifier_call = mtk_arch_reset_handle;
 	mtk_restart_handler.priority = 128;
-	pr_info("\n register_restart_handler- 0x%p, Notify call: - 0x%p\n",
+	pr_debug("\n register_restart_handler- 0x%p, Notify call: - 0x%p\n",
 		 &mtk_restart_handler, mtk_restart_handler.notifier_call);
 	ret = register_restart_handler(&mtk_restart_handler);
 	if (ret)
-		pr_notice("ARCH_RESET cannot register mtk_restart_handler!!!!\n");
-	pr_info("ARCH_RESET register mtk_restart_handler  ok!!!!\n");
+		pr_debug("ARCH_RESET cannot register mtk_restart_handler!!!!\n");
+	pr_debug("ARCH_RESET register mtk_restart_handler  ok!!!!\n");
 #ifdef FACTORY_VERSION
 	mtk_poweroff_handler.notifier_call = mtk_poweroff_notifier;
 	ret = register_reboot_notifier(&mtk_poweroff_handler);
 	if (ret)
-		pr_notice("ARCH_RESET cannot register mtk_poweroff_notifier!!!!\n");
-	pr_info("ARCH_RESET register mtk_poweroff_notifier  ok!!!!\n");
+		pr_debug("ARCH_RESET cannot register mtk_poweroff_notifier!!!!\n");
+	pr_debug("ARCH_RESET register mtk_poweroff_notifier  ok!!!!\n");
 #endif
 	return ret;
 }

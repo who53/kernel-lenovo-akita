@@ -223,7 +223,7 @@ static void enable_xo_low_power_mode(void)
 	value = BSI_read(0x08) | (1<<9);
 	BSI_write(0x08, value);
 	mdelay(5);
-	pr_notice("[xo] enable xo low power mode!\n");
+	pr_debug("[xo] enable xo low power mode!\n");
 }
 
 static void disable_xo_low_power_mode(void)
@@ -270,7 +270,7 @@ static void disable_xo_low_power_mode(void)
 	BSI_write(0x06, value);
 #endif
 
-	pr_notice("[xo] disable xo low power mode!\n");
+	pr_debug("[xo] disable xo low power mode!\n");
 }
 
 static void get_xo_status(void)
@@ -278,7 +278,7 @@ static void get_xo_status(void)
 	uint32_t status = 0;
 
 	status = (BSI_read(0x26) & BITS(4, 9))>>4;
-	pr_notice("[xo] status: 0x%x\n", status);
+	pr_debug("[xo] status: 0x%x\n", status);
 }
 
 void enable_32K_clock_to_pmic(void)
@@ -372,10 +372,10 @@ void enable_26M_clock_to_conn_rf(void)
 
 void enable_26M_clock_to_audio(void)
 {
-	pr_notice("@@@ toggle 1\n");
+	pr_debug("@@@ toggle 1\n");
 	BSI_write(0x29, 0x01);
 	udelay(100);
-	pr_notice("@@@ toggle 0\n");
+	pr_debug("@@@ toggle 0\n");
 	BSI_write(0x29, 0x00);
 	get_xo_status();
 }
@@ -383,10 +383,10 @@ void enable_26M_clock_to_audio(void)
 void disable_26M_clock_to_audio(void)
 {
 	BSI_write(0x25, BSI_read(0x25) | (1 << 12));
-	pr_notice("@@@ toggle 1\n");
+	pr_debug("@@@ toggle 1\n");
 	BSI_write(0x29, BSI_read(0x29) | (1 << 0));
 	udelay(100);
-	pr_notice("@@@ toggle 0\n");
+	pr_debug("@@@ toggle 0\n");
 	BSI_write(0x29, BSI_read(0x29) & ~(1 << 0));
 	get_xo_status();
 }
@@ -432,11 +432,11 @@ static ssize_t store_xo_capid(struct device *dev,
 
 		bsi_clock_enable(true);
 
-		pr_notice("original cap code: 0x%x\n", XO_trim_read());
+		pr_debug("original cap code: 0x%x\n", XO_trim_read());
 		XO_trim_write(capid);
 		mdelay(10);
 		xo_inst->cur_xo_capid = XO_trim_read();
-		pr_notice("write cap code 0x%x done. current cap code:0x%x\n",
+		pr_debug("write cap code 0x%x done. current cap code:0x%x\n",
 			  capid, xo_inst->cur_xo_capid);
 
 		bsi_clock_enable(false);
@@ -483,7 +483,7 @@ static ssize_t store_xo_board_offset(struct device *dev,
 		bsi_clock_enable(true);
 
 		capid = xo_inst->ori_xo_capid;
-		pr_notice("original cap code: 0x%x\n", capid);
+		pr_debug("original cap code: 0x%x\n", capid);
 
 		/* check sign bit */
 		if (offset & 0x40)
@@ -494,8 +494,8 @@ static ssize_t store_xo_board_offset(struct device *dev,
 		XO_trim_write(capid);
 		mdelay(10);
 		xo_inst->cur_xo_capid = XO_trim_read();
-		pr_notice("write cap code offset 0x%x done.", offset);
-		pr_notice("current cap code:0x%x\n", xo_inst->cur_xo_capid);
+		pr_debug("write cap code offset 0x%x done.", offset);
+		pr_debug("current cap code:0x%x\n", xo_inst->cur_xo_capid);
 
 		bsi_clock_enable(false);
 	}
@@ -568,7 +568,7 @@ static ssize_t store_xo_cmd(struct device *dev,
 			disable_26M_clock_to_audio();
 			break;
 		default:
-			pr_notice("cmd not support!\n");
+			pr_debug("cmd not support!\n");
 		}
 
 		bsi_clock_enable(false);
@@ -601,7 +601,7 @@ static ssize_t store_bsi_read(struct device *dev,
 		bsi_clock_enable(true);
 		value = BSI_read(addr);
 		bsi_clock_enable(false);
-		pr_notice("bsi read 0x%x: 0x%x\n", addr, value);
+		pr_debug("bsi read 0x%x: 0x%x\n", addr, value);
 	}
 
 	return size;
@@ -637,10 +637,10 @@ static ssize_t store_bsi_write(struct device *dev,
 			return ret;
 
 		bsi_clock_enable(true);
-		pr_notice("bsi read 0x%x: 0x%x\n", addr, BSI_read(addr));
+		pr_debug("bsi read 0x%x: 0x%x\n", addr, BSI_read(addr));
 		BSI_write(addr, value);
-		pr_notice("bsi write 0x%x: 0x%x\n", addr, value);
-		pr_notice("bsi read 0x%x: 0x%x\n", addr, BSI_read(addr));
+		pr_debug("bsi write 0x%x: 0x%x\n", addr, value);
+		pr_debug("bsi read 0x%x: 0x%x\n", addr, BSI_read(addr));
 		bsi_clock_enable(false);
 	}
 

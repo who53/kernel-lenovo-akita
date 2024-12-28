@@ -343,7 +343,7 @@ void sram_log_save(const char *msg, int count)
 	unsigned int ram_console_buffer_size = ram_console_size();
 
 	if (ram_console_buffer == NULL) {
-		pr_notice("ram console buffer is NULL!\n");
+		pr_debug("ram console buffer is NULL!\n");
 		return;
 	}
 
@@ -465,7 +465,7 @@ static int ram_console_check_header(struct ram_console_buffer *buffer)
 		|| buffer->off_pl + ALIGN(buffer->sz_pl, 64) != buffer->off_lpl
 		|| buffer->off_lk + ALIGN(buffer->sz_lk, 64)
 			!= buffer->off_llk) {
-		pr_notice("ram_console: ilegal header.");
+		pr_debug("ram_console: ilegal header.");
 		return -1;
 	} else
 		return 0;
@@ -477,13 +477,13 @@ static int ram_console_lastk_show(struct ram_console_buffer *buffer,
 	unsigned int wdt_status;
 
 	if (!buffer) {
-		pr_notice("ram_console: buffer is null\n");
+		pr_debug("ram_console: buffer is null\n");
 		seq_puts(m, "buffer is null.\n");
 		return 0;
 	}
 
 	if (ram_console_check_header(buffer) && buffer->sz_buffer != 0) {
-		pr_notice("ram_console: buffer %p, size %x(%x)\n",
+		pr_debug("ram_console: buffer %p, size %x(%x)\n",
 			buffer, buffer->sz_buffer,
 			ram_console_buffer->sz_buffer);
 		seq_write(m, buffer, ram_console_buffer->sz_buffer);
@@ -528,21 +528,21 @@ static int ram_console_lastk_show(struct ram_console_buffer *buffer,
 static void aee_rr_show_in_log(void)
 {
 	if (ram_console_check_header(ram_console_old))
-		pr_notice("ram_console: no valid data\n");
+		pr_debug("ram_console: no valid data\n");
 	else {
-		pr_notice("pmic & external buck: 0x%x\n",
+		pr_debug("pmic & external buck: 0x%x\n",
 				LAST_RRR_VAL(pmic_ext_buck));
-		pr_notice("ram_console: CPU notifier status: %d, %d, 0x%llx, %llu\n",
+		pr_debug("ram_console: CPU notifier status: %d, %d, 0x%llx, %llu\n",
 				LAST_RRR_VAL(hotplug_cpu_event),
 				LAST_RRR_VAL(hotplug_cb_index),
 				LAST_RRR_VAL(hotplug_cb_fp),
 				LAST_RRR_VAL(hotplug_cb_times));
-		pr_notice("ram_console: CPU HPS footprint: %llu, 0x%x, %d, %llu\n",
+		pr_debug("ram_console: CPU HPS footprint: %llu, 0x%x, %d, %llu\n",
 				LAST_RRR_VAL(hps_cb_enter_times),
 				LAST_RRR_VAL(hps_cb_cpu_bitmask),
 				LAST_RRR_VAL(hps_cb_footprint),
 				LAST_RRR_VAL(hps_cb_fp_times));
-		pr_notice("ram_console: last init function: 0x%lx\n",
+		pr_debug("ram_console: last init function: 0x%lx\n",
 				LAST_RRR_VAL(last_init_func));
 	}
 }
@@ -552,7 +552,7 @@ static int __init ram_console_save_old(struct ram_console_buffer *buffer,
 {
 	ram_console_old = kmalloc(buffer_size, GFP_KERNEL);
 	if (ram_console_old == NULL) {
-		pr_notice("ram_console: failed to allocate old buffer\n");
+		pr_debug("ram_console: failed to allocate old buffer\n");
 		return -1;
 	}
 	memcpy(ram_console_old, buffer, buffer_size);
@@ -624,7 +624,7 @@ static void *remap_lowmem(phys_addr_t start, phys_addr_t size)
 	vaddr = vmap(pages, page_count, VM_MAP, prot);
 	kfree(pages);
 	if (!vaddr) {
-		pr_notice("%s: Failed to map %u pages\n", __func__, page_count);
+		pr_debug("%s: Failed to map %u pages\n", __func__, page_count);
 		return NULL;
 	}
 
@@ -651,7 +651,7 @@ static int __init dt_get_ram_console(unsigned long node, const char *uname,
 	sram = (struct mem_desc_t *) of_get_flat_dt_prop(node,
 			"ram_console", NULL);
 	if (sram) {
-		pr_notice("ram_console:[DT] 0x%x@0x%x, 0x%x(0x%x)\n",
+		pr_debug("ram_console:[DT] 0x%x@0x%x, 0x%x(0x%x)\n",
 				sram->size, sram->start,
 				sram->def_type, sram->offset);
 		*(struct mem_desc_t *) data = *sram;
@@ -748,7 +748,7 @@ static void ram_console_parse_memory_info(struct mem_desc_t *sram,
 			mrdump_mini_set_addr_size(mini_addr, mini_size);
 			sram_log_store_set_addr_size(log_store_addr,
 					log_store_size);
-			pr_notice("ram_console: [DT] 0x%x@0x%x-0x%x@0x%x\n",
+			pr_debug("ram_console: [DT] 0x%x@0x%x-0x%x@0x%x\n",
 					pstore_size, pstore_addr,
 					mini_size, mini_addr);
 			memcpy(p_memory_info, memory_info,
@@ -784,12 +784,12 @@ static int __init ram_console_early_init(void)
 	if (of_scan_flat_dt(dt_get_ram_console, &sram)) {
 		ram_console_parse_memory_info(&sram, &memory_info_data);
 		if (sram.def_type == RAM_CONSOLE_DEF_SRAM) {
-			pr_info("ram_console: using sram:0x%x\n", sram.start);
+			pr_debug("ram_console: using sram:0x%x\n", sram.start);
 			start = sram.start;
 			size  = sram.size;
 			bufp = ioremap_wc(sram.start, sram.size);
 		} else if (sram.def_type == RAM_CONSOLE_DEF_DRAM) {
-			pr_info("ram_console: using dram:0x%x\n",
+			pr_debug("ram_console: using dram:0x%x\n",
 					memory_info_data.dram_addr);
 			start = memory_info_data.dram_addr;
 			size = memory_info_data.dram_size;
@@ -829,7 +829,7 @@ static int __init ram_console_early_init(void)
 #error "CONFIG_OF NOT defined"
 #endif
 
-	pr_notice("ram_console: buffer start: 0x%lx, size: 0x%zx\n",
+	pr_debug("ram_console: buffer start: 0x%lx, size: 0x%zx\n",
 			(unsigned long)bufp, buffer_size);
 	mtk_cpu_num = num_present_cpus();
 	if (bufp)
@@ -876,7 +876,7 @@ late_initcall(ram_console_late_init);
 
 int ram_console_pstore_reserve_memory(struct reserved_mem *rmem)
 {
-	pr_info("[memblock]%s: 0x%llx - 0x%llx (0x%llx)\n", "mediatek,pstore",
+	pr_debug("[memblock]%s: 0x%llx - 0x%llx (0x%llx)\n", "mediatek,pstore",
 		 (unsigned long long)rmem->base,
 		 (unsigned long long)rmem->base +
 		 (unsigned long long)rmem->size,
@@ -886,7 +886,7 @@ int ram_console_pstore_reserve_memory(struct reserved_mem *rmem)
 
 int ram_console_binary_reserve_memory(struct reserved_mem *rmem)
 {
-	pr_info("[memblock]%s: 0x%llx - 0x%llx (0x%llx)\n",
+	pr_debug("[memblock]%s: 0x%llx - 0x%llx (0x%llx)\n",
 		"mediatek,ram_console",
 		 (unsigned long long)rmem->base,
 		 (unsigned long long)rmem->base +
@@ -1806,7 +1806,7 @@ void aee_rr_rec_etc_mode(u8 val)
 int aee_rr_init_thermal_temp(int num)
 {
 	if (num < 0 || num >= THERMAL_RESERVED_TZS) {
-		pr_notice("%s num= %d\n", __func__, num);
+		pr_debug("%s num= %d\n", __func__, num);
 		return -1;
 	}
 
@@ -1820,7 +1820,7 @@ int aee_rr_rec_thermal_temp(int index, s8 val)
 		return -1;
 
 	if (index < 0 || index >= thermal_num) {
-		pr_notice("%s index= %d\n", __func__, index);
+		pr_debug("%s index= %d\n", __func__, index);
 		return -1;
 	}
 
@@ -1918,7 +1918,7 @@ void aee_rr_rec_ocp_target_limit(int id, u32 val)
 		return;
 
 	if (id < 0 || id >= 4) {
-		pr_notice("%s: Invalid ocp id = %d\n", __func__, id);
+		pr_debug("%s: Invalid ocp id = %d\n", __func__, id);
 		return;
 	}
 

@@ -336,7 +336,7 @@ static inline int check_version(void)
 		return ret;
 
 	/* CMP version is meaningless in this case and is thus not printed */
-	mc_dev_info("\n"
+	mc_dev_dbg("\n"
 		    "    product_id        = %s\n"
 		    "    version_mci       = 0x%08x\n"
 		    "    version_so        = 0x%08x\n"
@@ -586,7 +586,7 @@ static int mobicore_probe(struct platform_device *pdev)
 		g_ctx.mcd->of_node = pdev->dev.of_node;
 
 #ifdef MOBICORE_COMPONENT_BUILD_TAG
-	mc_dev_info("MobiCore %s", MOBICORE_COMPONENT_BUILD_TAG);
+	mc_dev_dbg("MobiCore %s", MOBICORE_COMPONENT_BUILD_TAG);
 #endif
 	/* Hardware does not support ARM TrustZone -> Cannot continue! */
 	if (!is_xen_domu() && !has_security_extensions()) {
@@ -705,7 +705,7 @@ static int __init mobicore_init(void)
 	 * Do not remove or change the following trace.
 	 * The string "MobiCore" is used to detect if the TEE is in of the image
 	 */
-	mc_dev_info("MobiCore mcDrvModuleApi version is %d.%d",
+	mc_dev_dbg("MobiCore mcDrvModuleApi version is %d.%d",
 		    MCDRVMODULEAPI_VERSION_MAJOR,
 		    MCDRVMODULEAPI_VERSION_MINOR);
 

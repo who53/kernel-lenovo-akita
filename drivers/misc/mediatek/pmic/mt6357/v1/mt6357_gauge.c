@@ -2217,10 +2217,10 @@ static ssize_t mt_kpdpwr_reset_show(struct device *dev,
        int32_t reg_val2 = 0;
 
        reg_val1 = upmu_get_reg_value(MT6357_STRUP_CON12);
-       pr_info("MT6357_STRUP_CON12 = 0x%x \n", reg_val1);
+       pr_debug("MT6357_STRUP_CON12 = 0x%x \n", reg_val1);
 
        reg_val2 = upmu_get_reg_value(MT6357_TOP_RST_MISC);
-       pr_info("MT6357_TOP_RST_MISC = 0x%x \n", reg_val2);
+       pr_debug("MT6357_TOP_RST_MISC = 0x%x \n", reg_val2);
 
        return snprintf(buf, 20, "0x%x  0x%x\n", reg_val1,reg_val2);
 }
@@ -2241,12 +2241,12 @@ static ssize_t mt_kpdpwr_reset_store(struct device *dev,
                pmic_set_register_value(PMIC_RG_PWRKEY_RST_EN, 0);
                pmic_set_register_value(PMIC_RG_PWRKEY_RST_TD, 2);
                pmic_set_register_value(PMIC_RG_STRUP_LONG_PRESS_EXT_EN, 0);
-               pr_info("%s: disable kpdpwr reset, time change to 14S\n", __func__);
+               pr_debug("%s: disable kpdpwr reset, time change to 14S\n", __func__);
        }else if (1 == value){
                pmic_set_register_value(PMIC_RG_PWRKEY_RST_EN, 1);
                pmic_set_register_value(PMIC_RG_PWRKEY_RST_TD, 0);
                pmic_set_register_value(PMIC_RG_STRUP_LONG_PRESS_EXT_EN, 1);
-               pr_info("%s:  enable kpdpwr reset, time change to 8S \n", __func__);
+               pr_debug("%s:  enable kpdpwr reset, time change to 8S \n", __func__);
        }
 
        return size;

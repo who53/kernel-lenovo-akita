@@ -197,7 +197,7 @@ static void copysinewavetohdmi(unsigned int channels)
 	if (channels == 0) {
 		memset_io((void *)(Bufferaddr), 0x7f7f7f7f,
 			  Hdmi_Buffer_length); /* using for observe data */
-		pr_info("use fix pattern Bufferaddr = %p Hhdmi_Buffer_length = %d\n",
+		pr_debug("use fix pattern Bufferaddr = %p Hhdmi_Buffer_length = %d\n",
 			Bufferaddr, Hdmi_Buffer_length);
 		return;
 	}
@@ -891,7 +891,7 @@ static int mtk_pcm_hdmi_copy(struct snd_pcm_substream *substream, int channel,
 			size_2 = copy_size - size_1;
 			if (!access_ok(VERIFY_READ, data_w_ptr, size_1)) {
 #if defined(HDMI_DEBUG_LOG)
-				pr_warn("HDMI_write 1ptr invalid data_w_ptr=%p, size_1=%d u4BufferSize=%d, u4DataRemained=%d",
+				pr_debug("HDMI_write 1ptr invalid data_w_ptr=%p, size_1=%d u4BufferSize=%d, u4DataRemained=%d",
 					data_w_ptr, size_1,
 					Afe_Block->u4BufferSize,
 					Afe_Block->u4DataRemained);
@@ -908,7 +908,7 @@ static int mtk_pcm_hdmi_copy(struct snd_pcm_substream *substream, int channel,
 						     Afe_WriteIdx_tmp),
 						    data_w_ptr, size_1))) {
 #if defined(HDMI_DEBUG_LOG)
-					pr_warn("HDMI_write Fail 1 copy from user");
+					pr_debug("HDMI_write Fail 1 copy from user");
 #endif
 					return -1;
 				}
@@ -923,7 +923,7 @@ static int mtk_pcm_hdmi_copy(struct snd_pcm_substream *substream, int channel,
 			if (!access_ok(VERIFY_READ, data_w_ptr + size_1,
 				       size_2)) {
 #if defined(HDMI_DEBUG_LOG)
-				pr_warn(
+				pr_debug(
 					"HDMI_write 2ptr invalid data_w_ptr=%p, size_1=%d, size_2=%d u4BufferSize=%d, u4DataRemained=%d",
 					data_w_ptr, size_1, size_2,
 					Afe_Block->u4BufferSize,
@@ -942,7 +942,7 @@ static int mtk_pcm_hdmi_copy(struct snd_pcm_substream *substream, int channel,
 						    (data_w_ptr + size_1),
 						    size_2))) {
 #if defined(HDMI_DEBUG_LOG)
-					pr_warn(
+					pr_debug(
 						"[mtk_pcm_hdmi_copy] Fail 2  copy from user");
 #endif
 					return -1;

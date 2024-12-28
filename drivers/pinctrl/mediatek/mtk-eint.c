@@ -473,7 +473,7 @@ int mtk_irq_domain_xlate_fourcell(struct irq_domain *d,
 	eint->eint_m = mode;
 	eint->eint_n = intspec[0];
 
-	pr_info("[pinctrl] mtk_pin[%d], eint=%d, mode=%d\n",
+	pr_debug("[pinctrl] mtk_pin[%d], eint=%d, mode=%d\n",
 		gpio, eint->eint_n, eint->eint_m);
 	return 0;
 }

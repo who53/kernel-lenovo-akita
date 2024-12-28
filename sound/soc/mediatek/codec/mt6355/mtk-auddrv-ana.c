@@ -94,7 +94,7 @@ void Ana_Set_Reg(unsigned int offset, unsigned int value, unsigned int mask)
 
 	Reg_Value = Ana_Get_Reg(offset);
 	if ((Reg_Value & mask) != (value & mask))
-		pr_warn("Ana_Set_Reg  mask = 0x%x ret = %d Reg_Value = 0x%x\n",
+		pr_debug("Ana_Set_Reg  mask = 0x%x ret = %d Reg_Value = 0x%x\n",
 			mask, ret, Reg_Value);
 #endif
 }

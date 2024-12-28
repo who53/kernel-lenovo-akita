@@ -66,11 +66,11 @@ static int __init dt_get_boot_reason(unsigned long node, const char *uname,
 			g_boot_reason = br_ptr[12] - '0';
 			atomic_set(&g_br_status, 1);
 		} else {
-			pr_warn("'boot_reason=' is not found\n");
+			pr_debug("'boot_reason=' is not found\n");
 		}
 		pr_debug("%s\n", ptr);
 	} else
-		pr_warn("'bootargs' is not found\n");
+		pr_debug("'bootargs' is not found\n");
 
 	/* break now */
 	return 1;
@@ -84,7 +84,7 @@ static void __init init_boot_reason(unsigned int line)
 	int rc;
 
 	if (atomic_read(&g_br_state) == BOOT_REASON_INITIALIZING) {
-		pr_notice("%s (%d) state(%d)\n", __func__, line,
+		pr_debug("%s (%d) state(%d)\n", __func__, line,
 			atomic_read(&g_br_state));
 		atomic_inc(&g_br_errcnt);
 		return;
@@ -97,7 +97,7 @@ static void __init init_boot_reason(unsigned int line)
 
 	if (g_boot_reason != BR_UNKNOWN) {
 		atomic_set(&g_br_state, BOOT_REASON_INITIALIZED);
-		pr_notice("boot_reason = %d\n", g_boot_reason);
+		pr_debug("boot_reason = %d\n", g_boot_reason);
 		return;
 	}
 
@@ -117,7 +117,7 @@ static void __init init_boot_reason(unsigned int line)
 enum boot_reason_t get_boot_reason(void)
 {
 	if (atomic_read(&g_br_state) != BOOT_REASON_INITIALIZED) {
-		pr_warn("fail, %s (%d) state(%d)\n", __func__, __LINE__,
+		pr_debug("fail, %s (%d) state(%d)\n", __func__, __LINE__,
 			atomic_read(&g_br_state));
 	}
 

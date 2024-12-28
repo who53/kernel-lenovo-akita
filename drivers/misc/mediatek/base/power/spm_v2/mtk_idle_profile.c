@@ -21,12 +21,12 @@
 #endif
 
 #define IDLE_PROF_TAG     "Power/swap "
-#define idle_prof_emerg(fmt, args...)   pr_notice(IDLE_PROF_TAG fmt, ##args)
-#define idle_prof_alert(fmt, args...)   pr_notice(IDLE_PROF_TAG fmt, ##args)
-#define idle_prof_crit(fmt, args...)    pr_notice(IDLE_PROF_TAG fmt, ##args)
-#define idle_prof_err(fmt, args...)     pr_notice(IDLE_PROF_TAG fmt, ##args)
-#define idle_prof_warn(fmt, args...)	pr_notice(IDLE_PROF_TAG fmt, ##args)
-#define idle_prof_notice(fmt, args...)  pr_notice(IDLE_PROF_TAG fmt, ##args)
+#define idle_prof_emerg(fmt, args...)   pr_debug(IDLE_PROF_TAG fmt, ##args)
+#define idle_prof_alert(fmt, args...)   pr_debug(IDLE_PROF_TAG fmt, ##args)
+#define idle_prof_crit(fmt, args...)    pr_debug(IDLE_PROF_TAG fmt, ##args)
+#define idle_prof_err(fmt, args...)     pr_debug(IDLE_PROF_TAG fmt, ##args)
+#define idle_prof_warn(fmt, args...)	pr_debug(IDLE_PROF_TAG fmt, ##args)
+#define idle_prof_notice(fmt, args...)  pr_debug(IDLE_PROF_TAG fmt, ##args)
 #define idle_prof_info(fmt, args...)    pr_debug(IDLE_PROF_TAG fmt, ##args)
 #define idle_prof_ver(fmt, args...)     pr_debug(IDLE_PROF_TAG fmt, ##args)
 #define idle_prof_dbg(fmt, args...)     pr_debug(IDLE_PROF_TAG fmt, ##args)

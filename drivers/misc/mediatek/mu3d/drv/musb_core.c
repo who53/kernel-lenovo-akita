@@ -176,7 +176,7 @@ static int set_musb_speed(const char *val, const struct kernel_param *kp)
 
 	musb_hal_speed = musb_speed;
 
-	pr_warn("musb_speed:%d, musb_hal_speed:%d\n", musb_speed, musb_hal_speed);
+	pr_debug("musb_speed:%d, musb_hal_speed:%d\n", musb_speed, musb_hal_speed);
 
 	return 0;
 }
@@ -2423,7 +2423,7 @@ static int __init musb_init_controller(struct device *dev, int nIrq, void __iome
 
 	pm_runtime_put(musb->controller);
 
-	dev_info(dev, "USB %s mode controller at %p using %s, IRQ %d\n", ({
+	dev_dbg(dev, "USB %s mode controller at %p using %s, IRQ %d\n", ({
 			char *s;
 
 			switch (musb->board_mode) {
@@ -3077,7 +3077,7 @@ static int __init musb_init(void)
 	if (usb_disabled())
 		return 0;
 
-	pr_info("%s: version " MUSB_VERSION ", ?dma?, otg (peripheral+host)\n", musb_driver_name);
+	pr_debug("%s: version " MUSB_VERSION ", ?dma?, otg (peripheral+host)\n", musb_driver_name);
 
 	/* USBIF */
 	prEntry = proc_create("mu3d_driver_init", 0644, NULL, &mu3d_proc_fops);
@@ -3111,7 +3111,7 @@ static int __init musb_init(void)
 	if (usb_disabled())
 		return 0;
 
-	pr_info("%s: version " MUSB_VERSION ", ?dma?, otg (peripheral+host)\n", musb_driver_name);
+	pr_debug("%s: version " MUSB_VERSION ", ?dma?, otg (peripheral+host)\n", musb_driver_name);
 	return platform_driver_register(&musb_driver_probe);
 }
 module_init(musb_init);

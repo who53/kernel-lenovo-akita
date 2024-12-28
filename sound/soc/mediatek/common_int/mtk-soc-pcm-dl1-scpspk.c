@@ -164,14 +164,14 @@ static int audio_dl1spk_hdoutput_set(struct snd_kcontrol *kcontrol,
 	pr_debug("%s()\n", __func__);
 	if (ucontrol->value.enumerated.item[0] >
 	    ARRAY_SIZE(dl1_scpspk_HD_output)) {
-		pr_warn("return -EINVAL\n");
+		pr_debug("return -EINVAL\n");
 		return -EINVAL;
 	}
 
 	mdl1spk_hdoutput_control = ucontrol->value.integer.value[0];
 
 	if (GetMemoryPathEnable(Soc_Aud_Digital_Block_MEM_HDMI) == true) {
-		pr_warn("return HDMI enabled\n");
+		pr_debug("return HDMI enabled\n");
 		return 0;
 	}
 	return 0;
@@ -336,7 +336,7 @@ mtk_pcm_dl1spk_pointer(struct snd_pcm_substream *substream)
 		Afe_Block->u4DMAReadIdx += Afe_consumed_bytes;
 		Afe_Block->u4DMAReadIdx %= Afe_Block->u4BufferSize;
 		if (Afe_Block->u4DataRemained < 0) {
-			pr_info("[AudioWarn] underflow, u4DataRemained=%d\n",
+			pr_debug("[AudioWarn] underflow, u4DataRemained=%d\n",
 				Afe_Block->u4DataRemained);
 			underflow = true;
 		}
@@ -618,14 +618,14 @@ static int mtk_pcm_dl1spk_open(struct snd_pcm_substream *substream)
 	mspkiv_meminterface_type =
 		get_usage_digital_block(AUDIO_USAGE_SCP_SPK_IV_DATA);
 	if (mspkiv_meminterface_type < 0) {
-		pr_info("%s get_pcm_mem_id err using VUL_Data2 as default\n",
+		pr_debug("%s get_pcm_mem_id err using VUL_Data2 as default\n",
 			__func__);
 		mspkiv_meminterface_type = Soc_Aud_Digital_Block_MEM_VUL_DATA2;
 	}
 	mspkiv_io_type =
 		get_usage_digital_block_io(AUDIO_USAGE_SCP_SPK_IV_DATA);
 	if (mspkiv_io_type < 0) {
-		pr_info("%s io block err using VUL_Data2 as default\n",
+		pr_debug("%s io block err using VUL_Data2 as default\n",
 			__func__);
 		mspkiv_io_type = Soc_Aud_AFE_IO_Block_MEM_VUL_DATA2;
 	}
@@ -1047,7 +1047,7 @@ static int mtk_dl1spk_probe(struct platform_device *pdev)
 	if (pdev->dev.of_node)
 		dev_set_name(&pdev->dev, "%s", MT_SOC_DL1SCPSPK_PCM);
 
-	pr_info("%s: dev name %s\n", __func__, dev_name(&pdev->dev));
+	pr_debug("%s: dev name %s\n", __func__, dev_name(&pdev->dev));
 
 	mDev = &pdev->dev;
 
@@ -1072,11 +1072,11 @@ static int smartpa_scp_event(struct notifier_block *this, unsigned long event,
 	spin_lock_irqsave(&pdl1spkMemControl->substream_lock, flags);
 	switch (event) {
 	case SCP_EVENT_READY:
-		pr_info("%s(), SCP_EVENT_READY\n", __func__);
+		pr_debug("%s(), SCP_EVENT_READY\n", __func__);
 		atomic_set(&scp_reset_done, 1);
 		break;
 	case SCP_EVENT_STOP:
-		pr_info("%s(), SCP_EVENT_STOP\n", __func__);
+		pr_debug("%s(), SCP_EVENT_STOP\n", __func__);
 		atomic_set(&stop_send_ipi_flag, 1);
 		atomic_set(&scp_reset_done, 0);
 		break;
@@ -1092,7 +1092,7 @@ static struct notifier_block smartpa_scp_ready_notifier = {
 
 static int mtk_afe_dl1spk_probe(struct snd_soc_platform *platform)
 {
-	pr_info("mtk_afe_dl1spk_probe\n");
+	pr_debug("mtk_afe_dl1spk_probe\n");
 	snd_soc_add_platform_controls(platform, Audio_snd_dl1spk_controls,
 				      ARRAY_SIZE(Audio_snd_dl1spk_controls));
 	/* allocate dram */

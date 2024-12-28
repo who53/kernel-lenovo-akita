@@ -79,13 +79,13 @@ void msdc_ldo_power(u32 on, struct regulator *reg, int voltage_mv, u32 *status)
 	if (on) { /* want to power on */
 		if (*status == 0) {  /* can power on */
 			/*Comment out to reduce log */
-			/* pr_warn("msdc power on<%d>\n", voltage_uv); */
+			/* pr_debug("msdc power on<%d>\n", voltage_uv); */
 			msdc_regulator_set_and_enable(reg, voltage_uv);
 			*status = voltage_uv;
 		} else if (*status == voltage_uv) {
 			pr_err("msdc power on <%d> again!\n", voltage_uv);
 		} else {
-			pr_warn("msdc change<%d> to <%d>\n",
+			pr_debug("msdc change<%d> to <%d>\n",
 				*status, voltage_uv);
 			regulator_disable(reg);
 			msdc_regulator_set_and_enable(reg, voltage_uv);
@@ -93,7 +93,7 @@ void msdc_ldo_power(u32 on, struct regulator *reg, int voltage_mv, u32 *status)
 		}
 	} else {  /* want to power off */
 		if (*status != 0) {  /* has been powerred on */
-			pr_warn("msdc power off\n");
+			pr_debug("msdc power off\n");
 			regulator_disable(reg);
 			*status = 0;
 		} else {

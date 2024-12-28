@@ -127,7 +127,7 @@ module_param(rtc_eosc_cali_td, int, 0664);
 
 void hal_rtc_set_abb_32k(u16 enable)
 {
-	pr_notice("ABB 32k not support\n");
+	pr_debug("ABB 32k not support\n");
 }
 
 u16 hal_rtc_get_gpio_32k_status(void)
@@ -136,7 +136,7 @@ u16 hal_rtc_get_gpio_32k_status(void)
 
 	con = rtc_read(RTC_CON);
 
-	pr_notice("RTC_GPIO 32k status(RTC_CON=0x%x)\n", con);
+	pr_debug("RTC_GPIO 32k status(RTC_CON=0x%x)\n", con);
 
 	if (con & RTC_CON_F32KOB)
 		return 0;
@@ -173,7 +173,7 @@ void hal_rtc_set_gpio_32k_status(u16 user, bool enable)
 		rtc_write(RTC_PDN1, pdn1);
 		rtc_write_trigger();
 	}
-	pr_notice("RTC_GPIO user %d enable = %d 32k (0x%x), RTC_CON = %x\n",
+	pr_debug("RTC_GPIO user %d enable = %d 32k (0x%x), RTC_CON = %x\n",
 		      user, enable, pdn1, rtc_read(RTC_CON));
 }
 
@@ -185,7 +185,7 @@ void rtc_spar_alarm_clear_wait(void)
 		if ((rtc_read(RTC_BBPU) & RTC_BBPU_CLR) == 0)
 			break;
 		else if (sched_clock() > timeout) {
-			pr_notice("%s, spar/alarm clear time out, %x,\n",
+			pr_debug("%s, spar/alarm clear time out, %x,\n",
 				__func__, rtc_read(RTC_BBPU));
 			break;
 		}
@@ -254,7 +254,7 @@ void rtc_enable_k_eosc(void)
 
 	osc32 = rtc_read(RTC_OSC32CON);
 	rtc_xosc_write(osc32 | RTC_EMBCK_SRC_SEL, true);
-	pr_notice("RTC_enable_k_eosc\n");
+	pr_debug("RTC_enable_k_eosc\n");
 }
 
 void rtc_disable_2sec_reboot(void)
@@ -286,7 +286,7 @@ void hal_rtc_bbpu_pwdn(bool charger_status)
 		rtc_write_trigger();
 	}
 	/* lpsd */
-	pr_notice("clear lpsd solution\n");
+	pr_debug("clear lpsd solution\n");
 	bbpu = RTC_BBPU_KEY | RTC_BBPU_CLR | RTC_BBPU_PWREN;
 	rtc_write(RTC_BBPU, bbpu);
 
@@ -300,7 +300,7 @@ void hal_rtc_bbpu_pwdn(bool charger_status)
 	rtc_write(RTC_BBPU,
 			rtc_read(RTC_BBPU) | RTC_BBPU_KEY | RTC_BBPU_RELOAD);
 	rtc_write_trigger();
-	pr_notice("RTC_AL_MASK= 0x%x RTC_IRQ_EN= 0x%x\n",
+	pr_debug("RTC_AL_MASK= 0x%x RTC_IRQ_EN= 0x%x\n",
 			rtc_read(RTC_AL_MASK), rtc_read(RTC_IRQ_EN));
 	/* lpsd */
 	rtc_bbpu_pwrdown(true);
@@ -344,13 +344,13 @@ bool hal_rtc_is_pwron_alarm(struct rtc_time *nowtm, struct rtc_time *tm)
 	u16 pdn1;
 
 	pdn1 = rtc_read(RTC_PDN1);
-	pr_notice("pdn1 = 0x%4x\n", pdn1);
+	pr_debug("pdn1 = 0x%4x\n", pdn1);
 
 	if (pdn1 & RTC_PDN1_PWRON_TIME) {	/* power-on time is available */
 
-		pr_notice("pdn1 = 0x%4x\n", pdn1);
+		pr_debug("pdn1 = 0x%4x\n", pdn1);
 		hal_rtc_get_tick_time(nowtm);
-		pr_notice("pdn1 = 0x%4x\n", pdn1);
+		pr_debug("pdn1 = 0x%4x\n", pdn1);
 		/* SEC has carried */
 		if (rtc_read(RTC_TC_SEC) < nowtm->tm_sec)
 			hal_rtc_get_tick_time(nowtm);
@@ -455,14 +455,14 @@ void rtc_clock_enable(int enable)
 
 void rtc_lpsd_restore_al_mask(void)
 {
-	pr_notice("rtc_lpsd_restore_al_mask\n");
+	pr_debug("rtc_lpsd_restore_al_mask\n");
 
 	rtc_write(RTC_BBPU,
 			rtc_read(RTC_BBPU) | RTC_BBPU_KEY | RTC_BBPU_RELOAD);
 	rtc_write_trigger();
-	pr_notice("1st RTC_AL_MASK = 0x%x\n", rtc_read(RTC_AL_MASK));
+	pr_debug("1st RTC_AL_MASK = 0x%x\n", rtc_read(RTC_AL_MASK));
 	/* mask DOW */
 	rtc_write(RTC_AL_MASK, RTC_AL_MASK_DOW);
 	rtc_write_trigger();
-	pr_notice("2nd RTC_AL_MASK = 0x%x\n", rtc_read(RTC_AL_MASK));
+	pr_debug("2nd RTC_AL_MASK = 0x%x\n", rtc_read(RTC_AL_MASK));
 }

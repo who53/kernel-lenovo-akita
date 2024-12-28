@@ -1006,7 +1006,7 @@ static void musb_rx_reinit
 	} else {
 		csr = musb_readw(ep->regs, MUSB_RXCSR);
 		if (csr & MUSB_RXCSR_RXPKTRDY)
-			pr_warn("[MUSB]rx%d, packet/%d ready?\n", ep->epnum,
+			pr_debug("[MUSB]rx%d, packet/%d ready?\n", ep->epnum,
 				musb_readw(ep->regs, MUSB_RXCOUNT));
 
 		/* musb_h_flush_rxfifo(ep, MUSB_RXCSR_CLRDATATOG); */

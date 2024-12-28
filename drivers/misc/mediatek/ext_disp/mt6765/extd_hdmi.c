@@ -1144,7 +1144,7 @@ int hdmi_set_resolution(int res)
 	return 0;
 }
 
-int hdmi_get_dev_info(int is_sf, void *info)
+int hdmi_get_dev_dbg(int is_sf, void *info)
 {
 	int ret = 0;
 
@@ -1554,7 +1554,7 @@ const struct EXTD_DRIVER *EXTD_HDMI_Driver(void)
 		.set_audio_enable = hdmi_set_audio_enable,
 		.set_audio_format = hdmi_audio_config,
 		.set_resolution = hdmi_set_resolution,
-		.get_dev_info = hdmi_get_dev_info,
+		.get_dev_dbg = hdmi_get_dev_dbg,
 		.get_capability = hdmi_get_capability,
 		.get_edid = hdmi_get_edid,
 		.wait_vsync = NULL,

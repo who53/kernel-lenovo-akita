@@ -224,7 +224,7 @@ static int mc_cpu_offline(int cpu)
 	/* Chose the first online CPU and switch! */
 	for_each_online_cpu(i) {
 		if (cpu != i) {
-			mc_dev_info("CPU %d is dying, switching to %d",
+			mc_dev_dbg("CPU %d is dying, switching to %d",
 				    cpu, i);
 			return mc_switch_core(i);
 		}
@@ -263,7 +263,7 @@ static struct notifier_block mobicore_cpu_notifer = {
 #else
 static int nq_cpu_down_prep(unsigned int cpu)
 {
-	mc_dev_info("CPU #%d is going to die", cpu);
+	mc_dev_dbg("CPU #%d is going to die", cpu);
 	return mc_cpu_offline(cpu);
 }
 #endif
@@ -433,7 +433,7 @@ int mc_fastcall_init(void)
 
 	ret = sched_setscheduler(fastcall_thread, SCHED_RR, &param);
 	if (ret)
-		mc_dev_info("cannot set tee_fastcall priority: %d\n", ret);
+		mc_dev_dbg("cannot set tee_fastcall priority: %d\n", ret);
 #else
 	set_user_nice(fastcall_thread, MIN_NICE);
 #endif

@@ -1126,12 +1126,12 @@ static int do_test_mode(struct usba_udc *udc)
 	case 0x0100:
 		/* Test_J */
 		usba_writel(udc, TST, USBA_TST_J_MODE);
-		dev_info(dev, "Entering Test_J mode...\n");
+		dev_dbg(dev, "Entering Test_J mode...\n");
 		break;
 	case 0x0200:
 		/* Test_K */
 		usba_writel(udc, TST, USBA_TST_K_MODE);
-		dev_info(dev, "Entering Test_K mode...\n");
+		dev_dbg(dev, "Entering Test_K mode...\n");
 		break;
 	case 0x0300:
 		/*
@@ -1151,7 +1151,7 @@ static int do_test_mode(struct usba_udc *udc)
 			dev_err(dev, "Test_SE0_NAK: ep0 not mapped\n");
 		} else {
 			usba_ep_writel(ep, CTL_ENB, USBA_EPT_ENABLE);
-			dev_info(dev, "Entering Test_SE0_NAK mode...\n");
+			dev_dbg(dev, "Entering Test_SE0_NAK mode...\n");
 		}
 		break;
 	case 0x0400:
@@ -1171,7 +1171,7 @@ static int do_test_mode(struct usba_udc *udc)
 			memcpy_toio(ep->fifo, test_packet_buffer,
 					sizeof(test_packet_buffer));
 			usba_ep_writel(ep, SET_STA, USBA_TX_PK_RDY);
-			dev_info(dev, "Entering Test_Packet mode...\n");
+			dev_dbg(dev, "Entering Test_Packet mode...\n");
 		}
 		break;
 	default:
@@ -2129,14 +2129,14 @@ static int usba_udc_probe(struct platform_device *pdev)
 		dev_err(&pdev->dev, "Unable to map I/O memory, aborting.\n");
 		return ret;
 	}
-	dev_info(&pdev->dev, "MMIO registers at 0x%08lx mapped at %p\n",
+	dev_dbg(&pdev->dev, "MMIO registers at 0x%08lx mapped at %p\n",
 		 (unsigned long)regs->start, udc->regs);
 	udc->fifo = devm_ioremap(&pdev->dev, fifo->start, resource_size(fifo));
 	if (!udc->fifo) {
 		dev_err(&pdev->dev, "Unable to map FIFO, aborting.\n");
 		return ret;
 	}
-	dev_info(&pdev->dev, "FIFO at 0x%08lx mapped at %p\n",
+	dev_dbg(&pdev->dev, "FIFO at 0x%08lx mapped at %p\n",
 		 (unsigned long)fifo->start, udc->fifo);
 
 	platform_set_drvdata(pdev, udc);

@@ -17,7 +17,7 @@
 
 INT32 kalBoostCpu(P_GLUE_INFO_T prGlueInfo, UINT_32 core_num)
 {
-	pr_warn("enter kalBoostCpu, core_num:%d\n", core_num);
+	pr_debug("enter kalBoostCpu, core_num:%d\n", core_num);
 	/* mt_ppm_sysboost_core(BOOST_BY_WIFI, core_num); */
 	if (core_num == 0) {
 		mt_ppm_sysboost_set_core_limit(BOOST_BY_WIFI, 0, -1, -1);

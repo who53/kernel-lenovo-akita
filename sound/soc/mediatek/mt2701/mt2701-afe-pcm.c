@@ -196,13 +196,13 @@ static void mt2701_afe_i2s_shutdown(struct snd_pcm_substream *substream,
 
 	ret = mt2701_afe_i2s_path_shutdown(substream, dai, 0);
 	if (ret != 0)
-		dev_info(afe->dev, "mt2701_afe_i2s_path_shutdown fail %d", ret);
+		dev_dbg(afe->dev, "mt2701_afe_i2s_path_shutdown fail %d", ret);
 	if (afe_priv->i2s_path[i2s_num].i2s_mode == I2S_COCLK) {
 		/* need to disable i2s-out path when disable i2s-in */
 		if (substream->stream == SNDRV_PCM_STREAM_CAPTURE) {
 			ret = mt2701_afe_i2s_path_shutdown(substream, dai, 1);
 			if (ret != 0)
-				dev_info(afe->dev, "mt2701_afe_i2s_path_shutdown fail %d", ret);
+				dev_dbg(afe->dev, "mt2701_afe_i2s_path_shutdown fail %d", ret);
 		}
 	}
 
@@ -3403,7 +3403,7 @@ static int mt2701_afe_pcm_dev_probe(struct platform_device *pdev)
 
 	ret = mt2701_afe_resume(&pdev->dev);
 	if (ret != 0) {
-		dev_info(dev, "err_open_audio_clock\n");
+		dev_dbg(dev, "err_open_audio_clock\n");
 		goto err_open_audio_clock;
 	}
 
@@ -3431,7 +3431,7 @@ static int mt2701_afe_pcm_dev_remove(struct platform_device *pdev)
 	if (!pm_runtime_status_suspended(&pdev->dev)) {
 		ret = mt2701_afe_suspend(&pdev->dev);
 		if (ret != 0) {
-			dev_info(&pdev->dev, "err_close_audio_clock\n");
+			dev_dbg(&pdev->dev, "err_close_audio_clock\n");
 			goto err_close_audio_clock;
 		}
 	}

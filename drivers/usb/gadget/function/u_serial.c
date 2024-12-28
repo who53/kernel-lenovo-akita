@@ -32,7 +32,7 @@
 
 #include "u_serial.h"
 
-#define ACM_LOG(fmt, args...) pr_notice("USB_ACM " fmt, ## args)
+#define ACM_LOG(fmt, args...) pr_debug("USB_ACM " fmt, ## args)
 
 /*
  * This component encapsulates the TTY layer glue needed to provide basic
@@ -529,7 +529,7 @@ static void gs_rx_push(unsigned long _port)
 
 		default:
 			/* presumably a transient fault */
-			pr_warn("ttyGS%d: unexpected RX status %d\n",
+			pr_debug("ttyGS%d: unexpected RX status %d\n",
 				port->port_num, req->status);
 			/* FALLTHROUGH */
 		case 0:
@@ -589,7 +589,7 @@ static void gs_rx_push(unsigned long _port)
 			if (do_push)
 				tasklet_schedule(&port->push);
 			else
-				pr_warn("ttyGS%d: RX not scheduled?\n",
+				pr_debug("ttyGS%d: RX not scheduled?\n",
 					port->port_num);
 		}
 	}
@@ -1077,7 +1077,7 @@ static void gs_complete_out(struct usb_ep *ep, struct usb_request *req)
 
 	switch (req->status) {
 	default:
-		pr_warn("%s: unexpected %s status %d\n",
+		pr_debug("%s: unexpected %s status %d\n",
 			__func__, ep->name, req->status);
 	case 0:
 		/* normal completion */

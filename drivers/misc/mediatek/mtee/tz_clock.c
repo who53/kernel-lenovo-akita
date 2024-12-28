@@ -27,7 +27,7 @@ int KREE_ServEnableClock(u32 op, u8 uparam[REE_SERVICE_BUFFER_SIZE])
 	struct clk *clk = mtee_clk_get(param->clk_name);
 
 	if (clk == NULL) {
-		pr_warn("can not find clk %s\n", param->clk_name);
+		pr_debug("can not find clk %s\n", param->clk_name);
 		return TZ_RESULT_ERROR_GENERIC;
 	}
 
@@ -42,7 +42,7 @@ int KREE_ServDisableClock(u32 op, u8 uparam[REE_SERVICE_BUFFER_SIZE])
 	struct clk *clk = mtee_clk_get(param->clk_name);
 
 	if (clk == NULL) {
-		pr_warn("can not find clk %s\n", param->clk_name);
+		pr_debug("can not find clk %s\n", param->clk_name);
 		return TZ_RESULT_ERROR_GENERIC;
 	}
 

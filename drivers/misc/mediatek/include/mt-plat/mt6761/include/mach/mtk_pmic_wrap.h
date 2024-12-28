@@ -55,9 +55,9 @@ extern unsigned int gPWRAPDBGADDR;
 		if (addr == gPWRAPDBGADDR) { \
 			unsigned int rdata; \
 			pwrap_read(addr, &rdata); \
-			pr_notice("pwrap addr = 0x%x\n", addr); \
-			pr_notice("pwrap wdata = 0x%x\n", wdata); \
-			pr_notice("pwrap rdata = 0x%x\n", rdata); \
+			pr_debug("pwrap addr = 0x%x\n", addr); \
+			pr_debug("pwrap wdata = 0x%x\n", wdata); \
+			pr_debug("pwrap rdata = 0x%x\n", rdata); \
 			WARN_ON(1); \
 		} \
 } while (0)

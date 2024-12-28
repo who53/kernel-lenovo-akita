@@ -18,7 +18,7 @@
 extern int musbfsh_debug;
 #define yprintk(facility, format, args...)	do { \
 		if (musbfsh_debug) { \
-			pr_notice("[MUSBFSH] %s %d: " format, \
+			pr_debug("[MUSBFSH] %s %d: " format, \
 					__func__, __LINE__, ## args); \
 		} \
 	} while (0)
@@ -27,7 +27,7 @@ extern int musbfsh_debug;
 
 /* for critical log */
 #define zprintk(facility, format, args...) \
-		pr_notice("[MUSBFSH] %s %d: " format, \
+		pr_debug("[MUSBFSH] %s %d: " format, \
 				__func__, __LINE__, ## args)
 
 #define WARNING(fmt, args...) zprintk(KERN_WARNING, fmt, ## args)

@@ -57,7 +57,7 @@ static int flat_get_data(int *probability, int *status)
 
 	err = sensor_get_data_from_hub(ID_FLAT, &data);
 	if (err < 0) {
-		pr_warn("sensor_get_data_from_hub fail!!\n");
+		pr_debug("sensor_get_data_from_hub fail!!\n");
 		return -1;
 	}
 	time_stamp = data.time_stamp;
@@ -99,7 +99,7 @@ static int flat_recv_data(struct data_unit_t *event, void *reserved)
 	int err = 0;
 
 	if (event->flush_action == FLUSH_ACTION)
-		pr_warn("flat do not support flush\n");
+		pr_debug("flat do not support flush\n");
 	else if (event->flush_action == DATA_ACTION)
 		err = situation_notify(ID_FLAT);
 	return err;
@@ -116,19 +116,19 @@ static int flat_local_init(void)
 	ctl.is_support_wake_lock = true;
 	err = situation_register_control_path(&ctl, ID_FLAT);
 	if (err) {
-		pr_warn("register flat control path err\n");
+		pr_debug("register flat control path err\n");
 		goto exit;
 	}
 
 	data.get_data = flat_get_data;
 	err = situation_register_data_path(&data, ID_FLAT);
 	if (err) {
-		pr_warn("register flat data path err\n");
+		pr_debug("register flat data path err\n");
 		goto exit;
 	}
 	err = scp_sensorHub_data_registration(ID_FLAT, flat_recv_data);
 	if (err) {
-		pr_warn("SCP_sensorHub_data_registration fail!!\n");
+		pr_debug("SCP_sensorHub_data_registration fail!!\n");
 		goto exit_create_attr_failed;
 	}
 	return 0;

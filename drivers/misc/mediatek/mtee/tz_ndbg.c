@@ -54,13 +54,13 @@ int entropy_thread(void *arg)
 	while (!kthread_should_stop()) {
 		ret = KREE_CreateSession(TZ_TA_NDBG_UUID, &ndbg_session);
 		if (ret != TZ_RESULT_SUCCESS) {
-			pr_warn("CreateSession error %d\n", ret);
+			pr_debug("CreateSession error %d\n", ret);
 			break;
 		}
 
 		ret = KREE_CreateSession(TZ_TA_MEM_UUID, &mem_session);
 		if (ret != TZ_RESULT_SUCCESS) {
-			pr_warn("Create memory session error %d\n", ret);
+			pr_debug("Create memory session error %d\n", ret);
 			break;
 		}
 
@@ -69,7 +69,7 @@ int entropy_thread(void *arg)
 		ret = KREE_RegisterSharedmem(mem_session, &shm_handle,
 						&shm_param);
 		if (ret != TZ_RESULT_SUCCESS) {
-			pr_warn("KREE_RegisterSharedmem Error: %s\n",
+			pr_debug("KREE_RegisterSharedmem Error: %s\n",
 				TZ_GetErrorString(ret));
 			break;
 		}
@@ -97,7 +97,7 @@ int entropy_thread(void *arg)
 					param);
 
 		if (ret != TZ_RESULT_SUCCESS)
-			pr_warn("TZCMD_NDBG_INIT fail, reason:%s\n",
+			pr_debug("TZCMD_NDBG_INIT fail, reason:%s\n",
 				TZ_GetErrorString(ret));
 
 		pr_debug("Start to wait reseed.\n");
@@ -108,25 +108,25 @@ int entropy_thread(void *arg)
 							TZPT_VALUE_OUTPUT),
 					param);
 		if (ret != TZ_RESULT_SUCCESS)
-			pr_warn("TZCMD_NDBG_WAIT_RESEED fail, reason:%s\n",
+			pr_debug("TZCMD_NDBG_WAIT_RESEED fail, reason:%s\n",
 				TZ_GetErrorString(ret));
 
 		pr_debug("OK to send reseed.\n");
 
 		ret = KREE_UnregisterSharedmem(mem_session, shm_handle);
 		if (ret != TZ_RESULT_SUCCESS) {
-			pr_warn("KREE_UnregisterSharedmem Error: %s\n",
+			pr_debug("KREE_UnregisterSharedmem Error: %s\n",
 				TZ_GetErrorString(ret));
 			break;
 		}
 
 		ret = KREE_CloseSession(ndbg_session);
 		if (ret != TZ_RESULT_SUCCESS)
-			pr_warn("CloseSession error %d\n", ret);
+			pr_debug("CloseSession error %d\n", ret);
 
 		ret = KREE_CloseSession(mem_session);
 		if (ret != TZ_RESULT_SUCCESS)
-			pr_warn("Close memory session error %d\n", ret);
+			pr_debug("Close memory session error %d\n", ret);
 
 	}
 
@@ -153,13 +153,13 @@ int test_random_thread(void *arg)
 	while (!kthread_should_stop()) {
 		ret = KREE_CreateSession(TZ_TA_NDBG_UUID, &ndbg_session);
 		if (ret != TZ_RESULT_SUCCESS) {
-			pr_warn("CreateSession error %d\n", ret);
+			pr_debug("CreateSession error %d\n", ret);
 			return 1;
 		}
 
 		ret = KREE_CreateSession(TZ_TA_MEM_UUID, &mem_session);
 		if (ret != TZ_RESULT_SUCCESS) {
-			pr_warn("Create memory session error %d\n", ret);
+			pr_debug("Create memory session error %d\n", ret);
 			return 1;
 		}
 
@@ -168,7 +168,7 @@ int test_random_thread(void *arg)
 		ret = KREE_RegisterSharedmem(mem_session, &shm_handle,
 						&shm_param);
 		if (ret != TZ_RESULT_SUCCESS) {
-			pr_warn("KREE_RegisterSharedmem Error: %s\n",
+			pr_debug("KREE_RegisterSharedmem Error: %s\n",
 				TZ_GetErrorString(ret));
 			return 1;
 		}
@@ -187,18 +187,18 @@ int test_random_thread(void *arg)
 
 		ret = KREE_UnregisterSharedmem(mem_session, shm_handle);
 		if (ret != TZ_RESULT_SUCCESS) {
-			pr_warn("KREE_UnregisterSharedmem Error: %s\n",
+			pr_debug("KREE_UnregisterSharedmem Error: %s\n",
 				TZ_GetErrorString(ret));
 			return 1;
 		}
 
 		ret = KREE_CloseSession(ndbg_session);
 		if (ret != TZ_RESULT_SUCCESS)
-			pr_warn("CloseSession error %d\n", ret);
+			pr_debug("CloseSession error %d\n", ret);
 
 		ret = KREE_CloseSession(mem_session);
 		if (ret != TZ_RESULT_SUCCESS)
-			pr_warn("Close memory session error %d\n", ret);
+			pr_debug("Close memory session error %d\n", ret);
 
 		ssleep(5);
 	}

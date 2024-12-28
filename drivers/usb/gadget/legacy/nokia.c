@@ -356,7 +356,7 @@ static int nokia_bind(struct usb_composite_dev *cdev)
 		goto err_put_cfg1;
 
 	usb_composite_overwrite_options(cdev, &coverwrite);
-	dev_info(&gadget->dev, "%s\n", NOKIA_LONG_NAME);
+	dev_dbg(&gadget->dev, "%s\n", NOKIA_LONG_NAME);
 
 	return 0;
 

@@ -271,7 +271,7 @@ static int set_aud_clk_mosi(bool _enable)
 			aud_clk_mosi_counter--;
 		} else {
 			aud_clk_mosi_counter = 0;
-			pr_info("%s(), counter %d <= 0\n", __func__,
+			pr_debug("%s(), counter %d <= 0\n", __func__,
 				aud_clk_mosi_counter);
 		}
 
@@ -447,7 +447,7 @@ int AudDrv_GPIO_PMIC_Select(int bEnable)
 				pinctrlaud,
 				aud_gpios[GPIO_PMIC_MODE1].gpioctrl);
 			if (retval)
-				pr_info("could not set aud_gpios[GPIO_PMIC_MODE1] pins\n");
+				pr_debug("could not set aud_gpios[GPIO_PMIC_MODE1] pins\n");
 		}
 	} else {
 		if (aud_gpios[GPIO_PMIC_MODE0].gpio_prepare) {
@@ -455,7 +455,7 @@ int AudDrv_GPIO_PMIC_Select(int bEnable)
 				pinctrlaud,
 				aud_gpios[GPIO_PMIC_MODE0].gpioctrl);
 			if (retval)
-				pr_info("could not set aud_gpios[GPIO_PMIC_MODE0] pins\n");
+				pr_debug("could not set aud_gpios[GPIO_PMIC_MODE0] pins\n");
 		}
 	}
 	mutex_unlock(&gpio_request_mutex);
@@ -473,14 +473,14 @@ int AudDrv_GPIO_I2S_Select(int bEnable)
 			retval = pinctrl_select_state(
 				pinctrlaud, aud_gpios[GPIO_I2S_MODE1].gpioctrl);
 			if (retval)
-				pr_info("could not set aud_gpios[GPIO_I2S_MODE1] pins\n");
+				pr_debug("could not set aud_gpios[GPIO_I2S_MODE1] pins\n");
 		}
 	} else {
 		if (aud_gpios[GPIO_I2S_MODE0].gpio_prepare) {
 			retval = pinctrl_select_state(
 				pinctrlaud, aud_gpios[GPIO_I2S_MODE0].gpioctrl);
 			if (retval)
-				pr_info("could not set aud_gpios[GPIO_I2S_MODE0] pins\n");
+				pr_debug("could not set aud_gpios[GPIO_I2S_MODE0] pins\n");
 		}
 	}
 #endif
@@ -510,13 +510,13 @@ int AudDrv_GPIO_EXTAMP_Select(int bEnable, int mode)
 					pinctrlaud,
 					aud_gpios[GPIO_EXTAMP_LOW].gpioctrl);
 				if (retval)
-					pr_info("could not set aud_gpios[GPIO_EXTAMP_LOW] pins\n");
+					pr_debug("could not set aud_gpios[GPIO_EXTAMP_LOW] pins\n");
 				udelay(2);
 				retval = pinctrl_select_state(
 					pinctrlaud,
 					aud_gpios[GPIO_EXTAMP_HIGH].gpioctrl);
 				if (retval)
-					pr_info("could not set aud_gpios[GPIO_EXTAMP_HIGH] pins\n");
+					pr_debug("could not set aud_gpios[GPIO_EXTAMP_HIGH] pins\n");
 				udelay(2);
 			}
 		}
@@ -526,7 +526,7 @@ int AudDrv_GPIO_EXTAMP_Select(int bEnable, int mode)
 				pinctrlaud,
 				aud_gpios[GPIO_EXTAMP_LOW].gpioctrl);
 			if (retval)
-				pr_info("could not set aud_gpios[GPIO_EXTAMP_LOW] pins\n");
+				pr_debug("could not set aud_gpios[GPIO_EXTAMP_LOW] pins\n");
 		}
 	}
 	mutex_unlock(&gpio_request_mutex);
@@ -599,13 +599,13 @@ int AudDrv_GPIO_EXTAMP2_Select(int bEnable, int mode)
 					pinctrlaud,
 					aud_gpios[GPIO_EXTAMP2_LOW].gpioctrl);
 				if (retval)
-					pr_info("could not set aud_gpios[GPIO_EXTAMP2_LOW] pins\n");
+					pr_debug("could not set aud_gpios[GPIO_EXTAMP2_LOW] pins\n");
 				udelay(2);
 				retval = pinctrl_select_state(
 					pinctrlaud,
 					aud_gpios[GPIO_EXTAMP2_HIGH].gpioctrl);
 				if (retval)
-					pr_info("could not set aud_gpios[GPIO_EXTAMP2_HIGH] pins\n");
+					pr_debug("could not set aud_gpios[GPIO_EXTAMP2_HIGH] pins\n");
 				udelay(2);
 			}
 		}
@@ -615,7 +615,7 @@ int AudDrv_GPIO_EXTAMP2_Select(int bEnable, int mode)
 				pinctrlaud,
 				aud_gpios[GPIO_EXTAMP2_LOW].gpioctrl);
 			if (retval)
-				pr_info("could not set aud_gpios[GPIO_EXTAMP2_LOW] pins\n");
+				pr_debug("could not set aud_gpios[GPIO_EXTAMP2_LOW] pins\n");
 		}
 	}
 	mutex_unlock(&gpio_request_mutex);
@@ -635,7 +635,7 @@ int AudDrv_GPIO_RCVSPK_Select(int bEnable)
 				pinctrlaud,
 				aud_gpios[GPIO_RCVSPK_HIGH].gpioctrl);
 			if (retval)
-				pr_info("could not set aud_gpios[GPIO_RCVSPK_HIGH] pins\n");
+				pr_debug("could not set aud_gpios[GPIO_RCVSPK_HIGH] pins\n");
 		}
 	} else {
 		if (aud_gpios[GPIO_RCVSPK_LOW].gpio_prepare) {
@@ -643,7 +643,7 @@ int AudDrv_GPIO_RCVSPK_Select(int bEnable)
 				pinctrlaud,
 				aud_gpios[GPIO_RCVSPK_LOW].gpioctrl);
 			if (retval)
-				pr_info("could not set aud_gpios[GPIO_RCVSPK_LOW] pins\n");
+				pr_debug("could not set aud_gpios[GPIO_RCVSPK_LOW] pins\n");
 		}
 	}
 	mutex_unlock(&gpio_request_mutex);
@@ -696,7 +696,7 @@ static int __init dt_get_extbuck_info(unsigned long node, const char *uname,
 
 	if (tags) {
 		extbuck_fan53526_exist = tags->extbuck_fan53526_exist;
-		pr_info("[%s] fan53526_exist = %d\n", __func__,
+		pr_debug("[%s] fan53526_exist = %d\n", __func__,
 			extbuck_fan53526_exist);
 	}
 	return 0;

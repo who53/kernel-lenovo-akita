@@ -1177,7 +1177,7 @@ bool SetChannels(uint32 Memory_Interface, uint32 channel)
 			break;
 		}
 	default:
-		pr_warn("SetChannels wrong Mem_Interface = %d\n",
+		pr_debug("SetChannels wrong Mem_Interface = %d\n",
 			Memory_Interface);
 		return false;
 	}
@@ -1717,7 +1717,7 @@ bool SetHwDigitalGainEnable(int GainType, bool Enable)
 		Afe_Set_Reg(AFE_GAIN2_CON0, Enable, 0x1);
 		break;
 	default:
-		pr_warn("%s with no match type\n", __func__);
+		pr_debug("%s with no match type\n", __func__);
 		return false;
 	}
 	return true;
@@ -1735,7 +1735,7 @@ bool SetHwDigitalGain(uint32 Gain, int GainType)
 		Afe_Set_Reg(AFE_GAIN2_CON1, Gain, 0xffffffff);
 		break;
 	default:
-		pr_warn("%s with no match type\n", __func__);
+		pr_debug("%s with no match type\n", __func__);
 		return false;
 	}
 	return true;
@@ -1921,7 +1921,7 @@ bool SetModemPcmEnable(int modem_index, bool modem_pcm_on)
 		mAudioMEMIF[Soc_Aud_Digital_Block_MODEM_PCM_2_O]->mState
 			 = modem_pcm_on;
 	} else {
-		pr_warn("%s(), no such modem_index: %d!!\n",
+		pr_debug("%s(), no such modem_index: %d!!\n",
 			 __func__, modem_index);
 		return false;
 	}
@@ -2026,12 +2026,12 @@ bool SetMemoryPathEnable(uint32 Aud_block, bool bEnable)
 		mAudioMEMIF[Aud_block]->mUserCount--;
 		if (mAudioMEMIF[Aud_block]->mUserCount < 0) {
 			mAudioMEMIF[Aud_block]->mUserCount = 0;
-			pr_warn("warning , user count <0\n");
+			pr_debug("warning , user count <0\n");
 		}
 		if (mAudioMEMIF[Aud_block]->mUserCount == 0)
 			mAudioMEMIF[Aud_block]->mState = false;
 	}
-	pr_warn("%s Aud_block = %d mUserCount = %d mState = %d\n",
+	pr_debug("%s Aud_block = %d mUserCount = %d mState = %d\n",
 		__func__, Aud_block,
 		mAudioMEMIF[Aud_block]->mUserCount,
 			 mAudioMEMIF[Aud_block]->mState);
@@ -2192,7 +2192,7 @@ void SetHdmiPcmInterConnection(unsigned int connection_state,
 				  Soc_Aud_InterConnectionOutput_O30);
 		break;
 	default:
-		pr_warn("%s unsupported channels %u\n", __func__, channels);
+		pr_debug("%s unsupported channels %u\n", __func__, channels);
 		break;
 	}
 }
@@ -2214,7 +2214,7 @@ bool SetConnection(uint32 ConnectionState, uint32 Input, uint32 Output)
 
 bool SetIrqEnable(uint32 Irqmode, bool bEnable)
 {
-	pr_warn("+%s(), Irqmode = %d, bEnable = %d\n", __func__,
+	pr_debug("+%s(), Irqmode = %d, bEnable = %d\n", __func__,
 		 Irqmode, bEnable);
 	switch (Irqmode) {
 	case Soc_Aud_IRQ_MCU_MODE_IRQ1_MCU_MODE:{
@@ -2475,7 +2475,7 @@ bool SetMemIfFetchFormatPerSample(uint32 InterfaceType, uint32 eFetchFormat)
 		}
 	case Soc_Aud_Digital_Block_MEM_I2S:{
 
-			pr_warn("Unsupport MEM_I2S!!\n");
+			pr_debug("Unsupport MEM_I2S!!\n");
 			break;
 		}
 	case Soc_Aud_Digital_Block_MEM_AWB:{
@@ -2647,43 +2647,43 @@ bool SetHDMIsamplerate(uint32 samplerate)
 
 bool SetTDMLrckWidth(uint32 cycles)
 {
-	pr_warn("%s not support!!!\n", __func__);
+	pr_debug("%s not support!!!\n", __func__);
 	return true;
 }
 
 bool SetTDMbckcycle(uint32 cycles)
 {
-	pr_warn("%s not support!!!\n", __func__);
+	pr_debug("%s not support!!!\n", __func__);
 	return true;
 }
 
 bool SetTDMChannelsSdata(uint32 channels)
 {
-	pr_warn("%s not support!!!\n", __func__);
+	pr_debug("%s not support!!!\n", __func__);
 	return true;
 }
 
 bool SetTDMDatalength(uint32 length)
 {
-	pr_warn("%s not support!!!\n", __func__);
+	pr_debug("%s not support!!!\n", __func__);
 	return true;
 }
 
 bool SetTDMI2Smode(uint32 mode)
 {
-	pr_warn("%s not support!!!\n", __func__);
+	pr_debug("%s not support!!!\n", __func__);
 	return true;
 }
 
 bool SetTDMLrckInverse(bool enable)
 {
-	pr_warn("%s not support!!!\n", __func__);
+	pr_debug("%s not support!!!\n", __func__);
 	return true;
 }
 
 bool SetTDMBckInverse(bool enable)
 {
-	pr_warn("%s not support!!!\n", __func__);
+	pr_debug("%s not support!!!\n", __func__);
 	return true;
 }
 
@@ -2878,9 +2878,9 @@ int AudDrv_Allocate_mem_Buffer(struct device *pDev,
 			break;
 		}
 	case Soc_Aud_Digital_Block_MEM_I2S:
-		pr_warn("currently not support\n");
+		pr_debug("currently not support\n");
 	default:
-		pr_warn("%s not support\n", __func__);
+		pr_debug("%s not support\n", __func__);
 	}
 	return true;
 }
@@ -2908,7 +2908,7 @@ bool SetMemifSubStream(enum Soc_Aud_Digital_Block MemBlock,
 	 flags);
 	head = AFE_Mem_Control_context[MemBlock]->substreamL;
 	if (head == NULL) {	/* first item is NULL */
-		pr_warn("%s head == NULL\n", __func__);
+		pr_debug("%s head == NULL\n", __func__);
 		temp = kzalloc(sizeof(struct substreamList), GFP_ATOMIC);
 		temp->substream = substream;
 		temp->next = NULL;
@@ -2932,7 +2932,7 @@ bool SetMemifSubStream(enum Soc_Aud_Digital_Block MemBlock,
 
 bool ClearMemBlock(enum Soc_Aud_Digital_Block MemBlock)
 {
-	pr_warn("%s MemBlock = %d\n", __func__, MemBlock);
+	pr_debug("%s MemBlock = %d\n", __func__, MemBlock);
 
 	if (MemBlock >= 0 && MemBlock <= Soc_Aud_Digital_Block_MEM_HDMI) {
 		struct AFE_BLOCK_T *pBlock =
@@ -2948,7 +2948,7 @@ bool ClearMemBlock(enum Soc_Aud_Digital_Block MemBlock)
 #ifdef AUDIO_MEM_IOREMAP
 		}
 #endif
-		pr_warn("%s MemBlock %d reset done\n", __func__, MemBlock);
+		pr_debug("%s MemBlock %d reset done\n", __func__, MemBlock);
 		pBlock->u4WriteIdx = 0;
 		pBlock->u4DMAReadIdx = 0;
 		pBlock->u4DataRemained = 0;
@@ -3523,7 +3523,7 @@ struct snd_dma_buffer *Get_Mem_Buffer(enum Soc_Aud_Digital_Block MemBlock)
 	case Soc_Aud_Digital_Block_MEM_HDMI:
 		return Audio_dma_buf[MemBlock];
 	case Soc_Aud_Digital_Block_MEM_I2S:
-		pr_warn("currently not support\n");
+		pr_debug("currently not support\n");
 		break;
 	default:
 		break;

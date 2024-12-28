@@ -57,7 +57,7 @@ int acquire_dram_ctrl(void)
 
 	if (cnt == 0) {
 		spin_unlock_irqrestore(&dramc_lock, save_flags);
-		pr_warn("[DRAMC] can NOT get SPM HW SEMAPHORE!\n");
+		pr_debug("[DRAMC] can NOT get SPM HW SEMAPHORE!\n");
 		return -1;
 	}
 

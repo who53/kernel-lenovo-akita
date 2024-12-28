@@ -2654,11 +2654,11 @@ static int mtk_uart_pm_freeze(struct device *device)
 	port_idx = uart->nport;
 	if (uart_freeze_enable[port_idx]) {
 		ret = uart_suspend_port(&mtk_uart_drv, &uart->port);
-		pr_warn("[%s] here.\n", __func__);
+		pr_debug("[%s] here.\n", __func__);
 		/* To keeping uart idle state */
 		/* tx pin:  idle->high   power down->low */
 		mtk_uart_switch_tx_to_gpio(uart);
-		pr_warn("[%s] done.\n", __func__);
+		pr_debug("[%s] done.\n", __func__);
 	}
 
 	return 0;	/* mtk_uart_suspend(pdev, PMSG_SUSPEND); */
@@ -2679,9 +2679,9 @@ static int mtk_uart_pm_restore(struct device *device)
 	if (uart_freeze_enable[port_idx]) {
 		mtk_uart_switch_to_tx(uart);
 		ret = uart_resume_port(&mtk_uart_drv, &uart->port);
-		pr_warn("[%s] uart (%p) base: 0x%lx\n",
+		pr_debug("[%s] uart (%p) base: 0x%lx\n",
 			__func__, uart, uart->base);
-		pr_warn("[%s] nport %d, dma mode:%d\n",
+		pr_debug("[%s] nport %d, dma mode:%d\n",
 			__func__, uart->nport, uart->dma_mode);
 	}
 
@@ -2694,7 +2694,7 @@ static int mtk_uart_pm_restore_noirq(struct device *device)
 
 	uart = dev_get_drvdata(device);
 	if (!uart || !uart->setting) {
-		pr_warn("[%s] uart or uart->setting is null!!\n", __func__);
+		pr_debug("[%s] uart or uart->setting is null!!\n", __func__);
 		return 0;
 	}
 	mtk_uart_fifo_set_trig(uart, uart->tx_trig, uart->rx_trig);

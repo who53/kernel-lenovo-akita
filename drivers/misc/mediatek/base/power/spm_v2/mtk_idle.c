@@ -90,7 +90,7 @@
 #define idle_crit(fmt, args...)		pr_debug(IDLE_TAG fmt, ##args)
 #define idle_err(fmt, args...)		pr_debug(IDLE_TAG fmt, ##args)
 #define idle_warn(fmt, args...)		pr_debug(IDLE_TAG fmt, ##args)
-#define idle_notice(fmt, args...)	pr_notice(IDLE_TAG fmt, ##args)
+#define idle_notice(fmt, args...)	pr_debug(IDLE_TAG fmt, ##args)
 #define idle_info(fmt, args...)		pr_debug(IDLE_TAG fmt, ##args)
 #define idle_ver(fmt, args...)		pr_debug(IDLE_TAG fmt, ##args)
 #define idle_dbg(fmt, args...)		pr_debug(IDLE_TAG fmt, ##args)

@@ -24,7 +24,7 @@
 #include "hi556mipiraw_Sensor.h"
 
 #define PFX "hi556_camera_sensor"
-#define LOG_INF(format, args...)    pr_info(PFX "[%s] " format, __func__, ##args)
+#define LOG_INF(format, args...)    pr_debug(PFX "[%s] " format, __func__, ##args)
 #define LOG_DBG(format, args...)    pr_debug(PFX "[%s] " format, __func__, ##args)
 #define LOG_ERR(format, args...)    pr_err(PFX "[%s] " format, __func__, ##args)
 #define cam_pr_debug(format, args...)   pr_debug(PFX "[%s] " format, __func__, ##args)

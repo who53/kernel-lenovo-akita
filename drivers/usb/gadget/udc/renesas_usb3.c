@@ -2002,7 +2002,7 @@ static int renesas_usb3_probe(struct platform_device *pdev)
 
 	usb3->workaround_for_vbus = priv->workaround_for_vbus;
 
-	dev_info(&pdev->dev, "probed\n");
+	dev_dbg(&pdev->dev, "probed\n");
 
 	return 0;
 

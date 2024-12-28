@@ -183,7 +183,7 @@ int __attribute__ ((weak))
 
 void __attribute__ ((weak)) enable_bat_temp_det(bool en)
 {
-	pr_notice("[%s] not support!\n", __func__);
+	pr_debug("[%s] not support!\n", __func__);
 }
 
 unsigned int __attribute__ ((weak)) mt6358_irq_get_virq(struct device *dev,

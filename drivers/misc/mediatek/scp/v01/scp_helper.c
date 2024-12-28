@@ -406,7 +406,7 @@ static void scp_timeout_ws(struct work_struct *ws)
 #endif
 
 	scp_timeout_times++;
-	pr_notice("[SCP] scp_timeout_times=%x\n", scp_timeout_times);
+	pr_debug("[SCP] scp_timeout_times=%x\n", scp_timeout_times);
 }
 
 
@@ -476,7 +476,7 @@ static void scp_A_set_ready(void)
 #if SCP_BOOT_TIME_OUT_MONITOR
 static void scp_wait_ready_timeout(unsigned long data)
 {
-	pr_notice("[SCP] %s(),timer data=%lu\n", __func__, data);
+	pr_debug("[SCP] %s(),timer data=%lu\n", __func__, data);
 	/*data=0: SCP A  ,  data=1: SCP B*/
 	scp_timeout_work.flags = 0;
 	scp_timeout_work.id = SCP_A_ID;
@@ -524,7 +524,7 @@ static void scp_err_info_handler(int id, void *data, unsigned int len)
 	struct error_info *info = (struct error_info *)data;
 
 	if (sizeof(*info) != len) {
-		pr_notice("[SCP] error: incorrect size %d of error_info\n",
+		pr_debug("[SCP] error: incorrect size %d of error_info\n",
 				len);
 		WARN_ON(1);
 		return;
@@ -532,9 +532,9 @@ static void scp_err_info_handler(int id, void *data, unsigned int len)
 
 	/* Ensure the context[] is terminated by the NULL character. */
 	info->context[ERR_MAX_CONTEXT_LEN - 1] = '\0';
-	pr_notice("[SCP] Error_info: case id: %u\n", info->case_id);
-	pr_notice("[SCP] Error_info: sensor id: %u\n", info->sensor_id);
-	pr_notice("[SCP] Error_info: context: %s\n", info->context);
+	pr_debug("[SCP] Error_info: case id: %u\n", info->case_id);
+	pr_debug("[SCP] Error_info: sensor id: %u\n", info->sensor_id);
+	pr_debug("[SCP] Error_info: context: %s\n", info->context);
 
 	if (report_hub_dmd)
 		report_hub_dmd(info->case_id, info->sensor_id, info->context);
@@ -898,16 +898,16 @@ static ssize_t scp_set_log_filter(struct device *dev,
 	ret = scp_ipi_send(IPI_SCP_LOG_FILTER, &filter, len, 0, SCP_A_ID);
 	switch (ret) {
 	case SCP_IPI_DONE:
-		pr_notice("[SCP] Set log filter to 0x%08x\n", filter);
+		pr_debug("[SCP] Set log filter to 0x%08x\n", filter);
 		return count;
 
 	case SCP_IPI_BUSY:
-		pr_notice("[SCP] IPI busy. Set log filter failed!\n");
+		pr_debug("[SCP] IPI busy. Set log filter failed!\n");
 		return -EBUSY;
 
 	case SCP_IPI_ERROR:
 	default:
-		pr_notice("[SCP] IPI error. Set log filter failed!\n");
+		pr_debug("[SCP] IPI error. Set log filter failed!\n");
 		return -EIO;
 	}
 }
@@ -1130,9 +1130,9 @@ static int scp_reserve_memory_ioremap(void)
 		uint64_t start_virt = (uint64_t)scp_get_reserve_mem_virt(id);
 		uint64_t len = (uint64_t)scp_get_reserve_mem_size(id);
 
-		pr_notice("[SCP][rsrv_mem-%d] phy:0x%llx - 0x%llx, len:0x%llx\n",
+		pr_debug("[SCP][rsrv_mem-%d] phy:0x%llx - 0x%llx, len:0x%llx\n",
 			id, start_phys, start_phys + len - 1, len);
-		pr_notice("[SCP][rsrv_mem-%d] vir:0x%llx - 0x%llx, len:0x%llx\n",
+		pr_debug("[SCP][rsrv_mem-%d] vir:0x%llx - 0x%llx, len:0x%llx\n",
 			id, start_virt, start_virt + len - 1, len);
 	}
 #endif  // DEBUG
@@ -1394,7 +1394,7 @@ void reset_sram_state_machine(void)
 	if ((clkctrl == NULL) || (SCP_TCM == NULL))
 		return;
 
-	pr_notice("[SCP] Reset SRAM state machine.\n");
+	pr_debug("[SCP] Reset SRAM state machine.\n");
 
 	/**********************************************************************
 	 * Reset SRAM state machine.
@@ -1402,11 +1402,11 @@ void reset_sram_state_machine(void)
 	// Set bit 0 of 0xC4020 to 0.
 	offset = 0x20;
 	value = (unsigned int)readl(clkctrl + offset);
-	pr_notice("[SCP] clk[0x%02x]: 0x%08x\n", offset, value);
+	pr_debug("[SCP] clk[0x%02x]: 0x%08x\n", offset, value);
 	value &= ~0x1;
 	writel(value, clkctrl + offset);
 	value = (unsigned int)readl(clkctrl + offset);
-	pr_notice("[SCP] clk[0x%02x]: 0x%08x\n", offset, value);
+	pr_debug("[SCP] clk[0x%02x]: 0x%08x\n", offset, value);
 
 	/**********************************************************************
 	 * SRAM read/write test once again.
@@ -1415,13 +1415,13 @@ void reset_sram_state_machine(void)
 	writel(0x33CCCC33, SCP_TCM + 0);
 	value = readl(SCP_TCM + 0);
 	if (value != 0x33CCCC33)
-		pr_notice("[SCP] SRAM W/R failed! loader[0]: 0x%08x\n", value);
+		pr_debug("[SCP] SRAM W/R failed! loader[0]: 0x%08x\n", value);
 
 	// Loader[4]
 	writel(0x44BBBB44, SCP_TCM + 4);
 	value = readl(SCP_TCM + 4);
 	if (value != 0x44BBBB44)
-		pr_notice("[SCP] SRAM W/R failed! loader[4]: 0x%08x\n", value);
+		pr_debug("[SCP] SRAM W/R failed! loader[4]: 0x%08x\n", value);
 }
 
 
@@ -1440,7 +1440,7 @@ void print_clk_registers(void)
 	if (loader_base) {
 		for (offset = 0; offset < 16; offset += 4) {
 			value = (unsigned int)readl(loader_base + offset);
-			pr_notice("[SCP] loader[0x%02x]: 0x%08x\n",
+			pr_debug("[SCP] loader[0x%02x]: 0x%08x\n",
 				offset, value);
 		}
 	}
@@ -1448,20 +1448,20 @@ void print_clk_registers(void)
 	if (SCP_TCM) {
 		for (offset = 0; offset < 16; offset += 4) {
 			value = (unsigned int)readl(SCP_TCM + offset);
-			pr_notice("[SCP] SRAM loader[0x%02x]: 0x%08x\n",
+			pr_debug("[SCP] SRAM loader[0x%02x]: 0x%08x\n",
 				offset, value);
 		}
 		writel(0x3CC35AA5, SCP_TCM + 0);
 		value = readl(SCP_TCM + 0);
 		if (value != 0x3CC35AA5) {
-			pr_notice("[SCP] SRAM W/R failed! loader[0]: 0x%08x\n",
+			pr_debug("[SCP] SRAM W/R failed! loader[0]: 0x%08x\n",
 				value);
 			cmp_error = 1;
 		}
 		writel(0x2DD24BB4, SCP_TCM + 4);
 		value = readl(SCP_TCM + 4);
 		if (value != 0x2DD24BB4) {
-			pr_notice("[SCP] SRAM W/R failed! loader[4]: 0x%08x\n",
+			pr_debug("[SCP] SRAM W/R failed! loader[4]: 0x%08x\n",
 				value);
 			cmp_error = 1;
 		}
@@ -1470,22 +1470,22 @@ void print_clk_registers(void)
 	// 0x0000 ~ 0x01CC (inclusive)
 	for (offset = 0x0000; offset <= 0x01CC; offset += 4) {
 		value = (unsigned int)readl(cfg + offset);
-		pr_notice("[SCP] cfg[0x%04x]: 0x%08x\n", offset, value);
+		pr_debug("[SCP] cfg[0x%04x]: 0x%08x\n", offset, value);
 	}
 	// 0x2000 ~ 0x200C (inclusive)
 	for (offset = 0x2000; offset <= 0x200C; offset += 4) {
 		value = (unsigned int)readl(cfg + offset);
-		pr_notice("[SCP] cfg[0x%04x]: 0x%08x\n", offset, value);
+		pr_debug("[SCP] cfg[0x%04x]: 0x%08x\n", offset, value);
 	}
 	// 0x2080 ~ 0x208C (inclusive)
 	for (offset = 0x2080; offset <= 0x208C; offset += 4) {
 		value = (unsigned int)readl(cfg + offset);
-		pr_notice("[SCP] cfg[0x%04x]: 0x%08x\n", offset, value);
+		pr_debug("[SCP] cfg[0x%04x]: 0x%08x\n", offset, value);
 	}
 	// 0x4000 ~ 0x40A4 (inclusive)
 	for (offset = 0x0000; offset < CLK_BANK_LEN; offset += 4) {
 		value = (unsigned int)readl(clkctrl + offset);
-		pr_notice("[SCP] clk[0x%02x]: 0x%08x\n", offset, value);
+		pr_debug("[SCP] clk[0x%02x]: 0x%08x\n", offset, value);
 	}
 
 	if (cmp_error)
@@ -1558,7 +1558,7 @@ void scp_sys_reset_ws(struct work_struct *ws)
 	/* scp reset by CMD, WDT or awake fail */
 	if (scp_reset_type == RESET_TYPE_WDT) {
 		/* reset type scp WDT */
-		pr_notice("[SCP] %s(): scp wdt reset\n", __func__);
+		pr_debug("[SCP] %s(): scp wdt reset\n", __func__);
 		/* make sure scp is in idle state */
 		while (timeout--) {
 			if (readl(SCP_GPR_CM4_A_REBOOT) == 0x34) {
@@ -1574,7 +1574,7 @@ void scp_sys_reset_ws(struct work_struct *ws)
 		}
 
 		if (timeout == 0)
-			pr_notice("[SCP]wdt reset timeout, still reset scp\n");
+			pr_debug("[SCP]wdt reset timeout, still reset scp\n");
 
 		writel(0, scp_reset_reg);
 		CHECK_RESET_REG(scp_reset_reg, 0);
@@ -1607,16 +1607,16 @@ void scp_sys_reset_ws(struct work_struct *ws)
 	dsb(SY);
 
 	while ((readl(scp_reset_reg) == 0) && (timeout > 0)) {
-		pr_notice("[SCP] reset countdown, %d\n", timeout);
+		pr_debug("[SCP] reset countdown, %d\n", timeout);
 		writel(1, scp_reset_reg);
 		mdelay(20);
 		timeout--;
 	};
 
 	if (readl(scp_reset_reg))
-		pr_notice("[SCP] start scp\n");
+		pr_debug("[SCP] start scp\n");
 	else
-		pr_notice("[SCP] start scp failed\n");
+		pr_debug("[SCP] start scp failed\n");
 
 #if SCP_BOOT_TIME_OUT_MONITOR
 	mod_timer(&scp_ready_timer[SCP_A_ID], jiffies + SCP_READY_TIMEOUT);
@@ -1959,7 +1959,7 @@ static int __init scp_init(void)
 
 #if SCP_RESERVED_MEM
 	/*scp resvered memory*/
-	pr_notice("[SCP] scp_reserve_memory_ioremap\n");
+	pr_debug("[SCP] scp_reserve_memory_ioremap\n");
 	ret = scp_reserve_memory_ioremap();
 	if (ret) {
 		pr_err("[SCP]scp_reserve_memory_ioremap failed\n");

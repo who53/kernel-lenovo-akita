@@ -110,10 +110,10 @@ int Auddrv_Reg_map(struct device *pdev)
 	pr_debug("%s\n", __func__);
 
 	if (!pdev->of_node)
-		pr_warn("%s invalid of_node\n", __func__);
+		pr_debug("%s invalid of_node\n", __func__);
 
 	if (audio_sram_node == NULL)
-		pr_warn("%s invalid audio_sram_node\n", __func__);
+		pr_debug("%s invalid audio_sram_node\n", __func__);
 
 	/* mapping AFE reg*/
 	AFE_BASE_ADDRESS = of_iomap(pdev->of_node, 0);
@@ -212,7 +212,7 @@ unsigned int clksys_get_reg(unsigned int offset)
 	unsigned int *value;
 
 	if (CLKSYS_ADDRESS == NULL) {
-		pr_warn("%s(), CLKSYS_ADDRESS is null\n", __func__);
+		pr_debug("%s(), CLKSYS_ADDRESS is null\n", __func__);
 		return 0;
 	}
 
@@ -236,7 +236,7 @@ void clksys_set_reg(unsigned int offset, unsigned int value, unsigned int mask)
 	unsigned long flags = 0;
 
 	if (CLKSYS_ADDRESS == NULL) {
-		pr_warn("%s(), CLKSYS_ADDRESS is null\n", __func__);
+		pr_debug("%s(), CLKSYS_ADDRESS is null\n", __func__);
 		return;
 	}
 #if defined(AUD_DEBUG_LOG)
@@ -258,7 +258,7 @@ void Afe_Set_Reg(unsigned int offset, unsigned int value, unsigned int mask)
 
 	ret = regmap_update_bits(pregmap, offset, mask, value);
 	if (ret) {
-		pr_warn("%s ret = %d offset = 0x%x value = 0x%x mask = 0x%x\n",
+		pr_debug("%s ret = %d offset = 0x%x value = 0x%x mask = 0x%x\n",
 		       __func__, ret, offset, value, mask);
 	}
 }
@@ -271,7 +271,7 @@ unsigned int Afe_Get_Reg(unsigned int offset)
 
 	ret = regmap_read(pregmap, offset, &value);
 	if (ret)
-		pr_warn("%s ret = %d value = 0x%x mask = 0x%x\n", __func__, ret,
+		pr_debug("%s ret = %d value = 0x%x mask = 0x%x\n", __func__, ret,
 		       offset, value);
 	return value;
 }

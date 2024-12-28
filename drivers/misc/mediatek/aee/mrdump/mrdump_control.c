@@ -33,12 +33,12 @@ static int __init mrdump_get_cb(char *p)
 
 	ret = sscanf(p, "0x%lx,0x%lx", &cbaddr, &cbsize);
 	if (ret != 2) {
-		pr_notice("%s: no mrdump_sram_cb. (ret=%d, p=%s)\n",
+		pr_debug("%s: no mrdump_sram_cb. (ret=%d, p=%s)\n",
 			 __func__, ret, p);
 	} else {
 		mrdump_sram_cb.start_addr = cbaddr;
 		mrdump_sram_cb.size = cbsize;
-		pr_notice("%s: mrdump_cbaddr=%pa, mrdump_cbsize=%pa\n",
+		pr_debug("%s: mrdump_cbaddr=%pa, mrdump_cbsize=%pa\n",
 			 __func__,
 			 &mrdump_sram_cb.start_addr,
 			 &mrdump_sram_cb.size
@@ -93,12 +93,12 @@ __init void mrdump_cblock_init(void)
 	struct mrdump_machdesc *machdesc_p;
 
 	if ((mrdump_sram_cb.start_addr == 0) || (mrdump_sram_cb.size == 0)) {
-		pr_notice("%s: no mrdump_cb\n", __func__);
+		pr_debug("%s: no mrdump_cb\n", __func__);
 		goto end;
 	}
 
 	if (mrdump_sram_cb.size < sizeof(struct mrdump_control_block)) {
-		pr_notice("%s: not enough space for mrdump control block\n",
+		pr_debug("%s: not enough space for mrdump control block\n",
 			  __func__);
 		goto end;
 	}
@@ -106,7 +106,7 @@ __init void mrdump_cblock_init(void)
 	mrdump_cblock = ioremap_wc(mrdump_sram_cb.start_addr,
 				   mrdump_sram_cb.size);
 	if (mrdump_cblock == NULL) {
-		pr_notice("%s: mrdump_cb not mapped\n", __func__);
+		pr_debug("%s: mrdump_cb not mapped\n", __func__);
 		goto end;
 	}
 	memset_io(mrdump_cblock, 0, sizeof(struct mrdump_control_block));
@@ -151,7 +151,7 @@ __init void mrdump_cblock_init(void)
 	mrdump_cblock->machdesc_crc = crc32(0, machdesc_p,
 			sizeof(struct mrdump_machdesc));
 
-	pr_notice("%s: done.\n", __func__);
+	pr_debug("%s: done.\n", __func__);
 
 end:
 	__inner_flush_dcache_all();

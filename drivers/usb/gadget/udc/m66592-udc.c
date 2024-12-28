@@ -1667,7 +1667,7 @@ static int m66592_probe(struct platform_device *pdev)
 	if (ret)
 		goto err_add_udc;
 
-	dev_info(&pdev->dev, "version %s\n", DRIVER_VERSION);
+	dev_dbg(&pdev->dev, "version %s\n", DRIVER_VERSION);
 	return 0;
 
 err_add_udc:

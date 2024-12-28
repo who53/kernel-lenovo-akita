@@ -80,7 +80,7 @@ static void cyttsp5_pr_buf_op_mode(struct cyttsp5_debug_data *dd, u8 *pr_buf,
 	for (i = 0; i < report_size && i < max; i++, k += 3)
 		scnprintf(pr_buf + k, CY_MAX_PRBUF_SIZE, fmt, si->xy_data[i]);
 
-	pr_info("%s=%s%s\n", "cyttsp5_OpModeData", pr_buf,
+	pr_debug("%s=%s%s\n", "cyttsp5_OpModeData", pr_buf,
 			total_size <= max ? "" : CY_PR_TRUNCATED);
 }
 
@@ -100,10 +100,10 @@ static void cyttsp5_debug_print(struct device *dev, u8 *pr_buf, u8 *sptr,
 		scnprintf(pr_buf + j, CY_MAX_PRBUF_SIZE - j, "%02X ", sptr[i]);
 
 	if (size)
-		pr_info("%s[0..%d]=%s%s\n", data_name, size - 1, pr_buf,
+		pr_debug("%s[0..%d]=%s%s\n", data_name, size - 1, pr_buf,
 			size <= max ? "" : CY_PR_TRUNCATED);
 	else
-		pr_info("%s[]\n", data_name);
+		pr_debug("%s[]\n", data_name);
 }
 
 static void cyttsp5_debug_formated(struct device *dev, u8 *pr_buf,
@@ -129,7 +129,7 @@ static void cyttsp5_debug_formated(struct device *dev, u8 *pr_buf,
 
 	/* xy_data */
 	if (report_size > max_print_length) {
-		pr_info("xy_data[0..%d]:\n", report_size);
+		pr_debug("xy_data[0..%d]:\n", report_size);
 		for (i = 0; i < report_size - max_print_length;
 				i += max_print_length) {
 			cyttsp5_debug_print(dev, pr_buf, si->xy_data + i,
@@ -175,7 +175,7 @@ static int cyttsp5_xy_worker(struct cyttsp5_debug_data *dd)
 	mutex_unlock(&dd->sysfs_lock);
 
 	/* Interrupt */
-	pr_info("Interrupt(%u)\n", dd->interrupt_count);
+	pr_debug("Interrupt(%u)\n", dd->interrupt_count);
 
 	if (formated_output)
 		cyttsp5_debug_formated(dev, dd->pr_buf, si, num_cur_tch);
@@ -183,7 +183,7 @@ static int cyttsp5_xy_worker(struct cyttsp5_debug_data *dd)
 		/* print data for TTHE */
 		cyttsp5_pr_buf_op_mode(dd, dd->pr_buf, si, num_cur_tch);
 
-	pr_info("\n");
+	pr_debug("\n");
 
 	return 0;
 }
@@ -376,7 +376,7 @@ static int __init cyttsp5_debug_init(void)
 			return rc;
 	}
 
-	pr_info("%s: Parade TTSP Debug Driver (Built %s) rc=%d\n",
+	pr_debug("%s: Parade TTSP Debug Driver (Built %s) rc=%d\n",
 		 __func__, CY_DRIVER_VERSION, rc);
 	return 0;
 }

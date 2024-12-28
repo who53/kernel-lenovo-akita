@@ -1046,7 +1046,7 @@ static int kbasep_vinstr_fill_dump_buffer_legacy(
 	/* Copy data to user buffer. */
 	rcode = copy_to_user(buffer, cli->accum_buffer, cli->dump_size);
 	if (rcode) {
-		pr_warn("error while copying buffer to user\n");
+		pr_debug("error while copying buffer to user\n");
 		return -EFAULT;
 	}
 	return 0;

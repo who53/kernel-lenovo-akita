@@ -35,7 +35,7 @@ static int trusty_fiq_probe(struct platform_device *pdev)
 
 	ret = of_platform_populate(pdev->dev.of_node, NULL, NULL, &pdev->dev);
 	if (ret < 0) {
-		dev_info(&pdev->dev, "Failed to add children: %d\n", ret);
+		dev_dbg(&pdev->dev, "Failed to add children: %d\n", ret);
 		goto err_add_children;
 	}
 

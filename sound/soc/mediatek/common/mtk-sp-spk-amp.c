@@ -59,7 +59,7 @@ static int mtk_spk_i2c_probe(struct i2c_client *client,
 {
 	int i, ret = 0;
 
-	dev_info(&client->dev, "%s()\n", __func__);
+	dev_dbg(&client->dev, "%s()\n", __func__);
 
 	mtk_spk_type = MTK_SPK_NOT_SMARTPA;
 	for (i = 0; i < MTK_SPK_TYPE_NUM; i++) {
@@ -79,7 +79,7 @@ static int mtk_spk_i2c_probe(struct i2c_client *client,
 
 static int mtk_spk_i2c_remove(struct i2c_client *client)
 {
-	dev_info(&client->dev, "%s()\n", __func__);
+	dev_dbg(&client->dev, "%s()\n", __func__);
 
 	if (mtk_spk_list[mtk_spk_type].i2c_remove)
 		mtk_spk_list[mtk_spk_type].i2c_remove(client);
@@ -89,7 +89,7 @@ static int mtk_spk_i2c_remove(struct i2c_client *client)
 
 static void mtk_spk_i2c_shutdown(struct i2c_client *client)
 {
-	dev_info(&client->dev, "%s()\n", __func__);
+	dev_dbg(&client->dev, "%s()\n", __func__);
 
 	if (mtk_spk_list[mtk_spk_type].i2c_shutdown)
 		mtk_spk_list[mtk_spk_type].i2c_shutdown(client);
@@ -123,7 +123,7 @@ int mtk_spk_update_dai_link(struct snd_soc_card *card,
 	int i2s_mck;
 	struct snd_soc_dai_link *dai_link;
 
-	dev_info(&pdev->dev, "%s(), mtk_spk_type %d\n",
+	dev_dbg(&pdev->dev, "%s(), mtk_spk_type %d\n",
 		 __func__, mtk_spk_type);
 
 	/* get spk i2s out number */
@@ -212,7 +212,7 @@ int mtk_spk_update_dai_link(struct snd_soc_card *card,
 	if (i2s_mck == mtk_spk_i2s_out)
 		dai_link->ops = i2s_ops;
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "%s(), %s, codec dai name = %s, codec name = %s, cpu dai name: %s\n",
 		 __func__, dai_link->name,
 		 dai_link->codec_dai_name,
@@ -229,7 +229,7 @@ int mtk_spk_update_dai_link(struct snd_soc_card *card,
 	if (i2s_mck == mtk_spk_i2s_in)
 		dai_link->ops = i2s_ops;
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "%s(), %s, codec dai name = %s, codec name = %s, cpu dai name: %s\n",
 		 __func__, dai_link->name,
 		 dai_link->codec_dai_name,

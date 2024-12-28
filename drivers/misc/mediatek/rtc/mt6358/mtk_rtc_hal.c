@@ -40,7 +40,7 @@
 #include "include/pmic.h"
 
 #define hal_rtc_xinfo(fmt, args...)		\
-	pr_notice(fmt, ##args)
+	pr_debug(fmt, ##args)
 
 /*TODO extern bool pmic_chrdet_status(void);*/
 

@@ -39,7 +39,7 @@ static unsigned int smi_parallel_mode;
 
 #define SMI_MET_KERNEL_MSG(fmt, args...) \
 	do { \
-		pr_notice(fmt, ##args); \
+		pr_debug(fmt, ##args); \
 		SMI_MET_MSG(fmt, ##args); \
 	} while (0)
 
@@ -553,7 +553,7 @@ int SMI_MET_config(struct met_smi_conf *met_smi_config, unsigned int conf_num,
 
 	if (already_configured == 0) {
 		if (SMI_MET_SMI_base_Init()) {
-			pr_notice("Fail to init SMI\n");
+			pr_debug("Fail to init SMI\n");
 			return MET_SMI_FAIL;
 		}
 		already_configured = 1;

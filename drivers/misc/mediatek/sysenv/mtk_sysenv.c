@@ -65,7 +65,7 @@ static ssize_t env_proc_read(struct file *file,
 	int env_valid_length = 0;
 
 	if (env_init_state != ENV_READY) {
-		pr_notice("[%s] data not ready yet\n", MODULE_NAME);
+		pr_debug("[%s] data not ready yet\n", MODULE_NAME);
 		return 0;
 	}
 	if (!env_valid) {
@@ -101,14 +101,14 @@ env_proc_write(struct file *file,
 	int ret = 0, i, v_index = 0;
 	if (size > CFG_ENV_DATA_SIZE) {
 		ret = -ERANGE;
-		pr_notice("[%s]break for size too large\n", MODULE_NAME);
+		pr_debug("[%s]break for size too large\n", MODULE_NAME);
 		goto fail_malloc;
 	}
 
 	buffer = kzalloc(size+1, GFP_KERNEL);
 	if (!buffer) {
 		ret = -ENOMEM;
-		pr_notice("[%s]alloc buffer fail\n", MODULE_NAME);
+		pr_debug("[%s]alloc buffer fail\n", MODULE_NAME);
 		goto fail_malloc;
 	}
 
@@ -128,7 +128,7 @@ env_proc_write(struct file *file,
 	}
 	if (i == size) {
 		ret = -EFAULT;
-		pr_notice("[%s]write fail\n", MODULE_NAME);
+		pr_debug("[%s]write fail\n", MODULE_NAME);
 		goto end;
 	} else {
 		pr_debug("[%s]name :%s,value: %s\n",
@@ -195,7 +195,7 @@ static long env_proc_ioctl(struct file *filp,
 		value_r = get_env(name_buf);
 		if (value_r == NULL) {
 			ret = -EPERM;
-			pr_notice("[%s]cann't find name=%s\n",
+			pr_debug("[%s]cann't find name=%s\n",
 					MODULE_NAME, name_buf);
 			goto end;
 		}
@@ -211,7 +211,7 @@ static long env_proc_ioctl(struct file *filp,
 		break;
 	case ENV_USER_INIT:
 		env_init_state = ENV_INIT;
-		pr_notice("ENV_USER_INIT!\n");
+		pr_debug("ENV_USER_INIT!\n");
 	/* do not break, ENV_INIT taking the same process as ENV_WRITE */
 	case ENV_WRITE:
 		if (copy_from_user((void *)value_buf,
@@ -283,7 +283,7 @@ static long env_proc_compat_ioctl(struct file *filp,
 	int err;
 
 	if (!filp->f_op || !filp->f_op->unlocked_ioctl) {
-		pr_notice("f_op or unlocked ioctl is NULL.\n");
+		pr_debug("f_op or unlocked ioctl is NULL.\n");
 		return -ENOTTY;
 	}
 	arg32 = compat_ptr(arg);
@@ -389,7 +389,7 @@ int set_user_env(char *name, char *value)
 	data_len = strlen(name) + strlen(value) + strlen(TAG_SET_ENV) + 3;
 	data = kmalloc(data_len, GFP_KERNEL); /* 3 : 2 space and 1 \0 */
 	if (data == NULL) {
-		pr_notice("[%s] %s allocate %d buffer fail!\n",
+		pr_debug("[%s] %s allocate %d buffer fail!\n",
 				MODULE_NAME, __func__, data_len);
 		return -1;
 	}
@@ -412,7 +412,7 @@ int set_env(char *name, char *value)
 	pr_debug("[%s]set env, name=%s,value=%s\n", MODULE_NAME, name, value);
 
 	if (env_init_state == ENV_UNINIT) {
-		pr_notice("[%s] data not ready yet\n", MODULE_NAME);
+		pr_debug("[%s] data not ready yet\n", MODULE_NAME);
 		return 0;
 	}
 
@@ -463,7 +463,7 @@ add:
 	len = strlen(name) + 2;
 	len += strlen(value) + 1;
 	if (len > (&env_data[CFG_ENV_DATA_SIZE] - env)) {
-		pr_notice("[%s]env data overflow, %s deleted\n",
+		pr_debug("[%s]env data overflow, %s deleted\n",
 				MODULE_NAME, name);
 		return -1;
 	}
@@ -478,7 +478,7 @@ write_env:
 	memset(env, 0x00, CFG_ENV_DATA_SIZE - (env - env_data));
 	if (env_init_state == ENV_READY) {
 		if (set_user_env(name_base, value_base) < 0)
-			pr_notice("[%s]set user env fail: %s=%s\n",
+			pr_debug("[%s]set user env fail: %s=%s\n",
 					MODULE_NAME, name, value);
 	}
 	env_valid = 1;
@@ -499,7 +499,7 @@ static int send_sysenv_msg(int pid, int seq, void *payload, int payload_len)
 	if (!skb)
 		return -1;
 	if (len < payload_len) {
-		pr_notice("[%s] payload is %d larger than skb len %d\n",
+		pr_debug("[%s] payload is %d larger than skb len %d\n",
 				MODULE_NAME, payload_len, len);
 		kfree_skb(skb);
 		return -1;
@@ -517,7 +517,7 @@ static int send_sysenv_msg(int pid, int seq, void *payload, int payload_len)
 	pr_debug("[%s] send %d data to user process(%d), ret = %d\n",
 				MODULE_NAME, len, pid, ret);
 	if (ret < 0) {
-		pr_notice("[%s] send failed\n", MODULE_NAME);
+		pr_debug("[%s] send failed\n", MODULE_NAME);
 		return -1;
 	}
 	return 0;
@@ -529,14 +529,14 @@ static int __init sysenv_init(void)
 
 	sysenv_proc = proc_create("lk_env", 0600, NULL, &env_proc_fops);
 	if (!sysenv_proc)
-		pr_notice("[%s]fail to create /proc/lk_env\n", MODULE_NAME);
+		pr_debug("[%s]fail to create /proc/lk_env\n", MODULE_NAME);
 
 	env_init();
 
 	netlink_sock = netlink_kernel_create(&init_net,
 						NETLINK_USERSOCK, NULL);
 	if (netlink_sock == NULL)
-		pr_notice("[%s] netlink_kernel_create fail!\n", MODULE_NAME);
+		pr_debug("[%s] netlink_kernel_create fail!\n", MODULE_NAME);
 
 	return 0;
 }

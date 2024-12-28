@@ -289,7 +289,7 @@ static int rt5081_pmu_probe(struct i2c_client *i2c,
 	if (ret < 0)
 		goto out_subdevs;
 	pm_runtime_enable(&i2c->dev);
-	dev_info(&i2c->dev, "%s successfully\n", __func__);
+	dev_dbg(&i2c->dev, "%s successfully\n", __func__);
 	return 0;
 out_subdevs:
 	rt5081_pmu_irq_unregister(chip);
@@ -312,7 +312,7 @@ static int rt5081_pmu_remove(struct i2c_client *i2c)
 	rt5081_pmu_irq_unregister(chip);
 	rt5081_pmu_regmap_unregister(chip);
 	pm_runtime_set_suspended(&i2c->dev);
-	dev_info(chip->dev, "%s successfully\n", __func__);
+	dev_dbg(chip->dev, "%s successfully\n", __func__);
 	return 0;
 }
 

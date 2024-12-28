@@ -27,7 +27,7 @@
 #endif
 
 #define IDLE_PROF_TAG                   "Power/swap "
-#define idle_prof_notice(fmt, args...)  pr_notice(IDLE_PROF_TAG fmt, ##args)
+#define idle_prof_notice(fmt, args...)  pr_debug(IDLE_PROF_TAG fmt, ##args)
 #define idle_prof_info(fmt, args...)    pr_debug(IDLE_PROF_TAG fmt, ##args)
 #define idle_prof_ver(fmt, args...)     pr_debug(IDLE_PROF_TAG fmt, ##args)
 #define idle_prof_dbg(fmt, args...)     pr_debug(IDLE_PROF_TAG fmt, ##args)
@@ -154,7 +154,7 @@ struct mtk_idle_twam *mtk_idle_get_twam(void)
 
 void mtk_idle_twam_callback(struct twam_sig *ts)
 {
-	pr_warn("spm twam (sel%d: %d) ratio: %5u/1000\n",
+	pr_debug("spm twam (sel%d: %d) ratio: %5u/1000\n",
 			idle_twam.sel, idle_twam.event,
 			(idle_twam.speed_mode)
 			? GET_EVENT_RATIO_SPEED(ts->sig0)
@@ -423,7 +423,7 @@ void mtk_idle_dump_cnt_in_interval(void)
 	mtk_idle_dump_cnt(IDLE_TYPE_SO);
 
 	/* dump log */
-	pr_warn("%s\n", get_log());
+	pr_debug("%s\n", get_log());
 
 	/* dump idle ratio */
 	if (idle_ratio_en) {
@@ -441,7 +441,7 @@ void mtk_idle_dump_cnt_in_interval(void)
 			idle_prof[i].ratio.value = 0;
 		}
 		append_log("--- (ms)\n");
-		pr_warn("%s\n", get_log());
+		pr_debug("%s\n", get_log());
 		idle_ratio_profile_start_time = idle_get_current_time_ms();
 	}
 
@@ -501,7 +501,7 @@ bool mtk_idle_select_state(int type, int reason)
 			idle_buf_append(idle_state_log, "[%d] = (%lu,%lu), ",
 				i, p_idle->cnt[i],
 				idle_prof[IDLE_TYPE_RG].block.cnt[i]);
-		pr_warn("%s\n", get_idle_buf(idle_state_log));
+		pr_debug("%s\n", get_idle_buf(idle_state_log));
 
 		/* block category */
 		reset_idle_buf(idle_state_log);
@@ -511,7 +511,7 @@ bool mtk_idle_select_state(int type, int reason)
 			idle_buf_append(idle_state_log, "[%s] = %lu, ",
 					mtk_get_reason_name(i),
 					p_idle->block_cnt[i]);
-		pr_warn("%s\n", get_idle_buf(idle_state_log));
+		pr_debug("%s\n", get_idle_buf(idle_state_log));
 
 		reset_idle_buf(idle_state_log);
 
@@ -520,7 +520,7 @@ bool mtk_idle_select_state(int type, int reason)
 		for (i = 0; i < NR_GRPS; i++)
 			idle_buf_append(idle_state_log,
 					"0x%08x, ", p_idle->block_mask[i]);
-		pr_warn("%s\n", get_idle_buf(idle_state_log));
+		pr_debug("%s\n", get_idle_buf(idle_state_log));
 
 		memset(p_idle->block_cnt, 0,
 				NR_REASONS * sizeof(p_idle->block_cnt[0]));

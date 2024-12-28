@@ -133,45 +133,45 @@ void cmdq_dumpregs(struct cmdq_host *cq_host)
 {
 	struct mmc_host *mmc = cq_host->mmc;
 
-	pr_notice(DRV_NAME ": ========== REGISTER DUMP (%s)==========\n",
+	pr_debug(DRV_NAME ": ========== REGISTER DUMP (%s)==========\n",
 		mmc_hostname(mmc));
 
-	pr_notice(DRV_NAME ": Caps: 0x%08x		  | Version:  0x%08x\n",
+	pr_debug(DRV_NAME ": Caps: 0x%08x		  | Version:  0x%08x\n",
 		cmdq_readl(cq_host, CQCAP),
 		cmdq_readl(cq_host, CQVER));
-	pr_notice(DRV_NAME ": Queing config: 0x%08x  | Queue Ctrl:  0x%08x\n",
+	pr_debug(DRV_NAME ": Queing config: 0x%08x  | Queue Ctrl:  0x%08x\n",
 		cmdq_readl(cq_host, CQCFG),
 		cmdq_readl(cq_host, CQCTL));
-	pr_notice(DRV_NAME ": Int stat: 0x%08x	  | Int enab:  0x%08x\n",
+	pr_debug(DRV_NAME ": Int stat: 0x%08x	  | Int enab:  0x%08x\n",
 		cmdq_readl(cq_host, CQIS),
 		cmdq_readl(cq_host, CQISTE));
-	pr_notice(DRV_NAME ": Int sig: 0x%08x	  | Int Coal:  0x%08x\n",
+	pr_debug(DRV_NAME ": Int sig: 0x%08x	  | Int Coal:  0x%08x\n",
 		cmdq_readl(cq_host, CQISGE),
 		cmdq_readl(cq_host, CQIC));
-	pr_notice(DRV_NAME ": TDL base: 0x%08x	  | TDL up32:  0x%08x\n",
+	pr_debug(DRV_NAME ": TDL base: 0x%08x	  | TDL up32:  0x%08x\n",
 		cmdq_readl(cq_host, CQTDLBA),
 		cmdq_readl(cq_host, CQTDLBAU));
-	pr_notice(DRV_NAME ": Doorbell: 0x%08x	  | Comp Notif:  0x%08x\n",
+	pr_debug(DRV_NAME ": Doorbell: 0x%08x	  | Comp Notif:  0x%08x\n",
 		cmdq_readl(cq_host, CQTDBR),
 		cmdq_readl(cq_host, CQTCN));
-	pr_notice(DRV_NAME ": Dev queue: 0x%08x	  | Dev Pend:  0x%08x\n",
+	pr_debug(DRV_NAME ": Dev queue: 0x%08x	  | Dev Pend:  0x%08x\n",
 		cmdq_readl(cq_host, CQDQS),
 		cmdq_readl(cq_host, CQDPT));
-	pr_notice(DRV_NAME ": Task clr: 0x%08x	  | Send stat 1:  0x%08x\n",
+	pr_debug(DRV_NAME ": Task clr: 0x%08x	  | Send stat 1:  0x%08x\n",
 		cmdq_readl(cq_host, CQTCLR),
 		cmdq_readl(cq_host, CQSSC1));
-	pr_notice(DRV_NAME ": Send stat 2: 0x%08x	  | DCMD resp:  0x%08x\n",
+	pr_debug(DRV_NAME ": Send stat 2: 0x%08x	  | DCMD resp:  0x%08x\n",
 		cmdq_readl(cq_host, CQSSC2),
 		cmdq_readl(cq_host, CQCRDCT));
-	pr_notice(DRV_NAME ": Resp err mask: 0x%08x  | Task err:  0x%08x\n",
+	pr_debug(DRV_NAME ": Resp err mask: 0x%08x  | Task err:  0x%08x\n",
 		cmdq_readl(cq_host, CQRMEM),
 		cmdq_readl(cq_host, CQTERRI));
-	pr_notice(DRV_NAME ": Resp idx 0x%08x	  | Resp arg:  0x%08x\n",
+	pr_debug(DRV_NAME ": Resp idx 0x%08x	  | Resp arg:  0x%08x\n",
 		cmdq_readl(cq_host, CQCRI),
 		cmdq_readl(cq_host, CQCRA));
-	pr_notice(DRV_NAME": Vendor cfg 0x%08x\n",
+	pr_debug(DRV_NAME": Vendor cfg 0x%08x\n",
 	       cmdq_readl(cq_host, CQ_VENDOR_CFG));
-	pr_notice(DRV_NAME ": ===========================================\n");
+	pr_debug(DRV_NAME ": ===========================================\n");
 
 }
 
@@ -282,7 +282,7 @@ static int cmdq_enable(struct mmc_host *mmc)
 
 	cqcfg = cmdq_readl(cq_host, CQCFG);
 	if (cqcfg & 0x1) {
-		pr_notice("%s: %s: cq_host is already enabled\n",
+		pr_debug("%s: %s: cq_host is already enabled\n",
 				mmc_hostname(mmc), __func__);
 		WARN_ON(1);
 		goto out;
@@ -310,7 +310,7 @@ static int cmdq_enable(struct mmc_host *mmc)
 			!cq_host->trans_desc_base) {
 		err = cmdq_host_alloc_tdl(cq_host);
 		if (err) {
-			pr_notice("cmdq_host_alloc_tdl fail\n");
+			pr_debug("cmdq_host_alloc_tdl fail\n");
 			goto out;
 		}
 	}
@@ -369,7 +369,7 @@ static void cmdq_reset(struct mmc_host *mmc, bool soft)
 	unsigned int rca = 0;
 	int ret;
 
-	pr_notice("%s: %s\n",
+	pr_debug("%s: %s\n",
 			mmc_hostname(mmc), __func__);
 
 	cqcfg = cmdq_readl(cq_host, CQCFG);
@@ -382,7 +382,7 @@ static void cmdq_reset(struct mmc_host *mmc, bool soft)
 	if (cq_host->ops->reset && !mrq->cmdq_req->skip_reset) {
 		ret = cq_host->ops->reset(mmc);
 		if (ret) {
-			pr_notice("%s: reset CMDQ controller: failed\n",
+			pr_debug("%s: reset CMDQ controller: failed\n",
 				mmc_hostname(mmc));
 			WARN_ON(1); /*bug*/
 		}
@@ -462,7 +462,7 @@ static int cmdq_dma_map(struct mmc_host *host, struct mmc_request *mrq)
 			      (data->flags & MMC_DATA_WRITE) ?
 			      DMA_TO_DEVICE : DMA_FROM_DEVICE);
 	if (!sg_count) {
-		pr_notice("%s: sg-len: %d\n", __func__, data->sg_len);
+		pr_debug("%s: sg-len: %d\n", __func__, data->sg_len);
 		return -ENOMEM;
 	}
 
@@ -506,7 +506,7 @@ static int cmdq_prep_tran_desc(struct mmc_request *mrq,
 
 	sg_count = cmdq_dma_map(mrq->host, mrq);
 	if (sg_count < 0) {
-		pr_notice("%s: %s: unable to map sg lists, %d\n",
+		pr_debug("%s: %s: unable to map sg lists, %d\n",
 				mmc_hostname(mrq->host), __func__, sg_count);
 		return sg_count;
 	}
@@ -621,7 +621,7 @@ static int cmdq_request(struct mmc_host *mmc, struct mmc_request *mrq)
 	(void)msdc_host; /* prevent build error */
 
 	if (!cq_host->enabled) {
-		pr_notice("%s: CMDQ host not enabled yet !!!\n",
+		pr_debug("%s: CMDQ host not enabled yet !!!\n",
 		       mmc_hostname(mmc));
 		err = -EINVAL;
 		goto out;
@@ -641,7 +641,7 @@ static int cmdq_request(struct mmc_host *mmc, struct mmc_request *mrq)
 	if (cq_host->ops->crypto_cfg) {
 		err = cq_host->ops->crypto_cfg(mmc, mrq, tag, &hci_ce_ctx);
 		if (err) {
-			pr_notice("%s: failed to configure crypto: err %d tag %d\n",
+			pr_debug("%s: failed to configure crypto: err %d tag %d\n",
 					mmc_hostname(mmc), err, tag);
 			goto out;
 		}
@@ -657,7 +657,7 @@ static int cmdq_request(struct mmc_host *mmc, struct mmc_request *mrq)
 
 	err = cmdq_prep_tran_desc(mrq, cq_host, tag);
 	if (err) {
-		pr_notice("%s: %s: failed to setup tx desc: %d\n",
+		pr_debug("%s: %s: failed to setup tx desc: %d\n",
 		       mmc_hostname(mmc), __func__, err);
 		return err;
 	}
@@ -748,7 +748,7 @@ irqreturn_t cmdq_irq(struct mmc_host *mmc, int err)
 _err:
 	if (err || (status & CQIS_RED)) {
 		err_info = cmdq_readl(cq_host, CQTERRI);
-		pr_notice("%s: err: %d status: 0x%08x task-err-info (0x%08lx)\n",
+		pr_debug("%s: err: %d status: 0x%08x task-err-info (0x%08lx)\n",
 		       mmc_hostname(mmc), err, status, err_info);
 
 		if (mmc->cmdq_ops->dumpstate)
@@ -763,7 +763,7 @@ _err:
 		 */
 		ret = cmdq_halt_poll(mmc, true);
 		if (ret)
-			pr_notice("%s: %s: halt failed ret = %d\n",
+			pr_debug("%s: %s: halt failed ret = %d\n",
 					mmc_hostname(mmc), __func__, ret);
 
 		/*
@@ -797,11 +797,11 @@ _err:
 				if (!task_mask)
 					task_mask = cmdq_readl(cq_host, CQTDBR);
 				tag = uffs(task_mask) - 1;
-				pr_notice("%s: cmd%lu err tag: %lu\n",
+				pr_debug("%s: cmd%lu err tag: %lu\n",
 					__func__, cmd_idx, tag);
 			} else {
 				tag = GET_CMD_ERR_TAG(err_info);
-				pr_notice("%s: cmd err tag: %lu\n",
+				pr_debug("%s: cmd err tag: %lu\n",
 					__func__, tag);
 			}
 			mrq = get_req_by_tag(cq_host, tag);
@@ -812,7 +812,7 @@ _err:
 				mrq->data->error = err;
 		} else if (err_info & CQ_DTEFV) {
 			tag = GET_DAT_ERR_TAG(err_info);
-			pr_notice("%s: dat err  tag: %lu\n", __func__, tag);
+			pr_debug("%s: dat err  tag: %lu\n", __func__, tag);
 
 			mrq = get_req_by_tag(cq_host, tag);
 			mrq->data->error = err;
@@ -836,7 +836,7 @@ _err:
 					mrq->cmdq_req->skip_reset = true;
 				}
 			}
-			pr_notice("%s: Response error (0x%08x) from card !!!\n",
+			pr_debug("%s: Response error (0x%08x) from card !!!\n",
 				mmc_hostname(mmc), cmdq_readl(cq_host, CQCRA));
 		} else {
 			if (mrq && mrq->cmdq_req) {
@@ -922,7 +922,7 @@ static int cmdq_halt_poll(struct mmc_host *mmc, bool halt)
 	struct cmdq_host *cq_host = (struct cmdq_host *)mmc_cmdq_private(mmc);
 	int retries = 100;
 
-	pr_notice("%s: %s halt = %d\n",
+	pr_debug("%s: %s halt = %d\n",
 		mmc_hostname(mmc), __func__, halt);
 
 	if (!halt) {
@@ -954,7 +954,7 @@ static int cmdq_halt_poll(struct mmc_host *mmc, bool halt)
 	cmdq_set_halt_irq(cq_host, true);
 
 	if (!retries) {
-		pr_notice("%s: %s err! retries = %d\n",
+		pr_debug("%s: %s err! retries = %d\n",
 			 mmc_hostname(mmc), __func__, retries);
 	}
 
@@ -975,7 +975,7 @@ static int cmdq_halt(struct mmc_host *mmc, bool halt)
 			ret = wait_for_completion_timeout(&cq_host->halt_comp,
 					  msecs_to_jiffies(HALT_TIMEOUT_MS));
 			if (!ret && !(cmdq_readl(cq_host, CQCTL) & HALT)) {
-				pr_notice("%s: %s: HAC int timeout, retryng halt (%d)\n",
+				pr_debug("%s: %s: HAC int timeout, retryng halt (%d)\n",
 					mmc_hostname(mmc), __func__, retries);
 				retries--;
 				continue;

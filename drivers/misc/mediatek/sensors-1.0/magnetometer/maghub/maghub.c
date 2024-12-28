@@ -281,10 +281,10 @@ static void scp_init_work_done(struct work_struct *work)
 			return;
 		}
 		strlcpy(mag_libinfo.libname,
-			obj->mag_info.mag_dev_info.libname,
+			obj->mag_info.mag_dev_dbg.libname,
 			sizeof(mag_libinfo.libname));
-		mag_libinfo.layout = obj->mag_info.mag_dev_info.layout;
-		mag_libinfo.deviceid = obj->mag_info.mag_dev_info.deviceid;
+		mag_libinfo.layout = obj->mag_info.mag_dev_dbg.layout;
+		mag_libinfo.deviceid = obj->mag_info.mag_dev_dbg.deviceid;
 
 		err = mag_info_record(&mag_libinfo);
 		return;

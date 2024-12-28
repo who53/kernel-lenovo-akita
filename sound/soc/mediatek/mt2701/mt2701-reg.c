@@ -7,7 +7,7 @@ void mt2701_regmap_update_bits(struct regmap *map, unsigned int reg,
 
 	ret = regmap_update_bits(map, reg, mask, val);
 	if (ret != 0)
-		dev_info(regmap_get_device(map),
+		dev_dbg(regmap_get_device(map),
 			"regmap set error reg(0x%x) err(%d)", reg, ret);
 }
 
@@ -17,7 +17,7 @@ void mt2701_regmap_write(struct regmap *map, unsigned int reg, unsigned int val)
 
 	ret = regmap_write(map, reg, val);
 	if (ret != 0)
-		dev_info(regmap_get_device(map),
+		dev_dbg(regmap_get_device(map),
 			"regmap set error reg(0x%x) err(%d)", reg, ret);
 }
 
@@ -27,6 +27,6 @@ void mt2701_regmap_read(struct regmap *map, unsigned int reg, unsigned int *val)
 
 	ret = regmap_read(map, reg, val);
 	if (ret != 0)
-		dev_info(regmap_get_device(map),
+		dev_dbg(regmap_get_device(map),
 			"regmap read error reg(0x%x) err(%d)", reg, ret);
 }

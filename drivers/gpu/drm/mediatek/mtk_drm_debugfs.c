@@ -60,7 +60,7 @@ static void mtk_read_reg(unsigned long addr)
 	void __iomem *reg_va = 0;
 
 	reg_va = ioremap_nocache(addr, sizeof(reg_va));
-	pr_info("r:0x%8lx = 0x%08x\n", addr, readl(reg_va));
+	pr_debug("r:0x%8lx = 0x%08x\n", addr, readl(reg_va));
 	iounmap(reg_va);
 }
 

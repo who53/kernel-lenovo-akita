@@ -581,7 +581,7 @@ mtk_p2p_wext_get_powermode(IN struct net_device *prDev,
 
 /* Private Wireless I/O Controls takes use of iw_handler */
 int
-mtk_p2p_wext_set_local_dev_info(IN struct net_device *prDev,
+mtk_p2p_wext_set_local_dev_dbg(IN struct net_device *prDev,
 				IN struct iw_request_info *info, IN OUT union iwreq_data *wrqu, IN OUT char *extra);
 
 int
@@ -609,7 +609,7 @@ mtk_p2p_wext_password_ready(IN struct net_device *prDev,
 			    IN struct iw_request_info *info, IN OUT union iwreq_data *wrqu, IN OUT char *extra);
 
 int
-mtk_p2p_wext_request_dev_info(IN struct net_device *prDev,
+mtk_p2p_wext_request_dev_dbg(IN struct net_device *prDev,
 			      IN struct iw_request_info *info, IN OUT union iwreq_data *wrqu, IN OUT char *extra);
 
 int

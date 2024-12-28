@@ -173,13 +173,13 @@
 		 pr_debug("ERROR!! _lcm_i2c_client is null\n");
 		 return 0;
 	 }
-	 pr_err("[LCM][I2C] __lcm_i2c_write_bytes\n");
+	 pr_debug("[LCM][I2C] __lcm_i2c_write_bytes\n");
 
 	 write_data[0] = addr;
 	 write_data[1] = value;
 	 ret = i2c_master_send(client, write_data, 2);
 	 if (ret < 0)
-		 pr_info("[LCM][ERROR] _lcm_i2c write data fail !!\n");
+		 pr_debug("[LCM][ERROR] _lcm_i2c write data fail !!\n");
 
 	 return ret;
  }
@@ -188,7 +188,7 @@
 	 int ret = 0;
 	 struct i2c_client *client = _lcm_i2c_client;
 	 char read_data[2] = { 0 };
-	 pr_err("[LCM][I2C] __lcm_i2c_read_bytes\n");
+	 pr_debug("[LCM][I2C] __lcm_i2c_read_bytes\n");
 
 	 if (client == NULL) {
 		 pr_debug("ERROR!! _lcm_i2c_client is null\n");
@@ -199,7 +199,7 @@
 	 read_data[1] = value;
 	 ret = i2c_master_recv(client, read_data, 2);
 	 if (ret < 0)
-		 pr_info("[LCM][ERROR] _lcm_i2c read data fail !!\n");
+		 pr_debug("[LCM][ERROR] _lcm_i2c read data fail !!\n");
 
 	 return ret;
  }
@@ -207,7 +207,7 @@
  {
 		 unsigned char SM5109_reg=0;
 		 unsigned char ret = 0;
-		 pr_err("[LCM][I2C] SM5109_REG_MASK\n");
+		 pr_debug("[LCM][I2C] SM5109_REG_MASK\n");
 
 		 ret = _lcm_i2c_read_bytes(addr, SM5109_reg);
 
@@ -224,18 +224,18 @@
 	char * ptr;
 	int lcd_bias_id = 0x02;
 
-	pr_err("[LCM]power enable\n");
+	pr_debug("[LCM]power enable\n");
 
 	ptr = strstr(saved_command_line, "lcd_bias_id=");
 	ptr += strlen("lcd_bias_id=");
 	lcd_bias_id = simple_strtol(ptr, NULL, 10);
 
-	pr_err("kernel hd lcd_bias_id = %0d, this parameter from lk transmit to kernel through cmdline\n", lcd_bias_id);
+	pr_debug("kernel hd lcd_bias_id = %0d, this parameter from lk transmit to kernel through cmdline\n", lcd_bias_id);
 
 	//from cmdline get LCD Bias IC compatible solutions value
 	if( lcd_bias_id == LCD_BIAS_ID_STATUS_FLOAT )
 	{
-		pr_err("This is NT bias IC NT50358A\n");
+		pr_debug("This is NT bias IC NT50358A\n");
 		pinctrl_select_state(_lcm_gpio, _lcm_gpio_mode[1]);    //enable enp
 		mdelay(10);
 		pinctrl_select_state(_lcm_gpio, _lcm_gpio_mode[3]);    //enable enn
@@ -243,7 +243,7 @@
 	}
 	else
 	{
-		pr_err("This is TI bias IC TPS65132S\n");
+		pr_debug("This is TI bias IC TPS65132S\n");
 		pinctrl_select_state(_lcm_gpio, _lcm_gpio_mode[3]);    //enable TI tps65132s SYNC to 150mA
 		mdelay(5);
 		pinctrl_select_state(_lcm_gpio, _lcm_gpio_mode[1]);    //enable TI tps65132s EN pin
@@ -256,7 +256,7 @@
 	//if (ret < 0)
 	//		pr_debug("ili9881h----cmd=%0x--i2c write error----\n", 0x00);
 	//else
-	//		pr_err("ili9881h----cmd=%0x--i2c write success----\n", 0x00);
+	//		pr_debug("ili9881h----cmd=%0x--i2c write success----\n", 0x00);
 
 	/* set AVEE */
 	/*-4.0V - 20* 100mV*/
@@ -264,14 +264,14 @@
 	//if (ret < 0)
 	//		pr_debug("ili9881h----cmd=%0x--i2c write error----\n", 0x01);
 	//else
-	//		pr_err("ili9881h----cmd=%0x--i2c write success----\n", 0x01);
+	//		pr_debug("ili9881h----cmd=%0x--i2c write success----\n", 0x01);
 
 	/* enable AVDD & AVEE discharge*/
 	//ret = SM5109_REG_MASK(0x03, (1<<0) | (1<<1), (1<<0) | (1<<1));
 	//if (ret < 0)
 	//		pr_debug("ili9881h----cmd=%0x--i2c write error----\n", 0x03);
 	//else
-	//		pr_err("ili9881h----cmd=%0x--i2c write success----\n", 0x03);
+	//		pr_debug("ili9881h----cmd=%0x--i2c write success----\n", 0x03);
 
 	return ret;
 
@@ -282,18 +282,18 @@ int lcm_power_enable_fhd(void){
 	char * ptr;
 	int lcd_bias_id = 0x02;
 
-	pr_err("[LCM]power enable_fhd\n");
+	pr_debug("[LCM]power enable_fhd\n");
 
 	//from cmdline get LCD Bias IC compatible solutions value
 	ptr = strstr(saved_command_line, "lcd_bias_id=");
 	ptr += strlen("lcd_bias_id=");
 	lcd_bias_id = simple_strtol(ptr, NULL, 10);
 
-	pr_err("kernel fhd lcd_bias_id = %0d, this parameter from lk transmit to kernel through cmdline\n", lcd_bias_id);
+	pr_debug("kernel fhd lcd_bias_id = %0d, this parameter from lk transmit to kernel through cmdline\n", lcd_bias_id);
 
 	if( lcd_bias_id == LCD_BIAS_ID_STATUS_FLOAT )
 	{
-		pr_err("This is NT bias IC NT50358A\n");
+		pr_debug("This is NT bias IC NT50358A\n");
 		pinctrl_select_state(_lcm_gpio, _lcm_gpio_mode[1]);    //enable enp
 		mdelay(6);
 		pinctrl_select_state(_lcm_gpio, _lcm_gpio_mode[3]);    //enable enn
@@ -301,7 +301,7 @@ int lcm_power_enable_fhd(void){
 	}
 	else
 	{
-		pr_err("This is TI bias IC TPS65132S\n");
+		pr_debug("This is TI bias IC TPS65132S\n");
 		pinctrl_select_state(_lcm_gpio, _lcm_gpio_mode[3]);    //enable TI tps65132s SYNC to 150mA
 		mdelay(5);
 		pinctrl_select_state(_lcm_gpio, _lcm_gpio_mode[1]);    //enable TI tps65132s EN pin
@@ -314,7 +314,7 @@ int lcm_power_enable_fhd(void){
 	if (ret < 0)
 			pr_debug("ili9881h----cmd=%0x--i2c write error----\n", 0x00);
 	else
-			pr_err("ili9881h----cmd=%0x--i2c write success----\n", 0x00);*/
+			pr_debug("ili9881h----cmd=%0x--i2c write success----\n", 0x00);*/
 
 	/* set AVEE */
 	/*-4.0V - 15* 100mV*/
@@ -322,14 +322,14 @@ int lcm_power_enable_fhd(void){
 	if (ret < 0)
 			pr_debug("ili9881h----cmd=%0x--i2c write error----\n", 0x01);
 	else
-			pr_err("ili9881h----cmd=%0x--i2c write success----\n", 0x01);*/
+			pr_debug("ili9881h----cmd=%0x--i2c write success----\n", 0x01);*/
 
 	/* enable AVDD & AVEE discharge*/
 	/*ret = SM5109_REG_MASK(0x03, (1<<0) | (1<<1), (1<<0) | (1<<1));
 	if (ret < 0)
 			pr_debug("ili9881h----cmd=%0x--i2c write error----\n", 0x03);
 	else
-			pr_err("ili9881h----cmd=%0x--i2c write success----\n", 0x03);*/
+			pr_debug("ili9881h----cmd=%0x--i2c write success----\n", 0x03);*/
 
 	return ret;
 
@@ -339,7 +339,7 @@ int lcm_power_enable_fhd(void){
 
 int lcm_power_enable_vdd3(void){
  	int ret=0;
-	pr_err("[LCM]power enable vdd3\n");
+	pr_debug("[LCM]power enable vdd3\n");
 	mdelay(1);
 	pinctrl_select_state(_lcm_gpio, _lcm_gpio_mode[9]);    //enable vdd3.3
 	return ret;
@@ -349,7 +349,7 @@ int lcm_power_enable_vdd3(void){
  EXPORT_SYMBOL(lcm_power_enable_vdd3);
 
  int lcm_power_disable(void){
- 	pr_err("[LCM]power disable\n");
+ 	pr_debug("[LCM]power disable\n");
 	pinctrl_select_state(_lcm_gpio, _lcm_gpio_mode[2]);    //pull down enn
 	//mdelay(1);
 	pinctrl_select_state(_lcm_gpio, _lcm_gpio_mode[0]);    //pull down enp
@@ -358,7 +358,7 @@ int lcm_power_enable_vdd3(void){
  EXPORT_SYMBOL(lcm_power_disable);
 
  int lcm_power_disable_vdd3(void){
- 	pr_err("[LCM]power disable vdd3\n");
+ 	pr_debug("[LCM]power disable vdd3\n");
 	pinctrl_select_state(_lcm_gpio, _lcm_gpio_mode[8]);    //pull down vdd3
 	return 0;
  }
@@ -366,7 +366,7 @@ int lcm_power_enable_vdd3(void){
 
  int lcm_power_enable_led(void){
 	int ret=0;
-	pr_err("[LCM]backlight enable led_en pin\n");
+	pr_debug("[LCM]backlight enable led_en pin\n");
 	mdelay(80);
 	pinctrl_select_state(_lcm_gpio, _lcm_gpio_mode[11]);    //enable led_en pin
 	return ret;
@@ -375,7 +375,7 @@ int lcm_power_enable_vdd3(void){
  EXPORT_SYMBOL(lcm_power_enable_led);
 
  int lcm_power_disable_led(void){
-	pr_err("[LCM]backlight disable led_en pin\n");
+	pr_debug("[LCM]backlight disable led_en pin\n");
 	pinctrl_select_state(_lcm_gpio, _lcm_gpio_mode[10]);    //disable led_en pin
 	return 0;
  }
@@ -387,7 +387,7 @@ int lcm_power_enable_vdd3(void){
  };
   void lcm_reset_pin(unsigned int mode)
  {
-	 pr_err("[LCM][GPIO]lcm_reset_pin mode:%d !\n",mode);
+	 pr_debug("[LCM][GPIO]lcm_reset_pin mode:%d !\n",mode);
 	 if((mode==0)||(mode==1)){
 		 switch (mode){
 			 case LOW :
@@ -407,7 +407,7 @@ int lcm_power_enable_vdd3(void){
 
   void ctp_reset_pin(unsigned int mode)
  {
-	 pr_err("[LCM][GPIO]ctp_reset_pin mode:%d !\n",mode);
+	 pr_debug("[LCM][GPIO]ctp_reset_pin mode:%d !\n",mode);
 	 if((mode==0)||(mode==1)){
 		 switch (mode){
 			 case LOW :
@@ -435,7 +435,7 @@ int lcm_power_enable_vdd3(void){
 		 _lcm_gpio = devm_pinctrl_get(dev);
 		 if (IS_ERR(_lcm_gpio)) {
 			 ret = PTR_ERR(_lcm_gpio);
-		 pr_err("[LCM][ERROR] Cannot find _lcm_gpio!\n");
+		 pr_debug("[LCM][ERROR] Cannot find _lcm_gpio!\n");
 			 return ret;
 		 }
 		 for (mode = PC_LCM_GPIO_MODE_00; mode < PC_MAX_LCM_GPIO_MODE; mode++) {
@@ -443,11 +443,11 @@ int lcm_power_enable_vdd3(void){
 				 pinctrl_lookup_state(_lcm_gpio,
 					 _lcm_gpio_mode_list[mode]);
 			 if (IS_ERR(_lcm_gpio_mode[mode]))
-				 pr_err("[LCM][ERROR] Cannot find lcm_mode:%d! skip it.\n",
+				 pr_debug("[LCM][ERROR] Cannot find lcm_mode:%d! skip it.\n",
 				 mode);
 		 }
 	 	pr_debug("[LCM][GPIO] exit %s, %d\n", __func__, __LINE__);
- 		pr_err("MediaTek LCM I2C driver init\n");
+ 		pr_debug("MediaTek LCM I2C driver init\n");
 	 		ret = i2c_add_driver(&_lcm_i2c_driver);
 	 	pr_debug("MediaTek LCM I2C driver init ret=%d\n",ret);
 	 		if(ret !=0){
@@ -464,9 +464,9 @@ int lcm_power_enable_vdd3(void){
 
  static int __init _lcm_gpio_init(void)
  {
-	 pr_err("[LCM] LCM GPIO driver init\n");
+	 pr_debug("[LCM] LCM GPIO driver init\n");
 	 if (platform_driver_register(&_lcm_gpio_driver) != 0) {
-		 pr_info("[LCM]unable to register LCM GPIO driver.\n");
+		 pr_debug("[LCM]unable to register LCM GPIO driver.\n");
 		 return -1;
 	 }
 	 return 0;

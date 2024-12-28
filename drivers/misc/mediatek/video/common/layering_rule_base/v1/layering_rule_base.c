@@ -294,7 +294,7 @@ static int get_ovl_idx_by_phy_layer(int layer_map_tb, int phy_layer_idx)
 	}
 
 	if (layer_idx == MAX_PHY_OVL_CNT) {
-		pr_info("[DISP]%s fail, phy_layer_idx:%d\n",
+		pr_debug("[DISP]%s fail, phy_layer_idx:%d\n",
 			__func__, phy_layer_idx);
 		return -1;
 	}
@@ -1104,7 +1104,7 @@ static int get_layer_weight(int disp_idx, struct layer_config *layer_info)
 		struct disp_session_info dispif_info;
 
 		/* For seconary display, set the wight 4K@30 as 2K@60.	*/
-		hdmi_get_dev_info(true, &dispif_info);
+		hdmi_get_dev_dbg(true, &dispif_info);
 
 		if (dispif_info.displayWidth > 2560)
 			weight = HRT_UINT_WEIGHT * 2;
@@ -1646,7 +1646,7 @@ static int _copy_layer_info_from_disp(struct disp_layer_info *disp_info_user,
 		kzalloc(layer_size, GFP_KERNEL);
 
 	if (l_info->input_config[disp_idx] == NULL) {
-		pr_info("[DISP][HRT]: alloc input config 0 fail, layer_num:%d\n",
+		pr_debug("[DISP][HRT]: alloc input config 0 fail, layer_num:%d\n",
 			l_info->layer_num[disp_idx]);
 		return -EFAULT;
 	}
@@ -1659,7 +1659,7 @@ static int _copy_layer_info_from_disp(struct disp_layer_info *disp_info_user,
 		if (copy_from_user(l_info->input_config[disp_idx],
 				disp_info_user->input_config[disp_idx],
 				layer_size)) {
-			pr_info("[DISP][FB]: copy_to_user failed! line:%d\n",
+			pr_debug("[DISP][FB]: copy_to_user failed! line:%d\n",
 				__LINE__);
 			return -EFAULT;
 		}
@@ -1701,7 +1701,7 @@ static int _copy_layer_info_by_disp(struct disp_layer_info *disp_info_user,
 	} else {
 		if (copy_to_user(disp_info_user->input_config[disp_idx],
 				l_info->input_config[disp_idx], layer_size)) {
-			pr_info("[DISP][FB]: copy_to_user failed! line:%d\n",
+			pr_debug("[DISP][FB]: copy_to_user failed! line:%d\n",
 				__LINE__);
 			ret = -EFAULT;
 		}

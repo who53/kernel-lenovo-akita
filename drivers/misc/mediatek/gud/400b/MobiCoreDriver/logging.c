@@ -93,18 +93,18 @@ static inline void log_eol(u16 source, u32 cpuid)
 	if (log_ctx.prev_source)
 		/* TEE user-space */
 #ifdef TBASE_CORE_SWITCHER
-		dev_info(g_ctx.mcd, "%03x(%u)|%s\n", log_ctx.prev_source,
+		dev_dbg(g_ctx.mcd, "%03x(%u)|%s\n", log_ctx.prev_source,
 			 cpuid, log_ctx.line);
 #else
-		dev_info(g_ctx.mcd, "%03x|%s\n", log_ctx.prev_source,
+		dev_dbg(g_ctx.mcd, "%03x|%s\n", log_ctx.prev_source,
 			 log_ctx.line);
 #endif
 	else
 		/* TEE kernel */
 #ifdef TBASE_CORE_SWITCHER
-		dev_info(g_ctx.mcd, "mtk(%u)|%s\n", cpuid, log_ctx.line);
+		dev_dbg(g_ctx.mcd, "mtk(%u)|%s\n", cpuid, log_ctx.line);
 #else
-		dev_info(g_ctx.mcd, "mtk|%s\n", log_ctx.line);
+		dev_dbg(g_ctx.mcd, "mtk|%s\n", log_ctx.line);
 #endif
 
 	log_ctx.line[0] = '\0';

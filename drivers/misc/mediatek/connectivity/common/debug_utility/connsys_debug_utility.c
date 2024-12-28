@@ -250,7 +250,7 @@ static void connlog_ring_emi_to_cache(int conn_type)
 
 	if (RING_FULL(ring_cache)) {
 		if (__ratelimit(&_rs))
-			pr_warn("%s cache is full.\n", type_to_title[conn_type]);
+			pr_debug("%s cache is full.\n", type_to_title[conn_type]);
 		return;
 	}
 
@@ -768,7 +768,7 @@ static int connlog_eirq_init(unsigned int irq_id, unsigned int irq_flag)
 	if (gDev.conn2ApIrqId == 0)
 		gDev.conn2ApIrqId = irq_id;
 	else {
-		pr_warn("IRQ has been initialized\n");
+		pr_debug("IRQ has been initialized\n");
 		return -1;
 	}
 	pr_debug("EINT CONN_LOG_IRQ(%d, %d)\n", irq_id, irq_flag);
@@ -839,7 +839,7 @@ static int connlog_emi_init(phys_addr_t emiaddr)
 	}
 
 	if (gDev.phyAddrEmiBase) {
-		pr_warn("emi base address has been initialized\n");
+		pr_debug("emi base address has been initialized\n");
 		return -2;
 	}
 

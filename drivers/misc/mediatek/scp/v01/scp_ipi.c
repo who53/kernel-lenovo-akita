@@ -198,7 +198,7 @@ enum scp_ipi_status scp_ipi_send(enum ipi_id id, void *buf,
 		/* pr_err("[SCP] %s: %s not enabled, id=%d\n", __func__
 		 *					, core_ids[scp_id], id);
 		 */
-		pr_notice("[SCP] %s: %s not ready\n", __func__,
+		pr_debug("[SCP] %s: %s not ready\n", __func__,
 			core_ids[scp_id]);
 		scp_ipi_desc[id].error_count++;
 		return SCP_IPI_ERROR;
@@ -211,7 +211,7 @@ enum scp_ipi_status scp_ipi_send(enum ipi_id id, void *buf,
 	}
 #if SCP_RECOVERY_SUPPORT
 	if (atomic_read(&scp_reset_status) == RESET_STATUS_START) {
-		pr_notice("[SCP] %s: %s reset start\n", __func__,
+		pr_debug("[SCP] %s: %s reset start\n", __func__,
 			core_ids[scp_id]);
 		scp_ipi_desc[id].error_count++;
 		return SCP_IPI_ERROR;
@@ -378,11 +378,11 @@ void mt_print_scp_ipi_id(void)
 
 	switch (id) {
 	case IPI_SENSOR:
-		pr_info("[SCP] ipi(%d) id/type/action/event/reserve = %d/%d/%d/%d/%d\n",
+		pr_debug("[SCP] ipi(%d) id/type/action/event/reserve = %d/%d/%d/%d/%d\n",
 				*ipi_count, id, buf[0], buf[1], buf[2], buf[3]);
 		break;
 	default:
-		pr_info("[SCP] ipi id = %d\n", id);
+		pr_debug("[SCP] ipi id = %d\n", id);
 		break;
 	}
 }

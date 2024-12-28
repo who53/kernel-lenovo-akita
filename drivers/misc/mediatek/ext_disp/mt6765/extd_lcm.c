@@ -83,7 +83,7 @@ LCM_PARAMS extd_interface_params;
 
 #define EXTD_LCM_SESSION_ID          (0x20003)
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-int lcm_get_dev_info(int is_sf, void *info)
+int lcm_get_dev_dbg(int is_sf, void *info)
 {
 	int ret = 0;
 
@@ -176,7 +176,7 @@ const struct EXTD_DRIVER *EXTD_LCM_Driver(void)
 #if defined(CONFIG_MTK_DUAL_DISPLAY_SUPPORT) &&	\
 			(CONFIG_MTK_DUAL_DISPLAY_SUPPORT == 2)
 		.post_init = lcm_post_init,
-		.get_dev_info = lcm_get_dev_info,
+		.get_dev_dbg = lcm_get_dev_dbg,
 		.ioctl = lcm_ioctl,
 		.power_enable = NULL,
 #else

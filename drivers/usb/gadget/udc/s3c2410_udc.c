@@ -1790,7 +1790,7 @@ static int s3c2410_udc_probe(struct platform_device *pdev)
 	dev_dbg(dev, "got and enabled clocks\n");
 
 	if (strncmp(pdev->name, "s3c2440", 7) == 0) {
-		dev_info(dev, "S3C2440: increasing FIFO to 128 bytes\n");
+		dev_dbg(dev, "S3C2440: increasing FIFO to 128 bytes\n");
 		memory.ep[1].fifo_size = S3C2440_EP_FIFO_SIZE;
 		memory.ep[2].fifo_size = S3C2440_EP_FIFO_SIZE;
 		memory.ep[3].fifo_size = S3C2440_EP_FIFO_SIZE;

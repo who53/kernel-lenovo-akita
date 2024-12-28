@@ -112,7 +112,7 @@ static void pdp_apollo_set_updates_enabled(struct device *dev,
 				void __iomem *pdp_reg, bool enable)
 {
 #ifdef PDP_VERBOSE
-	dev_info(dev, "Set updates: %s\n",
+	dev_dbg(dev, "Set updates: %s\n",
 			 enable ? "enable" : "disable");
 #endif
 
@@ -125,7 +125,7 @@ static void pdp_apollo_set_syncgen_enabled(struct device *dev,
 	u32 value;
 
 #ifdef PDP_VERBOSE
-	dev_info(dev, "Set syncgen: %s\n",
+	dev_dbg(dev, "Set syncgen: %s\n",
 		enable ? "enable" : "disable");
 #endif
 
@@ -146,7 +146,7 @@ static void pdp_apollo_set_powerdwn_enabled(struct device *dev,
 	u32 value;
 
 #ifdef PDP_VERBOSE
-	dev_info(dev, "Set powerdwn: %s\n",
+	dev_dbg(dev, "Set powerdwn: %s\n",
 		enable ? "enable" : "disable");
 #endif
 
@@ -167,7 +167,7 @@ static void pdp_apollo_set_vblank_enabled(struct device *dev,
 	u32 value;
 
 #ifdef PDP_VERBOSE
-	dev_info(dev, "Set vblank: %s\n",
+	dev_dbg(dev, "Set vblank: %s\n",
 		enable ? "enable" : "disable");
 #endif
 
@@ -210,7 +210,7 @@ static void pdp_apollo_set_plane_enabled(struct device *dev,
 	u32 value;
 
 #ifdef PDP_VERBOSE
-	dev_info(dev, "Set plane %u: %s\n",
+	dev_dbg(dev, "Set plane %u: %s\n",
 		 plane, enable ? "enable" : "disable");
 #endif
 
@@ -235,7 +235,7 @@ static void pdp_apollo_reset_planes(struct device *dev,
 				void __iomem *pdp_reg)
 {
 #ifdef PDP_VERBOSE
-	dev_info(dev, "Reset planes\n");
+	dev_dbg(dev, "Reset planes\n");
 #endif
 
 	pdp_apollo_set_plane_enabled(dev, pdp_reg, 0, false);
@@ -254,7 +254,7 @@ static void pdp_apollo_set_surface(struct device *dev,
 	u32 value;
 
 #ifdef PDP_VERBOSE
-	dev_info(dev, "Set surface: size=%dx%d stride=%d format=%d address=0x%x\n",
+	dev_dbg(dev, "Set surface: size=%dx%d stride=%d format=%d address=0x%x\n",
 			 width, height, stride, format, address);
 #endif
 
@@ -319,11 +319,11 @@ static void pdp_apollo_mode_set(struct device *dev,
 {
 	u32 value;
 
-	dev_info(dev, "Set mode: %dx%d\n", h_display, v_display);
+	dev_dbg(dev, "Set mode: %dx%d\n", h_display, v_display);
 #ifdef PDP_VERBOSE
-	dev_info(dev, " ht: %d hbps %d has %d hlbs %d hfps %d hrbs %d\n",
+	dev_dbg(dev, " ht: %d hbps %d has %d hlbs %d hfps %d hrbs %d\n",
 			 ht, hbps, has, hlbs, hfps, hrbs);
-	dev_info(dev, " vt: %d vbps %d vas %d vtbs %d vfps %d vbbs %d\n",
+	dev_dbg(dev, " vt: %d vbps %d vas %d vtbs %d vfps %d vbbs %d\n",
 			 vt, vbps, vas, vtbs, vfps, vbbs);
 #endif
 

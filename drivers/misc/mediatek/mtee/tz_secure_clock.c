@@ -34,11 +34,11 @@ uint32_t TEE_update_gb_time_intee(KREE_SESSION_HANDLE session,
 	struct TZ_GB_SECURETIME_INFO secure_time;
 	DRM_UINT64 cur_counter;
 
-	pr_info("enter %s\n", __func__);
+	pr_debug("enter %s\n", __func__);
 	rtc = rtc_class_open(CONFIG_RTC_HCTOSYS_DEVICE);
 
 	if (rtc == NULL) {
-		pr_warn("%s: unable to open rtc device (%s)\n",
+		pr_debug("%s: unable to open rtc device (%s)\n",
 					__FILE__, CONFIG_RTC_HCTOSYS_DEVICE);
 		goto err_open;
 	}
@@ -60,8 +60,8 @@ uint32_t TEE_update_gb_time_intee(KREE_SESSION_HANDLE session,
 		goto err_read;
 	}
 	for (i = 0; i < sizeof(struct TZ_GB_SECURETIME_INFO); i++)
-		pr_info("%02x", ((char *)&secure_time)[i]);
-	pr_info("\n");
+		pr_debug("%02x", ((char *)&secure_time)[i]);
+	pr_debug("\n");
 
 	err = rtc_read_time(rtc, &tm);
 	if (err) {
@@ -86,16 +86,16 @@ uint32_t TEE_update_gb_time_intee(KREE_SESSION_HANDLE session,
 				TZCMD_SECURETIME_SET_CURRENT_COUNTER,
 				paramTypes, param);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("ServiceCall TZCMD_SECURETIME_SET_CURRENT_COUNTER error %d\n",
+		pr_debug("ServiceCall TZCMD_SECURETIME_SET_CURRENT_COUNTER error %d\n",
 			ret);
 
 	if (param[2].value.a == GB_TIME_FILE_ERROR_SIGN) {
 		file_result = GB_TIME_FILE_ERROR_SIGN;
-		pr_warn("ServiceCall TZCMD_SECURETIME_SET_CURRENT_COUNTER file_result %d\n",
+		pr_debug("ServiceCall TZCMD_SECURETIME_SET_CURRENT_COUNTER file_result %d\n",
 			file_result);
 	} else if (param[2].value.a == GB_TIME_FILE_OK_SIGN) {
 		file_result = GB_TIME_FILE_OK_SIGN;
-		pr_warn("ServiceCall TZCMD_SECURETIME_SET_CURRENT_COUNTER file_result %d\n",
+		pr_debug("ServiceCall TZCMD_SECURETIME_SET_CURRENT_COUNTER file_result %d\n",
 			file_result);
 	}
 
@@ -121,7 +121,7 @@ uint32_t TEE_update_gb_time_infile(KREE_SESSION_HANDLE session,
 	struct file *file = NULL;
 	UINT64 u8Offset = 0;
 
-	pr_info("enter %s\n", __func__);
+	pr_debug("enter %s\n", __func__);
 	shm_p = kmalloc(sizeof(struct TZ_GB_SECURETIME_INFO), GFP_KERNEL);
 
 	paramTypes = TZ_ParamTypes3(TZPT_MEM_OUTPUT, TZPT_VALUE_INPUT,
@@ -133,7 +133,7 @@ uint32_t TEE_update_gb_time_infile(KREE_SESSION_HANDLE session,
 	ret = KREE_TeeServiceCall(session, TZCMD_SECURETIME_GET_CURRENT_COUNTER,
 				paramTypes, param);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("ServiceCall error %d\n", ret);
+		pr_debug("ServiceCall error %d\n", ret);
 		goto tz_error;
 	}
 
@@ -143,7 +143,7 @@ uint32_t TEE_update_gb_time_infile(KREE_SESSION_HANDLE session,
 			sizeof(struct TZ_GB_SECURETIME_INFO), &u8Offset);
 		filp_close(file, NULL);
 	} else {
-		pr_warn("FILE_Open GB_TIME_FILE_SAVE_PATH return NULL\n");
+		pr_debug("FILE_Open GB_TIME_FILE_SAVE_PATH return NULL\n");
 	}
 
 tz_error:
@@ -178,7 +178,7 @@ uint32_t TEE_Icnt_time(KREE_SESSION_HANDLE session,
 	rtc = rtc_class_open(CONFIG_RTC_HCTOSYS_DEVICE);
 
 	if (rtc == NULL) {
-		pr_warn("%s: unable to open rtc device (%s)\n",
+		pr_debug("%s: unable to open rtc device (%s)\n",
 			__FILE__, CONFIG_RTC_HCTOSYS_DEVICE);
 		goto err_open;
 	}
@@ -208,7 +208,7 @@ uint32_t TEE_Icnt_time(KREE_SESSION_HANDLE session,
 	ret = KREE_TeeServiceCall(session, TZCMD_SECURETIME_INC_CURRENT_COUNTER,
 				 paramTypes, param);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("ServiceCall error %d\n", ret);
+		pr_debug("ServiceCall error %d\n", ret);
 
 #if 1
 	pr_debug("securetime increase result: %d %d %d %d %d %d %d\n",
@@ -247,18 +247,18 @@ static int securetime_savefile_gb(void)
 
 	ret = KREE_CreateSession(TZ_TA_SECURETIME_UUID, &securetime_session);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("[securetime]CreateSession error %d\n", ret);
+		pr_debug("[securetime]CreateSession error %d\n", ret);
 	} else {
 		ret = KREE_CreateSession(TZ_TA_MEM_UUID, &mem_session);
 		TEE_update_gb_time_infile(securetime_session, mem_session);
 
 		ret = KREE_CloseSession(securetime_session);
 		if (ret != TZ_RESULT_SUCCESS)
-			pr_warn("CloseSession error %d\n", ret);
+			pr_debug("CloseSession error %d\n", ret);
 
 		ret = KREE_CloseSession(mem_session);
 		if (ret != TZ_RESULT_SUCCESS)
-			pr_warn("[securetime]CloseMEMSession error %d\n", ret);
+			pr_debug("[securetime]CloseMEMSession error %d\n", ret);
 
 	}
 
@@ -281,18 +281,18 @@ static void st_late_resume_gb(struct early_suspend *h)
 
 	ret = KREE_CreateSession(TZ_TA_SECURETIME_UUID, &securetime_session);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("[securetime]CreateSession error %d\n", ret);
+		pr_debug("[securetime]CreateSession error %d\n", ret);
 	} else {
 		ret = KREE_CreateSession(TZ_TA_MEM_UUID, &mem_session);
 		TEE_update_gb_time_intee(securetime_session, mem_session);
 
 		ret = KREE_CloseSession(securetime_session);
 		if (ret != TZ_RESULT_SUCCESS)
-			pr_warn("[securetime]CloseSession error %d\n", ret);
+			pr_debug("[securetime]CloseSession error %d\n", ret);
 
 		ret = KREE_CloseSession(mem_session);
 		if (ret != TZ_RESULT_SUCCESS)
-			pr_warn("[securetime]CloseMEMSession error %d\n", ret);
+			pr_debug("[securetime]CloseMEMSession error %d\n", ret);
 	}
 }
 
@@ -314,13 +314,13 @@ int update_securetime_thread_gb(void *data)
 
 	ret = KREE_CreateSession(TZ_TA_SECURETIME_UUID, &icnt_session);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("%s CreateSession error %d\n", __func__, ret);
+		pr_debug("%s CreateSession error %d\n", __func__, ret);
 		return 1;
 	}
 
 	ret = KREE_CreateSession(TZ_TA_MEM_UUID, &mem_session);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("%s Create memory session error %d\n",
+		pr_debug("%s Create memory session error %d\n",
 		__func__, ret);
 		ret = KREE_CloseSession(icnt_session);
 		return ret;
@@ -363,12 +363,12 @@ int update_securetime_thread_gb(void *data)
 
 	ret = KREE_CloseSession(icnt_session);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("%s CloseSession error %d\n", __func__, ret);
+		pr_debug("%s CloseSession error %d\n", __func__, ret);
 
 
 	ret = KREE_CloseSession(mem_session);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("%s Close memory session error %d\n",
+		pr_debug("%s Close memory session error %d\n",
 			__func__, ret);
 
 	return 0;

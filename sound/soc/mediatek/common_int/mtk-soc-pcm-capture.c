@@ -105,7 +105,7 @@ static int Audio_capture_hdinput_Set(struct snd_kcontrol *kcontrol,
 {
 	pr_debug("%s()\n", __func__);
 	if (ucontrol->value.enumerated.item[0] > ARRAY_SIZE(capture_HD_input)) {
-		pr_warn("return -EINVAL\n");
+		pr_debug("return -EINVAL\n");
 		return -EINVAL;
 	}
 
@@ -145,7 +145,7 @@ static int Audio_Irq2cnt_Set(struct snd_kcontrol *kcontrol,
 		irq_update_user(irq_user_id, Soc_Aud_IRQ_MCU_MODE_IRQ2_MCU_MODE,
 				0, irq2_cnt);
 	else
-		pr_warn("warn, cannot update irq counter, user_id = %p, irq2_cnt = %d\n",
+		pr_debug("warn, cannot update irq counter, user_id = %p, irq2_cnt = %d\n",
 			irq_user_id, irq2_cnt);
 
 	AudDrv_Clk_Off();
@@ -377,7 +377,7 @@ static int mtk_capture_pcm_hw_params(struct snd_pcm_substream *substream,
 		mCaptureUseSram = true;
 		AudDrv_Emi_Clk_On();
 	} else {
-		pr_info("mtk_capture_pcm_hw_params snd_pcm_lib_malloc_pages\n");
+		pr_debug("mtk_capture_pcm_hw_params snd_pcm_lib_malloc_pages\n");
 		ret = snd_pcm_lib_malloc_pages(substream,
 					       params_buffer_bytes(hw_params));
 	}
@@ -649,7 +649,7 @@ static int __init mtk_soc_capture_platform_init(void)
 {
 	int ret = 0;
 
-	pr_info("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 #ifndef CONFIG_OF
 	soc_mtkafe_capture_dev = platform_device_alloc(MT_SOC_UL1_PCM, -1);
 	if (!soc_mtkafe_capture_dev)

@@ -86,14 +86,14 @@
 #define MTP_CONTAINER_PARAMETER_OFFSET          12
 #define MTP_CONTAINER_HEADER_SIZE               12
 #define MTP_DBG(fmt, args...) \
-	pr_notice("MTP, <%s(), %d> " fmt, __func__, __LINE__, ## args)
+	pr_debug("MTP, <%s(), %d> " fmt, __func__, __LINE__, ## args)
 #define MTP_DBG_LIMIT(FREQ, fmt, args...) do {\
 	static DEFINE_RATELIMIT_STATE(ratelimit, HZ, FREQ);\
 	static int skip_cnt;\
 	\
 	{ \
 		if (__ratelimit(&ratelimit)) {\
-			pr_notice("MTP, <%s(), %d> " fmt ", skip<%d>\n",\
+			pr_debug("MTP, <%s(), %d> " fmt ", skip<%d>\n",\
 					__func__, __LINE__, ## args, skip_cnt);\
 			skip_cnt = 0;\
 		} else\
@@ -676,7 +676,7 @@ retry_tx_alloc:
 			while ((req = mtp_req_get(dev, &dev->tx_idle)))
 				mtp_request_free(req, dev->ep_in);
 			len_idx++;
-			pr_info("allocate TX fail. try %d\n",
+			pr_debug("allocate TX fail. try %d\n",
 				mtp_req_len[len_idx]);
 			goto retry_tx_alloc;
 		}
@@ -695,7 +695,7 @@ retry_rx_alloc:
 			for (--i; i >= 0; i--)
 				mtp_request_free(dev->rx_req[i], dev->ep_out);
 			len_idx++;
-			pr_info("allocate RX fail. try %d\n",
+			pr_debug("allocate RX fail. try %d\n",
 				mtp_req_len[len_idx]);
 			goto retry_rx_alloc;
 		}
@@ -712,7 +712,7 @@ retry_rx_alloc:
 		mtp_req_put(dev, &dev->intr_idle, req);
 	}
 
-	pr_info("allocate RX=%d Tx=%d\n", mtp_rx_req_len, mtp_tx_req_len);
+	pr_debug("allocate RX=%d Tx=%d\n", mtp_rx_req_len, mtp_tx_req_len);
 
 	return 0;
 
@@ -741,7 +741,7 @@ void mtp_set_cpu_mask(unsigned int mask)
 	while (i <= mask) {
 		if (i & mask) {
 			cpumask_set_cpu(idx, &(dev->cpu_mask));
-			pr_info("Set CPU[%d] On\n", idx);
+			pr_debug("Set CPU[%d] On\n", idx);
 		}
 		idx++;
 		i = i << 1;
@@ -760,7 +760,7 @@ int mtp_get_mtp_server(void)
 }
 
 #define MTP_QUEUE_DBG(fmt, args...)		\
-	pr_info("MTP_QUEUE_DBG, <%s(), %d> " fmt, __func__, __LINE__, ## args)
+	pr_debug("MTP_QUEUE_DBG, <%s(), %d> " fmt, __func__, __LINE__, ## args)
 #define MTP_QUEUE_DBG_STR_SZ 128
 
 void mtp_dbg_dump(void)
@@ -1272,7 +1272,7 @@ static void receive_file_work(struct work_struct *data)
 /* #define MTP_RX_DBG_ON */
 #ifdef MTP_RX_DBG_ON
 #define MTP_RX_DBG(fmt, args...) \
-pr_notice("MTP_RX_DBG, <%s(), %d> " fmt, __func__, __LINE__, ## args)
+pr_debug("MTP_RX_DBG, <%s(), %d> " fmt, __func__, __LINE__, ## args)
 #else
 #define MTP_RX_DBG(fmt, args...) do {} while (0)
 #endif
@@ -1432,7 +1432,7 @@ static int mtp_send_event(struct mtp_dev *dev, struct mtp_event *event)
 		return -ENODEV;
 
 	if (mtp_send_event_timeout_cnt > MTP_SEND_EVENT_TIMEOUT_CNT) {
-		pr_info("%s, timeout count<%d> exceed %d, directly return\n",
+		pr_debug("%s, timeout count<%d> exceed %d, directly return\n",
 			__func__, mtp_send_event_timeout_cnt,
 			MTP_SEND_EVENT_TIMEOUT_CNT);
 		return -ETIME;
@@ -1443,7 +1443,7 @@ static int mtp_send_event(struct mtp_dev *dev, struct mtp_event *event)
 			msecs_to_jiffies(1000));
 	if (!req) {
 		mtp_send_event_timeout_cnt++;
-		pr_info("%s, timeout count<%d>\n", __func__,
+		pr_debug("%s, timeout count<%d>\n", __func__,
 			mtp_send_event_timeout_cnt);
 		return -ETIME;
 	}
@@ -1715,7 +1715,7 @@ static int mtp_open(struct inode *ip, struct file *fp)
 {
 	static bool inited;
 
-	pr_info("mtp_open\n");
+	pr_debug("mtp_open\n");
 	if (mtp_lock(&_mtp_dev->open_excl)) {
 		MTP_DBG("BUSY\n");
 		return -EBUSY;
@@ -1738,7 +1738,7 @@ static int mtp_open(struct inode *ip, struct file *fp)
 
 static int mtp_release(struct inode *ip, struct file *fp)
 {
-	pr_info("mtp_release\n");
+	pr_debug("mtp_release\n");
 
 	cancel_delayed_work(&monitor_work);
 
@@ -2090,7 +2090,7 @@ static int mtp_bind_config(struct usb_configuration *c,
 	struct mtp_dev *dev = _mtp_dev;
 	int ret = 0;
 
-	pr_info("mtp_bind_config\n");
+	pr_debug("mtp_bind_config\n");
 
 	/* allocate a string ID for our interface */
 	if (mtp_string_defs[INTERFACE_STRING_INDEX].id == 0) {
@@ -2168,7 +2168,7 @@ err2:
 err1:
 	_mtp_dev = NULL;
 	kfree(dev);
-	pr_info("mtp gadget driver failed to initialize\n");
+	pr_debug("mtp gadget driver failed to initialize\n");
 	return ret;
 }
 
@@ -2251,7 +2251,7 @@ static ssize_t cpu_mask_store(struct device *dev,
 	if (kstrtouint(buf, 16, &mask) != 0)
 		return -EINVAL;
 
-	pr_info("Store => 0x%x\n", mask);
+	pr_debug("Store => 0x%x\n", mask);
 
 	mtp_set_cpu_mask(mask);
 
@@ -2362,7 +2362,7 @@ struct usb_function_instance *alloc_inst_mtp_ptp(bool mtp_config)
 
 		if (IS_ERR(dev)) {
 			kfree(fi_mtp);
-			pr_info("Error create_function_device\n");
+			pr_debug("Error create_function_device\n");
 			return (void *)dev;
 		}
 
@@ -2375,7 +2375,7 @@ struct usb_function_instance *alloc_inst_mtp_ptp(bool mtp_config)
 			if (err) {
 				device_destroy(dev->class, dev->devt);
 				kfree(fi_mtp);
-				pr_info("Error device_create_file\n");
+				pr_debug("Error device_create_file\n");
 				return ERR_PTR(-EINVAL);
 			}
 		}

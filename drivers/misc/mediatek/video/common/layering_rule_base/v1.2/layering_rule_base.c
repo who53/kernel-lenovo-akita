@@ -1244,7 +1244,7 @@ static int get_layer_weight(int disp_idx, struct layer_config *layer_info)
 		struct disp_session_info dispif_info;
 
 		/* For seconary display, set the weight 4K@30 as 2K@60.	*/
-		hdmi_get_dev_info(true, &dispif_info);
+		hdmi_get_dev_dbg(true, &dispif_info);
 
 		if (dispif_info.displayWidth > 2560)
 			weight = HRT_UINT_WEIGHT * 2;
@@ -1799,7 +1799,7 @@ static int _copy_layer_info_from_disp(struct disp_layer_info *disp_info_user,
 		if (copy_from_user(l_info->input_config[disp_idx],
 				   disp_info_user->input_config[disp_idx],
 				   layer_size)) {
-			pr_info("[DISP][FB]: copy_to_user failed! line:%d\n",
+			pr_debug("[DISP][FB]: copy_to_user failed! line:%d\n",
 				__LINE__);
 
 			return 0;
@@ -1852,7 +1852,7 @@ static int _copy_layer_info_by_disp(struct disp_layer_info *disp_info_user,
 	} else {
 		if (copy_to_user(disp_info_user->input_config[disp_idx],
 				 l_info->input_config[disp_idx], layer_size)) {
-			pr_info("[DISP][FB]: copy_to_user failed! line:%d\n",
+			pr_debug("[DISP][FB]: copy_to_user failed! line:%d\n",
 				__LINE__);
 			ret = -EFAULT;
 		}

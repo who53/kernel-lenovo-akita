@@ -85,21 +85,21 @@ extern unsigned int g_dbg_level;
 #define FM_LOG_INF(flag, fmt, args...) \
 	do { \
 		if ((FM_INF <= (g_dbg_level&0x0000000f)) && ((flag)&0xfffffff0) & g_dbg_level) { \
-			pr_info("[" #flag "]" fmt, ## args); \
+			pr_debug("[" #flag "]" fmt, ## args); \
 		} \
 	} while (0)
 
 #define FM_LOG_NTC(flag, fmt, args...) \
 	do { \
 		if ((FM_NTC <= (g_dbg_level&0x0000000f)) && ((flag)&0xfffffff0) & g_dbg_level) { \
-			pr_notice("[" #flag "]" fmt, ## args); \
+			pr_debug("[" #flag "]" fmt, ## args); \
 		} \
 	} while (0)
 
 #define FM_LOG_WAR(flag, fmt, args...) \
 	do { \
 		if ((FM_WAR <= (g_dbg_level&0x0000000f)) && ((flag)&0xfffffff0) & g_dbg_level) { \
-			pr_warn("[" #flag "]" fmt, ## args); \
+			pr_debug("[" #flag "]" fmt, ## args); \
 		} \
 	} while (0)
 

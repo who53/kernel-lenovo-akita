@@ -194,7 +194,7 @@ static int msg_bind(struct usb_composite_dev *cdev)
 		goto fail_otg_desc;
 
 	usb_composite_overwrite_options(cdev, &coverwrite);
-	dev_info(&cdev->gadget->dev,
+	dev_dbg(&cdev->gadget->dev,
 		 DRIVER_DESC ", version: " DRIVER_VERSION "\n");
 	return 0;
 

@@ -897,7 +897,7 @@ static long admin_ioctl(struct file *file, unsigned int cmd,
 		/* Update TGID as it may change (when becoming a daemon) */
 		if (admin_ctx.admin_tgid != current->tgid) {
 			admin_ctx.admin_tgid = current->tgid;
-			mc_dev_info("daemon PID changed to %d",
+			mc_dev_dbg("daemon PID changed to %d",
 				    admin_ctx.admin_tgid);
 		}
 
@@ -1023,7 +1023,7 @@ static int admin_release(struct inode *inode, struct file *file)
 		complete(&g_request.server_complete);
 	}
 	mutex_unlock(&g_request.states_mutex);
-	mc_dev_info("daemon connection closed, TGID %d",
+	mc_dev_dbg("daemon connection closed, TGID %d",
 		    admin_ctx.admin_tgid);
 	admin_ctx.admin_tgid = 0;
 
@@ -1072,7 +1072,7 @@ static int admin_open(struct inode *inode, struct file *file)
 	reinit_completion_local(&g_request.client_complete);
 	reinit_completion_local(&g_request.server_complete);
 	/* Requests from driver to daemon */
-	mc_dev_info("daemon connection open, TGID %d", admin_ctx.admin_tgid);
+	mc_dev_dbg("daemon connection open, TGID %d", admin_ctx.admin_tgid);
 	return 0;
 }
 

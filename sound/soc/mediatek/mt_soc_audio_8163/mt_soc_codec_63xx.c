@@ -2845,7 +2845,7 @@ static bool AudioPreAmp1_Sel(int Mul_Sel)
 	else if (Mul_Sel == 3)
 		Ana_Set_Reg(AUDENC_ANA_CON0, 0x00C0, 0x00C0);	/* AIN2 */
 	else
-		pr_warn("AudioPreAmp1_Sel warning");
+		pr_debug("AudioPreAmp1_Sel warning");
 #endif
 	return true;
 }
@@ -2892,7 +2892,7 @@ static bool AudioPreAmp2_Sel(int Mul_Sel)
 	else if (Mul_Sel == 3)
 		Ana_Set_Reg(AUDENC_ANA_CON1, 0x0040, 0x00C0);	/* AIN0 */
 	else
-		pr_warn("AudioPreAmp1_Sel warning");
+		pr_debug("AudioPreAmp1_Sel warning");
 #endif
 	return true;
 }
@@ -3671,7 +3671,7 @@ static void ADC_LOOP_DAC_Func(int mode)
 		ADC_LOOP_DAC_Off();
 		break;
 	default:
-		pr_warn("unsupported codec loopback mode!!!\n");
+		pr_debug("unsupported codec loopback mode!!!\n");
 	}
 }
 

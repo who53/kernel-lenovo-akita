@@ -428,7 +428,7 @@ static int kbase_devfreq_init_core_mask_table(struct kbase_device *kbdev)
 		}
 #endif
 
-		dev_info(kbdev->dev, "OPP %d : opp_freq=%llu core_mask=%llx\n",
+		dev_dbg(kbdev->dev, "OPP %d : opp_freq=%llu core_mask=%llx\n",
 				i, opp_freq, core_mask);
 
 		i++;

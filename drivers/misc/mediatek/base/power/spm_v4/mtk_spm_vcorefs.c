@@ -60,7 +60,7 @@
 #define spm_vcorefs_err spm_vcorefs_info
 #define spm_vcorefs_warn spm_vcorefs_info
 #define spm_vcorefs_debug spm_vcorefs_info
-#define spm_vcorefs_info(fmt, args...)	pr_notice(SPM_VCOREFS_TAG fmt, ##args)
+#define spm_vcorefs_info(fmt, args...)	pr_debug(SPM_VCOREFS_TAG fmt, ##args)
 
 void __iomem *dvfsrc_base;
 

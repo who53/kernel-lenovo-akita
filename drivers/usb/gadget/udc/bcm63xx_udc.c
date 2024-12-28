@@ -1937,7 +1937,7 @@ static int bcm63xx_update_link_speed(struct bcm63xx_udc *udc)
 	}
 
 	if (udc->gadget.speed != oldspeed) {
-		dev_info(udc->dev, "link up, %s-speed mode\n",
+		dev_dbg(udc->dev, "link up, %s-speed mode\n",
 			 udc->gadget.speed == USB_SPEED_HIGH ? "high" : "full");
 		return 1;
 	} else {
@@ -1993,7 +1993,7 @@ static irqreturn_t bcm63xx_udc_ctrl_isr(int irq, void *dev_id)
 		if (!(usbd_readl(udc, USBD_EVENTS_REG) &
 		      USBD_EVENTS_USB_LINK_MASK) &&
 		      udc->gadget.speed != USB_SPEED_UNKNOWN)
-			dev_info(udc->dev, "link down\n");
+			dev_dbg(udc->dev, "link down\n");
 
 		udc->gadget.speed = USB_SPEED_UNKNOWN;
 		disconnected = true;

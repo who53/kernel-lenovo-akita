@@ -1306,7 +1306,7 @@ static int rt5081_pmu_rgbled_probe(struct platform_device *pdev)
 	}
 
 	rt5081_pmu_rgbled_irq_register(pdev);
-	dev_info(&pdev->dev, "%s successfully\n", __func__);
+	dev_dbg(&pdev->dev, "%s successfully\n", __func__);
 	return 0;
 out_led_register:
 	while (--i >= 0)
@@ -1331,7 +1331,7 @@ static int rt5081_pmu_rgbled_remove(struct platform_device *pdev)
 		led_classdev_unregister(&rt5081_led_classdev[i].led_dev);
 	for (i = 0; i < ARRAY_SIZE(rt5081_pmu_led_trigger); i++)
 		led_trigger_register(&rt5081_pmu_led_trigger[i]);
-	dev_info(rgbled_data->dev, "%s successfully\n", __func__);
+	dev_dbg(rgbled_data->dev, "%s successfully\n", __func__);
 	return 0;
 }
 

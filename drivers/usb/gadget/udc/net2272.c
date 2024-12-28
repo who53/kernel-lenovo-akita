@@ -2229,7 +2229,7 @@ net2272_remove(struct net2272 *dev)
 	iounmap(dev->base_addr);
 	device_remove_file(dev->dev, &dev_attr_registers);
 
-	dev_info(dev->dev, "unbind\n");
+	dev_dbg(dev->dev, "unbind\n");
 }
 
 static struct net2272 *net2272_probe_init(struct device *dev, unsigned int irq)
@@ -2282,11 +2282,11 @@ net2272_probe_fin(struct net2272 *dev, unsigned int irqflags)
 	dev->chiprev = net2272_read(dev, CHIPREV_2272);
 
 	/* done */
-	dev_info(dev->dev, "%s\n", driver_desc);
-	dev_info(dev->dev, "irq %i, mem %p, chip rev %04x, dma %s\n",
+	dev_dbg(dev->dev, "%s\n", driver_desc);
+	dev_dbg(dev->dev, "irq %i, mem %p, chip rev %04x, dma %s\n",
 		dev->irq, dev->base_addr, dev->chiprev,
 		dma_mode_string());
-	dev_info(dev->dev, "version: %s\n", driver_vers);
+	dev_dbg(dev->dev, "version: %s\n", driver_vers);
 
 	ret = device_create_file(dev->dev, &dev_attr_registers);
 	if (ret)
@@ -2438,7 +2438,7 @@ net2272_rdk2_probe(struct pci_dev *pdev, struct net2272 *dev)
 	udelay(200);
 	writel((1 << BUS_WIDTH), dev->rdk2.fpga_base_addr + RDK2_LOCCTLRDK);
 	/* Print fpga version number */
-	dev_info(dev->dev, "RDK2 FPGA version %08x\n",
+	dev_dbg(dev->dev, "RDK2 FPGA version %08x\n",
 		readl(dev->rdk2.fpga_base_addr + RDK2_FPGAREV));
 	/* Enable FPGA Interrupts */
 	writel((1 << NET2272_PCI_IRQ), dev->rdk2.fpga_base_addr + RDK2_IRQENB);
@@ -2656,7 +2656,7 @@ net2272_plat_probe(struct platform_device *pdev)
 		goto err_io;
 
 	platform_set_drvdata(pdev, dev);
-	dev_info(&pdev->dev, "running in 16-bit, %sbyte swap local bus mode\n",
+	dev_dbg(&pdev->dev, "running in 16-bit, %sbyte swap local bus mode\n",
 		(net2272_read(dev, LOCCTL) & (1 << BYTE_SWAP)) ? "" : "no ");
 
 	return 0;

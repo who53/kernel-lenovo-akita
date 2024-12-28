@@ -37,7 +37,7 @@ static struct power_supply *chrdet_psy;
 
 bool __attribute__((weak)) mt_usb_is_device(void)
 {
-	pr_notice("%s is not defined, return true\n", __func__);
+	pr_debug("%s is not defined, return true\n", __func__);
 	return true;
 }
 
@@ -47,7 +47,7 @@ static int chrdet_inform_psy_changed(enum charger_type chg_type,
 	int ret = 0;
 	union power_supply_propval propval;
 
-	pr_info("charger type: %s: online = %d, type = %d\n", __func__,
+	pr_debug("charger type: %s: online = %d, type = %d\n", __func__,
 		chg_online, chg_type);
 
 	/* Inform chg det power supply */
@@ -56,14 +56,14 @@ static int chrdet_inform_psy_changed(enum charger_type chg_type,
 		ret = power_supply_set_property(chrdet_psy,
 				POWER_SUPPLY_PROP_ONLINE, &propval);
 		if (ret < 0)
-			pr_notice("%s: psy online failed, ret = %d\n",
+			pr_debug("%s: psy online failed, ret = %d\n",
 				__func__, ret);
 
 		propval.intval = chg_type;
 		ret = power_supply_set_property(chrdet_psy,
 				POWER_SUPPLY_PROP_CHARGE_TYPE, &propval);
 		if (ret < 0)
-			pr_notice("%s: psy type failed, ret = %d\n",
+			pr_debug("%s: psy type failed, ret = %d\n",
 				__func__, ret);
 
 		return ret;
@@ -73,13 +73,13 @@ static int chrdet_inform_psy_changed(enum charger_type chg_type,
 	ret = power_supply_set_property(chrdet_psy,
 				POWER_SUPPLY_PROP_CHARGE_TYPE, &propval);
 	if (ret < 0)
-		pr_notice("%s: psy type failed, ret(%d)\n", __func__, ret);
+		pr_debug("%s: psy type failed, ret(%d)\n", __func__, ret);
 
 	propval.intval = chg_online;
 	ret = power_supply_set_property(chrdet_psy, POWER_SUPPLY_PROP_ONLINE,
 				&propval);
 	if (ret < 0)
-		pr_notice("%s: psy online failed, ret(%d)\n", __func__, ret);
+		pr_debug("%s: psy online failed, ret(%d)\n", __func__, ret);
 	return ret;
 }
 
@@ -96,13 +96,13 @@ void do_charger_detect(void)
 {
 	if (!mt_usb_is_device()) {
 		g_chr_type = CHARGER_UNKNOWN;
-		pr_info("charger type: Now is usb host mode. Skip detection\n");
+		pr_debug("charger type: Now is usb host mode. Skip detection\n");
 		return;
 	}
 
 	if (is_meta_mode()) {
 		/* Skip charger type detection to speed up meta boot */
-		pr_notice("charger type: force Standard USB Host in meta\n");
+		pr_debug("charger type: force Standard USB Host in meta\n");
 		g_chr_type = STANDARD_HOST;
 		chrdet_inform_psy_changed(g_chr_type, 1);
 		return;
@@ -111,11 +111,11 @@ void do_charger_detect(void)
 	mutex_lock(&chrdet_lock);
 
 	if (pmic_get_register_value(PMIC_RGS_CHRDET)) {
-		pr_info("charger type: charger IN\n");
+		pr_debug("charger type: charger IN\n");
 		g_chr_type = hw_charging_get_charger_type();
 		chrdet_inform_psy_changed(g_chr_type, 1);
 	} else {
-		pr_info("charger type: charger OUT\n");
+		pr_debug("charger type: charger OUT\n");
 		g_chr_type = CHARGER_UNKNOWN;
 		chrdet_inform_psy_changed(g_chr_type, 0);
 	}
@@ -129,7 +129,7 @@ void do_charger_detect(void)
 void chrdet_int_handler(void)
 {
 	/*
-	 * pr_notice("[chrdet_int_handler]CHRDET status = %d....\n",
+	 * pr_debug("[chrdet_int_handler]CHRDET status = %d....\n",
 	 *	pmic_get_register_value(PMIC_RGS_CHRDET));
 	 */
 #ifdef CONFIG_MTK_KERNEL_POWER_OFF_CHARGING
@@ -140,7 +140,7 @@ void chrdet_int_handler(void)
 
 		if (boot_mode == KERNEL_POWER_OFF_CHARGING_BOOT
 		    || boot_mode == LOW_POWER_OFF_CHARGING_BOOT) {
-			pr_info("[%s] Unplug Charger/USB\n", __func__);
+			pr_debug("[%s] Unplug Charger/USB\n", __func__);
 #ifndef CONFIG_TCPC_CLASS
 			mt_power_off();
 #else
@@ -167,7 +167,7 @@ static int __init pmic_chrdet_init(void)
 	mutex_init(&chrdet_lock);
 	chrdet_psy = power_supply_get_by_name("charger");
 	if (!chrdet_psy) {
-		pr_notice("%s: get power supply failed\n", __func__);
+		pr_debug("%s: get power supply failed\n", __func__);
 		return -EINVAL;
 	}
 

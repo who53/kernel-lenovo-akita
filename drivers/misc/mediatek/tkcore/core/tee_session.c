@@ -382,7 +382,7 @@ static long tee_session_internal_ioctl(struct tee_session *sess,
 			(struct tee_cmd_io __user *)arg == NULL) {
 			ret = -EBUSY;
 			mutex_unlock(&g_tui_obj.lock);
-			pr_warn(
+			pr_debug(
 				"TEE_TUI_OPEN_SESSION_IOC: tui busy or invalid argument\n");
 			break;
 		}
@@ -591,7 +591,7 @@ int tee_session_create_fd(struct tee_context *ctx, struct tee_cmd_io *cmd_io)
 	sess = tee_session_create_and_open(ctx, cmd_io);
 	if (IS_ERR_OR_NULL(sess)) {
 		ret = PTR_ERR(sess);
-		pr_warn(
+		pr_debug(
 			"ERROR can't create the session (ret=%d, err=0x%08x, org=%d)\n",
 			ret, cmd_io->err, cmd_io->origin);
 		cmd_io->fd_sess = -1;
@@ -647,7 +647,7 @@ static int to_memref_type(int flags)
 	if (flag_set(flags, TEEC_MEM_OUTPUT))
 		return TEEC_MEMREF_TEMP_OUTPUT;
 
-	pr_warn("tkcoredrv: %s: bad flags=%x\n", __func__, flags);
+	pr_debug("tkcoredrv: %s: bad flags=%x\n", __func__, flags);
 	return 0;
 }
 

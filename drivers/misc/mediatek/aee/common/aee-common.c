@@ -51,7 +51,7 @@ void aee_trigger_kdb(void)
 	 * kdb return
 	 */
 	if (res)
-		pr_notice("%s, get wd api error\n", __func__);
+		pr_debug("%s, get wd api error\n", __func__);
 	else
 		wd_api->wd_disable_all();
 #endif
@@ -60,16 +60,16 @@ void aee_trigger_kdb(void)
 	sysrq_sched_debug_show();
 #endif
 
-	pr_info("User trigger KDB\n");
+	pr_debug("User trigger KDB\n");
 	/* mtk_set_kgdboc_var(); */
 	kgdb_breakpoint();
 
-	pr_info("Exit KDB\n");
+	pr_debug("Exit KDB\n");
 #ifdef CONFIG_MTK_WATCHDOG
 #ifdef CONFIG_LOCAL_WDT
 	/* enable local WDT */
 	if (res)
-		pr_notice("%s, get wd api error\n", __func__);
+		pr_debug("%s, get wd api error\n", __func__);
 	else
 		wd_api->wd_restart(WD_TYPE_NOLOCK);
 
@@ -86,19 +86,19 @@ void aee_dumpbasic(void)
 
 	preempt_disable();
 	console_loglevel = 7;
-	pr_info("kernel  : %s-%s\n", init_uts_ns.name.sysname,
+	pr_debug("kernel  : %s-%s\n", init_uts_ns.name.sysname,
 				init_uts_ns.name.release);
-	pr_info("version : %s\n", init_uts_ns.name.version);
-	pr_info("machine : %s\n\n", init_uts_ns.name.machine);
+	pr_debug("version : %s\n", init_uts_ns.name.version);
+	pr_debug("machine : %s\n\n", init_uts_ns.name.machine);
 
 #ifdef CONFIG_SCHED_DEBUG
 	sysrq_sched_debug_show();
 #endif
-	pr_info("\n%-*s      Pid   Parent Command\n",
+	pr_debug("\n%-*s      Pid   Parent Command\n",
 			(int)(2 * sizeof(void *)) + 2, "Task Addr");
-	pr_info("0x%p %8d %8d  %s\n\n", (void *)p, p->pid, p->parent->pid,
+	pr_debug("0x%p %8d %8d  %s\n\n", (void *)p, p->pid, p->parent->pid,
 			p->comm);
-	pr_info("Stack traceback for current pid %d\n", p->pid);
+	pr_debug("Stack traceback for current pid %d\n", p->pid);
 	show_stack(p, NULL);
 
 #ifdef CONFIG_MTK_AEE_IPANIC_64
@@ -111,7 +111,7 @@ void aee_dumpbasic(void)
 
 void aee_trigger_kdb(void)
 {
-	pr_info("\nKDB is not enabled ! Dump basic debug info...\n\n");
+	pr_debug("\nKDB is not enabled ! Dump basic debug info...\n\n");
 	aee_dumpbasic();
 }
 #endif
@@ -148,7 +148,7 @@ void aee_oops_free(struct aee_oops *oops)
 	vfree(oops->userthread_stack.Userthread_Stack);
 	vfree(oops->userthread_maps.Userthread_maps);
 	kfree(oops);
-	pr_notice("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 }
 EXPORT_SYMBOL(aee_oops_free);
 
@@ -161,7 +161,7 @@ EXPORT_SYMBOL(aee_register_api);
 void aee_disable_api(void)
 {
 	if (g_aee_api) {
-		pr_info("disable aee kernel api");
+		pr_debug("disable aee kernel api");
 		g_aee_api = NULL;
 	}
 }
@@ -183,7 +183,7 @@ void aee_kernel_exception_api(const char *file, const int line,
 		g_aee_api->kernel_reportAPI(AE_DEFECT_EXCEPTION, db_opt, module,
 				msgbuf);
 	else
-		pr_notice("AEE kernel exception: %s", msgbuf);
+		pr_debug("AEE kernel exception: %s", msgbuf);
 	va_end(args);
 }
 EXPORT_SYMBOL(aee_kernel_exception_api);
@@ -210,7 +210,7 @@ void aee_kernel_warning_api(const char *file, const int line, const int db_opt,
 			g_aee_api->kernel_reportAPI(AE_DEFECT_WARNING, db_opt,
 				module, msgbuf);
 	} else {
-		pr_notice("AEE kernel warning: %s", msgbuf);
+		pr_debug("AEE kernel warning: %s", msgbuf);
 	}
 	va_end(args);
 }
@@ -232,7 +232,7 @@ void aee_kernel_reminding_api(const char *file, const int line,
 		g_aee_api->kernel_reportAPI(AE_DEFECT_REMINDING, db_opt,
 				module, msgbuf);
 	else
-		pr_notice("AEE kernel reminding: %s", msgbuf);
+		pr_debug("AEE kernel reminding: %s", msgbuf);
 	va_end(args);
 }
 EXPORT_SYMBOL(aee_kernel_reminding_api);

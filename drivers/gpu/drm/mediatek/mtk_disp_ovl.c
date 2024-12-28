@@ -286,7 +286,7 @@ static int mtk_disp_ovl_probe(struct platform_device *pdev)
 
 	iommu = iommu_get_domain_for_dev(dev);
 	if (iommu == NULL) {
-		dev_info(dev, "Waiting iommu driver ready...\n");
+		dev_dbg(dev, "Waiting iommu driver ready...\n");
 		return -EPROBE_DEFER;
 	}
 

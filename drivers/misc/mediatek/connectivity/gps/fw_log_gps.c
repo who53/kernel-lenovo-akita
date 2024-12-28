@@ -88,7 +88,7 @@ long fw_log_gps_unlocked_ioctl(struct file *filp, unsigned int cmd, unsigned lon
 		break;
 
 	default:
-		pr_warn("gps unknown cmd (%d)\n", cmd);
+		pr_debug("gps unknown cmd (%d)\n", cmd);
 		break;
 	}
 	return retval;

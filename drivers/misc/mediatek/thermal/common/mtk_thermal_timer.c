@@ -42,7 +42,7 @@
 #define mtkTTimer_dprintk(fmt, args...)   \
 	do {	\
 		if (mtkTTimer_debug_log)	\
-		pr_notice("[Thermal timer] " fmt, ##args); \
+		pr_debug("[Thermal timer] " fmt, ##args); \
 	} while (0)
 
 static DEFINE_SPINLOCK(tTimer_lock);

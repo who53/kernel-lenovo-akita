@@ -87,11 +87,11 @@ static inline void log_eol(u16 source, u32 cpuid)
 
 	if (log_ctx.prev_source)
 		/* TEE user-space */
-		dev_info(g_ctx.mcd, "%03x(%u)|%s\n", log_ctx.prev_source,
+		dev_dbg(g_ctx.mcd, "%03x(%u)|%s\n", log_ctx.prev_source,
 			 cpuid, log_ctx.line);
 	else
 		/* TEE kernel */
-		dev_info(g_ctx.mcd, "mtk(%u)|%s\n", cpuid, log_ctx.line);
+		dev_dbg(g_ctx.mcd, "mtk(%u)|%s\n", cpuid, log_ctx.line);
 	log_ctx.line[0] = '\0';
 	log_ctx.line_len = 0;
 }

@@ -27,12 +27,12 @@
 #define mc_dev_notice(fmt, ...) \
 	dev_notice(g_ctx.mcd, "%s: " fmt, __func__, ##__VA_ARGS__)
 
-#define mc_dev_info(fmt, ...) \
-	dev_info(g_ctx.mcd, "%s: " fmt, __func__, ##__VA_ARGS__)
+#define mc_dev_dbg(fmt, ...) \
+	dev_dbg(g_ctx.mcd, "%s: " fmt, __func__, ##__VA_ARGS__)
 
 #ifdef DEBUG
 #define mc_dev_devel(fmt, ...) \
-	dev_info(g_ctx.mcd, "%s: " fmt, __func__, ##__VA_ARGS__)
+	dev_dbg(g_ctx.mcd, "%s: " fmt, __func__, ##__VA_ARGS__)
 #else /* DEBUG */
 #define mc_dev_devel(...)		do {} while (0)
 #endif /* !DEBUG */

@@ -94,7 +94,7 @@ static int Audio_fmtx_hdoutput_Set(struct snd_kcontrol *kcontrol,
 				   struct snd_ctl_elem_value *ucontrol)
 {
 	if (ucontrol->value.enumerated.item[0] > ARRAY_SIZE(fmtx_HD_output)) {
-		pr_warn("return -EINVAL\n");
+		pr_debug("return -EINVAL\n");
 		return -EINVAL;
 	}
 	fmtx_hdoutput_control = ucontrol->value.integer.value[0];

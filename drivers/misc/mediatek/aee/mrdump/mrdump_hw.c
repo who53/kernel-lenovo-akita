@@ -23,7 +23,7 @@
 static void mrdump_set_sram_lastpc_flag(void)
 {
 	if (set_sram_flag_lastpc_valid() == 0)
-		pr_info("OK: set sram flag lastpc valid.\n");
+		pr_debug("OK: set sram flag lastpc valid.\n");
 }
 
 static void mrdump_wd_mcu_cache_preserve(bool enabled)
@@ -33,15 +33,15 @@ static void mrdump_wd_mcu_cache_preserve(bool enabled)
 
 	res = get_wd_api(&wd_api);
 	if (res < 0) {
-		pr_notice("%s: get wd api error %d\n", __func__, res);
+		pr_debug("%s: get wd api error %d\n", __func__, res);
 	} else {
 		res = wd_api->wd_mcu_cache_preserve(enabled);
 		if (res == 0) {
 			if (enabled == true)
-				pr_notice("%s: MCU Cache Preserve enabled\n",
+				pr_debug("%s: MCU Cache Preserve enabled\n",
 						__func__);
 			else
-				pr_notice("%s: MCU Cache Preserve disabled\n",
+				pr_debug("%s: MCU Cache Preserve disabled\n",
 						__func__);
 		}
 	}
@@ -72,29 +72,29 @@ static void mrdump_wd_dram_reserved_mode(bool enabled)
 	int res;
 	struct wd_api *wd_api = NULL;
 
-	pr_notice("%s: DDR Reserved Mode ready or not? (%s)\n", __func__,
+	pr_debug("%s: DDR Reserved Mode ready or not? (%s)\n", __func__,
 			mrdump_lk_ddr_reserve_ready);
 	res = get_wd_api(&wd_api);
 	if (res < 0) {
-		pr_notice("%s: get wd api error (%d)\n", __func__, res);
+		pr_debug("%s: get wd api error (%d)\n", __func__, res);
 	} else {
 		if (mrdump_ddr_reserve_is_ready()) {
 			res = wd_api->wd_dram_reserved_mode(enabled);
 			if (res == 0) {
 				if (enabled == true) {
-					pr_notice("%s: DDR reserved mode enabled\n",
+					pr_debug("%s: DDR reserved mode enabled\n",
 							__func__);
 #ifdef CONFIG_MTK_DFD_INTERNAL_DUMP
 					res = dfd_setup();
 					if (res == -1)
-						pr_notice("%s: DFD disabled\n",
+						pr_debug("%s: DFD disabled\n",
 								__func__);
 					else
-						pr_notice("%s: DFD enabled\n",
+						pr_debug("%s: DFD enabled\n",
 								__func__);
 #endif
 				} else {
-					pr_notice("%s: DDR reserved mode disabled(%d)\n",
+					pr_debug("%s: DDR reserved mode disabled(%d)\n",
 							__func__, res);
 				}
 			}
@@ -109,7 +109,7 @@ int __init mrdump_hw_init(void)
 	mrdump_wd_mcu_cache_preserve(true);
 	mrdump_set_sram_lastpc_flag();
 #endif /* CONFIG_MTK_LASTPC_V2 */
-	pr_info("%s: init_done.\n", __func__);
+	pr_debug("%s: init_done.\n", __func__);
 	return 0;
 }
 

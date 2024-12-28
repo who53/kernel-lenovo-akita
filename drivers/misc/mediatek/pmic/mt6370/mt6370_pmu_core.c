@@ -152,7 +152,7 @@ static int mt6370_pmu_core_reset(struct mt6370_pmu_core_data *core_data)
 	u8 chip_vid = core_data->chip->chip_vid;
 	int ret = 0;
 
-	dev_info(core_data->dev, "%s\n", __func__);
+	dev_dbg(core_data->dev, "%s\n", __func__);
 
 	if (chip_vid == MT6372_VENDOR_ID || chip_vid == MT6372C_VENDOR_ID)
 		return 0;
@@ -191,7 +191,7 @@ static int mt6370_pmu_core_probe(struct platform_device *pdev)
 	bool use_dt = pdev->dev.of_node;
 	int ret = 0;
 
-	pr_info("%s: (%s)\n", __func__, MT6370_PMU_CORE_DRV_VERSION);
+	pr_debug("%s: (%s)\n", __func__, MT6370_PMU_CORE_DRV_VERSION);
 
 	core_data = devm_kzalloc(&pdev->dev, sizeof(*core_data), GFP_KERNEL);
 	if (!core_data)
@@ -224,7 +224,7 @@ static int mt6370_pmu_core_probe(struct platform_device *pdev)
 		goto out_init_reg;
 
 	mt6370_pmu_core_irq_register(pdev);
-	dev_info(&pdev->dev, "%s successfully\n", __func__);
+	dev_dbg(&pdev->dev, "%s successfully\n", __func__);
 	return 0;
 out_init_reg:
 out_pdata:
@@ -236,7 +236,7 @@ static int mt6370_pmu_core_remove(struct platform_device *pdev)
 {
 	struct mt6370_pmu_core_data *core_data = platform_get_drvdata(pdev);
 
-	dev_info(core_data->dev, "%s successfully\n", __func__);
+	dev_dbg(core_data->dev, "%s successfully\n", __func__);
 	return 0;
 }
 

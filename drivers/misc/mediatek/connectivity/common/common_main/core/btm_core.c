@@ -48,12 +48,12 @@ do { \
 #define STP_BTM_PR_INFO(fmt, arg...) \
 do { \
 	if (gBtmDbgLevel >= STP_BTM_LOG_INFO) \
-		pr_info(PFX_BTM "[I]%s: "  fmt, __func__, ##arg); \
+		pr_debug(PFX_BTM "[I]%s: "  fmt, __func__, ##arg); \
 } while (0)
 #define STP_BTM_PR_WARN(fmt, arg...) \
 do { \
 	if (gBtmDbgLevel >= STP_BTM_LOG_WARN) \
-		pr_warn(PFX_BTM "[W]%s: "  fmt, __func__, ##arg); \
+		pr_debug(PFX_BTM "[W]%s: "  fmt, __func__, ##arg); \
 } while (0)
 #define STP_BTM_PR_ERR(fmt, arg...) \
 do { \
@@ -389,7 +389,7 @@ static INT32 _stp_btm_proc(PVOID pvData)
 		}
 
 		if (stp_btm->gDumplogflag) {
-			/* pr_warn("enter place1\n"); */
+			/* pr_debug("enter place1\n"); */
 			stp_btm->gDumplogflag = 0;
 			continue;
 		}
@@ -683,7 +683,7 @@ INT32 stp_btm_reset_btm_wq(MTKSTP_BTM_T *stp_btm)
 
 INT32 stp_notify_btm_dump(MTKSTP_BTM_T *stp_btm)
 {
-	/* pr_warn("%s:enter++\n",__func__); */
+	/* pr_debug("%s:enter++\n",__func__); */
 	if (stp_btm == NULL) {
 		osal_dbg_print("%s: NULL POINTER\n", __func__);
 		return -1;

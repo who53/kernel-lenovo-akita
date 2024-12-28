@@ -545,7 +545,7 @@ static int mtk_pcm_i2s0_open(struct snd_pcm_substream *substream)
 		SNDRV_PCM_HW_PARAM_PERIODS);
 
 	if (ret < 0)
-		pr_warn("snd_pcm_hw_constraint_integer failed\n");
+		pr_debug("snd_pcm_hw_constraint_integer failed\n");
 
 	/* print for hw pcm information */
 	pr_debug("%s, %d, channels = %d, substream->pcm->device = %d\n",
@@ -556,7 +556,7 @@ static int mtk_pcm_i2s0_open(struct snd_pcm_substream *substream)
 		pr_debug(" mtkalsa_i2s0_playback_constraints\n");
 
 	if (ret < 0) {
-		pr_warn("mtk_pcm_i2s0_close\n");
+		pr_debug("mtk_pcm_i2s0_close\n");
 		mtk_pcm_i2s0_close(substream);
 		return ret;
 	}

@@ -667,7 +667,7 @@ audio_bind(struct usb_configuration *c, struct usb_function *f)
 	} else {
 		err = snd_card_setup(c, config);
 		if (err) {
-			pr_info("snd_card_setup failed with %d\n", err);
+			pr_debug("snd_card_setup failed with %d\n", err);
 			return err;
 		}
 	}

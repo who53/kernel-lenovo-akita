@@ -76,13 +76,13 @@ pr_debug("FDVT [%s] " format, __func__, ##args)
 #define LOG_DBG(format, args...) \
 pr_debug("FDVT [%s] " format, __func__, ##args)
 #define LOG_INF(format, args...) \
-pr_info("FDVT [%s] " format, __func__, ##args)
+pr_debug("FDVT [%s] " format, __func__, ##args)
 #define LOG_WRN(format, args...) \
-pr_info("FDVT [%s] WARNING: " format, __func__, ##args)
+pr_debug("FDVT [%s] WARNING: " format, __func__, ##args)
 #define LOG_ERR(format, args...) \
-pr_info("FDVT [%s, line%04d] ERROR: " format, __func__, __LINE__, ##args)
+pr_debug("FDVT [%s, line%04d] ERROR: " format, __func__, __LINE__, ##args)
 #define LOG_AST(format, args...) \
-pr_info("FDVT [%s, line%04d] ASSERT: " format, __func__, __LINE__, ##args)
+pr_debug("FDVT [%s, line%04d] ASSERT: " format, __func__, __LINE__, ##args)
 
 #define LDVT_EARLY_PORTING_NO_CCF 0
 #if LDVT_EARLY_PORTING_NO_CCF
@@ -1115,7 +1115,7 @@ static int FDVT_probe(struct platform_device *dev)
 	LOG_DBG("[FDVT_DEBUG] FDVT_probe\n");
 
 	if (dev == NULL) {
-		dev_info(&dev->dev, "dev is NULL");
+		dev_dbg(&dev->dev, "dev is NULL");
 		return -ENXIO;
 	}
 
@@ -1125,7 +1125,7 @@ static int FDVT_probe(struct platform_device *dev)
 		sizeof(struct fdvt_device) * new_count,
 		GFP_KERNEL);
 	if (!tempFdvt) {
-		dev_info(&dev->dev, "Unable to realloc fdvt_devs\n");
+		dev_dbg(&dev->dev, "Unable to realloc fdvt_devs\n");
 		return -ENOMEM;
 	}
 	fdvt_devs = tempFdvt;
@@ -1136,7 +1136,7 @@ static int FDVT_probe(struct platform_device *dev)
 	for (i = 0; i < FDVT_BASEADDR_NUM; i++)	{
 		fdvt_dev->regs[i] = of_iomap(dev->dev.of_node, i);
 		if (!fdvt_dev->regs[i]) {
-			dev_info(&dev->dev, "of_iomap fail, i=%d\n", i);
+			dev_dbg(&dev->dev, "of_iomap fail, i=%d\n", i);
 			return -ENOMEM;
 		}
 		gFDVT_Reg[i] = (unsigned long)fdvt_dev->regs[i];
@@ -1165,7 +1165,7 @@ static int FDVT_probe(struct platform_device *dev)
 			/* NULL) */
 		}
 		if (ret) {
-			dev_info(&dev->dev, "request_irq fail, i=%d, irq=%d\n",
+			dev_dbg(&dev->dev, "request_irq fail, i=%d, irq=%d\n",
 				i, fdvt_dev->irq[i]);
 			return ret;
 		}

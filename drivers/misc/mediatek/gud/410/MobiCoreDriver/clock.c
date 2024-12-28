@@ -75,7 +75,7 @@ int mc_clock_init(void)
 				   &of_core_src_rate);
 	if (ret) {
 		core_src_rate = MC_CLOCK_CORESRC_DEFAULTRATE;
-		mc_dev_info("cannot get clock frequency from DT, use %d",
+		mc_dev_dbg("cannot get clock frequency from DT, use %d",
 			    core_src_rate);
 	} else {
 		core_src_rate = of_core_src_rate;

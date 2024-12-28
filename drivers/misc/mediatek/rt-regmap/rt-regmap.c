@@ -233,7 +233,7 @@ void rt_regmap_cache_sync(struct rt_regmap_device *rd)
 		}
 	}
 	rd->pending_event = 0;
-	dev_info(&rd->dev, "regmap sync successfully\n");
+	dev_dbg(&rd->dev, "regmap sync successfully\n");
 err_cache_sync:
 	up(&rd->semaphore);
 }
@@ -266,7 +266,7 @@ void rt_regmap_cache_write_back(struct rt_regmap_device *rd, u32 reg)
 		}
 		rd->cache_flag[rio.index] = 0;
 	}
-	dev_info(&rd->dev, "regmap sync successfully\n");
+	dev_dbg(&rd->dev, "regmap sync successfully\n");
 err_cache_chip_write:
 	up(&rd->semaphore);
 }
@@ -313,7 +313,7 @@ static void rt_work_func(struct work_struct *work)
 {
 	struct rt_regmap_device *rd;
 
-	pr_info(" %s\n", __func__);
+	pr_debug(" %s\n", __func__);
 	rd = container_of(work, struct rt_regmap_device, rt_work.work);
 	rt_regmap_cache_sync(rd);
 }
@@ -410,7 +410,7 @@ finished:
 		for (i = 0; i < count; i++)
 			j += snprintf(wri_data + j, sizeof(wri_data) - j,
 			"%02x,", wdata[i]);
-		pr_info("RT_REGMAP [WRITE] reg0x%04x  [Data] 0x%s\n",
+		pr_debug("RT_REGMAP [WRITE] reg0x%04x  [Data] 0x%s\n",
 							reg, wri_data);
 	}
 	return 0;
@@ -482,7 +482,7 @@ finished:
 		for (i = 0; i < count; i++)
 			j += snprintf(wri_data + j, sizeof(wri_data) - j,
 			"%02x,", wdata[i]);
-		pr_info("RT_REGMAP [WRITE] reg0x%04x  [Data] 0x%s\n",
+		pr_debug("RT_REGMAP [WRITE] reg0x%04x  [Data] 0x%s\n",
 								reg, wri_data);
 	}
 
@@ -681,7 +681,7 @@ static int rt_cache_block_read(struct rt_regmap_device *rd, u32 reg,
 	}
 
 	if (rd->props.io_log_en)
-		pr_info("RT_REGMAP [READ] reg0x%04x\n", reg);
+		pr_debug("RT_REGMAP [READ] reg0x%04x\n", reg);
 
 	memcpy(dest, data, bytes);
 
@@ -1162,7 +1162,7 @@ int rt_regmap_cache_init(struct rt_regmap_device *rd)
 	int i, j, bytes_num = 0, count = 0;
 	const rt_register_map_t *rm = rd->props.rm;
 
-	dev_info(&rd->dev, "rt register cache data init\n");
+	dev_dbg(&rd->dev, "rt register cache data init\n");
 
 	down(&rd->semaphore);
 	rd->cache_flag = devm_kzalloc(&rd->dev,
@@ -1204,7 +1204,7 @@ int rt_regmap_cache_init(struct rt_regmap_device *rd)
 	}
 
 	rd->cache_inited = 1;
-	dev_info(&rd->dev, "cache cata init successfully\n");
+	dev_dbg(&rd->dev, "cache cata init successfully\n");
 	up(&rd->semaphore);
 	return 0;
 }
@@ -1220,7 +1220,7 @@ int rt_regmap_cache_reload(struct rt_regmap_device *rd)
 		rd->cached[i] = rd->cache_flag[i] = 0;
 	rd->pending_event = 0;
 	up(&rd->semaphore);
-	dev_info(&rd->dev, "cache data reload\n");
+	dev_dbg(&rd->dev, "cache data reload\n");
 	return 0;
 }
 EXPORT_SYMBOL(rt_regmap_cache_reload);
@@ -1254,7 +1254,7 @@ static void rt_regmap_cache_release(struct rt_regmap_device *rd)
 {
 	int i;
 
-	dev_info(&rd->dev, "cache data release\n");
+	dev_dbg(&rd->dev, "cache data release\n");
 	for (i = 0; i < rd->props.register_num; i++)
 		rd->cache_data[i] = NULL;
 	devm_kfree(&rd->dev, rd->alloc_data);
@@ -1271,7 +1271,7 @@ static void rt_regmap_set_cache_mode(
 	unsigned char mode_mask;
 
 	mode_mask = mode & RT_CACHE_MODE_MASK;
-	dev_info(&rd->dev, "%s mode = %d\n", __func__, mode_mask>>1);
+	dev_dbg(&rd->dev, "%s mode = %d\n", __func__, mode_mask>>1);
 
 	down(&rd->write_mode_lock);
 	if (mode_mask == RT_CACHE_WR_THROUGH) {
@@ -1497,7 +1497,7 @@ static ssize_t general_write(struct file *file, const char __user *ubuf,
 	char lbuf[128];
 	ssize_t res;
 
-	pr_info("%s @ %p\n", __func__, ubuf);
+	pr_debug("%s @ %p\n", __func__, ubuf);
 
 	res = simple_write_to_buffer(lbuf, sizeof(lbuf) - 1, ppos, ubuf, count);
 	if (res <= 0)
@@ -1511,7 +1511,7 @@ static ssize_t general_write(struct file *file, const char __user *ubuf,
 		rio = find_register_index(rd, param[0]);
 		down(&rd->semaphore);
 		if (rio.index < 0) {
-			pr_info("this is an invalid or hiden register\n");
+			pr_debug("this is an invalid or hiden register\n");
 			rd->dbg_data.reg_addr = param[0];
 			rd->dbg_data.rio.index = -1;
 		} else {
@@ -1695,7 +1695,7 @@ static ssize_t general_write(struct file *file, const char __user *ubuf,
 	case RT_DBG_WATCHDOG:
 		rc = get_parameters(lbuf, param, 1);
 		if (param[0]) {
-			dev_info(&rd->dev, "enable watchdog\n");
+			dev_dbg(&rd->dev, "enable watchdog\n");
 			if (rd->props.watchdog)
 				alarm_cancel(&rd->watchdog_alarm);
 			else
@@ -1703,7 +1703,7 @@ static ssize_t general_write(struct file *file, const char __user *ubuf,
 			alarm_start_relative(&rd->watchdog_alarm,
 					ns_to_ktime(RT_WATCHDOG_TIMEOUT));
 		} else {
-			dev_info(&rd->dev, "disable watchdog\n");
+			dev_dbg(&rd->dev, "disable watchdog\n");
 			if (rd->props.watchdog) {
 				rd->props.watchdog = 0;
 				alarm_cancel(&rd->watchdog_alarm);
@@ -1789,7 +1789,7 @@ static ssize_t eachreg_write(struct file *file, const char __user *ubuf,
 		return -EINVAL;
 	}
 
-	pr_info("%s @ %p\n", __func__, ubuf);
+	pr_debug("%s @ %p\n", __func__, ubuf);
 
 	res = simple_write_to_buffer(lbuf, sizeof(lbuf) - 1, ppos, ubuf, count);
 	if (res <= 0)
@@ -1935,7 +1935,7 @@ static int rt_regmap_check(struct rt_regmap_device *rd)
 
 	/* check name property */
 	if (!rd->props.name) {
-		pr_info("there is no node name for rt-regmap\n");
+		pr_debug("there is no node name for rt-regmap\n");
 		return -EINVAL;
 	}
 
@@ -1945,7 +1945,7 @@ static int rt_regmap_check(struct rt_regmap_device *rd)
 	for (i = 0; i < num; i++) {
 		/* check byte size, 1 byte ~ 24 bytes is valid */
 		if (rm[i]->size < 1 || rm[i]->size > 24) {
-			pr_info("rt register size error at reg 0x%02x\n",
+			pr_debug("rt register size error at reg 0x%02x\n",
 				rm[i]->addr);
 			return -EINVAL;
 		}
@@ -1954,7 +1954,7 @@ static int rt_regmap_check(struct rt_regmap_device *rd)
 	for (i = 0; i < num - 1; i++) {
 		/* check register sequence */
 		if (rm[i]->addr >= rm[i + 1]->addr) {
-			pr_info("sequence format error at reg 0x%02x\n",
+			pr_debug("sequence format error at reg 0x%02x\n",
 				rm[i]->addr);
 			return -EINVAL;
 		}
@@ -1979,12 +1979,12 @@ static void rt_regmap_watchdog_work(struct work_struct *work)
 		struct rt_regmap_device, watchdog_work.work);
 	unsigned char current_mode;
 
-	dev_info(&rd->dev, "%s\n", __func__);
+	dev_dbg(&rd->dev, "%s\n", __func__);
 	current_mode = rd->props.rt_regmap_mode&RT_CACHE_MODE_MASK;
 	if (current_mode != rd->props.cache_mode_ori)
 		rt_regmap_set_cache_mode(rd, rd->props.cache_mode_ori);
 	else
-		dev_info(&rd->dev, "%s same mode, no need change\n", __func__);
+		dev_dbg(&rd->dev, "%s same mode, no need change\n", __func__);
 	rd->props.watchdog = 0;
 }
 
@@ -1994,7 +1994,7 @@ static enum alarmtimer_restart rt_regmap_watchdog_alarm(
 	struct rt_regmap_device *rd = (struct rt_regmap_device *)
 		container_of(alarm, struct rt_regmap_device, watchdog_alarm);
 
-	dev_info(&rd->dev, "%s\n", __func__);
+	dev_dbg(&rd->dev, "%s\n", __func__);
 	schedule_delayed_work(&rd->watchdog_work, 0);
 
 	return ALARMTIMER_NORESTART;
@@ -2020,10 +2020,10 @@ struct rt_regmap_device *rt_regmap_device_register_ex
 		return NULL;
 	}
 
-	pr_info("regmap_device_register: name = %s\n", props->name);
+	pr_debug("regmap_device_register: name = %s\n", props->name);
 	rd = devm_kzalloc(parent, sizeof(struct rt_regmap_device), GFP_KERNEL);
 	if (!rd) {
-		pr_info("rt_regmap_device memory allocate fail\n");
+		pr_debug("rt_regmap_device memory allocate fail\n");
 		return NULL;
 	}
 
@@ -2042,14 +2042,14 @@ struct rt_regmap_device *rt_regmap_device_register_ex
 	/* check rt_registe_map format */
 	ret = rt_regmap_check(rd);
 	if (ret) {
-		pr_info("rt register map format error\n");
+		pr_debug("rt register map format error\n");
 		devm_kfree(parent, rd);
 		return NULL;
 	}
 
 	ret = device_register(&rd->dev);
 	if (ret) {
-		pr_info("rt-regmap dev register fail\n");
+		pr_debug("rt-regmap dev register fail\n");
 		devm_kfree(parent, rd);
 		return NULL;
 	}
@@ -2061,7 +2061,7 @@ struct rt_regmap_device *rt_regmap_device_register_ex
 	/* init cache data */
 	ret = rt_regmap_cache_init(rd);
 	if (ret < 0) {
-		pr_info(" rt cache data init fail\n");
+		pr_debug(" rt cache data init fail\n");
 		goto err_cacheinit;
 	}
 
@@ -2130,7 +2130,7 @@ EXPORT_SYMBOL(rt_regmap_device_unregister);
 
 static int __init regmap_plat_init(void)
 {
-	pr_info("Init Richtek RegMap %s\n", RT_REGMAP_VERSION);
+	pr_debug("Init Richtek RegMap %s\n", RT_REGMAP_VERSION);
 #ifdef CONFIG_DEBUG_FS
 	rt_regmap_dir = debugfs_create_dir("rt-regmap", 0);
 	if (IS_ERR(rt_regmap_dir)) {

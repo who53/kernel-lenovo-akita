@@ -224,7 +224,7 @@ static long devinfo_ioctl(struct file *file, u32 cmd, unsigned long arg)
 			ret = copy_to_user((void __user *)arg,
 				(void *)&(data_read), sizeof(u32));
 		} else {
-			pr_warn("%s Error! Index %d is larger than size %d\n",
+			pr_debug("%s Error! Index %d is larger than size %d\n",
 					MODULE_NAME, index, size);
 			return -2;
 		}
@@ -259,7 +259,7 @@ static int __init devinfo_init(void)
 	pr_debug("[%s]init\n", MODULE_NAME);
 	ret = register_chrdev_region(devinfo_dev, 1, DEV_NAME);
 	if (ret) {
-		pr_warn("[%s] register device failed, ret:%d\n",
+		pr_debug("[%s] register device failed, ret:%d\n",
 				MODULE_NAME, ret);
 		return ret;
 	}
@@ -267,7 +267,7 @@ static int __init devinfo_init(void)
 	devinfo_class = class_create(THIS_MODULE, DEV_NAME);
 	if (IS_ERR(devinfo_class)) {
 		ret = PTR_ERR(devinfo_class);
-		pr_warn("[%s] register class failed, ret:%d\n",
+		pr_debug("[%s] register class failed, ret:%d\n",
 				MODULE_NAME, ret);
 		unregister_chrdev_region(devinfo_dev, 1);
 		return ret;
@@ -278,7 +278,7 @@ static int __init devinfo_init(void)
 
 	ret = cdev_add(&devinfo_cdev, devinfo_dev, 1);
 	if (ret < 0) {
-		pr_warn("[%s] could not allocate chrdev for the device, ret:%d\n",
+		pr_debug("[%s] could not allocate chrdev for the device, ret:%d\n",
 				MODULE_NAME, ret);
 		class_destroy(devinfo_class);
 		unregister_chrdev_region(devinfo_dev, 1);
@@ -289,7 +289,7 @@ static int __init devinfo_init(void)
 			"devmap");
 	if (IS_ERR(device)) {
 		ret = PTR_ERR(device);
-		pr_warn("[%s]device create fail\n", MODULE_NAME);
+		pr_debug("[%s]device create fail\n", MODULE_NAME);
 		cdev_del(&devinfo_cdev);
 		class_destroy(devinfo_class);
 		unregister_chrdev_region(devinfo_dev, 1);
@@ -355,13 +355,13 @@ static void devinfo_parse_dt(void)
 		} else
 			g_hrid_size = HRID_DEFAULT_SIZE;
 
-		pr_info("tag_devinfo_data size:%d, HRID size:%d\n",
+		pr_debug("tag_devinfo_data size:%d, HRID size:%d\n",
 				size, g_hrid_size);
 
 		sprintf(devinfo_segment_buff, "segment code=0x%x\n",
 				g_devinfo_data[DEVINFO_SEGCODE_INDEX]);
 
-		pr_info("[devinfo][SegCode] Segment Code=0x%x\n",
+		pr_debug("[devinfo][SegCode] Segment Code=0x%x\n",
 				g_devinfo_data[DEVINFO_SEGCODE_INDEX]);
 
 	} else {

@@ -2580,7 +2580,7 @@ static int qe_udc_probe(struct platform_device *ofdev)
 		goto err5;
 
 	platform_set_drvdata(ofdev, udc);
-	dev_info(udc->dev,
+	dev_dbg(udc->dev,
 			"%s USB controller initialized as device\n",
 			(udc->soc_type == PORT_QE) ? "QE" : "CPM");
 	return 0;

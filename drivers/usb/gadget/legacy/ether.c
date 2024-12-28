@@ -362,9 +362,9 @@ static int eth_bind(struct usb_composite_dev *cdev)
 
 	gether_set_qmult(net, qmult);
 	if (!gether_set_host_addr(net, host_addr))
-		pr_info("using host ethernet address: %s", host_addr);
+		pr_debug("using host ethernet address: %s", host_addr);
 	if (!gether_set_dev_addr(net, dev_addr))
-		pr_info("using self ethernet address: %s", dev_addr);
+		pr_debug("using self ethernet address: %s", dev_addr);
 
 	if (has_rndis()) {
 		/* RNDIS plus ECM-or-Subset */
@@ -427,7 +427,7 @@ static int eth_bind(struct usb_composite_dev *cdev)
 		goto fail2;
 
 	usb_composite_overwrite_options(cdev, &coverwrite);
-	dev_info(&gadget->dev, "%s, version: " DRIVER_VERSION "\n",
+	dev_dbg(&gadget->dev, "%s, version: " DRIVER_VERSION "\n",
 			DRIVER_DESC);
 
 	return 0;

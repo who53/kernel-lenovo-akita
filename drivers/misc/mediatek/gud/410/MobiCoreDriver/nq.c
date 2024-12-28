@@ -451,22 +451,22 @@ static void nq_dump_status(void)
 	if (l_ctx.dump.off)
 		ret = -EBUSY;
 
-	mc_dev_info("TEE HALTED");
+	mc_dev_dbg("TEE HALTED");
 	if (l_ctx.tee_version) {
-		mc_dev_info("TEE version: %s", l_ctx.tee_version);
+		mc_dev_dbg("TEE version: %s", l_ctx.tee_version);
 		if (ret >= 0)
 			ret = kasnprintf(&l_ctx.dump, "TEE version: %s\n",
 					 l_ctx.tee_version);
 	}
 
-	mc_dev_info("Status dump:");
+	mc_dev_dbg("Status dump:");
 	for (i = 0; i < (size_t)ARRAY_SIZE(status_map); i++) {
 		u32 info;
 
 		if (fc_info(status_map[i].index, NULL, &info))
 			return;
 
-		mc_dev_info("  %-22s= 0x%08x", status_map[i].msg, info);
+		mc_dev_dbg("  %-22s= 0x%08x", status_map[i].msg, info);
 		if (ret >= 0)
 			ret = kasnprintf(&l_ctx.dump, "%-22s= 0x%08x\n",
 					 status_map[i].msg, info);
@@ -486,7 +486,7 @@ static void nq_dump_status(void)
 		}
 	}
 
-	mc_dev_info("  %-22s= 0x%s", "mcExcep.uuid", uuid_str);
+	mc_dev_dbg("  %-22s= 0x%s", "mcExcep.uuid", uuid_str);
 	if (ret >= 0)
 		ret = kasnprintf(&l_ctx.dump, "%-22s= 0x%s\n", "mcExcep.uuid",
 				 uuid_str);
@@ -682,13 +682,13 @@ static int nq_boot_tee(void)
 				MC_IV_FLAG_IRQ;
 			l_ctx.mcp_buffer->message.init_values.irq =
 				irq_d->parent_data->hwirq;
-			mc_dev_info("irq_d->parent_data->hwirq is 0x%lx\n",
+			mc_dev_dbg("irq_d->parent_data->hwirq is 0x%lx\n",
 				irq_d->parent_data->hwirq);
 		}
 #else
 		l_ctx.mcp_buffer->message.init_values.flags |= MC_IV_FLAG_IRQ;
 		l_ctx.mcp_buffer->message.init_values.irq = irq_d->hwirq;
-		mc_dev_info("irq_d->hwirq is 0x%lx\n", irq_d->hwirq);
+		mc_dev_dbg("irq_d->hwirq is 0x%lx\n", irq_d->hwirq);
 #endif
 	}
 	l_ctx.mcp_buffer->message.init_values.time_ofs =
@@ -806,7 +806,7 @@ static int tee_scheduler(void *arg)
 		if (!ret) {
 			logging_run();
 			l_ctx.log_buffer_busy = true;
-			mc_dev_info("registered log buffer of size %d",
+			mc_dev_dbg("registered log buffer of size %d",
 				    l_ctx.log_buffer_size);
 		} else {
 			mc_dev_err(ret, "failed to register log buffer");
@@ -814,7 +814,7 @@ static int tee_scheduler(void *arg)
 			ret = 0;
 		}
 	} else {
-		mc_dev_info("no log buffer to register");
+		mc_dev_dbg("no log buffer to register");
 	}
 
 	/* Bootup */
@@ -966,7 +966,7 @@ int nq_start(void)
 	/* Make sure we have the interrupt before going on */
 #if defined(CONFIG_OF)
 	l_ctx.irq = irq_of_parse_and_map(g_ctx.mcd->of_node, 0);
-	mc_dev_info("SSIQ from dts is 0x%08x", l_ctx.irq);
+	mc_dev_dbg("SSIQ from dts is 0x%08x", l_ctx.irq);
 #endif
 #if defined(MC_INTR_SSIQ)
 	if (l_ctx.irq <= 0)
@@ -1014,7 +1014,7 @@ int nq_start(void)
 	for (i = 0; i < NB_CPU; i++)
 		cpumask_set_cpu(cpu_id[i], &new_mask);
 	set_cpus_allowed_ptr(l_ctx.tee_scheduler_thread, &new_mask);
-	mc_dev_info("tee_scheduler running only on %d CPU", NB_CPU);
+	mc_dev_dbg("tee_scheduler running only on %d CPU", NB_CPU);
 #endif
 
 	wake_up_process(l_ctx.tee_scheduler_thread);

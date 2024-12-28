@@ -54,12 +54,12 @@ do { \
 #define CONNADP_INFO_FUNC(fmt, arg...)  \
 do { \
 	if (gConnAdpDbgLvl >= CONNADP_LOG_INFO) \
-		pr_info("[I]%s:"  fmt, __func__, ##arg); \
+		pr_debug("[I]%s:"  fmt, __func__, ##arg); \
 } while (0)
 #define CONNADP_WARN_FUNC(fmt, arg...) \
 do { \
 	if (gConnAdpDbgLvl >= CONNADP_LOG_WARN) \
-		pr_warn("[W]%s:"  fmt, __func__, ##arg); \
+		pr_debug("[W]%s:"  fmt, __func__, ##arg); \
 } while (0)
 #define CONNADP_ERR_FUNC(fmt, arg...) \
 do { \

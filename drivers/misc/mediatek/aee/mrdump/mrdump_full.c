@@ -204,7 +204,7 @@ static void __mrdump_reboot_stop_all(struct mrdump_crash_record *crash_record)
 			aee_nested_printf(
 				"Non-crashing CPUs did not react to IPI\n");
 		else
-			pr_notice("Non-crashing CPUs did not react to IPI\n");
+			pr_debug("Non-crashing CPUs did not react to IPI\n");
 	}
 }
 
@@ -291,26 +291,26 @@ int __init mrdump_full_init(void)
 {
 	if (mrdump_cblock == NULL) {
 		memset(mrdump_lk, 0, sizeof(mrdump_lk));
-		pr_notice("%s: MT-RAMDUMP no control block\n", __func__);
+		pr_debug("%s: MT-RAMDUMP no control block\n", __func__);
 		return -EINVAL;
 	}
 
 	/* Allocate memory for saving cpu registers. */
 	crash_notes = alloc_percpu(note_buf_t);
 	if (!crash_notes) {
-		pr_notice("MT-RAMDUMP: Memory allocation for saving cpu register failed\n");
+		pr_debug("MT-RAMDUMP: Memory allocation for saving cpu register failed\n");
 		return -ENOMEM;
 	}
 
 	if (strcmp(mrdump_lk, MRDUMP_GO_DUMP) != 0) {
-		pr_notice("%s: MT-RAMDUMP init failed, lk version %s not matched.\n",
+		pr_debug("%s: MT-RAMDUMP init failed, lk version %s not matched.\n",
 				__func__, mrdump_lk);
 		return -EINVAL;
 	}
 
 	mrdump_cblock->enabled = MRDUMP_ENABLE_COOKIE;
 	__inner_flush_dcache_all();
-	pr_info("%s: MT-RAMDUMP enabled done\n", __func__);
+	pr_debug("%s: MT-RAMDUMP enabled done\n", __func__);
 	return 0;
 }
 
@@ -341,16 +341,16 @@ static int __init mrdump_sysfs_init(void)
 	kobj = kset_find_obj(module_kset, KBUILD_MODNAME);
 	if (kobj) {
 		if (sysfs_create_group(kobj, &attr_group)) {
-			pr_notice("MT-RAMDUMP: sysfs create sysfs failed\n");
+			pr_debug("MT-RAMDUMP: sysfs create sysfs failed\n");
 			return -ENOMEM;
 		}
 	} else {
-		pr_notice("MT-RAMDUMP: Cannot find module %s object\n",
+		pr_debug("MT-RAMDUMP: Cannot find module %s object\n",
 				KBUILD_MODNAME);
 		return -EINVAL;
 	}
 
-	pr_info("%s: done.\n", __func__);
+	pr_debug("%s: done.\n", __func__);
 	return 0;
 }
 

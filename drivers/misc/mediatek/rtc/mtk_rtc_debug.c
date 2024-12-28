@@ -38,12 +38,12 @@ static ssize_t mtk_rtc_debug_write(struct file *file,
 	lbuf[size] = '\0';
 
 	if (sscanf(lbuf, "%15s %d", option, &setting) != 2) {
-		pr_notice("Invalid para %s\n", lbuf);
+		pr_debug("Invalid para %s\n", lbuf);
 		return -EFAULT;
 	}
 
 	if (!strncmp(option, "alarm", strlen("alarm"))) {
-		pr_notice("alarm = %d\n", setting);
+		pr_debug("alarm = %d\n", setting);
 		rtc_alarm_enabled = setting;
 		if (rtc_alarm_enabled)
 			pmic_enable_interrupt(INT_RTC, 1, "RTC");
@@ -83,7 +83,7 @@ int __init rtc_debug_init(void)
 
 	mtk_rtc_dir = debugfs_create_dir("mtk_rtc", NULL);
 	if (!mtk_rtc_dir) {
-		pr_info("create /sys/kernel/debug/mtk_rtc_dir failed\n");
+		pr_debug("create /sys/kernel/debug/mtk_rtc_dir failed\n");
 		return -ENOMEM;
 	}
 
@@ -91,7 +91,7 @@ int __init rtc_debug_init(void)
 				mtk_rtc_dir, NULL,
 				&mtk_rtc_debug_ops);
 	if (!mtk_rtc_file) {
-		pr_info("create /sys/kernel/debug/mtk_rtc/mtk_rtc failed\n");
+		pr_debug("create /sys/kernel/debug/mtk_rtc/mtk_rtc failed\n");
 		return -ENOMEM;
 	}
 

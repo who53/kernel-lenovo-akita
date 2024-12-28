@@ -62,7 +62,7 @@ static int cs43130_hw_params(struct snd_pcm_substream *substream,
 	struct snd_soc_dai_link *dai_link = rtd[0].dai_link;
 	int ret;
 
-	dev_info(codec_dai->dev, "%s:%s:%d+ on codec_dai %s\n", __FILE__,
+	dev_dbg(codec_dai->dev, "%s:%s:%d+ on codec_dai %s\n", __FILE__,
 		 __func__, __LINE__, codec_dai->name);
 
 	ret = snd_soc_dai_set_fmt(codec_dai, dai_link->dai_fmt);
@@ -86,7 +86,7 @@ static int cs43130_hw_params(struct snd_pcm_substream *substream,
 		return ret;
 	}
 
-	dev_info(codec_dai->dev, "%s:%s:%d- with ret %d\n", __FILE__, __func__,
+	dev_dbg(codec_dai->dev, "%s:%s:%d- with ret %d\n", __FILE__, __func__,
 		 __LINE__, ret);
 
 	return ret;

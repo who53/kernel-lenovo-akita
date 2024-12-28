@@ -173,14 +173,14 @@ static int sec_init(struct platform_device *dev)
 
 	hacc_base = of_iomap(dev->dev.of_node, 0);
 	if (!hacc_base) {
-		pr_notice("[%s] hacc register remapping failed\n",
+		pr_debug("[%s] hacc register remapping failed\n",
 			  SEC_DEV_NAME);
 		return -ENXIO;
 	}
 
 	ret = sec_clk_enable(dev);
 	if (ret) {
-		pr_notice("[%s] Cannot get hacc clock\n", SEC_DEV_NAME);
+		pr_debug("[%s] Cannot get hacc clock\n", SEC_DEV_NAME);
 		return ret;
 	}
 
@@ -188,13 +188,13 @@ static int sec_init(struct platform_device *dev)
 	ret = register_chrdev_region(id, 1, SEC_DEV_NAME);
 
 	if (ret) {
-		pr_notice("[%s] Regist Failed (%d)\n", SEC_DEV_NAME, ret);
+		pr_debug("[%s] Regist Failed (%d)\n", SEC_DEV_NAME, ret);
 		return ret;
 	}
 
 	sec_class = class_create(THIS_MODULE, SEC_DEV_NAME);
 	if (sec_class == NULL) {
-		pr_notice("[%s] Create class failed(0x%x)\n",
+		pr_debug("[%s] Create class failed(0x%x)\n",
 			  SEC_DEV_NAME,
 			  ret);
 		ret = -1;
@@ -210,7 +210,7 @@ static int sec_init(struct platform_device *dev)
 
 	sec_device = device_create(sec_class, NULL, id, NULL, SEC_DEV_NAME);
 	if (sec_class == NULL) {
-		pr_notice("[%s] Create device failed(0x%x)\n",
+		pr_debug("[%s] Create device failed(0x%x)\n",
 			  SEC_DEV_NAME,
 			  ret);
 		class_destroy(sec_class);
@@ -295,7 +295,7 @@ static int __init masp_init(void)
 
 	ret = platform_driver_register(&masp_driver);
 	if (ret) {
-		pr_notice("[%s] Reg platform driver failed (%d)\n",
+		pr_debug("[%s] Reg platform driver failed (%d)\n",
 			  SEC_DEV_NAME,
 			  ret);
 		return ret;

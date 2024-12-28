@@ -470,7 +470,7 @@ void rx_fill(struct eth_dev *dev, gfp_t gfp_flags)
 		rndis_get_direct_tethering_state(&dev->port_usb->func);
 
 	if (__ratelimit(&ratelimit1))
-		pr_info("%s (%d)\n", __func__, direct_state);
+		pr_debug("%s (%d)\n", __func__, direct_state);
 	if (direct_state == DIRECT_STATE_ACTIVATING ||
 		direct_state == DIRECT_STATE_ACTIVATED ||
 		direct_state == DIRECT_STATE_DEACTIVATING) {
@@ -786,7 +786,7 @@ static netdev_tx_t eth_start_xmit(struct sk_buff *skb,
 		rndis_get_direct_tethering_state(&dev->port_usb->func);
 
 	if (__ratelimit(&ratelimit3))
-		pr_info("%s (%d)\n", __func__, direct_state);
+		pr_debug("%s (%d)\n", __func__, direct_state);
 
 	if (direct_state == DIRECT_STATE_ACTIVATING ||
 		direct_state == DIRECT_STATE_ACTIVATED ||
@@ -1073,7 +1073,7 @@ static int eth_stop(struct net_device *net)
 	unsigned long	flags;
 
 	U_ETHER_DBG("\n");
-	pr_info("%s, START !!!!\n", __func__);
+	pr_debug("%s, START !!!!\n", __func__);
 	netif_stop_queue(net);
 
 	DBG(dev, "stop stats: rx/tx %ld/%ld, errs %ld/%ld\n",
@@ -1113,7 +1113,7 @@ static int eth_stop(struct net_device *net)
 		}
 	}
 	spin_unlock_irqrestore(&dev->lock, flags);
-	pr_info("%s, END !!!!\n", __func__);
+	pr_debug("%s, END !!!!\n", __func__);
 
 	return 0;
 }
@@ -1301,9 +1301,9 @@ struct net_device *gether_setup_name_default(const char *netname)
 	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
 
 	eth_random_addr(dev->dev_mac);
-	pr_warn("using random %s ethernet address\n", "self");
+	pr_debug("using random %s ethernet address\n", "self");
 	eth_random_addr(dev->host_mac);
-	pr_warn("using random %s ethernet address\n", "host");
+	pr_debug("using random %s ethernet address\n", "host");
 
 	net->netdev_ops = &eth_netdev_ops;
 
@@ -1344,7 +1344,7 @@ int gether_register_netdev(struct net_device *net)
 	status = dev_set_mac_address(net, &sa);
 	rtnl_unlock();
 	if (status)
-		pr_warn("cannot set self ethernet address: %d\n", status);
+		pr_debug("cannot set self ethernet address: %d\n", status);
 	else
 		INFO(dev, "MAC %pM\n", dev->dev_mac);
 
@@ -1679,13 +1679,13 @@ static int __init gether_init(void)
 {
 	uether_wq  = create_singlethread_workqueue("uether");
 	if (!uether_wq) {
-		pr_info("%s: Unable to create workqueue: uether\n", __func__);
+		pr_debug("%s: Unable to create workqueue: uether\n", __func__);
 		return -ENOMEM;
 	}
 	uether_wq1  = create_singlethread_workqueue("uether_rx1");
 	if (!uether_wq1) {
 		destroy_workqueue(uether_wq);
-		pr_info("%s: Unable to create workqueue: uether\n", __func__);
+		pr_debug("%s: Unable to create workqueue: uether\n", __func__);
 		return -ENOMEM;
 	}
 	return 0;

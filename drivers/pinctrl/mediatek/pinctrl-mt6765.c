@@ -275,9 +275,9 @@ static int mtk_pinctrl_probe(struct platform_device *pdev)
 {
 	int ret = 0;
 
-	pr_info("[%04d][%s]: probe start..\n", __LINE__, __func__);
+	pr_debug("[%04d][%s]: probe start..\n", __LINE__, __func__);
 	ret = mtk_pctrl_init(pdev, &mt6765_pinctrl_data, NULL);
-	pr_info("[%04d][%s]: probe end, ret:%d\n", __LINE__, __func__, ret);
+	pr_debug("[%04d][%s]: probe end, ret:%d\n", __LINE__, __func__, ret);
 	return ret;
 }
 

@@ -318,7 +318,7 @@ void oc_int_handler(enum PMIC_IRQ_ENUM intNo, const char *int_name)
 	switch (intNo) {
 	case INT_VLDO28_OC:
 		/* keep OC interrupt and keep tracking */
-		pr_notice(PMICTAG "[PMIC_INT] PMIC OC: %s\n", int_name);
+		pr_debug(PMICTAG "[PMIC_INT] PMIC OC: %s\n", int_name);
 		break;
 	default:
 		/* issue AEE exception and disable OC interrupt */
@@ -328,7 +328,7 @@ void oc_int_handler(enum PMIC_IRQ_ENUM intNo, const char *int_name)
 		    oc_str, "\nCRDISPATCH_KEY:PMIC OC\nOC Interrupt: %s",
 		    int_name);
 		pmic_enable_interrupt(intNo, 0, "PMIC");
-		pr_notice(PMICTAG "[PMIC_INT] disable OC interrupt: %s\n",
+		pr_debug(PMICTAG "[PMIC_INT] disable OC interrupt: %s\n",
 			  int_name);
 		break;
 	}
@@ -560,13 +560,13 @@ static void pmic_sp_irq_handler(unsigned int spNo, unsigned int sp_conNo,
 	    (sp_int_status == 0x4 || sp_int_status == 0x8 ||
 	     sp_int_status == 0xC)) {
 		if (__ratelimit(&ratelimit)) {
-			pr_notice(
+			pr_debug(
 			    PMICTAG "[PMIC_INT] Reg[0x%x]=0x%x\n",
 			    (sp_interrupts[spNo].status + 0x6 * sp_conNo),
 			    sp_int_status);
 		}
 	} else {
-		pr_notice(PMICTAG "[PMIC_INT] Reg[0x%x]=0x%x\n",
+		pr_debug(PMICTAG "[PMIC_INT] Reg[0x%x]=0x%x\n",
 			  (sp_interrupts[spNo].status + 0x6 * sp_conNo),
 			  sp_int_status);
 	}

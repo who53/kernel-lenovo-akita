@@ -583,7 +583,7 @@ static void scp_logger_notify_ws(struct work_struct *ws)
 
 	scp_ipi_id = IPI_LOGGER_INIT_A;
 
-	pr_notice("[SCP] %s: id=%u\n", __func__, scp_ipi_id);
+	pr_debug("[SCP] %s: id=%u\n", __func__, scp_ipi_id);
 	/*
 	 *send ipi to invoke scp logger
 	 */

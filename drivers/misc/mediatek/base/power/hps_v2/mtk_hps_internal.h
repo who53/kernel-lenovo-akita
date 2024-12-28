@@ -69,8 +69,8 @@
  * LOG
  */
 #define TAG	"[HPS] "
-#define tag_pr_notice(fmt, args...)	pr_notice(TAG fmt, ##args)
-#define tag_pr_info(fmt, args...)	pr_info(TAG fmt, ##args)
+#define tag_pr_notice(fmt, args...)	pr_debug(TAG fmt, ##args)
+#define tag_pr_info(fmt, args...)	pr_debug(TAG fmt, ##args)
 #define tag_pr_debug(fmt, args...)	pr_debug(TAG fmt, ##args)
 
 #if EN_ISR_LOG

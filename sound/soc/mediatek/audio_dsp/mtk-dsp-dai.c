@@ -151,7 +151,7 @@ static struct snd_soc_dai_driver mtk_dai_dsp_driver[] = {
 
 int dai_dsp_register(struct platform_device *pdev, struct mtk_base_dsp *dsp)
 {
-	dev_info(&pdev->dev, "%s()\n", __func__);
+	dev_dbg(&pdev->dev, "%s()\n", __func__);
 
 	dsp->component_driver = &mtk_dai_dsp_component;
 	dsp->dai_drivers = mtk_dai_dsp_driver;

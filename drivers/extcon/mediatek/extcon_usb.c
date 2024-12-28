@@ -68,12 +68,12 @@ static void usb_extcon_detect_cable(struct work_struct *work)
 	unsigned int cur_dr, new_dr;
 
 	if (!g_extcon_info) {
-		pr_info("g_extcon_info = NULL\n");
+		pr_debug("g_extcon_info = NULL\n");
 		return;
 	}
 	cur_dr = g_extcon_info->dr;
 	new_dr = info->dr;
-	pr_info("cur_dr(%d) new_dr(%d)\n", cur_dr, new_dr);
+	pr_debug("cur_dr(%d) new_dr(%d)\n", cur_dr, new_dr);
 
 	/* none -> device */
 	if (cur_dr == DUAL_PROP_DR_NONE &&
@@ -98,11 +98,11 @@ static void usb_extcon_detect_cable(struct work_struct *work)
 	/* device -> host */
 	} else if (cur_dr == DUAL_PROP_DR_DEVICE &&
 			new_dr == DUAL_PROP_DR_HOST) {
-		pr_info("device -> host, it's illegal\n");
+		pr_debug("device -> host, it's illegal\n");
 	/* host -> device */
 	} else if (cur_dr == DUAL_PROP_DR_HOST &&
 			new_dr == DUAL_PROP_DR_DEVICE) {
-		pr_info("host -> device, it's illegal\n");
+		pr_debug("host -> device, it's illegal\n");
 	}
 
 	g_extcon_info->dr = new_dr;
@@ -114,7 +114,7 @@ static void issue_connection_work(unsigned int dr)
 	struct mt_usb_work *work;
 
 	if (!g_extcon_info) {
-		pr_info("g_extcon_info = NULL\n");
+		pr_debug("g_extcon_info = NULL\n");
 		return;
 	}
 	/* create and prepare worker */
@@ -131,14 +131,14 @@ static void issue_connection_work(unsigned int dr)
 #if !defined(CONFIG_USB_MU3D_DRV)
 void mt_usb_connect(void)
 {
-	pr_info("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 	issue_connection_work(DUAL_PROP_DR_DEVICE);
 }
 EXPORT_SYMBOL_GPL(mt_usb_connect);
 
 void mt_usb_disconnect(void)
 {
-	pr_info("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 	issue_connection_work(DUAL_PROP_DR_NONE);
 }
 EXPORT_SYMBOL_GPL(mt_usb_disconnect);
@@ -146,14 +146,14 @@ EXPORT_SYMBOL_GPL(mt_usb_disconnect);
 
 void mt_usbhost_connect(void)
 {
-	pr_info("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 	issue_connection_work(DUAL_PROP_DR_HOST);
 }
 EXPORT_SYMBOL_GPL(mt_usbhost_connect);
 
 void mt_usbhost_disconnect(void)
 {
-	pr_info("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 	issue_connection_work(DUAL_PROP_DR_NONE);
 }
 EXPORT_SYMBOL_GPL(mt_usbhost_disconnect);
@@ -184,13 +184,13 @@ static int usb_extcon_probe(struct platform_device *pdev)
 
 	info->edev = devm_extcon_dev_allocate(dev, usb_extcon_cable);
 	if (IS_ERR(info->edev)) {
-		dev_info(dev, "failed to allocate extcon device\n");
+		dev_dbg(dev, "failed to allocate extcon device\n");
 		return -ENOMEM;
 	}
 
 	ret = devm_extcon_dev_register(dev, info->edev);
 	if (ret < 0) {
-		dev_info(dev, "failed to register extcon device\n");
+		dev_dbg(dev, "failed to register extcon device\n");
 		return ret;
 	}
 	platform_set_drvdata(pdev, info);

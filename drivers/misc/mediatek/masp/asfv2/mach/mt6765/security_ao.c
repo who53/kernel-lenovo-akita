@@ -43,13 +43,13 @@ int masp_hal_set_dm_verity_error(void)
 						   NULL,
 						   compatible);
 		if (!np_secao) {
-			pr_notice("[SEC AO] security ao node not found\n");
+			pr_debug("[SEC AO] security ao node not found\n");
 			return -ENXIO;
 		}
 
 		security_ao_base = (void __iomem *)of_iomap(np_secao, 0);
 		if (!security_ao_base) {
-			pr_notice("[SEC AO] security ao register remapping failed\n");
+			pr_debug("[SEC AO] security ao register remapping failed\n");
 			return -ENXIO;
 		}
 	}

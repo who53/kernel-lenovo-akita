@@ -90,19 +90,19 @@ static void mtee_clks_init(struct platform_device *pdev)
 
 		if (of_property_read_string_index(pdev->dev.of_node,
 					"clock-names", idx, &clk_name)) {
-			pr_warn("[%s] get clk_name failed, index:%d\n",
+			pr_debug("[%s] get clk_name failed, index:%d\n",
 				MODULE_NAME,
 				idx);
 			continue;
 		}
 		if (strlen(clk_name) > CLK_NAME_LEN-1) {
-			pr_warn("[%s] clk_name %s is longer than %d, trims to %d\n",
+			pr_debug("[%s] clk_name %s is longer than %d, trims to %d\n",
 				MODULE_NAME,
 				clk_name, CLK_NAME_LEN-1, CLK_NAME_LEN-1);
 		}
 		clk = devm_clk_get(&pdev->dev, clk_name);
 		if (IS_ERR(clk)) {
-			pr_warn("[%s] get devm_clk_get failed, clk_name:%s\n",
+			pr_debug("[%s] get devm_clk_get failed, clk_name:%s\n",
 				MODULE_NAME,
 				clk_name);
 			continue;
@@ -152,13 +152,13 @@ static void mtee_pms_init(struct platform_device *pdev)
 
 		if (of_property_read_string_index(pdev->dev.of_node,
 					"pm-names", idx, &pm_name)) {
-			pr_warn("[%s] get pm_name failed, index:%d\n",
+			pr_debug("[%s] get pm_name failed, index:%d\n",
 				MODULE_NAME,
 				idx);
 			continue;
 		}
 		if (strlen(pm_name) > PM_NAME_LEN-1) {
-			pr_warn("[%s] pm_name %s is longer than %d, trims to %d\n",
+			pr_debug("[%s] pm_name %s is longer than %d, trims to %d\n",
 				MODULE_NAME,
 				pm_name, PM_NAME_LEN-1, PM_NAME_LEN-1);
 		}
@@ -327,7 +327,7 @@ static long _map_user_pages(struct MTIOMMU_PIN_RANGE_T *pinRange,
  out:
 	up_read(&current->mm->mmap_sem);
 	if (res < 0) {
-		pr_warn("%s error = %d\n", __func__, res);
+		pr_debug("%s error = %d\n", __func__, res);
 		goto out_free;
 	}
 
@@ -339,7 +339,7 @@ static long _map_user_pages(struct MTIOMMU_PIN_RANGE_T *pinRange,
 	return 0;
 
  out_unmap:
-	pr_warn("%s fail\n", __func__);
+	pr_debug("%s fail\n", __func__);
 	if (pinRange->isPage) {
 		for (j = 0; j < res; j++)
 			put_page(pages[j]);
@@ -1047,7 +1047,7 @@ static long __tz_reg_sharedmem(struct file *file, unsigned long arg,
 	cret = _map_user_pages(pin, (unsigned long)cparam->buffer,
 				cparam->size, cparam->control);
 	if (cret != 0) {
-		pr_warn("tz_client_reg_sharedmem fail: map user pages = 0x%x\n",
+		pr_debug("tz_client_reg_sharedmem fail: map user pages = 0x%x\n",
 			(uint32_t) cret);
 		errcode = -EFAULT;
 		goto client_regshm_mapfail_1;
@@ -1082,7 +1082,7 @@ static long __tz_reg_sharedmem(struct file *file, unsigned long arg,
 	ret = kree_register_sharedmem(session, &mem_handle, pin->start,
 					pin->size, (void *)map_p, tag);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("tz_client_reg_sharedmem fail: register shm 0x%x\n",
+		pr_debug("tz_client_reg_sharedmem fail: register shm 0x%x\n",
 			ret);
 		kfree(map_p);
 		kfree(tag);
@@ -1098,7 +1098,7 @@ static long __tz_reg_sharedmem(struct file *file, unsigned long arg,
 					(KREE_SHAREDMEM_HANDLE) mem_handle,
 					(uint32_t *) pin);
 	if (cret < 0) {
-		pr_warn("tz_client_reg_sharedmem fail: register fd 0x%x\n",
+		pr_debug("tz_client_reg_sharedmem fail: register fd 0x%x\n",
 			(uint32_t) cret);
 		errcode = -EFAULT;
 		goto client_regshm_free_1;
@@ -1121,7 +1121,7 @@ client_regshm_free:
 	cparam->ret = ret;	/* TEE service call return */
 	cret = copy_to_user((void *)arg, cparam,
 				sizeof(struct kree_sharedmemory_cmd_param));
-	pr_warn("tz_client_reg_sharedmem fail: shm reg\n");
+	pr_debug("tz_client_reg_sharedmem fail: shm reg\n");
 	return errcode;
 
 client_regshm_mapfail_2:
@@ -1130,7 +1130,7 @@ client_regshm_mapfail_1:
 	kfree(pin);
 client_regshm_mapfail:
 	kfree(tag);
-	pr_warn("tz_client_reg_sharedmem fail: map memory\n");
+	pr_debug("tz_client_reg_sharedmem fail: map memory\n");
 	return errcode;
 }
 
@@ -1186,7 +1186,7 @@ static long tz_client_unreg_sharedmem(struct file *file, unsigned long arg)
 	 */
 	ret = kree_unregister_sharedmem(session, (uint32_t) cparam.mem_handle);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("%s: 0x%x\n", __func__, ret);
+		pr_debug("%s: 0x%x\n", __func__, ret);
 		cparam.ret = ret;
 		cret = copy_to_user((void *)arg, &cparam, sizeof(cparam));
 		return -EFAULT;
@@ -1196,7 +1196,7 @@ static long tz_client_unreg_sharedmem(struct file *file, unsigned long arg)
 	 */
 	ret = tz_client_unregister_sharedmem(file, cparam.mem_handle);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("%s: unregister shm = 0x%x\n", __func__, ret);
+		pr_debug("%s: unregister shm = 0x%x\n", __func__, ret);
 		return -EFAULT;
 	}
 
@@ -1289,13 +1289,13 @@ static int securetime_savefile(void)
 
 	ret = KREE_CreateSession(TZ_TA_PLAYREADY_UUID, &securetime_session);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("[securetime]CreateSession error %d\n", ret);
+		pr_debug("[securetime]CreateSession error %d\n", ret);
 
 	TEE_update_pr_time_infile(securetime_session);
 
 	ret = KREE_CloseSession(securetime_session);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("CloseSession error %d\n", ret);
+		pr_debug("CloseSession error %d\n", ret);
 
 
 	return ret;
@@ -1304,7 +1304,7 @@ static int securetime_savefile(void)
 
 static void st_shutdown(struct platform_device *pdev)
 {
-	pr_info("[securetime]%s: kickoff\n", __func__);
+	pr_debug("[securetime]%s: kickoff\n", __func__);
 }
 #endif
 
@@ -1375,7 +1375,7 @@ int KREE_ServGetChunkmemPool(u32 op,
 	chunkmem = (struct ree_service_chunk_mem *)uparam;
 
 	if (secure_pages != NULL) {
-		pr_warn("%s() already allocated!\n", __func__);
+		pr_debug("%s() already allocated!\n", __func__);
 		return TZ_RESULT_ERROR_OUT_OF_MEMORY;
 	}
 
@@ -1383,13 +1383,13 @@ int KREE_ServGetChunkmemPool(u32 op,
 	secure_pages = cma_alloc_large(tz_cma, secure_size/SZ_4K,
 					get_order(SZ_1M));
 	if (secure_pages == NULL) {
-		pr_warn("%s() cma_alloc() failed!\n", __func__);
+		pr_debug("%s() cma_alloc() failed!\n", __func__);
 		return TZ_RESULT_ERROR_OUT_OF_MEMORY;
 	}
 	chunkmem->size = secure_size;
 	chunkmem->chunkmem_pa = (uint64_t)page_to_phys(secure_pages);
 
-	pr_info("%s() get @%llx [0x%zx]\n", __func__,
+	pr_debug("%s() get @%llx [0x%zx]\n", __func__,
 			chunkmem->chunkmem_pa, secure_size);
 
 	/* flush cache to avoid writing secure memory after allocation. */
@@ -1406,7 +1406,7 @@ int KREE_ServReleaseChunkmemPool(u32 op,
 
 		cma_release(tz_cma, secure_pages,
 				cma_get_size(tz_cma)>>PAGE_SHIFT);
-		pr_info("%s() release @%pax [0x%zx]\n", __func__,
+		pr_debug("%s() release @%pax [0x%zx]\n", __func__,
 				&addr, secure_size);
 		secure_pages = NULL;
 		secure_size = 0;
@@ -1424,14 +1424,14 @@ int KREE_TeeReleseChunkmemPool(void)
 
 	ret = KREE_CreateSession(TZ_TA_MEM_UUID, &mem_session);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("Create memory session error %d\n", ret);
+		pr_debug("Create memory session error %d\n", ret);
 		return ret;
 	}
 
 	ret = KREE_TeeServiceCall(mem_session, TZCMD_MEM_RELEASE_SECURECM,
 					TZPT_NONE, NULL);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("Release Secure CM failed, ret = %d\n", ret);
+		pr_debug("Release Secure CM failed, ret = %d\n", ret);
 
 	KREE_CloseSession(mem_session);
 
@@ -1451,7 +1451,7 @@ int tz_cm_shrinker_thread(void *data)
 		/* TeeReleaseChunkmemPool will call     */
 		/* ree-service call to do cma_release() */
 		if (KREE_TeeReleseChunkmemPool() != TZ_RESULT_SUCCESS)
-			pr_warn("Can't free tz chunk memory\n");
+			pr_debug("Can't free tz chunk memory\n");
 
 		complete(&tz_cm_shrinker_finish_work);
 	} while (1);
@@ -1468,14 +1468,14 @@ static int KREE_IsTeeChunkmemPoolReleasable(int *releasable)
 
 	ret = KREE_CreateSession(TZ_TA_MEM_UUID, &mem_session);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("Create memory session error %d\n", ret);
+		pr_debug("Create memory session error %d\n", ret);
 		return ret;
 	}
 
 	ret = KREE_TeeServiceCall(mem_session, TZCMD_MEM_USAGE_SECURECM,
 					TZPT_VALUE_OUTPUT, param);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("Is Secure CM releasable failed, ret = %d\n", ret);
+		pr_debug("Is Secure CM releasable failed, ret = %d\n", ret);
 
 	*releasable = param[0].value.a;
 
@@ -1533,19 +1533,19 @@ static int KREE_TeeTriggerChunkmemAllocation(void)
 
 	ret = KREE_CreateSession(TZ_TA_MEM_UUID, &mem_session);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("Create memory session error %d\n", ret);
+		pr_debug("Create memory session error %d\n", ret);
 		return ret;
 	}
 
 	ret = KREE_AllocSecurechunkmem(mem_session, &cm_handle, 1, 4096);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("Allocate securechunkmem error %d\n", ret);
+		pr_debug("Allocate securechunkmem error %d\n", ret);
 		return ret;
 	}
 
 	ret = KREE_UnreferenceSecurechunkmem(mem_session, cm_handle);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("Unreference securechunkmem error %d\n", ret);
+		pr_debug("Unreference securechunkmem error %d\n", ret);
 		return ret;
 	}
 
@@ -1587,9 +1587,9 @@ static int mtee_probe(struct platform_device *pdev)
 		if (parent_node)
 			kree_set_sysirq_node(parent_node);
 		else
-			pr_warn("can't find interrupt-parent device node from mtee\n");
+			pr_debug("can't find interrupt-parent device node from mtee\n");
 	} else
-		pr_warn("No mtee device node\n");
+		pr_debug("No mtee device node\n");
 
 	mtee_clks_init(pdev);
 	mtee_pms_init(pdev);
@@ -1601,7 +1601,7 @@ static int mtee_probe(struct platform_device *pdev)
 
 	ret = register_chrdev_region(tz_client_dev, 1, TZ_DEV_NAME);
 	if (ret) {
-		pr_warn("[%s] register device failed, ret:%d\n",
+		pr_debug("[%s] register device failed, ret:%d\n",
 			MODULE_NAME, ret);
 		return ret;
 	}
@@ -1612,7 +1612,7 @@ static int mtee_probe(struct platform_device *pdev)
 
 	ret = cdev_add(&tz_client_cdev, tz_client_dev, 1);
 	if (ret < 0) {
-		pr_warn("[%s] could not allocate chrdev for the device, ret:%d\n",
+		pr_debug("[%s] could not allocate chrdev for the device, ret:%d\n",
 			MODULE_NAME,
 			ret);
 		return ret;
@@ -1620,7 +1620,7 @@ static int mtee_probe(struct platform_device *pdev)
 
 	tzret = KREE_InitTZ();
 	if (tzret != TZ_RESULT_SUCCESS) {
-		pr_warn("tz_client_init: TZ Failed %d\n", (int)tzret);
+		pr_debug("tz_client_init: TZ Failed %d\n", (int)tzret);
 		WARN_ON(tzret != TZ_RESULT_SUCCESS);
 	}
 
@@ -1640,7 +1640,7 @@ static int mtee_probe(struct platform_device *pdev)
 	if (IS_ERR(pTzClass)) {
 		int ret = PTR_ERR(pTzClass);
 
-		pr_warn("[%s] could not create class for the device, ret:%d\n",
+		pr_debug("[%s] could not create class for the device, ret:%d\n",
 			MODULE_NAME,
 			ret);
 		return ret;
@@ -1718,7 +1718,7 @@ static int __init rmem_tz_sec_setup(struct reserved_mem *rmem)
 	}
 
 	tz_cma = cma;
-	pr_info("Reserved memory: created CMA memory pool at %pa, size %ld MiB\n",
+	pr_debug("Reserved memory: created CMA memory pool at %pa, size %ld MiB\n",
 		&rmem->base, (unsigned long)rmem->size / SZ_1M);
 
 	return 0;
@@ -1749,7 +1749,7 @@ static int __init register_tz_driver(void)
 #ifndef CONFIG_OF
 	if (platform_device_register(&tz_device)) {
 		ret = -ENODEV;
-		pr_warn("[%s] could not register device for the device, ret:%d\n",
+		pr_debug("[%s] could not register device for the device, ret:%d\n",
 			MODULE_NAME,
 			ret);
 		return ret;
@@ -1758,7 +1758,7 @@ static int __init register_tz_driver(void)
 
 	if (platform_driver_register(&tz_driver)) {
 		ret = -ENODEV;
-		pr_warn("[%s] could not register device for the device, ret:%d\n",
+		pr_debug("[%s] could not register device for the device, ret:%d\n",
 			MODULE_NAME,
 			ret);
 #ifndef CONFIG_OF
@@ -1786,12 +1786,12 @@ static void st_late_resume(struct early_suspend *h)
 
 	ret = KREE_CreateSession(TZ_TA_PLAYREADY_UUID, &securetime_session);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("[securetime]CreateSession error %d\n", ret);
+		pr_debug("[securetime]CreateSession error %d\n", ret);
 
 	TEE_update_pr_time_intee(securetime_session);
 	ret = KREE_CloseSession(securetime_session);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("[securetime]CloseSession error %d\n", ret);
+		pr_debug("[securetime]CloseSession error %d\n", ret);
 }
 
 static struct early_suspend securetime_early_suspend = {
@@ -1824,7 +1824,7 @@ static int __init tz_client_init(void)
 
 	ret = register_tz_driver();
 	if (ret) {
-		pr_warn("[%s] register device/driver failed, ret:%d\n",
+		pr_debug("[%s] register device/driver failed, ret:%d\n",
 			MODULE_NAME,
 			ret);
 		return ret;

@@ -147,7 +147,7 @@ static int Audio_MD_Select_Control_Set(struct snd_kcontrol *kcontrol,
 				       struct snd_ctl_elem_value *ucontrol)
 {
 	if (ucontrol->value.enumerated.item[0] > ARRAY_SIZE(md_choose)) {
-		pr_warn("return -EINVAL\n");
+		pr_debug("return -EINVAL\n");
 		return -EINVAL;
 	}
 	md_select = ucontrol->value.integer.value[0];
@@ -355,7 +355,7 @@ static int mtk_voice_ultra_open(struct snd_pcm_substream *substream)
 		runtime->rate, runtime->channels);
 
 	if (ret < 0) {
-		pr_warn("mtk_voice_ultra_close\n");
+		pr_debug("mtk_voice_ultra_close\n");
 		mtk_voice_ultra_close(substream);
 		return ret;
 	}

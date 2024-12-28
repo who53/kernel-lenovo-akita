@@ -220,7 +220,7 @@ static int acm_ms_bind(struct usb_composite_dev *cdev)
 		goto fail_otg_desc;
 
 	usb_composite_overwrite_options(cdev, &coverwrite);
-	dev_info(&gadget->dev, "%s, version: " DRIVER_VERSION "\n",
+	dev_dbg(&gadget->dev, "%s, version: " DRIVER_VERSION "\n",
 			DRIVER_DESC);
 	return 0;
 

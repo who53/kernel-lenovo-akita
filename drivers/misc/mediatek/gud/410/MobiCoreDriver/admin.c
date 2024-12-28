@@ -232,7 +232,7 @@ static int request_send(u32 command, const struct mc_uuid_t *uuid, bool is_gp,
 
 		if (counter++ == 10) {
 			wait_tens++;
-			mc_dev_info("daemon not connected after %d0s, waiting",
+			mc_dev_dbg("daemon not connected after %d0s, waiting",
 				    wait_tens);
 			counter = 0;
 		}
@@ -943,7 +943,7 @@ static long admin_ioctl(struct file *file, unsigned int cmd,
 		/* Update TGID as it may change (when becoming a daemon) */
 		if (l_ctx.admin_tgid != current->tgid) {
 			l_ctx.admin_tgid = current->tgid;
-			mc_dev_info("daemon PID changed to %d",
+			mc_dev_dbg("daemon PID changed to %d",
 				    l_ctx.admin_tgid);
 		}
 
@@ -1080,7 +1080,7 @@ static int admin_release(struct inode *inode, struct file *file)
 		complete(&g_request.server_complete);
 	}
 	mutex_unlock(&g_request.states_mutex);
-	mc_dev_info("daemon connection closed, TGID %d", l_ctx.admin_tgid);
+	mc_dev_dbg("daemon connection closed, TGID %d", l_ctx.admin_tgid);
 	l_ctx.admin_tgid = 0;
 
 	/*
@@ -1128,7 +1128,7 @@ static int admin_open(struct inode *inode, struct file *file)
 	reinit_completion_local(&g_request.client_complete);
 	reinit_completion_local(&g_request.server_complete);
 	/* Requests from driver to daemon */
-	mc_dev_info("daemon connection open, TGID %d", l_ctx.admin_tgid);
+	mc_dev_dbg("daemon connection open, TGID %d", l_ctx.admin_tgid);
 	return 0;
 }
 

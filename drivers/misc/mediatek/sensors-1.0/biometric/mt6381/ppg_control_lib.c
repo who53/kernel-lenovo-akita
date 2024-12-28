@@ -129,7 +129,7 @@ INT32 ppg_control_process(struct ppg_control_t *ppg_control_input)
 	ppg_control_timer[ch] += ppg_sample_length;
 
 #if defined(LOG_PPG_CONTROL_ENABLE)
-	pr_notice("%s, timer%d=%d, state=%d, led=%d, idx=%d, fs=%d, l=%d\n",
+	pr_debug("%s, timer%d=%d, state=%d, led=%d, idx=%d, fs=%d, l=%d\n",
 		"MT6381_AGC start", ch,
 		ppg_control_timer[ch], ppg_ctrl_cur_state[ch],
 		ppg_control_led_current[ch],
@@ -163,7 +163,7 @@ INT32 ppg_control_process(struct ppg_control_t *ppg_control_input)
 			value = input[i] + input_amb[i];
 
 #if defined(LOG_PPG_CONTROL_ENABLE)
-			pr_notice("%s, PPG%d = %d, LED = %d, AMB = %d, idx = %d\n",
+			pr_debug("%s, PPG%d = %d, LED = %d, AMB = %d, idx = %d\n",
 				"MT6381_AGC input", ch,
 				input[i], value, input_amb[i],
 				ppg_ctrl_buf_idx[ch]);
@@ -301,7 +301,7 @@ INT32 ppg_control_process(struct ppg_control_t *ppg_control_input)
 			ppg_control_led_current[ch] = PPG_MIN_LED_CURRENT;
 
 #if defined(LOG_PPG_CONTROL_ENABLE)
-		pr_notice("MT6381_AGC write, state%d = %d->%d, led = %d, step = %d\n",
+		pr_debug("MT6381_AGC write, state%d = %d->%d, led = %d, step = %d\n",
 			ch, ppg_ctrl_pre_state[ch], ppg_ctrl_cur_state[ch],
 			ppg_control_led_current[ch], led_step);
 #endif

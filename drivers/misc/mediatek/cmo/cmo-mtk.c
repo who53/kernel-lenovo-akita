@@ -85,7 +85,7 @@ void smp_inner_dcache_flush_all(void)
 	struct cpumask mask;
 
 	if (in_interrupt()) {
-		pr_notice
+		pr_debug
 			("Cannot invoke %s in interrupt/softirq context\n",
 				__func__);
 		return;
@@ -160,7 +160,7 @@ static void *cache_flush_map_page_va(struct vm_struct *vm, struct page *page)
 
 	ret = map_vm_area(vm, PAGE_KERNEL, ppPage);
 	if (ret) {
-		pr_notice("error to map page (err %d)\n", ret);
+		pr_debug("error to map page (err %d)\n", ret);
 		return NULL;
 	}
 	return vm->addr;
@@ -278,7 +278,7 @@ void _flush_sg_list(struct smp_sync_sg_list_arg *args)
 					(cache_flush_vm_struct[this_cpu],
 						page++);
 				if (unlikely(IS_ERR_OR_NULL((void *) start))) {
-					pr_notice(
+					pr_debug(
 				"[smp cache flush] cannot do cache sync: ret=%lu\n",
 							start);
 					args->ret_value = -EFAULT;
@@ -292,7 +292,7 @@ void _flush_sg_list(struct smp_sync_sg_list_arg *args)
 					ion_sync_kernel_func(start,
 					PAGE_SIZE, sync_type);
 				else
-					pr_notice(
+					pr_debug(
 				"[smp cache flush] ion_sync_kernel_func is NULL\n");
 
 				cache_flush_unmap_page_va
@@ -368,7 +368,7 @@ int mt_smp_cache_flush(struct sg_table *table, unsigned int sync_type,
 	long timeout = CACHE_FLUSH_TIMEOUT;
 
 	if (in_interrupt()) {
-		pr_notice(
+		pr_debug(
 			"Cannot invoke mt_smp_cache_flush() in interrupt/softirq context\n");
 		return -EFAULT;
 	}

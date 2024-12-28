@@ -88,7 +88,7 @@
 
 int dither_dbg_en;
 #define DITHER_ERR(fmt, arg...) \
-	pr_notice("[DITHER] %s: " fmt "\n", __func__, ##arg)
+	pr_debug("[DITHER] %s: " fmt "\n", __func__, ##arg)
 #define DITHER_DBG(fmt, arg...) \
 	do { if (dither_dbg_en) \
 		pr_debug("[DITHER] %s: " fmt "\n",  __func__, ##arg); \

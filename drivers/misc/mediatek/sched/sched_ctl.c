@@ -416,7 +416,7 @@ static int __init sched_hint_init(void)
 	g_shd.task = kthread_create(sched_hint_thread, NULL, "ksched_hint");
 
 	if (IS_ERR_OR_NULL(g_shd.task)) {
-		pr_info("%s: failed to create ksched_hint thread.\n", __func__);
+		pr_debug("%s: failed to create ksched_hint thread.\n", __func__);
 		goto err;
 	}
 
@@ -781,7 +781,7 @@ int set_sched_boost(unsigned int val)
 		else if (val == SCHED_FG_BOOST)
 			sched_set_boost_fg();
 	}
-	printk_deferred("[name:sched_boost&] sched boost: set %d\n",
+	pr_debug("[name:sched_boost&] sched boost: set %d\n",
 		sched_boost_type);
 	mutex_unlock(&sched_boost_mutex);
 

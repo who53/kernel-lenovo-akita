@@ -334,7 +334,7 @@ static void acm_complete_set_line_coding(struct usb_ep *ep,
 		 */
 		acm->port_line_coding = *value;
 
-		pr_notice("[USB_ACM] %s:rate=%d, stop=%d, parity=%d, data=%d\n",
+		pr_debug("[USB_ACM] %s:rate=%d, stop=%d, parity=%d, data=%d\n",
 			__func__,
 			acm->port_line_coding.dwDTERate,
 			acm->port_line_coding.bCharFormat,
@@ -368,7 +368,7 @@ static int acm_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
 
 
 	if (__ratelimit(&ratelimit)) {
-		pr_notice("[ACM]%s: ttyGS%d req%02x.%02x v%04x i%04x len=%d, skip_cnt:%d\n",
+		pr_debug("[ACM]%s: ttyGS%d req%02x.%02x v%04x i%04x len=%d, skip_cnt:%d\n",
 			__func__,
 			acm->port_num, ctrl->bRequestType,
 			ctrl->bRequest,
@@ -404,7 +404,7 @@ static int acm_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
 
 
 		if (__ratelimit(&ratelimit1)) {
-			pr_notice("[USB_ACM]%s: rate=%d,stop=%d,parity=%d,data=%d, skip_cnt:%d\n",
+			pr_debug("[USB_ACM]%s: rate=%d,stop=%d,parity=%d,data=%d, skip_cnt:%d\n",
 				__func__,
 				acm->port_line_coding.dwDTERate, acm->port_line_coding.bCharFormat,
 				acm->port_line_coding.bParityType, acm->port_line_coding.bDataBits,
@@ -728,7 +728,7 @@ acm_bind(struct usb_configuration *c, struct usb_function *f)
 	if (status)
 		goto fail;
 
-	pr_notice("[XLOG_INFO][USB_ACM]%s: ttyGS%d: %s speed IN/%s OUT/%s NOTIFY/%s\n",
+	pr_debug("[XLOG_INFO][USB_ACM]%s: ttyGS%d: %s speed IN/%s OUT/%s NOTIFY/%s\n",
 			__func__, acm->port_num,
 			gadget_is_superspeed(c->cdev->gadget) ? "super" :
 			gadget_is_dualspeed(c->cdev->gadget) ? "dual" : "full",
@@ -860,7 +860,7 @@ static struct usb_function_instance *acm_alloc_instance(void)
 		return ERR_PTR(ret);
 	}
 
-	pr_info("%s opts->port_num=%d\n", __func__, opts->port_num);
+	pr_debug("%s opts->port_num=%d\n", __func__, opts->port_num);
 
 	config_group_init_type_name(&opts->func_inst.group, "",
 			&acm_func_type);

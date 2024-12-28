@@ -49,7 +49,7 @@
 int corr_dbg_en;
 int ccorr_scenario;
 #define GAMMA_ERR(fmt, arg...) \
-	pr_notice("[GAMMA] %s: " fmt "\n", __func__, ##arg)
+	pr_debug("[GAMMA] %s: " fmt "\n", __func__, ##arg)
 #define GAMMA_NOTICE(fmt, arg...) \
 	do { if (corr_dbg_en) \
 		pr_debug("[GAMMA] %s: " fmt "\n", __func__, ##arg); } while (0)
@@ -57,7 +57,7 @@ int ccorr_scenario;
 	do { if (corr_dbg_en) \
 		pr_debug("[GAMMA] %s: " fmt "\n", __func__, ##arg); } while (0)
 #define CCORR_ERR(fmt, arg...) \
-	pr_notice("[CCORR] %s: " fmt "\n", __func__, ##arg)
+	pr_debug("[CCORR] %s: " fmt "\n", __func__, ##arg)
 #define CCORR_NOTICE(fmt, arg...) \
 	do { if (corr_dbg_en) \
 		pr_debug("[CCORR] %s: " fmt "\n", __func__, ##arg); } while (0)

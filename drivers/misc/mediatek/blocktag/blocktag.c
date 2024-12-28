@@ -58,7 +58,7 @@ do { \
 	if (evt) \
 		seq_printf(evt, fmt, ##args); \
 	if (!buff && !evt) { \
-		pr_info(fmt, ##args); \
+		pr_debug(fmt, ##args); \
 	} \
 } while (0)
 
@@ -312,11 +312,11 @@ void mtk_btag_mictx_dump(void)
 	ret = mtk_btag_mictx_get_data(&iostat);
 
 	if (ret) {
-		pr_info("[BLOCK_TAG] Mictx: Get data failed %d\n", ret);
+		pr_debug("[BLOCK_TAG] Mictx: Get data failed %d\n", ret);
 		return;
 	}
 
-	pr_info("[BLOCK_TAG] Mictx: %llu|%u|%u|%u|%u|%u|%u|%u|%u|%u|%u\n",
+	pr_debug("[BLOCK_TAG] Mictx: %llu|%u|%u|%u|%u|%u|%u|%u|%u|%u|%u\n",
 		iostat.duration, iostat.q_depth, iostat.wl,
 		iostat.tp_req_r, iostat.tp_req_w,
 		iostat.tp_all_r, iostat.tp_all_w,
@@ -859,7 +859,7 @@ static int mtk_btag_sub_open(struct inode *inode, struct file *file)
 			struct dentry, d_u.d_alias);
 
 		if (entry && entry->d_parent) {
-			pr_notice("[BLOCK_TAG] %s: %s/%s\n", __func__,
+			pr_debug("[BLOCK_TAG] %s: %s/%s\n", __func__,
 				entry->d_parent->d_name.name,
 				entry->d_name.name);
 			m->private =
@@ -904,7 +904,7 @@ static ssize_t mtk_btag_mictx_sub_write(struct file *file,
 	else if (cmd[0] == '4')
 		mtk_btag_mictx_debug = 0;
 	else {
-		pr_info("[pidmap] invalid arg: 0x%x\n", cmd[0]);
+		pr_debug("[pidmap] invalid arg: 0x%x\n", cmd[0]);
 		goto err;
 	}
 
@@ -954,7 +954,7 @@ struct mtk_blocktag *mtk_btag_alloc(const char *name,
 
 	btag = mtk_btag_find(name);
 	if (btag) {
-		pr_notice("[BLOCK_TAG] %s: blocktag %s already exists.\n",
+		pr_debug("[BLOCK_TAG] %s: blocktag %s already exists.\n",
 			__func__, name);
 		return NULL;
 	}
@@ -1000,7 +1000,7 @@ struct mtk_blocktag *mtk_btag_alloc(const char *name,
 	btag->dentry.droot = debugfs_create_dir(name, mtk_btag_droot);
 
 	if (IS_ERR(btag->dentry.droot)) {
-		pr_warn("[BLOCK_TAG] %s: fail to create debugfs root\n", name);
+		pr_debug("[BLOCK_TAG] %s: fail to create debugfs root\n", name);
 		goto out;
 	}
 
@@ -1008,21 +1008,21 @@ struct mtk_blocktag *mtk_btag_alloc(const char *name,
 		btag->dentry.droot, &btag->used_mem);
 
 	if (IS_ERR(btag->dentry.dmem))
-		pr_warn("[BLOCK_TAG] %s: fail to create used_mem at debugfs\n",
+		pr_debug("[BLOCK_TAG] %s: fail to create used_mem at debugfs\n",
 			name);
 
 	btag->dentry.dklog = debugfs_create_u32("klog_enable", 0660,
 		btag->dentry.droot, &btag->klog_enable);
 
 	if (IS_ERR(btag->dentry.dklog))
-		pr_warn(
+		pr_debug(
 	"[BLOCK_TAG] %s: fail to create klog_enable at debugfs\n", name);
 
 	btag->dentry.dlog = debugfs_create_file("blockio", S_IFREG | 0444,
 		btag->dentry.droot, (void *)0, &mtk_btag_sub_fops);
 
 	if (IS_ERR(btag->dentry.dlog))
-		pr_warn("[BLOCK_TAG] %s: fail to create blockio at debugfs\n",
+		pr_debug("[BLOCK_TAG] %s: fail to create blockio at debugfs\n",
 			name);
 
 	btag->dentry.dlog_mictx = debugfs_create_file("blockio_mictx",
@@ -1030,7 +1030,7 @@ struct mtk_blocktag *mtk_btag_alloc(const char *name,
 		btag->dentry.droot, (void *)0, &mtk_btag_mictx_sub_fops);
 
 	if (IS_ERR(btag->dentry.dlog_mictx))
-		pr_info("[BLOCK_TAG] %s: fail to create blockio_mictx at debugfs\n",
+		pr_debug("[BLOCK_TAG] %s: fail to create blockio_mictx at debugfs\n",
 			name);
 
 out:
@@ -1085,7 +1085,7 @@ init:
 	if (mtk_btag_pagelogger)
 		memset(mtk_btag_pagelogger, -1, size);
 	else
-		pr_info(
+		pr_debug(
 		"[BLOCK_TAG] blockio: fail to allocate mtk_btag_pagelogger\n");
 }
 
@@ -1168,7 +1168,7 @@ static void mtk_btag_init_debugfs(void)
 
 	mtk_btag_droot = debugfs_create_dir("blocktag", NULL);
 	if (IS_ERR(mtk_btag_droot)) {
-		pr_warn("[BLOCK_TAG] fail to create debugfs root: blocktag\n");
+		pr_debug("[BLOCK_TAG] fail to create debugfs root: blocktag\n");
 		mtk_btag_droot = NULL;
 		return;
 	}
@@ -1176,7 +1176,7 @@ static void mtk_btag_init_debugfs(void)
 	mtk_btag_dlog = debugfs_create_file("blockio", S_IFREG | 0444, NULL,
 		(void *)0, &mtk_btag_main_fops);
 	if (IS_ERR(mtk_btag_dlog))
-		pr_warn(
+		pr_debug(
 		"[BLOCK_TAG] blocktag: fail to create log at debugfs\n");
 }
 
@@ -1346,7 +1346,7 @@ void mtk_btag_mictx_enable(int enable)
 		mtk_btag_mictx =
 			kzalloc(sizeof(struct mtk_btag_mictx_struct), GFP_NOFS);
 		if (!mtk_btag_mictx) {
-			pr_info("[BLOCK_TAG] mtk_btag_mictx allocation fail, disabled.\n");
+			pr_debug("[BLOCK_TAG] mtk_btag_mictx allocation fail, disabled.\n");
 			return;
 		}
 

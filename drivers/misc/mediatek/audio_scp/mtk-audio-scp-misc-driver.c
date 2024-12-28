@@ -32,7 +32,7 @@ void scp_read_status_release(const unsigned long scp_event)
 	last_scp_status = scp_event;
 	if (status_update_flag == 0) {
 		status_update_flag = 1;
-		pr_info("wake up event: %lu\n", scp_event);
+		pr_debug("wake up event: %lu\n", scp_event);
 		wake_up_interruptible(&scp_status_wq);
 	}
 }
@@ -45,12 +45,12 @@ static int scp_read_status_blocked(void)
 	retval = wait_event_interruptible(scp_status_wq,
 					  (status_update_flag > 0));
 	if (retval == -ERESTARTSYS) {
-		pr_info("query scp status -ERESTARTSYS\n");
+		pr_debug("query scp status -ERESTARTSYS\n");
 		status = -EINTR;
 	} else if (retval == 0) {
 		status = last_scp_status;
 		status_update_flag = 0;
-		pr_info("query scp status wakeup %d\n", status);
+		pr_debug("query scp status wakeup %d\n", status);
 	} else
 		status = -1;
 
@@ -98,7 +98,7 @@ static long audio_scp_misc_ioctl(struct file *fp,
 		ret = copy_to_user((void __user *)arg,
 				   &scp_status, sizeof(scp_status));
 		if (ret)
-			pr_warn("Fail copy to user Ptr:%p, r_sz:%zu\n",
+			pr_debug("Fail copy to user Ptr:%p, r_sz:%zu\n",
 				(char *)&scp_status, sizeof(scp_status));
 
 		pr_debug("%s(), AUDIO_SCP_IOCTL_QUERY_STATUS(%d)\n",
@@ -106,11 +106,11 @@ static long audio_scp_misc_ioctl(struct file *fp,
 		break;
 	case AUDIO_SCP_IOCTL_RESET_CBK:
 		ret = scp_read_status_blocked();
-		pr_info("%s(), AUDIO_SCP_IOCTL_RESET_CBK(%d)\n",
+		pr_debug("%s(), AUDIO_SCP_IOCTL_RESET_CBK(%d)\n",
 			__func__, ret);
 		break;
 	default:
-		pr_warn("%s(), cmd: %d\n", __func__, cmd);
+		pr_debug("%s(), cmd: %d\n", __func__, cmd);
 		break;
 	};
 
@@ -119,7 +119,7 @@ static long audio_scp_misc_ioctl(struct file *fp,
 
 static int audio_scp_misc_open(struct inode *inode, struct file *file)
 {
-	/*pr_info("%s()\n", __func__);*/
+	/*pr_debug("%s()\n", __func__);*/
 	return nonseekable_open(inode, file);
 }
 

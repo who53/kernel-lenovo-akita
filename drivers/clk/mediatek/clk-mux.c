@@ -381,7 +381,7 @@ void __init mtk_clk_register_mux_upds(const struct mtk_mux_upd *mus,
 		clk = mtk_clk_register_mux_upd(mu, base, lock);
 
 		if (IS_ERR(clk)) {
-			pr_notice("Failed to register clk %s: %ld\n",
+			pr_debug("Failed to register clk %s: %ld\n",
 					mu->name, PTR_ERR(clk));
 			continue;
 		}
@@ -458,7 +458,7 @@ void __init mtk_clk_register_mux_clr_set_upds(
 		clk = mtk_clk_register_mux_clr_set_upd(mu, base, lock);
 
 		if (IS_ERR(clk)) {
-			pr_notice("Failed to register clk %s: %ld\n",
+			pr_debug("Failed to register clk %s: %ld\n",
 					mu->name, PTR_ERR(clk));
 			continue;
 		}

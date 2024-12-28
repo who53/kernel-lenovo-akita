@@ -112,7 +112,7 @@ int KREE_ServRequestIrq(u32 op, u8 uparam[REE_SERVICE_BUFFER_SIZE])
 
 		if (rret) {
 			kfree(token);
-			pr_warn("%s (virq:%d, hwirq:%d) return error: %d\n",
+			pr_debug("%s (virq:%d, hwirq:%d) return error: %d\n",
 				__func__, virq, param->irq, rret);
 			if (rret == -ENOMEM)
 				ret = TZ_RESULT_ERROR_OUT_OF_MEMORY;
@@ -166,7 +166,7 @@ void kree_irq_init(void)
 
 	ret = KREE_CreateSession(TZ_TA_IRQ_UUID, &irq_session);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("%s: CreateSession error %d\n", __func__, ret);
+		pr_debug("%s: CreateSession error %d\n", __func__, ret);
 		return;
 	}
 }
@@ -194,7 +194,7 @@ int kree_set_fiq(int irq, unsigned long irq_flags)
 							TZPT_VALUE_INPUT),
 					param);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("%s error: %s\n", __func__, TZ_GetErrorString(ret));
+		pr_debug("%s error: %s\n", __func__, TZ_GetErrorString(ret));
 
 	return ret;
 }
@@ -211,7 +211,7 @@ static void __kree_enable_fiq(int irq, int enable)
 							TZPT_VALUE_INPUT),
 					param);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("%s error: %s\n", __func__, TZ_GetErrorString(ret));
+		pr_debug("%s error: %s\n", __func__, TZ_GetErrorString(ret));
 
 }
 
@@ -236,7 +236,7 @@ void kree_query_fiq(int irq, int *enable, int *pending)
 							TZPT_VALUE_OUTPUT),
 					param);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("%s error: %s\n", __func__, TZ_GetErrorString(ret));
+		pr_debug("%s error: %s\n", __func__, TZ_GetErrorString(ret));
 		param[1].value.a = 0;
 	}
 
@@ -266,7 +266,7 @@ void kree_fiq_eoi(unsigned int iar)
 	ret = KREE_TeeServiceCall(irq_session, TZCMD_IRQ_EOI,
 				TZ_ParamTypes1(TZPT_VALUE_INPUT), param);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("%s() fails! ret=0x%x\n", __func__, ret);
+		pr_debug("%s() fails! ret=0x%x\n", __func__, ret);
 }
 
 int kree_raise_softfiq(unsigned int mask, unsigned int irq)
@@ -293,7 +293,7 @@ void kree_irq_mask_all(unsigned int *pmask, unsigned int size)
 	ret = KREE_TeeServiceCall(irq_session, TZCMD_IRQ_MASK_ALL,
 				  TZ_ParamTypes1(TZPT_MEM_OUTPUT), param);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("%s error: %s\n", __func__, TZ_GetErrorString(ret));
+		pr_debug("%s error: %s\n", __func__, TZ_GetErrorString(ret));
 }
 
 void kree_irq_mask_restore(unsigned int *pmask, unsigned int size)
@@ -306,7 +306,7 @@ void kree_irq_mask_restore(unsigned int *pmask, unsigned int size)
 	ret = KREE_TeeServiceCall(irq_session, TZCMD_IRQ_MASK_RESTORE,
 				  TZ_ParamTypes1(TZPT_MEM_INPUT), param);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("%s error: %s\n", __func__, TZ_GetErrorString(ret));
+		pr_debug("%s error: %s\n", __func__, TZ_GetErrorString(ret));
 }
 
 void kree_set_sysirq_node(struct device_node *pnode)

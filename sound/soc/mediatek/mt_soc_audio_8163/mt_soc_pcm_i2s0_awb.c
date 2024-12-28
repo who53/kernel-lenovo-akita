@@ -273,7 +273,7 @@ static int mtk_i2s0_awb_pcm_open(struct snd_pcm_substream *substream)
 		SNDRV_PCM_HW_PARAM_PERIODS);
 
 	if (ret < 0)
-		pr_warn("snd_pcm_hw_constraint_integer failed\n");
+		pr_debug("snd_pcm_hw_constraint_integer failed\n");
 
 	/* here open audio clocks */
 	AudDrv_Clk_On();
@@ -292,7 +292,7 @@ static int mtk_i2s0_awb_pcm_open(struct snd_pcm_substream *substream)
 		return -1;
 
 	if (ret < 0) {
-		pr_warn("mtk_i2s0_awb_pcm_close\n");
+		pr_debug("mtk_i2s0_awb_pcm_close\n");
 		mtk_i2s0_awb_pcm_close(substream);
 		return ret;
 	}

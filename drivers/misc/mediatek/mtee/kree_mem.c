@@ -65,7 +65,7 @@ static inline int _allocFunc(uint32_t cmd, KREE_SESSION_HANDLE session,
 		return TZ_RESULT_ERROR_BAD_PARAMETERS;
 	}
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("[kree] %s Error: %d\n", dbg, ret);
+		pr_debug("[kree] %s Error: %d\n", dbg, ret);
 		return ret;
 	}
 
@@ -87,7 +87,7 @@ static inline int _handleOpFunc(uint32_t cmd, KREE_SESSION_HANDLE session,
 	ret = KREE_TeeServiceCall(session, cmd,
 					TZ_ParamTypes1(TZPT_VALUE_INPUT), p);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("[kree] %s Error: %d\n", dbg, ret);
+		pr_debug("[kree] %s Error: %d\n", dbg, ret);
 		return ret;
 	}
 
@@ -111,7 +111,7 @@ static inline int _handleOpFunc_1(uint32_t cmd,
 							TZPT_VALUE_OUTPUT),
 					p);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("[kree] %s Error: %d\n", dbg, ret);
+		pr_debug("[kree] %s Error: %d\n", dbg, ret);
 		*count = 0;
 		return ret;
 	}
@@ -194,7 +194,7 @@ static int KREE_RegisterSharedmem_Helper(KREE_SESSION_HANDLE session,
 						0, /* set 0 for no remap... */
 						tag);
 		if (ret != TZ_RESULT_SUCCESS) {
-			pr_warn("[kree] KREE_RegisterSharedmem Error: %d\n",
+			pr_debug("[kree] KREE_RegisterSharedmem Error: %d\n",
 				ret);
 			return ret;
 		}
@@ -231,7 +231,7 @@ int KREE_UnregisterSharedmem(KREE_SESSION_HANDLE session,
 
 	ret = kree_unregister_sharedmem(session, shm_handle);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("[kree] %s Error: %d\n", __func__, ret);
+		pr_debug("[kree] %s Error: %d\n", __func__, ret);
 		return ret;
 	}
 
@@ -403,7 +403,7 @@ int KREE_ReadSecurechunkmem(KREE_SESSION_HANDLE session, uint32_t offset,
 							TZPT_MEM_OUTPUT),
 					p);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("[kree] %s Error: %d\n", __func__, ret);
+		pr_debug("[kree] %s Error: %d\n", __func__, ret);
 		return ret;
 	}
 
@@ -429,7 +429,7 @@ int KREE_WriteSecurechunkmem(KREE_SESSION_HANDLE session, uint32_t offset,
 							TZPT_MEM_INPUT),
 					p);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("[kree] %s Error: %d\n", __func__, ret);
+		pr_debug("[kree] %s Error: %d\n", __func__, ret);
 		return ret;
 	}
 
@@ -447,7 +447,7 @@ int KREE_GetSecurechunkReleaseSize(KREE_SESSION_HANDLE session,
 	    KREE_TeeServiceCall(session, TZCMD_MEM_SECURECM_RSIZE,
 				TZ_ParamTypes1(TZPT_VALUE_OUTPUT), p);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("[kree] %s Error: %d\n", __func__, ret);
+		pr_debug("[kree] %s Error: %d\n", __func__, ret);
 		return ret;
 	}
 
@@ -464,7 +464,7 @@ int KREE_GetTEETotalSize(KREE_SESSION_HANDLE session, uint32_t *size)
 	ret = KREE_TeeServiceCall(session, TZCMD_MEM_TOTAL_SIZE,
 					TZ_ParamTypes1(TZPT_VALUE_OUTPUT), p);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("[kree] %s Error: %d\n", __func__, ret);
+		pr_debug("[kree] %s Error: %d\n", __func__, ret);
 		return ret;
 	}
 

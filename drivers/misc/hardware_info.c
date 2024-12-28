@@ -75,7 +75,7 @@ char* boardid_get(void)
 
 	s1 = strstr(saved_command_line, "board_id=");
 	if(!s1) {
-		printk("board_id not found in cmdline\n");
+		pr_debug("board_id not found in cmdline\n");
 		return s2;
 	}
 	s1 += strlen("board_id=");
@@ -88,7 +88,7 @@ char* boardid_get(void)
 	strncpy(board_id, s1, length);
 	board_id[length]='\0';
 	s1 = board_id;
-	printk("board_id found in cmdline : %s\n", board_id);
+	pr_debug("board_id found in cmdline : %s\n", board_id);
 
 	return s1;
 }
@@ -102,7 +102,7 @@ static char* hwid_get(void)
 
 	s1 = strstr(saved_command_line, "hw_id=");
 	if(!s1) {
-		printk("hw_id not found in cmdline\n");
+		pr_debug("hw_id not found in cmdline\n");
 		return s2;
 	}
 	s1 += strlen("hw_id=");
@@ -112,7 +112,7 @@ static char* hwid_get(void)
 	}
 	strncpy(hardware_id, (const char *)s1,ptr-s1);
 	hardware_id[ptr-s1]='\0';
-	printk("hw_id found in cmdline : %s\n", hardware_id);
+	pr_debug("hw_id found in cmdline : %s\n", hardware_id);
 	if (strncmp(hardware_id, "EVT", strlen("hardware_id")) == 0)
 	{
 		strcpy(hardware_id, "REV0.1");
@@ -138,7 +138,7 @@ static char* hwid_get(void)
 		return s2;
 	}
 	s1 = hardware_id;
-	//printk("hw_id found in cmdline s1=: %s\n", s1);
+	//pr_debug("hw_id found in cmdline s1=: %s\n", s1);
 	//Bug 438050 njm@wt, 20190415 end
 
 	return s1;
@@ -261,7 +261,7 @@ static long hardwareinfo_ioctl(struct file *file, unsigned int cmd,unsigned long
 	}
 	//memset(data, 0, HARDWARE_MAX_ITEM_LONGTH);//clear the buffer
 	if (copy_to_user(data, hardwareinfo_name[hardwareinfo_num], strlen(hardwareinfo_name[hardwareinfo_num]))){
-		//printk("%s, copy to usr error\n", __func__);
+		//pr_debug("%s, copy to usr error\n", __func__);
 		ret =  -EINVAL;
 	}
 set_ok:

@@ -182,7 +182,7 @@ static int dbmd4_spi_boot(const void *fw_data, size_t fw_size,
 		}
 
 
-		dev_info(p->dev, "%s: ---------> firmware loaded\n",
+		dev_dbg(p->dev, "%s: ---------> firmware loaded\n",
 			__func__);
 		break;
 	} while (--retry);

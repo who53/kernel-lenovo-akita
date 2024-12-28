@@ -73,7 +73,7 @@ static int dsp_pcm_taskattr_init(struct platform_device *pdev)
 	int ret = 0;
 	int dsp_id = 0;
 
-	pr_info("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 	if (pdev->dev.of_node) {
 		for (dsp_id = 0; dsp_id < AUDIO_TASK_DAI_NUM; dsp_id++) {
 			ret = of_property_read_u32_array(pdev->dev.of_node,
@@ -81,7 +81,7 @@ static int dsp_pcm_taskattr_init(struct platform_device *pdev)
 						 (unsigned int *)&task_attr,
 						 SND_DSP_DTS_SIZE);
 			if (ret != 0) {
-				pr_info("%s mtk_dsp_voip error dsp_id[%d]\n",
+				pr_debug("%s mtk_dsp_voip error dsp_id[%d]\n",
 					__func__, dsp_id);
 				continue;
 			}
@@ -158,11 +158,11 @@ static int dsp_pcm_dev_probe(struct platform_device *pdev)
 
 	ret = mtk_adsp_init_gen_pool(dsp);
 	if (ret)
-		pr_info("init_gen_pool fail\n");
+		pr_debug("init_gen_pool fail\n");
 
 	ret = mtk_init_adsp_audio_share_mem(dsp);
 	if (ret)
-		pr_info("init share mem fail\n");
+		pr_debug("init share mem fail\n");
 
 	mtk_audio_register_notify();
 	return 0;

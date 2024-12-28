@@ -2156,7 +2156,7 @@ static int mt6370_pmu_rgbled_probe(struct platform_device *pdev)
 	bool use_dt = pdev->dev.of_node, new = false;
 	int i = 0, ret = 0;
 
-	pr_info("%s: (%s)\n", __func__, MT6370_PMU_RGBLED_DRV_VERSION);
+	pr_debug("%s: (%s)\n", __func__, MT6370_PMU_RGBLED_DRV_VERSION);
 
 	rgbled_data = devm_kzalloc(&pdev->dev,
 				   sizeof(*rgbled_data), GFP_KERNEL);
@@ -2239,7 +2239,7 @@ static int mt6370_pmu_rgbled_probe(struct platform_device *pdev)
 		}
 	}
 	mt6370_pmu_rgbled_irq_register(pdev);
-	dev_info(&pdev->dev, "%s successfully\n", __func__);
+	dev_dbg(&pdev->dev, "%s successfully\n", __func__);
 	return 0;
 out_led_register:
 	while (!new && --i >= 0)
@@ -2279,7 +2279,7 @@ static int mt6370_pmu_rgbled_remove(struct platform_device *pdev)
 		led_trigger_register(&mt6370_pmu_led_trigger[i]);
 	for (i = 0; i < ARRAY_SIZE(mt6370_pmu_led_trigger2) && new; i++)
 		led_trigger_register(&mt6370_pmu_led_trigger2[i]);
-	dev_info(rgbled_data->dev, "%s successfully\n", __func__);
+	dev_dbg(rgbled_data->dev, "%s successfully\n", __func__);
 	return 0;
 }
 

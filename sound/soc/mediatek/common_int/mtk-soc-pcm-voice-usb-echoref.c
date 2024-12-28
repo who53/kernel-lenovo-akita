@@ -122,7 +122,7 @@ static int Audio_USB_MD_Select_Control_Set(struct snd_kcontrol *kcontrol,
 					   struct snd_ctl_elem_value *ucontrol)
 {
 	if (ucontrol->value.enumerated.item[0] > ARRAY_SIZE(md_choose)) {
-		pr_warn("return -EINVAL\n");
+		pr_debug("return -EINVAL\n");
 		return -EINVAL;
 	}
 	usb_md_select = ucontrol->value.integer.value[0];
@@ -385,7 +385,7 @@ mtk_usb_echoref_pointer(struct snd_pcm_substream *substream)
 
 	hw_ptr = Afe_Get_Reg(AFE_DL1_CUR);
 	if (hw_ptr == 0) {
-		pr_info("%s(), hw_ptr == 0\n", __func__);
+		pr_debug("%s(), hw_ptr == 0\n", __func__);
 		hw_ptr = Afe_Block->pucPhysBufAddr;
 	}
 

@@ -79,7 +79,7 @@ int PMIC_check_battery(void)
 int PMIC_POWER_HOLD(unsigned int hold)
 {
 	if (hold > 1) {
-		pr_notice("[%s] hold = %d only 0 or 1\n", __func__, hold);
+		pr_debug("[%s] hold = %d only 0 or 1\n", __func__, hold);
 		return -1;
 	}
 
@@ -254,6 +254,6 @@ void PMIC_LP_INIT_SETTING(void)
 		pmic_set_register_value(PMIC_RG_LDO_VUSB_LP, 1);
 	}
 
-	pr_info("[%s] Chip Ver = %d\n", __func__, g_pmic_chip_version);
+	pr_debug("[%s] Chip Ver = %d\n", __func__, g_pmic_chip_version);
 #endif /*LP_INIT_SETTING_VERIFIED*/
 }

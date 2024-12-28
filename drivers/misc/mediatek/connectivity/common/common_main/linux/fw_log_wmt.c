@@ -193,7 +193,7 @@ void fw_log_wmt_deinit(void)
 
 	cdev_del(&gLogCdev);
 	unregister_chrdev_region(gDevId, 1);
-	pr_warn("fw_log_wmt_driver_deinit done\n");
+	pr_debug("fw_log_wmt_driver_deinit done\n");
 }
 EXPORT_SYMBOL(fw_log_wmt_deinit);
 #endif

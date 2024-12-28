@@ -19,13 +19,13 @@
 #include "mtk_spm_resource_req.h"
 
 #define SPM_RES_TAG                   "[SPM_RES]"
-#define spm_res_emerg(fmt, args...)   pr_notice(SPM_RES_TAG fmt, ##args)
-#define spm_res_alert(fmt, args...)   pr_notice(SPM_RES_TAG fmt, ##args)
-#define spm_res_crit(fmt, args...)    pr_notice(SPM_RES_TAG fmt, ##args)
-#define spm_res_err(fmt, args...)     pr_notice(SPM_RES_TAG fmt, ##args)
-#define spm_res_warn(fmt, args...)    pr_notice(SPM_RES_TAG fmt, ##args)
-#define spm_res_notice(fmt, args...)  pr_notice(SPM_RES_TAG fmt, ##args)
-#define spm_res_info(fmt, args...)    pr_info(SPM_RES_TAG fmt, ##args)
+#define spm_res_emerg(fmt, args...)   pr_debug(SPM_RES_TAG fmt, ##args)
+#define spm_res_alert(fmt, args...)   pr_debug(SPM_RES_TAG fmt, ##args)
+#define spm_res_crit(fmt, args...)    pr_debug(SPM_RES_TAG fmt, ##args)
+#define spm_res_err(fmt, args...)     pr_debug(SPM_RES_TAG fmt, ##args)
+#define spm_res_warn(fmt, args...)    pr_debug(SPM_RES_TAG fmt, ##args)
+#define spm_res_notice(fmt, args...)  pr_debug(SPM_RES_TAG fmt, ##args)
+#define spm_res_info(fmt, args...)    pr_debug(SPM_RES_TAG fmt, ##args)
 #define spm_res_ver(fmt, args...)     pr_debug(SPM_RES_TAG fmt, ##args)
 #define spm_res_dbg(fmt, args...)     pr_debug(SPM_RES_TAG fmt, ##args)
 

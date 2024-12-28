@@ -135,9 +135,9 @@ static inline void show_kaslr(void)
 {
 	u64 const kaslr_offset = kimage_vaddr - KIMAGE_VADDR;
 
-	pr_notice("Kernel Offset: 0x%llx from 0x%lx\n",
+	pr_debug("Kernel Offset: 0x%llx from 0x%lx\n",
 			kaslr_offset, KIMAGE_VADDR);
-	pr_notice("PHYS_OFFSET: 0x%llx\n", PHYS_OFFSET);
+	pr_debug("PHYS_OFFSET: 0x%llx\n", PHYS_OFFSET);
 #ifdef CONFIG_MTK_RAM_CONSOLE
 	aee_rr_rec_kaslr_offset(kaslr_offset);
 #endif
@@ -145,7 +145,7 @@ static inline void show_kaslr(void)
 #else
 static inline void show_kaslr(void)
 {
-	pr_notice("Kernel Offset: disabled\n");
+	pr_debug("Kernel Offset: disabled\n");
 #ifdef CONFIG_MTK_RAM_CONSOLE
 	aee_rr_rec_kaslr_offset(0);
 #endif

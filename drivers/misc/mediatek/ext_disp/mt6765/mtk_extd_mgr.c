@@ -94,7 +94,7 @@ static void external_display_set_resolution(unsigned long param)
 		extd_driver[device_id]->set_resolution(res);
 }
 
-static int external_display_get_dev_info(unsigned long param, void *info)
+static int external_display_get_dev_dbg(unsigned long param, void *info)
 {
 	int ret = 0;
 	enum EXTD_DEV_ID device_id = EXTD_DEV_ID(param);
@@ -105,8 +105,8 @@ static int external_display_get_dev_info(unsigned long param, void *info)
 		return ret;
 	}
 
-	if (extd_driver[device_id] && extd_driver[device_id]->get_dev_info)
-		ret = extd_driver[device_id]->get_dev_info(AP_GET_INFO, info);
+	if (extd_driver[device_id] && extd_driver[device_id]->get_dev_dbg)
+		ret = extd_driver[device_id]->get_dev_dbg(AP_GET_INFO, info);
 
 	return ret;
 }
@@ -179,7 +179,7 @@ static long mtk_extd_mgr_ioctl(struct file *file, unsigned int cmd,
 					 __LINE__);
 				return -EAGAIN;
 			}
-			r = external_display_get_dev_info(displayid, argp);
+			r = external_display_get_dev_dbg(displayid, argp);
 			break;
 		}
 	case MTK_HDMI_USBOTG_STATUS:

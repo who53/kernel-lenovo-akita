@@ -238,7 +238,7 @@ s32 mcp_session_exitcode(struct mcp_session *session)
 	exit_code = session->exit_code;
 	mutex_unlock(&session->exit_code_lock);
 	if (exit_code)
-		mc_dev_info("session %x ec %d", session->sid, exit_code);
+		mc_dev_dbg("session %x ec %d", session->sid, exit_code);
 
 	return exit_code;
 }

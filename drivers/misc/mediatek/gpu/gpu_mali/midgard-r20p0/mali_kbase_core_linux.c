@@ -3775,7 +3775,7 @@ static int kbasep_protected_mode_init(struct kbase_device *kbdev)
 	if (!protected_node) {
 		/* If protected_node cannot be looked up then we assume
 		 * protected mode is not supported on this platform. */
-		dev_info(kbdev->dev, "Protected mode not available\n");
+		dev_dbg(kbdev->dev, "Protected mode not available\n");
 		return 0;
 	}
 
@@ -3908,7 +3908,7 @@ static int power_control_init(struct platform_device *pdev)
 			dev_err(&pdev->dev, "Failed to get regulator\n");
 			return err;
 		}
-		dev_info(kbdev->dev,
+		dev_dbg(kbdev->dev,
 			"Continuing without Mali regulator control\n");
 		/* Allow probe to continue without regulator */
 	}
@@ -3922,7 +3922,7 @@ static int power_control_init(struct platform_device *pdev)
 			dev_err(&pdev->dev, "Failed to get clock\n");
 			goto fail;
 		}
-		dev_info(kbdev->dev, "Continuing without Mali clock control\n");
+		dev_dbg(kbdev->dev, "Continuing without Mali clock control\n");
 		/* Allow probe to continue without clock. */
 	} else {
 		err = clk_prepare_enable(kbdev->clock);
@@ -4223,7 +4223,7 @@ static void kbase_device_coherency_init(struct kbase_device *kbdev,
 
 			kbdev->system_coherency = override_coherency;
 
-			dev_info(kbdev->dev,
+			dev_dbg(kbdev->dev,
 				"Using coherency mode %u set from dtb",
 				override_coherency);
 		} else
@@ -4250,7 +4250,7 @@ static void kbase_logging_started_cb(void *data)
 
 	if (kbase_prepare_to_reset_gpu(kbdev))
 		kbase_reset_gpu(kbdev);
-	dev_info(kbdev->dev, "KBASE - Bus logger restarted\n");
+	dev_dbg(kbdev->dev, "KBASE - Bus logger restarted\n");
 }
 #endif
 
@@ -4732,7 +4732,7 @@ static int kbase_platform_device_probe(struct platform_device *pdev)
 	ged_dvfs_gpu_freq_commit_fp = mtk_gpu_dvfs_commit;
 #endif
 
-	dev_info(kbdev->dev,
+	dev_dbg(kbdev->dev,
 			"Probed as %s\n", dev_name(kbdev->mdev.this_device));
 
 	kbase_dev_nr++;

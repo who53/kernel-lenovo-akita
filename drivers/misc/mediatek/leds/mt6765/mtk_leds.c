@@ -972,7 +972,7 @@ void mt_mt65xx_led_set(struct led_classdev *led_cdev, enum led_brightness level)
 					if((level > 0) && (level <= 27)) {
 						level = 10;
 					}
-					pr_info("%s: board-FHD level = %d", __func__, level);
+					pr_debug("%s: board-FHD level = %d", __func__, level);
 				}
 			}
 

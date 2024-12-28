@@ -179,7 +179,7 @@ int cyttsp5_get_powerpins_info(struct device *dev)
     power_pins = devm_pinctrl_get(dev);
     if (IS_ERR(power_pins)) {
 	    ret = PTR_ERR(power_pins);
-	    dev_info(dev, "fwq Cannot find power_pins!\n");
+	    dev_dbg(dev, "fwq Cannot find power_pins!\n");
 	    return ret;
     }
     powerpins_default = pinctrl_lookup_state(power_pins, "default");
@@ -245,7 +245,7 @@ int cyttsp5_xres(struct cyttsp5_core_platform_data *pdata,
 	msleep(40);
 	gpio_set_value(rst_gpio, 1);
 	msleep(20);
-	dev_info(dev,
+	dev_dbg(dev,
 		"%s: RESET CYTTSP gpio=%d r=%d\n", __func__,
 		pdata->rst_gpio, rc);
 
@@ -306,7 +306,7 @@ int cyttsp5_init(struct cyttsp5_core_platform_data *pdata,
 		gpio_free(irq_gpio);
 	}
 
-	dev_info(dev, "%s: INIT CYTTSP RST gpio=%d and IRQ gpio=%d r=%d\n",
+	dev_dbg(dev, "%s: INIT CYTTSP RST gpio=%d and IRQ gpio=%d r=%d\n",
 		__func__, rst_gpio, irq_gpio, rc);
 	return rc;
 #endif

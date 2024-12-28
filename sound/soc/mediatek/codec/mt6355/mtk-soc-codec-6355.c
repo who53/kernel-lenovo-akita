@@ -529,7 +529,7 @@ void audckbufEnable(bool enable)
 #endif
 		}
 		if (audck_buf_Count < 0) {
-			pr_warn("audck_buf_Count count < 0\n");
+			pr_debug("audck_buf_Count count < 0\n");
 			audck_buf_Count = 0;
 		}
 	}
@@ -592,7 +592,7 @@ static void Topck_Enable(bool enable)
 		}
 
 		if (TopCkCount < 0) {
-			pr_warn("TopCkCount <0 =%d\n ", TopCkCount);
+			pr_debug("TopCkCount <0 =%d\n ", TopCkCount);
 			TopCkCount = 0;
 		}
 	}
@@ -619,7 +619,7 @@ static void NvregEnable(bool enable)
 			/* Disable AUDGLB */
 		}
 		if (NvRegCount < 0) {
-			pr_warn("NvRegCount <0 =%d\n ", NvRegCount);
+			pr_debug("NvRegCount <0 =%d\n ", NvRegCount);
 			NvRegCount = 0;
 		}
 	}
@@ -679,7 +679,7 @@ static void anc_ul_src_enable(bool _enable)
 #endif
 		}
 		if (anc_ul_src_counter < 0) {
-			pr_warn("anc_clk_counter < 0 = %d\n",
+			pr_debug("anc_clk_counter < 0 = %d\n",
 				anc_ul_src_counter);
 			anc_ul_src_counter = 0;
 		}
@@ -1628,7 +1628,7 @@ static int mtk_calculate_hp_impedance(int dc_init, int dc_input,
 	int r_tmp = 0;
 
 	if (dc_input < dc_init) {
-		pr_info("%s(), Wrong[%d] : dc_input(%d) > dc_init(%d)\n",
+		pr_debug("%s(), Wrong[%d] : dc_input(%d) > dc_init(%d)\n",
 			__func__, pcm_offset, dc_input, dc_init);
 		return 0;
 	}
@@ -1785,7 +1785,7 @@ static int pmic_hp_impedance_get(struct snd_kcontrol *kcontrol,
 		hp_impedance = detect_impedance_by_phase();
 		OpenHeadPhoneImpedanceSetting(false);
 	} else
-		pr_warn("%s(), Pmic DL Busy, HPDET do nothing\n", __func__);
+		pr_debug("%s(), Pmic DL Busy, HPDET do nothing\n", __func__);
 
 	ucontrol->value.integer.value[0] = hp_impedance;
 
@@ -2418,7 +2418,7 @@ unsigned int GetDLNewIFFrequency(unsigned int frequency)
 		Reg_value = 8;
 		break;
 	default:
-		pr_warn("GetDLNewIFFrequency invalid freq %d\n", frequency);
+		pr_debug("GetDLNewIFFrequency invalid freq %d\n", frequency);
 		break;
 	}
 	return Reg_value;
@@ -2621,7 +2621,7 @@ static void headset_volume_ramp(int source, int target)
 	unsigned short dcCompLchHigh = 0, dcCompLchLow = 0;
 
 	if (!is_valid_hp_pga_idx(reg_idx) || !is_valid_hp_pga_idx(reg_idx))
-		pr_warn("%s, volume index is not valid, source = %d, target = %d\n",
+		pr_debug("%s, volume index is not valid, source = %d, target = %d\n",
 			__func__, source, target);
 
 	oldindex = source == 63 ? 31 : source;
@@ -4161,7 +4161,7 @@ static int Lineout_PGAL_Set(struct snd_kcontrol *kcontrol,
 	pr_debug("%s(), index = %d\n", __func__, index);
 
 	if (index >= ARRAY_SIZE(DAC_DL_PGA_Speaker_GAIN)) {
-		pr_warn("return -EINVAL\n");
+		pr_debug("return -EINVAL\n");
 		return -EINVAL;
 	}
 
@@ -4193,7 +4193,7 @@ static int Lineout_PGAR_Set(struct snd_kcontrol *kcontrol,
 	pr_debug("%s(), index = %d\n", __func__, index);
 
 	if (index >= ARRAY_SIZE(DAC_DL_PGA_Speaker_GAIN)) {
-		pr_warn("return -EINVAL\n");
+		pr_debug("return -EINVAL\n");
 		return -EINVAL;
 	}
 
@@ -4224,7 +4224,7 @@ static int Handset_PGA_Set(struct snd_kcontrol *kcontrol,
 	pr_debug("%s(), index = %d\n", __func__, index);
 
 	if (index >= ARRAY_SIZE(DAC_DL_PGA_Handset_GAIN)) {
-		pr_warn("return -EINVAL\n");
+		pr_debug("return -EINVAL\n");
 		return -EINVAL;
 	}
 
@@ -6221,7 +6221,7 @@ static int channel_map_to_device(enum audio_analog_uplink_array_type channel)
 	case AUDIO_UL_ARRAY_DMIC2_RCH:
 		return AUDIO_ANALOG_DEVICE_IN_DMIC2;
 	default:
-		pr_warn("%s can't mapping channel %d to device", __func__,
+		pr_debug("%s can't mapping channel %d to device", __func__,
 		       channel);
 	}
 	return 0;
@@ -6239,7 +6239,7 @@ static bool audio_preamp1_sel(int mul_sel)
 	else if (mul_sel == 3)
 		Ana_Set_Reg(AUDENC_ANA_CON0, 0x00C0, 0x00c0); /* AIN2 */
 	else
-		pr_warn("[AudioWarn] audio_preamp1_sel: mul_sel = %d", mul_sel);
+		pr_debug("[AudioWarn] audio_preamp1_sel: mul_sel = %d", mul_sel);
 
 	return true;
 }
@@ -6282,7 +6282,7 @@ static bool audio_preamp2_sel(int mul_sel)
 	else if (mul_sel == 3)
 		Ana_Set_Reg(AUDENC_ANA_CON1, 0x00C0, 0x00c0); /* AIN2 */
 	else
-		pr_warn("[AudioWarn] audio_preamp2_sel: mul_sel = %d", mul_sel);
+		pr_debug("[AudioWarn] audio_preamp2_sel: mul_sel = %d", mul_sel);
 
 	return true;
 }
@@ -6359,7 +6359,7 @@ static void audio_dmic_input_enable(bool power,
 		}
 		break;
 	default:
-		pr_warn("%s not support this device_type = %d", __func__,
+		pr_debug("%s not support this device_type = %d", __func__,
 			device_in);
 		break;
 	}
@@ -6385,7 +6385,7 @@ static void audio_adc_enable(bool power, enum audio_analog_device_type adc)
 		mic_mode = adc4_mic_mode_mux;
 		break;
 	default:
-		pr_warn("%s can't mapping adc %d to mic mode", __func__, adc);
+		pr_debug("%s can't mapping adc %d to mic mode", __func__, adc);
 		break;
 	}
 
@@ -6534,7 +6534,7 @@ static int audio_capture1_enable(bool power)
 			else if (is_dmic(device_lch))
 				audio_dmic_enable(true, device_lch);
 			else
-				pr_info("%s is not uplink device %d", __func__,
+				pr_debug("%s is not uplink device %d", __func__,
 					device_lch);
 		}
 		(*counter1)++;
@@ -6546,7 +6546,7 @@ static int audio_capture1_enable(bool power)
 			else if (is_dmic(device_rch))
 				audio_dmic_enable(true, device_rch);
 			else
-				pr_info("%s is not uplink device %d", __func__,
+				pr_debug("%s is not uplink device %d", __func__,
 					device_rch);
 		}
 		(*counter2)++;
@@ -6563,11 +6563,11 @@ static int audio_capture1_enable(bool power)
 			else if (is_dmic(device_lch))
 				audio_dmic_enable(false, device_lch);
 			else
-				pr_info("%s is not uplink device %d", __func__,
+				pr_debug("%s is not uplink device %d", __func__,
 					device_lch);
 		}
 		if (*counter1 < 0) {
-			pr_warn(" device power(%d) < 0 = %d\n ", device_lch,
+			pr_debug(" device power(%d) < 0 = %d\n ", device_lch,
 				*counter1);
 			*counter1 = 0;
 		}
@@ -6580,11 +6580,11 @@ static int audio_capture1_enable(bool power)
 			else if (is_dmic(device_rch))
 				audio_dmic_enable(false, device_rch);
 			else
-				pr_info("%s is not uplink device %d", __func__,
+				pr_debug("%s is not uplink device %d", __func__,
 					device_rch);
 		}
 		if (*counter2 < 0) {
-			pr_info(" device power(%d) < 0 = %d\n ", device_rch,
+			pr_debug(" device power(%d) < 0 = %d\n ", device_rch,
 				*counter2);
 			*counter2 = 0;
 		}
@@ -6616,7 +6616,7 @@ static int audio_capture2_enable(bool power)
 			else if (is_dmic(device_lch))
 				audio_dmic_enable(true, device_lch);
 			else
-				pr_info("%s is not uplink device %d", __func__,
+				pr_debug("%s is not uplink device %d", __func__,
 					device_lch);
 		}
 		(*counter1)++;
@@ -6628,7 +6628,7 @@ static int audio_capture2_enable(bool power)
 			else if (is_dmic(device_rch))
 				audio_dmic_enable(true, device_rch);
 			else
-				pr_info("%s is not uplink device %d", __func__,
+				pr_debug("%s is not uplink device %d", __func__,
 					device_rch);
 		}
 		(*counter2)++;
@@ -6645,11 +6645,11 @@ static int audio_capture2_enable(bool power)
 			else if (is_dmic(device_lch))
 				audio_dmic_enable(false, device_lch);
 			else
-				pr_info("%s is not uplink device %d", __func__,
+				pr_debug("%s is not uplink device %d", __func__,
 					device_lch);
 		}
 		if (*counter1 < 0) {
-			pr_warn(" device power(%d) < 0 = %d\n ", device_lch,
+			pr_debug(" device power(%d) < 0 = %d\n ", device_lch,
 				*counter1);
 			*counter1 = 0;
 		}
@@ -6662,11 +6662,11 @@ static int audio_capture2_enable(bool power)
 			else if (is_dmic(device_rch))
 				audio_dmic_enable(false, device_rch);
 			else
-				pr_info("%s is not uplink device %d", __func__,
+				pr_debug("%s is not uplink device %d", __func__,
 					device_rch);
 		}
 		if (*counter2 < 0) {
-			pr_info(" device power(%d) < 0 = %d\n ", device_rch,
+			pr_debug(" device power(%d) < 0 = %d\n ", device_rch,
 				*counter2);
 			*counter2 = 0;
 		}
@@ -6819,7 +6819,7 @@ static int audio_capture1_set(struct snd_kcontrol *kcontrol,
 		*ul1_power = power;
 		audio_capture1_enable(false);
 	} else {
-		pr_info("%s Nothing happened : ctrl_power = %d , ul_power = %d\n",
+		pr_debug("%s Nothing happened : ctrl_power = %d , ul_power = %d\n",
 			__func__, power, *ul1_power);
 	}
 
@@ -6854,7 +6854,7 @@ static int audio_capture2_set(struct snd_kcontrol *kcontrol,
 		*ul2_power = power;
 		audio_capture2_enable(false);
 	} else {
-		pr_info("%s Nothing happened : ctrl_power = %d , ul_power = %d\n",
+		pr_debug("%s Nothing happened : ctrl_power = %d , ul_power = %d\n",
 			__func__, power, *ul2_power);
 	}
 
@@ -6993,7 +6993,7 @@ static int audio_adc1_mic_source_get(struct snd_kcontrol *kcontrol,
 		ucontrol->value.integer.value[0] = 2;
 		break;
 	default:
-		pr_info("%s adc1 not support this mic source = %d\n", __func__,
+		pr_debug("%s adc1 not support this mic source = %d\n", __func__,
 			adc1_mic);
 		break;
 	}
@@ -7024,7 +7024,7 @@ static int audio_adc1_mic_source_set(struct snd_kcontrol *kcontrol,
 		*adc1_mic = AUDIO_AMIC_AIN2;
 		break;
 	default:
-		pr_info("%s adc1 not support this index = %d\n", __func__,
+		pr_debug("%s adc1 not support this index = %d\n", __func__,
 			index);
 		break;
 	}
@@ -7052,7 +7052,7 @@ static int audio_adc2_mic_source_get(struct snd_kcontrol *kcontrol,
 		ucontrol->value.integer.value[0] = 2;
 		break;
 	default:
-		pr_info("%s adc2 not support this mic source = %d\n", __func__,
+		pr_debug("%s adc2 not support this mic source = %d\n", __func__,
 			adc2_mic);
 		break;
 	}
@@ -7085,7 +7085,7 @@ static int audio_adc2_mic_source_set(struct snd_kcontrol *kcontrol,
 		*adc2_mic = AUDIO_AMIC_AIN2;
 		break;
 	default:
-		pr_info("%s adc2 not support this index = %d\n", __func__,
+		pr_debug("%s adc2 not support this index = %d\n", __func__,
 			index);
 		break;
 	}
@@ -7112,7 +7112,7 @@ static int audio_adc3_mic_source_get(struct snd_kcontrol *kcontrol,
 		ucontrol->value.integer.value[0] = 2;
 		break;
 	default:
-		pr_info("%s adc3 not support this mic source = %d\n", __func__,
+		pr_debug("%s adc3 not support this mic source = %d\n", __func__,
 			adc3_mic);
 		break;
 	}
@@ -7145,7 +7145,7 @@ static int audio_adc3_mic_source_set(struct snd_kcontrol *kcontrol,
 		*adc3_mic = AUDIO_AMIC_AIN6;
 		break;
 	default:
-		pr_info("%s adc3 not support this index = %d\n", __func__,
+		pr_debug("%s adc3 not support this index = %d\n", __func__,
 			index);
 		break;
 	}
@@ -7172,7 +7172,7 @@ static int audio_adc4_mic_source_get(struct snd_kcontrol *kcontrol,
 		ucontrol->value.integer.value[0] = 2;
 		break;
 	default:
-		pr_info("%s adc4 not support this mic source = %d\n", __func__,
+		pr_debug("%s adc4 not support this mic source = %d\n", __func__,
 			adc4_mic);
 		break;
 	}
@@ -7205,7 +7205,7 @@ static int audio_adc4_mic_source_set(struct snd_kcontrol *kcontrol,
 		*adc4_mic = AUDIO_AMIC_AIN6;
 		break;
 	default:
-		pr_info("%s adc4 not support this index = %d\n", __func__,
+		pr_debug("%s adc4 not support this index = %d\n", __func__,
 			index);
 		break;
 	}
@@ -7810,7 +7810,7 @@ static int Pmic_Loopback_Set(struct snd_kcontrol *kcontrol,
 		ClsqEnable(true);
 		Topck_Enable(true);
 
-		pr_info("set PMIC LPBK3, DLSR=%u, ULSR=%u\n", dl_rate, ul_rate);
+		pr_debug("set PMIC LPBK3, DLSR=%u, ULSR=%u\n", dl_rate, ul_rate);
 
 		Ana_Set_Reg(AFE_AUDIO_TOP_CON0, 0x8000,
 			    0xffff); /* power on clock */
@@ -8394,21 +8394,21 @@ static int Audio_HyBridNLE_TurnOn_Set(struct snd_kcontrol *kcontrol,
 	if (rg_nle_delay_ana == 0 || para_temp_value > NLE_ANA_GAIN_MAX_DB ||
 	    (para_temp_value < NLE_ANA_GAIN_MIN_DB &&
 	     para_temp_value != NLE_ANA_GAIN_MUTE_DB)) {
-		pr_warn("ana_delay [%d] ana_db [%d]\n", rg_nle_delay_ana,
+		pr_debug("ana_delay [%d] ana_db [%d]\n", rg_nle_delay_ana,
 		       para_temp_value);
 		return -10;
 	}
 	rg_nle_delay_ana_idx = ((unsigned int)rg_nle_delay_ana) - 1;
 	if (Audio_HyBridNLE_getAnalogIdx(para_temp_value,
 					 &rg_nle_gain_ana_tar_idx) < 0) {
-		pr_warn("%s -1\n", __func__);
+		pr_debug("%s -1\n", __func__);
 		return -1;
 	}
 	pr_debug("%s %d %d enter\n", __func__, rg_nle_delay_ana_idx,
 	       rg_nle_gain_ana_tar_idx);
 	rg_temp_value = Ana_Get_Reg(AFE_DL_NLE_R_CFG3);
 	if ((rg_temp_value & 0x00C0) != 0x40) {
-		pr_warn("%s R Err rg_temp_value 0x%x\n", __func__,
+		pr_debug("%s R Err rg_temp_value 0x%x\n", __func__,
 		       rg_temp_value);
 		Audio_NLE_RegDump();
 		return -2;
@@ -8416,7 +8416,7 @@ static int Audio_HyBridNLE_TurnOn_Set(struct snd_kcontrol *kcontrol,
 
 	rg_temp_value = Ana_Get_Reg(AFE_DL_NLE_L_CFG3);
 	if ((rg_temp_value & 0x0080) != 0) {
-		pr_warn("%s L Err rg_temp_value 0x%x\n", __func__,
+		pr_debug("%s L Err rg_temp_value 0x%x\n", __func__,
 		       rg_temp_value);
 		Audio_NLE_RegDump();
 		return -3;
@@ -8426,7 +8426,7 @@ static int Audio_HyBridNLE_TurnOn_Set(struct snd_kcontrol *kcontrol,
 	rg_nle_l_gain_dig_tar = Ana_Get_Reg(AFE_DL_NLE_L_CFG0) & 0x3f00;
 	if (rg_nle_r_gain_dig_tar > 0 || rg_nle_l_gain_dig_tar > 0) {
 		/* It should be zero */
-		pr_warn("%s Err %d %d\n", __func__, rg_nle_r_gain_dig_tar,
+		pr_debug("%s Err %d %d\n", __func__, rg_nle_r_gain_dig_tar,
 		       rg_nle_l_gain_dig_tar);
 		Audio_NLE_RegDump();
 	}
@@ -8486,7 +8486,7 @@ static int Audio_HyBridNLE_TurnOff_Set(struct snd_kcontrol *kcontrol,
 	if (rg_nle_delay_ana == 0 || para_temp_value > NLE_ANA_GAIN_MAX_DB ||
 	    (para_temp_value < NLE_ANA_GAIN_MIN_DB &&
 	     para_temp_value != NLE_ANA_GAIN_MUTE_DB)) {
-		pr_warn("ana_delay [%d] ana_db [%d]\n", rg_nle_delay_ana,
+		pr_debug("ana_delay [%d] ana_db [%d]\n", rg_nle_delay_ana,
 		       para_temp_value);
 		return -10;
 	}
@@ -8494,7 +8494,7 @@ static int Audio_HyBridNLE_TurnOff_Set(struct snd_kcontrol *kcontrol,
 
 	if (Audio_HyBridNLE_getAnalogIdx(para_temp_value,
 					 &rg_nle_gain_ana_tar_idx) < 0) {
-		pr_warn("%s -1\n", __func__);
+		pr_debug("%s -1\n", __func__);
 		return -1;
 	}
 
@@ -8503,7 +8503,7 @@ static int Audio_HyBridNLE_TurnOff_Set(struct snd_kcontrol *kcontrol,
 
 	rg_temp_value = Ana_Get_Reg(AFE_DL_NLE_R_CFG3);
 	if ((rg_temp_value & 0x00C0) != 0x0080) {
-		pr_warn("%s R Warn Off rg_temp_value 0x%x\n", __func__,
+		pr_debug("%s R Warn Off rg_temp_value 0x%x\n", __func__,
 			rg_temp_value);
 		Audio_NLE_RegDump();
 		return 0;
@@ -8860,7 +8860,7 @@ static int Audio_HyBridNLE_SetGain_Set(struct snd_kcontrol *kcontrol,
 	    (gainHPDb > NLE_ANA_GAIN_MAX_DB) ||
 	    (gainHPDb < NLE_ANA_GAIN_MIN_DB &&
 	     gainHPDb != NLE_ANA_GAIN_MUTE_DB)) {
-		pr_info("%s Parameter invalid -10 max [%d] ch [%d] dGain [%d] aGain [%d]\n",
+		pr_debug("%s Parameter invalid -10 max [%d] ch [%d] dGain [%d] aGain [%d]\n",
 			__func__, maxdbPerStep,
 			nle_channel, gainNleDb, gainHPDb
 			);
@@ -8868,12 +8868,12 @@ static int Audio_HyBridNLE_SetGain_Set(struct snd_kcontrol *kcontrol,
 	}
 	dGainStepIndex = maxdbPerStep - 1;
 	if (Audio_HyBridNLE_getAnalogIdx(gainHPDb, &gainHPIndex) < 0) {
-		pr_info("%s -1\n", __func__);
+		pr_debug("%s -1\n", __func__);
 		return -1;
 	}
 
 	if (Audio_HyBridNLE_getDigitalIdx(gainNleDb, &gainNleIndex) < 0) {
-		pr_info("%s -2\n", __func__);
+		pr_debug("%s -2\n", __func__);
 		return -2;
 	}
 
@@ -8903,7 +8903,7 @@ static int Audio_HyBridNLE_SetGain_Set(struct snd_kcontrol *kcontrol,
 				if (Audio_HyBridNLE_getDbFromDigitalIdx(
 					    ((rg_temp_value & 0x3f00) >> 8),
 					    &srcGainNleDb) < 0) {
-					pr_info("%s R-3\n", __func__);
+					pr_debug("%s R-3\n", __func__);
 					return -3;
 				}
 			}
@@ -8912,14 +8912,14 @@ static int Audio_HyBridNLE_SetGain_Set(struct snd_kcontrol *kcontrol,
 			if (Audio_HyBridNLE_getDbFromDigitalIdx(
 				    ((rg_temp_value & 0x3f00) >> 8),
 				    &srcGainNleDb) < 0) {
-				pr_info("%s R-4\n", __func__);
+				pr_debug("%s R-4\n", __func__);
 				return -4;
 			}
 			rg_temp_value = Ana_Get_Reg(AFE_RGS_NLE_R_CFG0);
 			if (Audio_HyBridNLE_getDbFromDigitalIdx(
 				    ((rg_temp_value & 0x3f00) >> 8),
 				    &srcCurGainNleDb) < 0) {
-				pr_info("%s R-5\n", __func__);
+				pr_debug("%s R-5\n", __func__);
 				return -5;
 			}
 
@@ -8996,7 +8996,7 @@ static int Audio_HyBridNLE_SetGain_Set(struct snd_kcontrol *kcontrol,
 				if (Audio_HyBridNLE_getDbFromDigitalIdx(
 					    ((rg_temp_value & 0x3f00) >> 8),
 					    &srcGainNleDb) < 0) {
-					pr_info("%s R-3\n", __func__);
+					pr_debug("%s R-3\n", __func__);
 					return -3;
 				}
 			}
@@ -9005,14 +9005,14 @@ static int Audio_HyBridNLE_SetGain_Set(struct snd_kcontrol *kcontrol,
 			if (Audio_HyBridNLE_getDbFromDigitalIdx(
 				    ((rg_temp_value & 0x3f00) >> 8),
 				    &srcGainNleDb) < 0) {
-				pr_info("%s R-4\n", __func__);
+				pr_debug("%s R-4\n", __func__);
 				return -4;
 			}
 			rg_temp_value = Ana_Get_Reg(AFE_RGS_NLE_L_CFG0);
 			if (Audio_HyBridNLE_getDbFromDigitalIdx(
 				    ((rg_temp_value & 0x3f00) >> 8),
 				    &srcCurGainNleDb) < 0) {
-				pr_info("%s R-5\n", __func__);
+				pr_debug("%s R-5\n", __func__);
 				return -5;
 			}
 
@@ -9073,7 +9073,7 @@ static int Audio_HyBridNLE_SetGain_Set(struct snd_kcontrol *kcontrol,
 		mCodec_data->mAudio_Ana_Volume[AUDIO_ANALOG_VOLUME_HPOUTL] =
 			gainHPIndex;
 	} else
-		pr_warn("%s err no channel match\n", __func__);
+		pr_debug("%s err no channel match\n", __func__);
 	pr_debug("%s exit\n", __func__);
 	return 0;
 }
@@ -9223,7 +9223,7 @@ EXPORT_SYMBOL(mtk_audio_reset_input_precharge);
 
 static void mt6331_codec_init_reg(struct snd_soc_codec *codec)
 {
-	pr_info("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 
 	audckbufEnable(true);
 
@@ -9289,7 +9289,7 @@ static void mt6331_codec_init_reg(struct snd_soc_codec *codec)
 
 void InitCodecDefault(void)
 {
-	pr_info("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 	mCodec_data->mAudio_Ana_Volume[AUDIO_ANALOG_VOLUME_MICAMP1] = 3;
 	mCodec_data->mAudio_Ana_Volume[AUDIO_ANALOG_VOLUME_MICAMP2] = 3;
 	mCodec_data->mAudio_Ana_Volume[AUDIO_ANALOG_VOLUME_MICAMP3] = 3;
@@ -9338,7 +9338,7 @@ static int mt6331_codec_probe(struct snd_soc_codec *codec)
 
 	struct snd_soc_dapm_context *dapm = &codec->component.dapm;
 
-	pr_info("%s()\n", __func__);
+	pr_debug("%s()\n", __func__);
 
 	if (mInitCodec == true)
 		return 0;
@@ -9410,7 +9410,7 @@ static int mt6331_codec_probe(struct snd_soc_codec *codec)
 	if (IS_ERR(dc_trim_task)) {
 		ret = PTR_ERR(dc_trim_task);
 		dc_trim_task = NULL;
-		pr_info("%s(), create dc_trim_thread failed, ret %d\n",
+		pr_debug("%s(), create dc_trim_thread failed, ret %d\n",
 			__func__, ret);
 	} else {
 		wake_up_process(dc_trim_task);
@@ -9482,10 +9482,10 @@ static int mtk_mt6331_codec_dev_probe(struct platform_device *pdev)
 		ret = of_property_read_u32(pdev->dev.of_node, "use_mtkaif_ver",
 					   &use_mtkaif_version);
 		if (ret)
-			pr_info("%s [use_mtkaif_ver] property_read error = %d\n",
+			pr_debug("%s [use_mtkaif_ver] property_read error = %d\n",
 			       __func__, ret);
 		else if (use_mtkaif_version >= MTKAIF_NUM) {
-			pr_info("%s Mtkaif not support this version = %d\n",
+			pr_debug("%s Mtkaif not support this version = %d\n",
 			       __func__, use_mtkaif_version);
 		}
 
@@ -9493,17 +9493,17 @@ static int mtk_mt6331_codec_dev_probe(struct platform_device *pdev)
 		ret = of_property_read_u32(pdev->dev.of_node, "use_6355_e3",
 					   &use_6355_e3);
 		if (ret)
-			pr_info("%s [use_6355_e3] property_read error = %d\n",
+			pr_debug("%s [use_6355_e3] property_read error = %d\n",
 				__func__, ret);
 
-		pr_info("%s(), use_hp_depop_flow = %d, use_ul_260k = %d, use_mtkaif_ver = %d, use_6355_e3 = %d\n",
+		pr_debug("%s(), use_hp_depop_flow = %d, use_ul_260k = %d, use_mtkaif_ver = %d, use_6355_e3 = %d\n",
 			__func__, mUseHpDepopFlow, mUseUl260kFlow,
 			use_mtkaif_version, use_6355_e3);
 	} else {
-		pr_info("%s(), pdev->dev.of_node = NULL!!!\n", __func__);
+		pr_debug("%s(), pdev->dev.of_node = NULL!!!\n", __func__);
 	}
 
-	pr_info("%s: dev name %s\n", __func__, dev_name(&pdev->dev));
+	pr_debug("%s: dev name %s\n", __func__, dev_name(&pdev->dev));
 	return snd_soc_register_codec(&pdev->dev, &soc_mtk_codec,
 				      mtk_6331_dai_codecs,
 				      ARRAY_SIZE(mtk_6331_dai_codecs));
@@ -9511,7 +9511,7 @@ static int mtk_mt6331_codec_dev_probe(struct platform_device *pdev)
 
 static int mtk_mt6331_codec_dev_remove(struct platform_device *pdev)
 {
-	pr_info("%s:\n", __func__);
+	pr_debug("%s:\n", __func__);
 	snd_soc_unregister_codec(&pdev->dev);
 	return 0;
 }
@@ -9543,7 +9543,7 @@ static struct platform_device *soc_mtk_codec6331_dev;
 
 static int __init mtk_mt6331_codec_init(void)
 {
-	pr_info("%s:\n", __func__);
+	pr_debug("%s:\n", __func__);
 #ifndef CONFIG_OF
 	int ret = 0;
 
@@ -9566,7 +9566,7 @@ module_init(mtk_mt6331_codec_init);
 
 static void __exit mtk_mt6331_codec_exit(void)
 {
-	pr_info("%s:\n", __func__);
+	pr_debug("%s:\n", __func__);
 
 	platform_driver_unregister(&mtk_codec_6331_driver);
 }

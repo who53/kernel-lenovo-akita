@@ -51,7 +51,7 @@ static irqreturn_t amms_irq_handler(int irq, void *dev_id)
 	if (amms_work)
 		schedule_work(amms_work);
 	else
-		pr_notice("%s:amms_work is null\n", __func__);
+		pr_debug("%s:amms_work is null\n", __func__);
 	return IRQ_HANDLED;
 }
 
@@ -69,16 +69,16 @@ static void amms_work_handler(struct work_struct *work)
 			0, 0, 0, 0);
 		if (pfn_valid(__phys_to_pfn(addr)) &&
 			pfn_valid(__phys_to_pfn(addr + length - 1))) {
-			pr_info("%s:addr = 0x%pa length=0x%pa\n",
+			pr_debug("%s:addr = 0x%pa length=0x%pa\n",
 				__func__, &addr, &length);
 			free_reserved_memory(addr, addr+length);
 			amms_static_free = true;
 		} else {
-			pr_notice("AMMS: error addr and length is not set properly\n");
-			pr_notice("can not free_reserved_memory\n");
+			pr_debug("AMMS: error addr and length is not set properly\n");
+			pr_debug("can not free_reserved_memory\n");
 		}
 	} else {
-		pr_notice("amms: static memory already free, should not happened\n");
+		pr_debug("amms: static memory already free, should not happened\n");
 	}
 }
 
@@ -93,7 +93,7 @@ static int __init amms_probe(struct platform_device *pdev)
 		return -EINVAL;
 	}
 
-	pr_info("amms irq num %d.\n", irq_num);
+	pr_debug("amms irq num %d.\n", irq_num);
 
 	if (request_irq(irq_num, (irq_handler_t)amms_irq_handler,
 			   IRQF_TRIGGER_NONE,
@@ -115,7 +115,7 @@ static int __init amms_probe(struct platform_device *pdev)
 static void __exit amms_exit(void)
 {
 	kfree(amms_work);
-	pr_notice("amms: exited");
+	pr_debug("amms: exited");
 }
 static int amms_remove(struct platform_device *dev)
 {

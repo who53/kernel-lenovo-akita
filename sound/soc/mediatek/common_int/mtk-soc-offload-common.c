@@ -231,7 +231,7 @@ static int offloadservice_getformat(struct snd_kcontrol *kcontrol,
 {
 	ucontrol->value.integer.value[0] = 0;
 	if (afe_offload_service.decode_error == true) {
-		pr_info("offloadgetformat decode_error\n");
+		pr_debug("offloadgetformat decode_error\n");
 		ucontrol->value.integer.value[0] = 1;
 	}
 	return 0;
@@ -321,7 +321,7 @@ static int mtk_compr_offload_drain(struct snd_compr_stream *stream)
 	afe_offload_service.needdata = false;
 
 #ifdef CONFIG_MTK_AUDIO_TUNNELING_SUPPORT
-	pr_info("%s, OFFLOAD_DRAIN", __func__);
+	pr_debug("%s, OFFLOAD_DRAIN", __func__);
 	mtk_scp_ipi_send(get_dspscene_by_dspdaiid(ID),
 			AUDIO_IPI_MSG_ONLY, AUDIO_IPI_MSG_NEED_ACK,
 			OFFLOAD_DRAIN, buf_bridge->pWrite, 0, NULL);
@@ -430,7 +430,7 @@ static int mtk_compr_offload_set_params(struct snd_compr_stream *stream,
 			      ID);
 
 		if (ret < 0) {
-			pr_warn("%s err\n", __func__);
+			pr_debug("%s err\n", __func__);
 			return -1;
 		}
 
@@ -590,12 +590,12 @@ static void offloadservice_ipicmd_received(struct ipi_msg_t *ipi_msg)
 	int id = 0;
 
 	if (ipi_msg == NULL) {
-		pr_info("%s ipi_msg == NULL\n", __func__);
+		pr_debug("%s ipi_msg == NULL\n", __func__);
 		return;
 	}
 
 	if (dsp == NULL) {
-		pr_warn("%s dsp == NULL\n", __func__);
+		pr_debug("%s dsp == NULL\n", __func__);
 		return;
 	}
 
@@ -617,7 +617,7 @@ static void offloadservice_ipicmd_received(struct ipi_msg_t *ipi_msg)
 		afe_offload_service.ipiresult = true;
 		break;
 	case OFFLOAD_DRAINDONE:
-		pr_info("%s mtk_compr_offload_draindone\n", __func__);
+		pr_debug("%s mtk_compr_offload_draindone\n", __func__);
 		afe_offload_block.drain_state = AUDIO_DRAIN_ALL;
 		mtk_compr_offload_draindone();
 		afe_offload_service.ipiwait = false;
@@ -630,7 +630,7 @@ static void offloadservice_ipicmd_received(struct ipi_msg_t *ipi_msg)
 
 	case OFFLOAD_DECODE_ERROR:
 		afe_offload_service.decode_error = true;
-		pr_info("%s decode_error\n", __func__);
+		pr_debug("%s decode_error\n", __func__);
 		break;
 	default:
 		break;
@@ -773,7 +773,7 @@ static int offloadservice_copydatatoram(void __user *buf, size_t count)
 	ringbufbridge_writebk = buf_bridge->pWrite;
 	return count;
 Error:
-	pr_warn("%s copy failed\n", __func__);
+	pr_debug("%s copy failed\n", __func__);
 	return -1;
 }
 
@@ -988,7 +988,7 @@ static int mtk_dloffload_probe(struct platform_device *dev)
 	if (dev->dev.of_node)
 		dev_set_name(&dev->dev, "%s", "mt_soc_offload_common");
 
-	pr_info("%s: dev name %s\n", __func__, dev_name(&dev->dev));
+	pr_debug("%s: dev name %s\n", __func__, dev_name(&dev->dev));
 
 	offload_dev = &dev->dev;
 

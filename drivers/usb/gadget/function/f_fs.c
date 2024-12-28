@@ -355,7 +355,7 @@ static ssize_t ffs_ep0_write(struct file *file, const char __user *buf,
 
 		/* Handle data */
 		if (ffs->state == FFS_READ_DESCRIPTORS) {
-			pr_info("read descriptors\n");
+			pr_debug("read descriptors\n");
 			ret = __ffs_data_got_descs(ffs, data, len);
 			if (unlikely(ret < 0))
 				break;
@@ -363,7 +363,7 @@ static ssize_t ffs_ep0_write(struct file *file, const char __user *buf,
 			ffs->state = FFS_READ_STRINGS;
 			ret = len;
 		} else {
-			pr_info("read strings\n");
+			pr_debug("read strings\n");
 			ret = __ffs_data_got_strings(ffs, data, len);
 			if (unlikely(ret < 0))
 				break;
@@ -863,7 +863,7 @@ static ssize_t __ffs_epfile_read_data(struct ffs_epfile *epfile,
 		return -EFAULT;
 
 	/* See ffs_copy_to_iter for more context. */
-	pr_warn("functionfs read size %d > requested size %zd, splitting request into multiple reads.",
+	pr_debug("functionfs read size %d > requested size %zd, splitting request into multiple reads.",
 		data_len, ret);
 
 	data_len -= ret;
@@ -907,7 +907,7 @@ void abortion(struct work_struct *data)
 	rcu_read_unlock();
 
 	if (t != NULL) {
-		pr_info("%s, tid<%d>, comm<%s>\n", __func__, tid, t->comm);
+		pr_debug("%s, tid<%d>, comm<%s>\n", __func__, tid, t->comm);
 		send_sig_info(SIGKILL, &info, t);
 	}
 }
@@ -937,7 +937,7 @@ static void do_wmonitor_wk(struct work_struct *work)
 
 	if ((write_in != write_out) && (last_write_in == write_in)) {
 		if (state == 2)
-			pr_notice("USB write stuck, <%d,%d,%d>\n",
+			pr_debug("USB write stuck, <%d,%d,%d>\n",
 					write_in, write_out, last_write_in);
 		else
 			state++;
@@ -1178,7 +1178,7 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
 					&& cnxn_data[2] == 0x58
 					&& cnxn_data[3] == 0x4e) {
 					cnxn_cnt++;
-					pr_info("%s: cnxn_cnt=%d\n",
+					pr_debug("%s: cnxn_cnt=%d\n",
 						__func__, cnxn_cnt);
 				} else {
 					cnxn_cnt = 0;
@@ -1186,7 +1186,7 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
 
 				if (cnxn_cnt == 3) {
 					cnxn_cnt = 0;
-					pr_info("%s trigger abort\n", __func__);
+					pr_debug("%s trigger abort\n", __func__);
 					abortion_user();
 				}
 			}
@@ -1244,7 +1244,7 @@ ffs_epfile_open(struct inode *inode, struct file *file)
 	/* to get updated opened atomic variable value */
 	smp_mb__before_atomic();
 	if (atomic_read(&epfile->opened)) {
-		pr_info("%s(): ep(%s) is already opened.\n",
+		pr_debug("%s(): ep(%s) is already opened.\n",
 					__func__, epfile->name);
 		return -EBUSY;
 	}
@@ -1738,7 +1738,7 @@ static int functionfs_init(void)
 
 	ret = register_filesystem(&ffs_fs_type);
 	if (likely(!ret))
-		pr_info("file system registered\n");
+		pr_debug("file system registered\n");
 	else
 		pr_err("failed registering file system (%d)\n", ret);
 
@@ -1749,7 +1749,7 @@ static void functionfs_cleanup(void)
 {
 	ENTER();
 
-	pr_info("unloading\n");
+	pr_debug("unloading\n");
 	unregister_filesystem(&ffs_fs_type);
 }
 
@@ -1789,7 +1789,7 @@ static void ffs_data_put(struct ffs_data *ffs)
 	/* to get updated ref atomic variable value */
 	smp_mb__before_atomic();
 	if (unlikely(atomic_dec_and_test(&ffs->ref))) {
-		pr_info("%s(): freeing\n", __func__);
+		pr_debug("%s(): freeing\n", __func__);
 		ffs_data_clear(ffs);
 		BUG_ON(waitqueue_active(&ffs->ev.waitq) ||
 		       waitqueue_active(&ffs->ep0req_completion.wait));
@@ -2638,7 +2638,7 @@ static int __ffs_data_got_descs(struct ffs_data *ffs,
 		len  -= ret;
 	}
 	if (skip_os_desc && os_descs_count) {
-		pr_notice("skip os descriptor, os_descs_count:%d, len:%d all to 0\n",
+		pr_debug("skip os descriptor, os_descs_count:%d, len:%d all to 0\n",
 			 (int)os_descs_count, (int)len);
 		os_descs_count = 0;
 		len = 0;  /* denote we've process all coming data */

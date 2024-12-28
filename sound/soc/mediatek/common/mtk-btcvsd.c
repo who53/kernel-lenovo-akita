@@ -351,13 +351,13 @@ static int btcvsd_tx_clean_buffer(struct mtk_btcvsd_snd *bt)
 	spin_lock_irqsave(&bt->tx_lock, flags);
 	num_valid_addr = bt->tx->buffer_info.num_valid_addr;
 
-	dev_info(bt->dev, "%s(), band %d, num_valid_addr %u\n",
+	dev_dbg(bt->dev, "%s(), band %d, num_valid_addr %u\n",
 		 __func__, band, num_valid_addr);
 
 	for (i = 0; i < num_valid_addr; i++) {
 		void *dst;
 
-		dev_info(bt->dev, "%s(), clean addr 0x%lx\n", __func__,
+		dev_dbg(bt->dev, "%s(), clean addr 0x%lx\n", __func__,
 			 bt->tx->buffer_info.bt_sram_addr[i]);
 
 		dst = (void *)bt->tx->buffer_info.bt_sram_addr[i];
@@ -491,7 +491,7 @@ int mtk_btcvsd_write_to_bt(struct mtk_btcvsd_snd *bt,
 		next_idx = bt->tx->buffer_info.num_valid_addr - 1;
 		bt->tx->buffer_info.bt_sram_addr[next_idx] = ap_addr_tx;
 		spin_unlock_irqrestore(&bt->tx_lock, flags);
-		dev_info(bt->dev, "%s(), new ap_addr_tx = 0x%lx, num_valid_addr %d\n",
+		dev_dbg(bt->dev, "%s(), new ap_addr_tx = 0x%lx, num_valid_addr %d\n",
 			 __func__, ap_addr_tx,
 			 bt->tx->buffer_info.num_valid_addr);
 	}

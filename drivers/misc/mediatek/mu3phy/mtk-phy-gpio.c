@@ -230,7 +230,7 @@ static int a60810_i2c_probe(struct i2c_client *client,
 #endif
 	usb_i2c_client = client;
 
-	pr_notice("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 
 	if (u3phy != NULL)
 		return PHY_TRUE;
@@ -259,7 +259,7 @@ static int a60810_i2c_probe(struct i2c_client *client,
 
 	/* parse phy version */
 	u3phy_version = U3PhyReadReg32(u3phy->phyd_version_addr);
-	pr_notice("phy version: %x\n", u3phy_version);
+	pr_debug("phy version: %x\n", u3phy_version);
 	u3phy->phy_version = u3phy_version;
 
 	if (u3phy_version == 0xc60802a) {
@@ -413,13 +413,13 @@ struct i2c_driver a60810_driver = {
 
 static int mtk_phy_drv_init(void)
 {
-	pr_notice("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 
 	i2c_register_board_info(2, &usb_i2c_dev, 1);
 	if ((i2c_add_driver(&a60810_driver)) !=  0)
-		pr_notice("%s usb_i2c_driver init failed!!\n", __func__);
+		pr_debug("%s usb_i2c_driver init failed!!\n", __func__);
 
-	pr_notice("%s usb_i2c_driver init succeed!!\n", __func__);
+	pr_debug("%s usb_i2c_driver init succeed!!\n", __func__);
 
 	return 0;
 }
@@ -777,7 +777,7 @@ PHY_INT32 I2cReadReg(PHY_UINT8 dev_id, PHY_UINT8 Addr, PHY_UINT8 *Data)
 PHY_INT32 I2cWriteReg(PHY_UINT8 dev_id, PHY_UINT8 addr, PHY_UINT8 val)
 {
 	if (IS_PRINT)
-		pr_info("I2C Write@%x [%x]=%x\n", dev_id, addr, val);
+		pr_debug("I2C Write@%x [%x]=%x\n", dev_id, addr, val);
 
 	REG_I2C_SLAVE_ADDR = dev_id << 1;
 	REG_I2C_TRANSFER_LEN = 2;
@@ -796,7 +796,7 @@ PHY_INT32 I2cWriteReg(PHY_UINT8 dev_id, PHY_UINT8 addr, PHY_UINT8 val)
 PHY_INT32 I2cReadReg(PHY_UINT8 dev_id, PHY_UINT8 addr, PHY_UINT8 *data)
 {
 	if (IS_PRINT)
-		pr_info("I2C Read@%x [%x]\n", dev_id, addr);
+		pr_debug("I2C Read@%x [%x]\n", dev_id, addr);
 
 	REG_I2C_SLAVE_ADDR = dev_id << 1;
 	REG_I2C_TRANSFER_LEN = 0x01;
@@ -816,7 +816,7 @@ PHY_INT32 I2cReadReg(PHY_UINT8 dev_id, PHY_UINT8 addr, PHY_UINT8 *data)
 	*data = REG_I2C_DATA_PORT;
 
 	if (IS_PRINT)
-		pr_info("I2C Read [%x]=%x\n", addr, *data);
+		pr_debug("I2C Read [%x]=%x\n", addr, *data);
 
 	return PHY_TRUE;	/* !!(PHY_INT32)*data; */
 }

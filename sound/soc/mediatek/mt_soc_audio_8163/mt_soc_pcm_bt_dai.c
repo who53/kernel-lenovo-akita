@@ -287,7 +287,7 @@ static int mtk_bt_dai_pcm_open(struct snd_pcm_substream *substream)
 	ret = snd_pcm_hw_constraint_integer(runtime,
 		 SNDRV_PCM_HW_PARAM_PERIODS);
 	if (ret < 0)
-		pr_warn("snd_pcm_hw_constraint_integer failed\n");
+		pr_debug("snd_pcm_hw_constraint_integer failed\n");
 
 	AudDrv_ANA_Clk_On();
 	AudDrv_Clk_On();
@@ -372,7 +372,7 @@ static int mtk_bt_dai_pcm_copy(struct snd_pcm_substream *substream,
 	Dai_Block = &(pDAI_MEM_ConTrol->rBlock);
 
 	if (pDAI_MEM_ConTrol == NULL) {
-		pr_warn("cannot find MEM control !!!!!!!\n");
+		pr_debug("cannot find MEM control !!!!!!!\n");
 		msleep(50);
 		return 0;
 	}
@@ -383,7 +383,7 @@ static int mtk_bt_dai_pcm_copy(struct snd_pcm_substream *substream,
 	}
 
 	if (CheckNullPointer((void *)Dai_Block->pucVirtBufAddr)) {
-		pr_warn("CheckNullPointer pucVirtBufAddr = %p\n",
+		pr_debug("CheckNullPointer pucVirtBufAddr = %p\n",
 			 Dai_Block->pucVirtBufAddr);
 		return 0;
 	}

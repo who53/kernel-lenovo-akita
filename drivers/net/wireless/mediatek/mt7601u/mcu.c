@@ -443,7 +443,7 @@ static int mt7601u_load_firmware(struct mt7601u_dev *dev)
 		goto err_inv_fw;
 
 	val = le16_to_cpu(hdr->fw_ver);
-	dev_info(dev->dev,
+	dev_dbg(dev->dev,
 		 "Firmware Version: %d.%d.%02d Build: %x Build time: %.16s\n",
 		 (val >> 12) & 0xf, (val >> 8) & 0xf, val & 0xf,
 		 le16_to_cpu(hdr->build_ver), hdr->build_time);

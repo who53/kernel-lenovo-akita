@@ -86,14 +86,14 @@ static int _tzmem_get_poolsize(uint32_t *size)
 
 	ret = KREE_CreateSession(TZ_TA_MEM_UUID, &session);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("[%s] %s: KREE_CreateSession Error = 0x%x\n",
+		pr_debug("[%s] %s: KREE_CreateSession Error = 0x%x\n",
 			MODULE_NAME, __func__, ret);
 		return ret;
 	}
 	/* get ta preset tzmem size */
 	ret = KREE_GetSecurechunkReleaseSize(session, size);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("[%s] %s: Error = 0x%x\n",
+		pr_debug("[%s] %s: Error = 0x%x\n",
 			MODULE_NAME, __func__, ret);
 		KREE_CloseSession(session);
 		return ret;
@@ -101,7 +101,7 @@ static int _tzmem_get_poolsize(uint32_t *size)
 
 	ret = KREE_CloseSession(session);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("[%s] %s: KREE_CloseSession Error = 0x%x\n",
+		pr_debug("[%s] %s: KREE_CloseSession Error = 0x%x\n",
 			    MODULE_NAME, __func__, ret);
 		return ret;
 	}
@@ -265,7 +265,7 @@ static struct kobject *tzmem_blk_probe(dev_t dev, int *part, void *data)
 
 		ret = KREE_CreateSession(TZ_TA_MEM_UUID, &session);
 		if (ret != TZ_RESULT_SUCCESS) {
-			pr_warn("[%s] _tzmem_get_poolsize: KREE_CreateSession Error = 0x%x\n",
+			pr_debug("[%s] _tzmem_get_poolsize: KREE_CreateSession Error = 0x%x\n",
 				MODULE_NAME, ret);
 			goto out_init;
 		}
@@ -300,7 +300,7 @@ static int __init tzmem_blkdev_init(void)
 #endif
 
 	if (register_blkdev(IO_NODE_MAJOR_TZMEM, DEV_TZMEM)) {
-		pr_warn("[%s] %s: register_blkdev error\n",
+		pr_debug("[%s] %s: register_blkdev error\n",
 			MODULE_NAME, __func__);
 		return -EFAULT;
 	}

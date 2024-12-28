@@ -1091,7 +1091,7 @@ static void gr_ep0_setup(struct gr_udc *dev, struct gr_request *req)
 		else
 			goto out; /* Got expected ZLP */
 	} else if (dev->ep0state != GR_EP0_SETUP) {
-		dev_info(dev->dev,
+		dev_dbg(dev->dev,
 			 "Unexpected ep0out request at state %s - stalling\n",
 			 gr_ep0state_string(dev->ep0state));
 		gr_control_stall(dev);
@@ -2241,10 +2241,10 @@ static int gr_probe(struct platform_device *pdev)
 	}
 
 	if (dev->irqi)
-		dev_info(dev->dev, "regs: %p, irqs %d, %d, %d\n", dev->regs,
+		dev_dbg(dev->dev, "regs: %p, irqs %d, %d, %d\n", dev->regs,
 			 dev->irq, dev->irqi, dev->irqo);
 	else
-		dev_info(dev->dev, "regs: %p, irq %d\n", dev->regs, dev->irq);
+		dev_dbg(dev->dev, "regs: %p, irq %d\n", dev->regs, dev->irq);
 
 out:
 	spin_unlock(&dev->lock);

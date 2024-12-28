@@ -1856,7 +1856,7 @@ imx486_table_write_cmos_sensor(
  *************************************************************************/
 /* #define SLT_DEVINFO_CMM */
 #ifdef SLT_DEVINFO_CMM
-#include  <linux/dev_info.h>
+#include  <linux/dev_dbg.h>
 static struct devinfo_struct *s_DEVINFO_ccm;	/* suppose 10 max lcm device */
 #endif
 static kal_uint32 get_imgsensor_id(UINT32 *sensor_id)

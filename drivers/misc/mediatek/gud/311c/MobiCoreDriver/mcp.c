@@ -413,7 +413,7 @@ s32 mcp_session_exitcode(struct mcp_session *session)
 	exit_code = session->exit_code;
 	mutex_unlock(&session->exit_code_lock);
 	if (exit_code)
-		mc_dev_info("session %x ec %d\n", session->id, exit_code);
+		mc_dev_dbg("session %x ec %d\n", session->id, exit_code);
 
 	return exit_code;
 }
@@ -1278,10 +1278,10 @@ int mcp_start(void)
 	/* Make sure we have an interrupt number before going on */
 #if defined(CONFIG_OF)
 	mcp_ctx.irq = irq_of_parse_and_map(g_ctx.mcd->of_node, 0);
-	mc_dev_info("SSIQ from dts is 0x%08x\n", mcp_ctx.irq);
+	mc_dev_dbg("SSIQ from dts is 0x%08x\n", mcp_ctx.irq);
 #endif
 #if defined(MC_INTR_SSIQ)
-	mc_dev_info("MC_INTR_SSIQ is 0x%08x\n", MC_INTR_SSIQ);
+	mc_dev_dbg("MC_INTR_SSIQ is 0x%08x\n", MC_INTR_SSIQ);
 	if (mcp_ctx.irq <= 0)
 		mcp_ctx.irq = MC_INTR_SSIQ;
 #endif
@@ -1291,7 +1291,7 @@ int mcp_start(void)
 		return -EINVAL;
 	}
 
-	mc_dev_info("FINAL SSIQ is 0x%08x\n", mcp_ctx.irq);
+	mc_dev_dbg("FINAL SSIQ is 0x%08x\n", mcp_ctx.irq);
 
 	/*
 	 * Initialize the time structure for SWd
@@ -1323,13 +1323,13 @@ int mcp_start(void)
 				MC_IV_FLAG_IRQ;
 			mcp_ctx.mcp_buffer->message.init_values.irq =
 				irq_d->parent_data->hwirq;
-			mc_dev_info("irq_d->parent_data->hwirq is 0x%lx\n",
+			mc_dev_dbg("irq_d->parent_data->hwirq is 0x%lx\n",
 				irq_d->parent_data->hwirq);
 		}
 #else
 		mcp_ctx.mcp_buffer->message.init_values.flags |= MC_IV_FLAG_IRQ;
 		mcp_ctx.mcp_buffer->message.init_values.irq = irq_d->hwirq;
-		mc_dev_info("irq_d->hwirq is 0x%lx\n", irq_d->hwirq);
+		mc_dev_dbg("irq_d->hwirq is 0x%lx\n", irq_d->hwirq);
 #endif
 	}
 	mcp_ctx.mcp_buffer->message.init_values.time_ofs =

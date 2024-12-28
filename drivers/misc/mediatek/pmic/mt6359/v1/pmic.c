@@ -24,7 +24,7 @@
 void record_md_vosel(void)
 {
 	g_vmodem_vosel = pmic_get_register_value(PMIC_RG_BUCK_VMODEM_VOSEL);
-	pr_info("[%s] vmodem_vosel = 0x%x\n", __func__, g_vmodem_vosel);
+	pr_debug("[%s] vmodem_vosel = 0x%x\n", __func__, g_vmodem_vosel);
 }
 
 /* [Export API] */
@@ -39,14 +39,14 @@ void vmd1_pmic_setting_on(void)
 		pmic_set_register_value(PMIC_RG_LDO_VSRAM_MD_VOSEL,
 			vsram_md_vosel);
 	} else {
-		pr_notice("[%s] vmodem vosel has not recorded!\n", __func__);
+		pr_debug("[%s] vmodem vosel has not recorded!\n", __func__);
 		g_vmodem_vosel =
 			pmic_get_register_value(PMIC_RG_BUCK_VMODEM_VOSEL);
-		pr_info("[%s] vmodem_vosel = 0x%x\n",
+		pr_debug("[%s] vmodem_vosel = 0x%x\n",
 			__func__, g_vmodem_vosel);
 	}
 	if (pmic_get_register_value(PMIC_DA_VMODEM_VOSEL) != g_vmodem_vosel)
-		pr_notice("[%s] vmodem vosel = 0x%x, da_vosel = 0x%x",
+		pr_debug("[%s] vmodem vosel = 0x%x, da_vosel = 0x%x",
 			__func__,
 			pmic_get_register_value(PMIC_RG_BUCK_VMODEM_VOSEL),
 			pmic_get_register_value(PMIC_DA_VMODEM_VOSEL));
@@ -62,7 +62,7 @@ void pmic_enable_smart_reset(unsigned char smart_en,
 {
 	pmic_set_register_value(PMIC_RG_SMART_RST_MODE, smart_en);
 	pmic_set_register_value(PMIC_RG_SMART_RST_SDN_EN, smart_sdn_en);
-	pr_info("[%s] smart_en:%d, smart_sdn_en:%d\n",
+	pr_debug("[%s] smart_en:%d, smart_sdn_en:%d\n",
 		__func__, smart_en, smart_sdn_en);
 }
 
@@ -82,7 +82,7 @@ static unsigned int pmic_scp_set_regulator(struct mtk_regulator mt_reg,
 
 	set_step = (voltage - min_uV) / uV_step;
 	if (voltage < min_uV || set_step >= n_voltages) {
-		pr_notice("[%s] SSHUB_%s Set Wrong voltage=%duV is unsupportable range %d-%duV\n"
+		pr_debug("[%s] SSHUB_%s Set Wrong voltage=%duV is unsupportable range %d-%duV\n"
 			  , __func__
 			  , mt_reg.desc.name
 			  , voltage
@@ -90,18 +90,18 @@ static unsigned int pmic_scp_set_regulator(struct mtk_regulator mt_reg,
 			  , (n_voltages * uV_step + min_uV));
 		return voltage;
 	}
-	pr_info("SSHUB_%s Expected %svolt step = %d\n",
+	pr_debug("SSHUB_%s Expected %svolt step = %d\n",
 		mt_reg.desc.name, is_sleep_vol?"sleep ":"", set_step);
 	pmic_set_register_value(vosel_reg, set_step);
 	udelay(220);
 	get_step = pmic_get_register_value(vosel_reg);
 	if (get_step != set_step) {
-		pr_notice("[%s] Set SSHUB_%s Voltage fail with step = %d, read voltage = %duV\n"
+		pr_debug("[%s] Set SSHUB_%s Voltage fail with step = %d, read voltage = %duV\n"
 			  , __func__, mt_reg.desc.name, set_step
 			  , (get_step * uV_step + min_uV));
 		return voltage;
 	}
-	pr_info("Set SSHUB_%s %sVoltage to %duV pass\n",
+	pr_debug("Set SSHUB_%s %sVoltage to %duV pass\n",
 		mt_reg.desc.name, is_sleep_vol?"sleep ":"", voltage);
 	return 0;
 }
@@ -116,7 +116,7 @@ int pmic_scp_ctrl_enable(bool vcore_en, bool vsram_en, bool is_pmrc_mode)
 	pmic_set_register_value(PMIC_RG_BUCK_VCORE_SSHUB_EN, vcore_en);
 	pmic_set_register_value(PMIC_RG_LDO_VSRAM_OTHERS_SSHUB_EN, vsram_en);
 	pmic_set_register_value(PMIC_RG_VR_SSHUB_MODE, is_pmrc_mode);
-	pr_info("[%s] vcore_en:%d vsram_en:%d is_pmic_mode:%d\n",
+	pr_debug("[%s] vcore_en:%d vsram_en:%d is_pmic_mode:%d\n",
 		__func__, vcore_en, vsram_en, is_pmrc_mode);
 	return ret;
 }

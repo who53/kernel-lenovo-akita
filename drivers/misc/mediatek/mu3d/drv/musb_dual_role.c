@@ -135,7 +135,7 @@ int mt_usb_dual_role_init(struct musb *musb)
 	dr_usb = devm_dual_role_instance_register(musb->controller,
 			dual_desc);
 	if (IS_ERR(dr_usb)) {
-		dev_info(musb->controller, "fail to register dual role usb\n");
+		dev_dbg(musb->controller, "fail to register dual role usb\n");
 		return -EINVAL;
 	}
 	return 0;

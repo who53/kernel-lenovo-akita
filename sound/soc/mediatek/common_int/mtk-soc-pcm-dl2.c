@@ -92,7 +92,7 @@ static int fast_dl_hdoutput_set(struct snd_kcontrol *kcontrol,
 	/* pr_debug("%s()\n", __func__); */
 	if (ucontrol->value.enumerated.item[0] >
 	    ARRAY_SIZE(fast_dl_hd_output)) {
-		pr_warn("%s(), return -EINVAL\n", __func__);
+		pr_debug("%s(), return -EINVAL\n", __func__);
 		return -EINVAL;
 	}
 
@@ -172,7 +172,7 @@ static int mtk_pcm_dl2_stop(struct snd_pcm_substream *substream)
 		struct afe_block_t *Afe_Block = &pMemControl->rBlock;
 
 		if (Afe_Block->u4DataRemained < 0) {
-			pr_warn("%s, dl2 underflow\n", __func__);
+			pr_debug("%s, dl2 underflow\n", __func__);
 			if (get_LowLatencyDebug() & DEBUG_DL2_AEE_UNDERFLOW)
 				AUDIO_AEE("mtk_pcm_dl2_stop - dl2 underflow");
 		}
@@ -223,7 +223,7 @@ mtk_pcm_dl2_pointer(struct snd_pcm_substream *substream)
 	if (GetMemoryPathEnable(Soc_Aud_Digital_Block_MEM_DL2) == true) {
 		HW_Cur_ReadIdx = Afe_Get_Reg(AFE_DL2_CUR);
 		if (HW_Cur_ReadIdx == 0) {
-			pr_warn("[Auddrv] HW_Cur_ReadIdx ==0\n");
+			pr_debug("[Auddrv] HW_Cur_ReadIdx ==0\n");
 			HW_Cur_ReadIdx = Afe_Block->pucPhysBufAddr;
 		}
 
@@ -408,7 +408,7 @@ static int mtk_pcm_dl2_prepare(struct snd_pcm_substream *substream)
 	pr_debug("%s\n", __func__);
 
 	if (mPrepareDone == false) {
-		pr_info(
+		pr_debug(
 			"%s format = %d SNDRV_PCM_FORMAT_S32_LE = %d SNDRV_PCM_FORMAT_U32_LE = %d, fast_dl_hdoutput = %d\n",
 			__func__, runtime->format, SNDRV_PCM_FORMAT_S32_LE,
 			SNDRV_PCM_FORMAT_U32_LE, fast_dl_hdoutput);
@@ -744,7 +744,7 @@ void mtk_dl2_copy2buffer(const void *addr, uint32_t size)
 retry:
 
 	if (unlikely(ISRCopyBuffer.u4BufferSize)) {
-		pr_info("%s, remaining data %d\n", __func__,
+		pr_debug("%s, remaining data %d\n", __func__,
 			ISRCopyBuffer.u4BufferSize);
 		if (unlikely(get_LowLatencyDebug() & DEBUG_DL2_AEE_OTHERS))
 			AUDIO_AEE("ISRCopy has remaining data !!");
@@ -772,7 +772,7 @@ retry:
 
 	if (unlikely(copy_from_user(ISRCopyBuffer.pBufferBase, (char *)addr,
 				    size))) {
-		pr_warn("%s Fail copy from user !!\n", __func__);
+		pr_debug("%s Fail copy from user !!\n", __func__);
 		goto exit;
 	}
 	ISRCopyBuffer.pBufferIndx = ISRCopyBuffer.pBufferBase;
@@ -831,7 +831,7 @@ static int mtk_pcm_dl2_copy(struct snd_pcm_substream *substream, int channel,
 			NowTime = sched_clock();
 
 			if ((NowTime - PrevTime) > UnderflowTime) {
-				pr_warn("%s, dl2 underflow, UnderflowTime %d, start %ld, end %ld\n",
+				pr_debug("%s, dl2 underflow, UnderflowTime %d, start %ld, end %ld\n",
 					__func__, UnderflowTime, PrevTime,
 					NowTime);
 				if (get_LowLatencyDebug() &

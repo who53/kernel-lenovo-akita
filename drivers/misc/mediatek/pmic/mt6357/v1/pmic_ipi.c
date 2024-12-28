@@ -211,7 +211,7 @@ static unsigned int pmic_interface_test_code(void)
 					, test_data[i], 0xffff, 0, 1);
 
 		if (ret_val != 0) {
-			pr_notice("%s config failed: test_data[%d]=%x ret_val=%x\n"
+			pr_debug("%s config failed: test_data[%d]=%x ret_val=%x\n"
 			       , __func__, i, test_data[i], ret_val);
 			error++;
 			break;
@@ -221,7 +221,7 @@ static unsigned int pmic_interface_test_code(void)
 						  , &rdata, 0xffff, 0, 1);
 
 		if (ret_val != 0 || rdata != test_data[i]) {
-			pr_notice("%s read failed: test_data[%d]=%x rdata =%x ret_val=%x\n"
+			pr_debug("%s read failed: test_data[%d]=%x rdata =%x ret_val=%x\n"
 			       , __func__, i, test_data[i], rdata, ret_val);
 			error++;
 			break;

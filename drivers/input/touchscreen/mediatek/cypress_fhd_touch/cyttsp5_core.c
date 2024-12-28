@@ -2939,7 +2939,7 @@ static void cyttsp5_queue_startup_(struct cyttsp5_core_data *cd)
 	if (cd->startup_state == STARTUP_NONE) {
 		cd->startup_state = STARTUP_QUEUED;
 		schedule_work(&cd->startup_work);
-		dev_info(cd->dev, "%s: cyttsp5_startup queued\n", __func__);
+		dev_dbg(cd->dev, "%s: cyttsp5_startup queued\n", __func__);
 	} else {
 		dev_dbg(cd->dev, "%s: startup_state = %d\n", __func__,
 			cd->startup_state);
@@ -3800,7 +3800,7 @@ reset:
 	cd->mode = cyttsp5_get_mode(cd, &cd->hid_desc);
 
 	if (cd->mode == CY_MODE_BOOTLOADER) {
-		dev_info(cd->dev, "%s: Bootloader mode\n", __func__);
+		dev_dbg(cd->dev, "%s: Bootloader mode\n", __func__);
 		rc = cyttsp5_hid_output_bl_launch_app_(cd);
 		if (rc < 0) {
 			dev_err(cd->dev, "%s: Error on launch app r=%d\n",
@@ -3946,7 +3946,7 @@ static int cyttsp5_check_and_deassert_int(struct cyttsp5_core_data *cd)
 
 	do {
 		rc = cyttsp5_adap_read_default(cd, buf, 2);
-		//dev_info(cd->dev, "force read %02xH %02xH", buf[0], buf[1]);
+		//dev_dbg(cd->dev, "force read %02xH %02xH", buf[0], buf[1]);
 		if (rc < 0)
 			return rc;
 		size = get_unaligned_le16(&buf[0]);
@@ -4021,7 +4021,7 @@ reset:
 				goto reset;
 			goto exit;
 		}
-		dev_info(cd->dev, "%s: Bootloader mode\n", __func__);
+		dev_dbg(cd->dev, "%s: Bootloader mode\n", __func__);
 	}
 
 	cyttsp5_hid_output_bl_get_panel_id_(cd, &cd->panel_id);
@@ -4066,9 +4066,9 @@ reset:
 
 	cd->mode = cyttsp5_get_mode(cd, &cd->hid_desc);
 	if (cd->mode == CY_MODE_OPERATIONAL)
-		dev_info(cd->dev, "%s: Operational mode\n", __func__);
+		dev_dbg(cd->dev, "%s: Operational mode\n", __func__);
 	else if (cd->mode == CY_MODE_BOOTLOADER)
-		dev_info(cd->dev, "%s: Bootloader mode\n", __func__);
+		dev_dbg(cd->dev, "%s: Bootloader mode\n", __func__);
 	else if (cd->mode == CY_MODE_UNKNOWN) {
 		dev_err(cd->dev, "%s: Unknown mode\n", __func__);
 		rc = -ENODEV;
@@ -4079,7 +4079,7 @@ reset:
 	}
 	mutex_unlock(&cd->system_lock);
 
-	dev_info(cd->dev, "%s: Init report descriptor\n", __func__);
+	dev_dbg(cd->dev, "%s: Init report descriptor\n", __func__);
 	pt_init_pip_report_fields(cd);
 
 	if (!cd->features.easywake)
@@ -4094,7 +4094,7 @@ reset:
 		goto exit;
 	}
 
-	dev_info(cd->dev, "cyttsp5 Protocol Version: %d.%d\n",
+	dev_dbg(cd->dev, "cyttsp5 Protocol Version: %d.%d\n",
 			cd->sysinfo.cydata.pip_ver_major,
 			cd->sysinfo.cydata.pip_ver_minor);
 
@@ -4438,10 +4438,10 @@ static ssize_t cyttsp5_drv_irq_store(struct device *dev,
 			cd->irq_enabled = false;
 			/* Disable IRQ */
 			disable_irq_nosync(cd->irq);
-			dev_info(dev, "%s: Driver IRQ now disabled\n",
+			dev_dbg(dev, "%s: Driver IRQ now disabled\n",
 				__func__);
 		} else
-			dev_info(dev, "%s: Driver IRQ already disabled\n",
+			dev_dbg(dev, "%s: Driver IRQ already disabled\n",
 				__func__);
 		break;
 
@@ -4450,10 +4450,10 @@ static ssize_t cyttsp5_drv_irq_store(struct device *dev,
 			cd->irq_enabled = true;
 			/* Enable IRQ */
 			enable_irq(cd->irq);
-			dev_info(dev, "%s: Driver IRQ now enabled\n",
+			dev_dbg(dev, "%s: Driver IRQ now enabled\n",
 				__func__);
 		} else
-			dev_info(dev, "%s: Driver IRQ already enabled\n",
+			dev_dbg(dev, "%s: Driver IRQ already enabled\n",
 				__func__);
 		break;
 
@@ -4487,7 +4487,7 @@ static ssize_t cyttsp5_drv_debug_store(struct device *dev,
 
 	/* Start watchdog timer command */
 	if (value == CY_DBG_HID_START_WD) {
-		dev_info(dev, "%s: start watchdog (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: start watchdog (cd=%p)\n", __func__, cd);
 		wd_disabled = 0;
 		cyttsp5_start_wd_timer(cd);
 		goto cyttsp5_drv_debug_store_exit;
@@ -4497,91 +4497,91 @@ static ssize_t cyttsp5_drv_debug_store(struct device *dev,
 	cyttsp5_stop_wd_timer(cd);
 
 	if (value == CY_DBG_HID_STOP_WD) {
-		dev_info(dev, "%s: stop watchdog (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: stop watchdog (cd=%p)\n", __func__, cd);
 		wd_disabled = 1;
 		goto cyttsp5_drv_debug_store_exit;
 	}
 
 	switch (value) {
 	case CY_DBG_SUSPEND:
-		dev_info(dev, "%s: SUSPEND (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: SUSPEND (cd=%p)\n", __func__, cd);
 		rc = cyttsp5_core_sleep(cd);
 		if (rc)
 			dev_err(dev, "%s: Suspend failed rc=%d\n",
 				__func__, rc);
 		else
-			dev_info(dev, "%s: Suspend succeeded\n", __func__);
+			dev_dbg(dev, "%s: Suspend succeeded\n", __func__);
 		break;
 
 	case CY_DBG_RESUME:
-		dev_info(dev, "%s: RESUME (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: RESUME (cd=%p)\n", __func__, cd);
 		rc = cyttsp5_core_wake(cd);
 		if (rc)
 			dev_err(dev, "%s: Resume failed rc=%d\n",
 				__func__, rc);
 		else
-			dev_info(dev, "%s: Resume succeeded\n", __func__);
+			dev_dbg(dev, "%s: Resume succeeded\n", __func__);
 		break;
 	case CY_DBG_SOFT_RESET:
-		dev_info(dev, "%s: SOFT RESET (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: SOFT RESET (cd=%p)\n", __func__, cd);
 		rc = cyttsp5_hw_soft_reset(cd);
 		break;
 	case CY_DBG_RESET:
-		dev_info(dev, "%s: HARD RESET (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: HARD RESET (cd=%p)\n", __func__, cd);
 		rc = cyttsp5_hw_hard_reset(cd);
 		break;
 	case CY_DBG_HID_RESET:
-		dev_info(dev, "%s: hid_reset (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: hid_reset (cd=%p)\n", __func__, cd);
 		cyttsp5_hid_cmd_reset(cd);
 		break;
 	case CY_DBG_HID_SET_POWER_ON:
-		dev_info(dev, "%s: hid_set_power_on (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: hid_set_power_on (cd=%p)\n", __func__, cd);
 		cyttsp5_hid_cmd_set_power(cd, HID_POWER_ON);
 		wd_disabled = 0;
 		break;
 	case CY_DBG_HID_SET_POWER_SLEEP:
-		dev_info(dev, "%s: hid_set_power_off (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: hid_set_power_off (cd=%p)\n", __func__, cd);
 		wd_disabled = 1;
 		cyttsp5_hid_cmd_set_power(cd, HID_POWER_SLEEP);
 		break;
 	case CY_DBG_HID_NULL:
-		dev_info(dev, "%s: hid_null (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: hid_null (cd=%p)\n", __func__, cd);
 		cyttsp5_hid_output_null(cd);
 		break;
 	case CY_DBG_HID_ENTER_BL:
-		dev_info(dev, "%s: start_bootloader (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: start_bootloader (cd=%p)\n", __func__, cd);
 		cyttsp5_hid_output_start_bootloader(cd);
 		break;
 	case CY_DBG_HID_SYSINFO:
-		dev_info(dev, "%s: get_sysinfo (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: get_sysinfo (cd=%p)\n", __func__, cd);
 		cyttsp5_hid_output_get_sysinfo(cd);
 		break;
 	case CY_DBG_HID_SUSPEND_SCAN:
-		dev_info(dev, "%s: suspend_scanning (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: suspend_scanning (cd=%p)\n", __func__, cd);
 		cyttsp5_hid_output_suspend_scanning(cd);
 		break;
 	case CY_DBG_HID_RESUME_SCAN:
-		dev_info(dev, "%s: resume_scanning (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: resume_scanning (cd=%p)\n", __func__, cd);
 		cyttsp5_hid_output_resume_scanning(cd);
 		break;
 	case HID_OUTPUT_BL_VERIFY_APP_INTEGRITY:
-		dev_info(dev, "%s: verify app integ (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: verify app integ (cd=%p)\n", __func__, cd);
 		cyttsp5_hid_output_bl_verify_app_integrity(cd, &return_data[0]);
 		break;
 	case HID_OUTPUT_BL_GET_INFO:
-		dev_info(dev, "%s: bl get info (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: bl get info (cd=%p)\n", __func__, cd);
 		cyttsp5_hid_output_bl_get_information(cd, return_data);
 		break;
 	case HID_OUTPUT_BL_PROGRAM_AND_VERIFY:
-		dev_info(dev, "%s: program and verify (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: program and verify (cd=%p)\n", __func__, cd);
 		cyttsp5_hid_output_bl_program_and_verify(cd, 0, NULL);
 		break;
 	case HID_OUTPUT_BL_LAUNCH_APP:
-		dev_info(dev, "%s: launch app (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: launch app (cd=%p)\n", __func__, cd);
 		cyttsp5_hid_output_bl_launch_app(cd);
 		break;
 	case HID_OUTPUT_BL_INITIATE_BL:
-		dev_info(dev, "%s: initiate bl (cd=%p)\n", __func__, cd);
+		dev_dbg(dev, "%s: initiate bl (cd=%p)\n", __func__, cd);
 		cyttsp5_hid_output_bl_initiate_bl(cd, 0, NULL, 0, NULL);
 		break;
 #ifdef TTHE_TUNER_SUPPORT
@@ -4596,7 +4596,7 @@ static ssize_t cyttsp5_drv_debug_store(struct device *dev,
 		if (cd->tthe_buf)
 			memset(cd->tthe_buf, 0, CY_MAX_PRBUF_SIZE);
 		else
-			dev_info(dev, "%s : tthe_buf not existed\n", __func__);
+			dev_dbg(dev, "%s : tthe_buf not existed\n", __func__);
 		break;
 #endif
 	default:
@@ -5168,14 +5168,14 @@ int fb_notifier_callback(struct notifier_block *self,
 
 	blank = evdata->data;
 	if (*blank == FB_BLANK_UNBLANK) {
-		dev_info(cd->dev, "%s: UNBLANK!\n", __func__);
+		dev_dbg(cd->dev, "%s: UNBLANK!\n", __func__);
 		if (cd->fb_state != FB_ON) {
 			call_atten_cb(cd, CY_ATTEN_RESUME, 0);
 			cyttsp5_core_resume(cd->dev);
 			cd->fb_state = FB_ON;
 		}
 	} else if (*blank == FB_BLANK_POWERDOWN) {
-		dev_info(cd->dev, "%s: POWERDOWN!\n", __func__);
+		dev_dbg(cd->dev, "%s: POWERDOWN!\n", __func__);
 		if (cd->fb_state != FB_OFF) {
 			cyttsp5_core_suspend(cd->dev);
 			call_atten_cb(cd, CY_ATTEN_SUSPEND, 0);
@@ -5216,7 +5216,7 @@ static int cyttsp5_setup_irq_gpio(struct cyttsp5_core_data *cd)
 		// of_property_read_u32_array(node, "debounce", ints, ARRAY_SIZE(ints));
 		// gpio_set_debounce(ints[0], ints[1]);
 		cd->irq = irq_of_parse_and_map(node, 0);
-		dev_info(dev, "%s: find irq=%d\n", __func__, cd->irq);
+		dev_dbg(dev, "%s: find irq=%d\n", __func__, cd->irq);
 	}
 	else {
 		printk("%s can't get device node!", __func__);
@@ -5353,7 +5353,7 @@ int cyttsp5_probe(const struct cyttsp5_bus_ops *ops, struct device *dev,
 		dev_err(dev, "%s Allocate DMA I2C Buffer failed!\n", __func__);
 		goto error_alloc_dma_data;
 	}
-	dev_info(dev, "%s: cd->I2CDMABuf_va  dma_alloc_coherent ok \n", __func__);
+	dev_dbg(dev, "%s: cd->I2CDMABuf_va  dma_alloc_coherent ok \n", __func__);
 #endif	
 
 	/* Initialize device info */
@@ -5410,7 +5410,7 @@ int cyttsp5_probe(const struct cyttsp5_bus_ops *ops, struct device *dev,
 		dev_dbg(cd->dev, "%s: Init HW\n", __func__);
 		rc = cd->cpdata->init(cd->cpdata, 1, cd->dev);
 	} else {
-		dev_info(cd->dev, "%s: No HW INIT function\n", __func__);
+		dev_dbg(cd->dev, "%s: No HW INIT function\n", __func__);
 		rc = 0;
 	}
 	if (rc < 0)
@@ -5418,11 +5418,11 @@ int cyttsp5_probe(const struct cyttsp5_bus_ops *ops, struct device *dev,
 
 	/* Call platform detect function */
 	if (cd->cpdata->detect) {
-		dev_info(cd->dev, "%s: Detect HW\n", __func__);
+		dev_dbg(cd->dev, "%s: Detect HW\n", __func__);
 		rc = cd->cpdata->detect(cd->cpdata, cd->dev,
 				cyttsp5_platform_detect_read);
 		if (rc) {
-			dev_info(cd->dev, "%s: No HW detected\n", __func__);
+			dev_dbg(cd->dev, "%s: No HW detected\n", __func__);
 			rc = -ENODEV;
 			goto error_detect;
 		}

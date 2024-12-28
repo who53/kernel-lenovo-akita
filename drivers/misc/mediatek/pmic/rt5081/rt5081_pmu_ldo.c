@@ -57,7 +57,7 @@ struct rt5081_pmu_ldo_platform_data {
 
 static irqreturn_t rt5081_pmu_ldo_oc_irq_handler(int irq, void *data)
 {
-	pr_info("%s: IRQ triggered\n", __func__);
+	pr_debug("%s: IRQ triggered\n", __func__);
 	return IRQ_HANDLED;
 }
 
@@ -233,7 +233,7 @@ static struct regulator_init_data *rt_parse_init_data(struct device *dev)
 	}
 	init_data = of_get_regulator_init_data(dev, sub_np, NULL);
 	if (init_data) {
-		dev_info(dev,
+		dev_dbg(dev,
 			"regulator_name = %s, min_uV = %d, max_uV = %d\n",
 			init_data->constraints.name,
 			init_data->constraints.min_uV,
@@ -295,10 +295,10 @@ static int rt5081_pmu_ldo_probe(struct platform_device *pdev)
 
 	rt5081_pmu_ldo_irq_register(pdev);
 
-	dev_info(&pdev->dev, "%s successfully\n", __func__);
+	dev_dbg(&pdev->dev, "%s successfully\n", __func__);
 	return ret;
 probe_err:
-	dev_info(&pdev->dev, "%s: register mtk regulator failed\n", __func__);
+	dev_dbg(&pdev->dev, "%s: register mtk regulator failed\n", __func__);
 	return ret;
 }
 
@@ -306,7 +306,7 @@ static int rt5081_pmu_ldo_remove(struct platform_device *pdev)
 {
 	struct rt5081_pmu_ldo_data *ldo_data = platform_get_drvdata(pdev);
 
-	dev_info(ldo_data->dev, "%s successfully\n", __func__);
+	dev_dbg(ldo_data->dev, "%s successfully\n", __func__);
 	return 0;
 }
 

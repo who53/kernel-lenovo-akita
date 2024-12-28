@@ -1170,7 +1170,7 @@ int force_get_tbat(bool update)
 		pre_bat_temperature_val = bat_temperature_val;
 
 		if (bat_temperature_val > 55)
-			pr_notice("[force_get_tbat] %d,%d,%d,%d,%d,%d\n",
+			pr_debug("[force_get_tbat] %d,%d,%d,%d,%d,%d\n",
 			 bat_temperature_volt_temp, bat_temperature_volt, fg_current_state,
 			 fg_current_temp, fg_r_value, bat_temperature_val);
 
@@ -2995,7 +2995,7 @@ void fgauge_algo_run_init(void)
 unsigned char reset_fg_bat_int = true;
 void fg_bat_int_handler(void)
 {
-	pr_notice("fg_bat_int_handler\n");
+	pr_debug("fg_bat_int_handler\n");
 	reset_fg_bat_int = true;
 	wake_up_bat2();
 }

@@ -255,10 +255,10 @@ static int thub_polling_thread(void *arg)
 		            if(pogo_status!=-1)
 			       vbus_flag  = (pogo_status>>1)&0x01;
 
-			    pr_info("thub detect[%d]:vbus (%d %d %d),ACA_type (%d %d)\n",__LINE__,THUB_BASE_VBUS,vbus,vbus_flag,i_ACA_type,current_status);
+			    pr_debug("thub detect[%d]:vbus (%d %d %d),ACA_type (%d %d)\n",__LINE__,THUB_BASE_VBUS,vbus,vbus_flag,i_ACA_type,current_status);
 			    if ((current_status!=CURRENT_THUB)&&(vbus > THUB_BASE_VBUS)&&(vbus_flag == 0||vbus_flag == -1)){
-				pr_info("thub detect:Adaptor plug in\n");
-				pr_info("thub detect:disable charger otg\n");
+				pr_debug("thub detect:Adaptor plug in\n");
+				pr_debug("thub detect:disable charger otg\n");
 				charger_dev_enable_otg(primary_charger, false);
 		 
 #ifdef CONFIG_POGO_CHARGER
@@ -266,13 +266,13 @@ static int thub_polling_thread(void *arg)
 #endif
 				mdelay(150);
 				vbus = battery_get_vbus();
-				pr_info("thub detect:vbus: %d", vbus);
+				pr_debug("thub detect:vbus: %d", vbus);
 				if(vbus >THUB_BASE_VBUS){
 		 
 #ifdef CONFIG_MTK_CHARGER
 #if CONFIG_MTK_GAUGE_VERSION == 30
 			   	   current_status =  CURRENT_THUB;
-				   pr_info("thub detect:set type 1\n");
+				   pr_debug("thub detect:set type 1\n");
 			   	   mtk_pmic_set_charger_type_by_thub(1);
 #endif
 #endif
@@ -284,15 +284,15 @@ static int thub_polling_thread(void *arg)
 	        } else if (i_ACA_type == CURRENT_OTG ) {
 		   if(ACA_get_current_type_status(1,CURRENT_OTG)){
 			    vbus = battery_get_vbus();
-			    pr_info("thub detect[%d]:vbus (%d %d),ACA_type (%d %d)\n",__LINE__,THUB_BASE_VBUS,vbus,i_ACA_type,current_status);
+			    pr_debug("thub detect[%d]:vbus (%d %d),ACA_type (%d %d)\n",__LINE__,THUB_BASE_VBUS,vbus,i_ACA_type,current_status);
 			    if((current_status!=CURRENT_OTG)&&(vbus<THUB_BASE_VBUS)){
-			    	pr_info("thub detect:Adaptor plug out\n");
+			    	pr_debug("thub detect:Adaptor plug out\n");
  #ifdef CONFIG_MTK_CHARGER
  #if CONFIG_MTK_GAUGE_VERSION == 30
 				 current_status =  CURRENT_OTG;
-			    	pr_info("thub detect:set type 0\n");
+			    	pr_debug("thub detect:set type 0\n");
 			    	mtk_pmic_set_charger_type_by_thub(0);
-			    	pr_info("thub detect:enable charger otg\n");
+			    	pr_debug("thub detect:enable charger otg\n");
 
 			     	charger_dev_enable_otg(primary_charger, true);
  #ifdef CONFIG_POGO_CHARGER
@@ -304,20 +304,20 @@ static int thub_polling_thread(void *arg)
 			   } else if ((current_status!=CURRENT_OTG) && (vbus>THUB_BASE_VBUS)) {
 				current_status = CURRENT_OTG;
 				mtk_pmic_set_charger_type_by_thub(0);
-				pr_info("thub detect:otg already on\n");
+				pr_debug("thub detect:otg already on\n");
 			   }
 		  }
 		  stop_timer = 0;
 	        } else if (i_ACA_type == CURRENT_PLUG_OUT) {
 		    if(ACA_get_current_type_status(1,CURRENT_PLUG_OUT)){
 			    vbus = battery_get_vbus();
-			    pr_info("thub detect[%d]:vbus (%d %d),ACA_type (%d %d)\n",__LINE__,THUB_BASE_VBUS,vbus,i_ACA_type,current_status);
+			    pr_debug("thub detect[%d]:vbus (%d %d),ACA_type (%d %d)\n",__LINE__,THUB_BASE_VBUS,vbus,i_ACA_type,current_status);
 			    if((current_status!=CURRENT_PLUG_OUT)&&(vbus >THUB_BASE_VBUS)){
-			        pr_info("thub detect:OTG plug out\n");
+			        pr_debug("thub detect:OTG plug out\n");
 				current_status =  CURRENT_PLUG_OUT;
-				pr_info("thub detect:set type 0\n");
+				pr_debug("thub detect:set type 0\n");
 			    	mtk_pmic_set_charger_type_by_thub(0);
-				pr_info("thub detect:disable charger otg\n");
+				pr_debug("thub detect:disable charger otg\n");
 			        charger_dev_enable_otg(primary_charger, false);
 			 
 #ifdef CONFIG_POGO_CHARGER
@@ -594,7 +594,7 @@ static int otg_tcp_notifier_call(struct notifier_block *nb,
 				noti->typec_state.new_state ==
 					TYPEC_ATTACHED_NORP_SRC) &&
 				in_uart_mode) {
-			pr_info("%s USB cable plugged-in in UART mode. "
+			pr_debug("%s USB cable plugged-in in UART mode. "
 					"Switch to USB mode.\n", __func__);
 			usb_phy_switch_to_usb();
 #endif

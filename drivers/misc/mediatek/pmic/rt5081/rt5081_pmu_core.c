@@ -222,7 +222,7 @@ static int rt5081_pmu_core_probe(struct platform_device *pdev)
 		goto out_notifier;
 
 	rt5081_pmu_core_irq_register(pdev);
-	dev_info(&pdev->dev, "%s successfully\n", __func__);
+	dev_dbg(&pdev->dev, "%s successfully\n", __func__);
 	return 0;
 out_notifier:
 out_init_reg:
@@ -236,7 +236,7 @@ static int rt5081_pmu_core_remove(struct platform_device *pdev)
 	struct rt5081_pmu_core_data *core_data = platform_get_drvdata(pdev);
 
 	unregister_reboot_notifier(&core_data->nb);
-	dev_info(core_data->dev, "%s successfully\n", __func__);
+	dev_dbg(core_data->dev, "%s successfully\n", __func__);
 	return 0;
 }
 

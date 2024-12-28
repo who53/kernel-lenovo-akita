@@ -58,8 +58,8 @@
 #endif
 
 static int pwm_dbg_en;
-#define PWM_ERR(fmt, arg...) pr_notice("[PWM] %s: " fmt "\n", __func__, ##arg)
-#define PWM_NOTICE(fmt, arg...) pr_info("[PWM] %s: " fmt "\n", __func__, ##arg)
+#define PWM_ERR(fmt, arg...) pr_debug("[PWM] %s: " fmt "\n", __func__, ##arg)
+#define PWM_NOTICE(fmt, arg...) pr_debug("[PWM] %s: " fmt "\n", __func__, ##arg)
 #define PWM_MSG(fmt, arg...) pr_debug("[PWM] %s: " fmt "\n", __func__, ##arg)
 #define PWM_DBG(fmt, arg...) \
 	do { if (pwm_dbg_en) pr_debug("[PWM] %s: " fmt "\n", __func__, ##arg); \
@@ -385,10 +385,10 @@ static void disp_pwm_set_drverIC_en(enum disp_pwm_id_t id, int enabled)
 #endif*/
 	if (id == DISP_PWM0) {
 		if(enabled) {
-			pr_err("[LCM][GPIO]lcm_resume !\n");
+			pr_debug("[LCM][GPIO]lcm_resume !\n");
 			lcm_power_enable_led();
 		} else {
-			pr_err("[LCM][GPIO]lcm_suspend !\n");
+			pr_debug("[LCM][GPIO]lcm_suspend !\n");
 			lcm_power_disable_led();
 		}
 	}

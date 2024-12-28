@@ -58,7 +58,7 @@ static inline void trace_tee_smc(struct tee_smc_xfer_ctl *ctl, int rv,
 	s64 duration = time_end - time_start;
 
 	if (duration > 1000000LL) {
-		pr_warn("WARNING SMC[0x%x] %sDURATION %lld us\n", rv,
+		pr_debug("WARNING SMC[0x%x] %sDURATION %lld us\n", rv,
 			rv == TEESMC_RPC_FUNC_IRQ ? "IRQ " : "", duration);
 	}
 

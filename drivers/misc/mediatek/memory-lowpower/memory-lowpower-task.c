@@ -42,8 +42,8 @@
 #include "internal.h"
 
 /* Print wrapper */
-#define MLPT_PRINT(args...)	do {} while (0) /* pr_info(args) */
-#define MLPT_PRERR(args...)	do {} while (0) /* pr_notice(args) */
+#define MLPT_PRINT(args...)	do {} while (0) /* pr_debug(args) */
+#define MLPT_PRERR(args...)	do {} while (0) /* pr_debug(args) */
 
 /* Profile Timing */
 #ifdef CONFIG_MLPT_PROFILE
@@ -217,7 +217,7 @@ static int acquire_memory(void)
 
 		/* Early termination for "action is changed" */
 		if (IS_ACTION_LEAVE(mlp_action)) {
-			pr_notice("%s: got a leave event\n", __func__);
+			pr_debug("%s: got a leave event\n", __func__);
 			ret = -EBUSY;
 			break;
 		}
@@ -469,7 +469,7 @@ static void go_to_mlp_enable(void)
 	 * If done or can't proceed, just go ahead.
 	 */
 	if (acquire_memory())
-		pr_notice("%s: some exception occurs!\n", __func__);
+		pr_debug("%s: some exception occurs!\n", __func__);
 
 	/* HW flow */
 	__go_to_mlp_enable();
@@ -655,7 +655,7 @@ retry:
 	}
 out:
 	__end_ns = sched_clock();
-	pr_info("elapsed %llu ns\n", (__end_ns - __start_ns));
+	pr_debug("elapsed %llu ns\n", (__end_ns - __start_ns));
 
 	return NOTIFY_OK;
 }
@@ -798,7 +798,7 @@ static int __init memory_lowpower_task_debug_init(void)
 					0444, NULL, NULL,
 					&memory_lowpower_task_fops);
 	if (!dentry)
-		pr_notice("Failed to create debugfs memory_lowpower_debug_init file\n");
+		pr_debug("Failed to create debugfs memory_lowpower_debug_init file\n");
 
 	return 0;
 }

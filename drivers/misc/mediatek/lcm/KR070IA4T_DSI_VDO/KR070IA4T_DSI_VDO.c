@@ -210,7 +210,7 @@ static struct platform_driver lcm_driver = {
 
 static int __init lcm_init(void)
 {
-	pr_notice("LCM: Register lcm driver\n");
+	pr_debug("LCM: Register lcm driver\n");
 	if (platform_driver_register(&lcm_driver)) {
 		pr_debug("LCM: failed to register disp driver\n");
 		return -ENODEV;
@@ -222,7 +222,7 @@ static int __init lcm_init(void)
 static void __exit lcm_exit(void)
 {
 	platform_driver_unregister(&lcm_driver);
-	pr_notice("LCM: Unregister lcm driver done\n");
+	pr_debug("LCM: Unregister lcm driver done\n");
 }
 late_initcall(lcm_init);
 module_exit(lcm_exit);

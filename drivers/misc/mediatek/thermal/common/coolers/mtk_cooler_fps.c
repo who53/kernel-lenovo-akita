@@ -69,7 +69,7 @@ pr_debug("[Thermal/TC/fps]" fmt, ##args)
 #define mtk_cooler_fps_dprintk(fmt, args...) \
 do { \
 	if (cl_fps_klog_on == 1) \
-		pr_notice("[Thermal/TC/fps]" fmt, ##args); \
+		pr_debug("[Thermal/TC/fps]" fmt, ##args); \
 } while (0)
 
 #define MAX_NUM_INSTANCE_MTK_COOLER_FPS  4
@@ -172,21 +172,21 @@ enum {
 int __attribute__ ((weak))
 disp_mgr_get_session_info(struct disp_session_info *info)
 {
-	pr_notice("E_WF: %s doesn't exist\n", __func__);
+	pr_debug("E_WF: %s doesn't exist\n", __func__);
 	return 0;
 }
 
 unsigned long  __attribute__ ((weak))
 ged_query_info(enum GED_INFO_TAG eType)
 {
-	pr_notice("E_WF: %s doesn't exist\n", __func__);
+	pr_debug("E_WF: %s doesn't exist\n", __func__);
 	return 0;
 }
 
 bool  __attribute__ ((weak))
 mtk_get_gpu_loading(unsigned int *pLoading)
 {
-	pr_notice("E_WF: %s doesn't exist\n", __func__);
+	pr_debug("E_WF: %s doesn't exist\n", __func__);
 	return 0;
 }
 
@@ -974,7 +974,7 @@ static const struct file_operations tm_fps_fops = {
  *do { \
  *	dentry_f = debugfs_create_u32(#name, S_IWUSR | S_IRUGO, _d, &name); \
  *	if (IS_ERR_OR_NULL(dentry_f)) {	\
- *		pr_notice("Unable to create debugfsfile: " #name "\n"); \
+ *		pr_debug("Unable to create debugfsfile: " #name "\n"); \
  *		return; \
  *	} \
  *} while (0)
@@ -986,7 +986,7 @@ static const struct file_operations tm_fps_fops = {
  *
  *	_d = debugfs_create_dir("clfps", NULL);
  *	if (IS_ERR_OR_NULL(_d)) {
- *		pr_info("unable to create debugfs directory\n");
+ *		pr_debug("unable to create debugfs directory\n");
  *		return;
  *	}
  *

@@ -117,7 +117,7 @@ static int dbmdx_snd_probe(struct platform_device *pdev)
 	 * on the device's 'struct device_private *p'->driver_data
 	 */
 
-	dev_info(&pdev->dev, "%s:\n", __func__);
+	dev_dbg(&pdev->dev, "%s:\n", __func__);
 
 	card->dev = &pdev->dev;
 	if (dbmdx_init_dai_link(card) < 0) {
@@ -129,7 +129,7 @@ static int dbmdx_snd_probe(struct platform_device *pdev)
 
 #if defined(DBMDX_DEFER_IF_SND_CARD_ID_0)
 	if (!snd_cards[0] || !(snd_cards[0]->id[0])) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			"%s: Defering DBMDX SND card probe, wait primary card...\n",
 			__func__);
 		return -EPROBE_DEFER;
@@ -143,7 +143,7 @@ static int dbmdx_snd_probe(struct platform_device *pdev)
 			__func__, ret);
 		goto ERR_CLEAR;
 	}
-	dev_info(&pdev->dev, "%s: DBMDX ASoC card registered\n", __func__);
+	dev_dbg(&pdev->dev, "%s: DBMDX ASoC card registered\n", __func__);
 
 	return 0;
 
@@ -157,7 +157,7 @@ static int dbmdx_snd_remove(struct platform_device *pdev)
 
 	snd_soc_unregister_card(card);
 
-	dev_info(&pdev->dev, "%s: DBMDX ASoC card unregistered\n", __func__);
+	dev_dbg(&pdev->dev, "%s: DBMDX ASoC card unregistered\n", __func__);
 
 	return 0;
 }

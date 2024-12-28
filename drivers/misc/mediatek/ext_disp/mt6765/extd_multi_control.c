@@ -552,8 +552,8 @@ int external_display_get_info(void *info, unsigned int session)
 
 	dev_index = get_dev_index(session);
 	if (dev_index >= 0 && extd_driver[dev_index]
-	    && extd_driver[dev_index]->get_dev_info)
-		ret = extd_driver[dev_index]->get_dev_info(SF_GET_INFO, info);
+	    && extd_driver[dev_index]->get_dev_dbg)
+		ret = extd_driver[dev_index]->get_dev_dbg(SF_GET_INFO, info);
 
 	return ret;
 }

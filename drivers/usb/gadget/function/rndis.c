@@ -185,7 +185,7 @@ static const u32 oid_supported_list[] =
 #endif	/* RNDIS_PM */
 };
 
-#define RNDIS_DBG(fmt, args...) pr_notice("RNDIS,%s, " fmt, __func__, ## args)
+#define RNDIS_DBG(fmt, args...) pr_debug("RNDIS,%s, " fmt, __func__, ## args)
 
 #ifdef CONFIG_MTK_MD_DIRECT_TETHERING_SUPPORT
 
@@ -864,7 +864,7 @@ static int rndis_set_response(struct rndis_params *params,
 
 	r = rndis_add_response(params, sizeof(rndis_set_cmplt_type));
 	if (!r) {
-		pr_info("rndis_set_response, rndis_add_response return NULL\n");
+		pr_debug("rndis_set_response, rndis_add_response return NULL\n");
 		return -ENOMEM;
 	}
 	resp = (rndis_set_cmplt_type *)r->buf;
@@ -1433,7 +1433,7 @@ int rndis_rm_hdr(struct gether *port,
 		}
 
 		if (skb->len < sizeof(*hdr)) {
-			pr_info("invalid rndis pkt: skblen:%u hdr_len:%zu",
+			pr_debug("invalid rndis pkt: skblen:%u hdr_len:%zu",
 					skb->len, sizeof(*hdr));
 		dev_kfree_skb_any(skb);
 		return -EINVAL;
@@ -1446,7 +1446,7 @@ int rndis_rm_hdr(struct gether *port,
 
 		if (skb->len < msg_len ||
 				((data_offset + data_len + 8) > msg_len)) {
-			pr_info("invalid rndis message: %d/%d/%d/%d, len:%d\n",
+			pr_debug("invalid rndis message: %d/%d/%d/%d, len:%d\n",
 					le32_to_cpu(hdr->MessageType),
 					msg_len, data_offset,
 					data_len, skb->len);
@@ -1454,7 +1454,7 @@ int rndis_rm_hdr(struct gether *port,
 		return -EOVERFLOW;
 	}
 		if (le32_to_cpu(hdr->MessageType) != RNDIS_MSG_PACKET) {
-			pr_info("invalid rndis message: %d/%d/%d/%d, len:%d\n",
+			pr_debug("invalid rndis message: %d/%d/%d/%d, len:%d\n",
 					le32_to_cpu(hdr->MessageType),
 					msg_len, data_offset, data_len,
 					skb->len);
@@ -1471,7 +1471,7 @@ int rndis_rm_hdr(struct gether *port,
 
 		skb2 = skb_clone(skb, GFP_ATOMIC);
 		if (!skb2) {
-			pr_info("%s:skb clone failed\n", __func__);
+			pr_debug("%s:skb clone failed\n", __func__);
 			dev_kfree_skb_any(skb);
 			return -ENOMEM;
 		}

@@ -165,9 +165,9 @@ static int __init create_sysfs(void)
 				__func__, g_meta_com_type, g_meta_com_id,
 				g_meta_uart_port);
 		} else
-			pr_warn("[%s] No atag,meta found !\n", __func__);
+			pr_debug("[%s] No atag,meta found !\n", __func__);
 	} else
-		pr_warn("[%s] of_chosen is NULL !\n", __func__);
+		pr_debug("[%s] of_chosen is NULL !\n", __func__);
 #endif
 
 	if (bm == META_BOOT || bm == ADVMETA_BOOT || bm == ATE_FACTORY_BOOT
@@ -175,28 +175,28 @@ static int __init create_sysfs(void)
 		/* register driver and create sysfs files */
 		ret = driver_register(&meta_com_type_info.driver);
 		if (ret)
-			pr_warn("fail to register META COM TYPE driver\n");
+			pr_debug("fail to register META COM TYPE driver\n");
 		ret =
 		    driver_create_file(&meta_com_type_info.driver,
 				&driver_attr_meta_com_type_info);
 		if (ret)
-			pr_warn("fail to create META COM TPYE sysfs file\n");
+			pr_debug("fail to create META COM TPYE sysfs file\n");
 
 		ret = driver_register(&meta_com_id_info.driver);
 		if (ret)
-			pr_warn("fail to register META COM ID driver\n");
+			pr_debug("fail to register META COM ID driver\n");
 		ret = driver_create_file(&meta_com_id_info.driver,
 				&driver_attr_meta_com_id_info);
 		if (ret)
-			pr_warn("fail to create META COM ID sysfs file\n");
+			pr_debug("fail to create META COM ID sysfs file\n");
 		ret = driver_register(&meta_uart_port_info.driver);
 		if (ret)
-			pr_warn("fail to register META UART PORT driver\n");
+			pr_debug("fail to register META UART PORT driver\n");
 		ret =
 		    driver_create_file(&meta_uart_port_info.driver,
 				       &driver_attr_meta_uart_port_info);
 		if (ret)
-			pr_warn("fail to create META UART PORT sysfs file\n");
+			pr_debug("fail to create META UART PORT sysfs file\n");
 	}
 
 	return 0;

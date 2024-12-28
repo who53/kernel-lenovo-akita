@@ -181,7 +181,7 @@ static snd_pcm_uframes_t mtk_capture2_pcm_pointer(
 
 		HW_Cur_ReadIdx = Align64ByteSize(Afe_Get_Reg(AFE_VUL_D2_CUR));
 		if (HW_Cur_ReadIdx == 0) {
-			pr_warn("[Auddrv] mtk_capture2_pcm_pointer HW_Cur_ReadIdx == 0\n");
+			pr_debug("[Auddrv] mtk_capture2_pcm_pointer HW_Cur_ReadIdx == 0\n");
 			HW_Cur_ReadIdx = vul2_Block->pucPhysBufAddr;
 		}
 		HW_memory_index = (HW_Cur_ReadIdx - vul2_Block->pucPhysBufAddr);
@@ -303,7 +303,7 @@ static int mtk_capture2_pcm_open(struct snd_pcm_substream *substream)
 		 SNDRV_PCM_HW_PARAM_PERIODS);
 
 	if (ret < 0)
-		pr_warn("snd_pcm_hw_constraint_integer failed\n");
+		pr_debug("snd_pcm_hw_constraint_integer failed\n");
 
 	pr_debug("mtk_capture2_pcm_open runtime rate = %d channels = %d\n",
 		runtime->rate, runtime->channels);
@@ -312,7 +312,7 @@ static int mtk_capture2_pcm_open(struct snd_pcm_substream *substream)
 		pr_debug("SNDRV_PCM_STREAM_CAPTURE mtkalsa_capture_constraints\n");
 
 	if (ret < 0) {
-		pr_warn("mtk_capture2_pcm_close\n");
+		pr_debug("mtk_capture2_pcm_close\n");
 		mtk_capture2_pcm_close(substream);
 		return ret;
 	}

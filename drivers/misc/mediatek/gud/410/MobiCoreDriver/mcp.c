@@ -274,7 +274,7 @@ int mcp_get_err(struct mcp_session *session, s32 *err)
 	*err = session->exit_code;
 	mutex_unlock(&session->exit_code_lock);
 	if (*err)
-		mc_dev_info("session %x ec %d", session->sid, *err);
+		mc_dev_dbg("session %x ec %d", session->sid, *err);
 
 	return 0;
 }

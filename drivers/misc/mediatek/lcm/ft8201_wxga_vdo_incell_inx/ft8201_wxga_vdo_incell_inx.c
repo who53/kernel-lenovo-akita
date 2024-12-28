@@ -290,7 +290,7 @@ static void lcm_get_params(struct LCM_PARAMS *params)
 static void lcm_init_power(void)
 {
 	//if(!tp_gesture_mode) {
-		pr_err("[LCM][GPIO]lcm_init_power !\n");
+		pr_debug("[LCM][GPIO]lcm_init_power !\n");
 		lcm_power_enable();
 	//}
 }
@@ -298,7 +298,7 @@ static void lcm_init_power(void)
 static void lcm_suspend_power(void)
 {
 	if(!tp_gesture_mode) {
-		pr_err("[LCM][GPIO]lcm_suspend_power !\n");
+		pr_debug("[LCM][GPIO]lcm_suspend_power !\n");
 		//lcm_reset_pin(0);
 		MDELAY(2);
 		lcm_power_disable();
@@ -308,11 +308,11 @@ static void lcm_suspend_power(void)
 static void lcm_resume_power(void)
 {
 	/*if(!tp_gesture_mode) {
-		pr_err("[LCM][GPIO]lcm_resume_power !\n");
+		pr_debug("[LCM][GPIO]lcm_resume_power !\n");
 		lcm_power_enable();
 	}*/
 
-	pr_err("[LCM][GPIO]lcm_resume_power !\n");
+	pr_debug("[LCM][GPIO]lcm_resume_power !\n");
 
 	MDELAY(7);
 	ctp_reset_pin(0);

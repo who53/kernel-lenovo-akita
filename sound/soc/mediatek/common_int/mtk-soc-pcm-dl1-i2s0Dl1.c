@@ -102,14 +102,14 @@ static int Audio_I2S0dl1_hdoutput_Set(struct snd_kcontrol *kcontrol,
 	/* pr_debug("%s()\n", __func__); */
 	if (ucontrol->value.enumerated.item[0] >
 	    ARRAY_SIZE(I2S0dl1_HD_output)) {
-		pr_warn("%s(), return -EINVAL\n", __func__);
+		pr_debug("%s(), return -EINVAL\n", __func__);
 		return -EINVAL;
 	}
 
 	mI2S0dl1_hdoutput_control = ucontrol->value.integer.value[0];
 
 	if (GetMemoryPathEnable(Soc_Aud_Digital_Block_MEM_HDMI) == true) {
-		pr_info("return HDMI enabled\n");
+		pr_debug("return HDMI enabled\n");
 		return 0;
 	}
 
@@ -142,7 +142,7 @@ static int Audio_Irqcnt1_Set(struct snd_kcontrol *kcontrol,
 		irq_update_user(irq_user_id, Soc_Aud_IRQ_MCU_MODE_IRQ1_MCU_MODE,
 				0, irq1_cnt);
 	else
-		pr_warn("warn, cannot update irq counter, user_id = %p, irq1_cnt = %d\n",
+		pr_debug("warn, cannot update irq counter, user_id = %p, irq1_cnt = %d\n",
 			irq_user_id, irq1_cnt);
 
 	AudDrv_Clk_Off();

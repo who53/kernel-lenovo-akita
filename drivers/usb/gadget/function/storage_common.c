@@ -468,7 +468,7 @@ ssize_t fsg_store_file(struct fsg_lun *curlun, struct rw_semaphore *filesem,
 	}
 #endif
 
-	pr_notice("fsg_store_file file=%s, count=%d, curlun->cdrom=%d\n", buf,
+	pr_debug("fsg_store_file file=%s, count=%d, curlun->cdrom=%d\n", buf,
 			(int)count, curlun->cdrom);
 
 	/*

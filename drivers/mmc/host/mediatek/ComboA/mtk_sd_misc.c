@@ -71,7 +71,7 @@ int msdc_reinit(struct msdc_host *host)
 	int ret = -1;
 
 	if (!host || !host->mmc || !host->mmc->card) {
-		pr_notice("Invalid msdc_host, mmc_host, or card");
+		pr_debug("Invalid msdc_host, mmc_host, or card");
 		return -1;
 	}
 
@@ -117,7 +117,7 @@ static int simple_sd_ioctl_get_cid(struct msdc_ioctl *msdc_ctl)
 	host_ctl = mtk_msdc_host[msdc_ctl->host_num];
 
 	if (!host_ctl || !host_ctl->mmc || !host_ctl->mmc->card) {
-		pr_notice("host_ctl or mmc or card is NULL\n");
+		pr_debug("host_ctl or mmc or card is NULL\n");
 		return -EINVAL;
 	}
 
@@ -148,7 +148,7 @@ static int simple_sd_ioctl_set_bootpart(struct msdc_ioctl *msdc_ctl)
 	host_ctl = mtk_msdc_host[msdc_ctl->host_num];
 
 	if (!host_ctl || !host_ctl->mmc || !host_ctl->mmc->card) {
-		pr_notice("host_ctl or mmc or card is NULL\n");
+		pr_debug("host_ctl or mmc or card is NULL\n");
 		return -EINVAL;
 	}
 	mmc = host_ctl->mmc;
@@ -240,7 +240,7 @@ int simple_sd_ioctl_rw(struct msdc_ioctl *msdc_ctl)
 	host_ctl = mtk_msdc_host[msdc_ctl->host_num];
 
 	if (!host_ctl || !host_ctl->mmc || !host_ctl->mmc->card) {
-		pr_notice("host_ctl or mmc or card is NULL\n");
+		pr_debug("host_ctl or mmc or card is NULL\n");
 		return -EINVAL;
 	}
 	mmc = host_ctl->mmc;
@@ -498,7 +498,7 @@ static int simple_sd_ioctl_get_csd(struct msdc_ioctl *msdc_ctl)
 	host_ctl = mtk_msdc_host[msdc_ctl->host_num];
 
 	if (!host_ctl || !host_ctl->mmc || !host_ctl->mmc->card) {
-		pr_notice("host_ctl or mmc or card is NULL\n");
+		pr_debug("host_ctl or mmc or card is NULL\n");
 		return -EINVAL;
 	}
 
@@ -529,7 +529,7 @@ static int simple_sd_ioctl_get_bootpart(struct msdc_ioctl *msdc_ctl)
 
 	host_ctl = mtk_msdc_host[msdc_ctl->host_num];
 	if (!host_ctl || !host_ctl->mmc || !host_ctl->mmc->card) {
-		pr_notice("host_ctl or mmc or card is NULL\n");
+		pr_debug("host_ctl or mmc or card is NULL\n");
 		return -EINVAL;
 	}
 	mmc = host_ctl->mmc;
@@ -590,7 +590,7 @@ static int simple_sd_ioctl_get_partition_size(struct msdc_ioctl *msdc_ctl)
 	host_ctl = mtk_msdc_host[msdc_ctl->host_num];
 
 	if (!host_ctl || !host_ctl->mmc || !host_ctl->mmc->card) {
-		pr_notice("host_ctl or mmc or card is NULL\n");
+		pr_debug("host_ctl or mmc or card is NULL\n");
 		return -EINVAL;
 	}
 
@@ -728,7 +728,7 @@ static int simple_mmc_erase_func(unsigned int start, unsigned int size)
 
 	host = mtk_msdc_host[0];
 	if (!host || !host->mmc || !host->mmc->card) {
-		pr_notice("host or mmc or card is NULL\n");
+		pr_debug("host or mmc or card is NULL\n");
 		return -EINVAL;
 	}
 	mmc = host->mmc;
@@ -746,7 +746,7 @@ static int simple_mmc_erase_func(unsigned int start, unsigned int size)
 	} else if (mmc_can_erase(mmc->card)) {
 		arg = __MMC_ERASE_ARG;
 	} else {
-		pr_notice("[%s]: emmc card can't support trim / discard / erase\n",
+		pr_debug("[%s]: emmc card can't support trim / discard / erase\n",
 			__func__);
 		goto end;
 	}
@@ -789,7 +789,7 @@ static int simple_sd_ioctl_erase_selected_area(struct msdc_ioctl *msdc_ctl)
 
 	host_ctl = mtk_msdc_host[msdc_ctl->host_num];
 	if (!host_ctl || !host_ctl->mmc || !host_ctl->mmc->card) {
-		pr_notice("host_ctl or mmc or card is NULL\n");
+		pr_debug("host_ctl or mmc or card is NULL\n");
 		return -EINVAL;
 	}
 
@@ -902,17 +902,17 @@ static long simple_sd_ioctl(struct file *file, unsigned int cmd,
 		switch (cmd) {
 #ifdef CONFIG_PWR_LOSS_MTK_TEST
 		case MSDC_REINIT_SDCARD:
-			pr_info("sd ioctl re-init!!\n");
+			pr_debug("sd ioctl re-init!!\n");
 			ret = sd_ioctl_reinit((struct msdc_ioctl *)arg);
 			break;
 
 		case MSDC_CD_PIN_EN_SDCARD:
-			pr_info("sd ioctl cd pin\n");
+			pr_debug("sd ioctl cd pin\n");
 			ret = sd_ioctl_cd_pin_en((struct msdc_ioctl *)arg);
 			break;
 
 		case MSDC_SD_POWER_OFF:
-			pr_info("sd ioctl power off!!!\n");
+			pr_debug("sd ioctl power off!!!\n");
 			host = mtk_msdc_host[1];
 			if (host && host->mmc) {
 				mmc_claim_host(host->mmc);
@@ -922,7 +922,7 @@ static long simple_sd_ioctl(struct file *file, unsigned int cmd,
 			break;
 
 		case MSDC_SD_POWER_ON:
-			pr_info("sd ioctl power on!!!\n");
+			pr_debug("sd ioctl power on!!!\n");
 			host = mtk_msdc_host[1];
 			/* FIX ME: kernel 3.18 does not provide
 			 * mmc_resume_host,
@@ -933,7 +933,7 @@ static long simple_sd_ioctl(struct file *file, unsigned int cmd,
 			break;
 #endif
 		default:
-			pr_notice("mt_sd_ioctl:this opcode value is illegal!!\n");
+			pr_debug("mt_sd_ioctl:this opcode value is illegal!!\n");
 			return -EINVAL;
 		}
 		return ret;
@@ -952,7 +952,7 @@ static long simple_sd_ioctl(struct file *file, unsigned int cmd,
 	if (msdc_ctl->opcode != MSDC_ERASE_PARTITION) {
 		if ((msdc_ctl->host_num < 0)
 		 || (msdc_ctl->host_num >= HOST_MAX_NUM)) {
-			pr_notice("invalid host num: %d\n", msdc_ctl->host_num);
+			pr_debug("invalid host num: %d\n", msdc_ctl->host_num);
 			kfree(msdc_ctl);
 			return -EINVAL;
 		}
@@ -993,7 +993,7 @@ static long simple_sd_ioctl(struct file *file, unsigned int cmd,
 			msdc_ctl);
 		break;
 	case MSDC_SD30_MODE_SWITCH:
-		pr_notice("obsolete opcode!!\n");
+		pr_debug("obsolete opcode!!\n");
 		kfree(msdc_ctl);
 		return -EINVAL;
 	case MSDC_GET_BOOTPART:
@@ -1006,7 +1006,7 @@ static long simple_sd_ioctl(struct file *file, unsigned int cmd,
 		break;
 #endif
 	default:
-		pr_notice("simple_sd_ioctl:invlalid opcode!!\n");
+		pr_debug("simple_sd_ioctl:invlalid opcode!!\n");
 		kfree(msdc_ctl);
 		return -EINVAL;
 	}
@@ -1190,7 +1190,7 @@ static long simple_sd_compat_ioctl(struct file *file, unsigned int cmd,
 	int err, ret;
 
 	if (!file->f_op || !file->f_op->unlocked_ioctl) {
-		pr_notice("f_op or unlocked ioctl is NULL.\n");
+		pr_debug("f_op or unlocked ioctl is NULL.\n");
 		return -ENOTTY;
 	}
 
@@ -1277,7 +1277,7 @@ static int __init simple_sd_init(void)
 
 	ret = platform_driver_register(&simple_sd_driver);
 	if (ret) {
-		pr_notice(DRV_NAME_MISC ": Can't register driver\n");
+		pr_debug(DRV_NAME_MISC ": Can't register driver\n");
 		return ret;
 	}
 	pr_debug(DRV_NAME_MISC ": MediaTek simple SD/MMC Card Driver\n");
@@ -1286,7 +1286,7 @@ static int __init simple_sd_init(void)
 	/* ret = misc_register(&simple_msdc_em_dev[host->id]); */
 	ret = misc_register(&simple_msdc_em_dev[0]);
 	if (ret) {
-		pr_notice("register MSDC Slot[0] misc driver failed (%d)\n",
+		pr_debug("register MSDC Slot[0] misc driver failed (%d)\n",
 			ret);
 		return ret;
 	}

@@ -645,7 +645,7 @@ static void SCP_sensorHub_notify_cmd(SCP_SENSOR_HUB_DATA_P rsp,
 		mark_ipi_timestamp(arch_counter_get_cntvct() -
 			rsp->notify_rsp.arch_counter);
 #ifdef DEBUG_PERFORMANCE_HW_TICK
-		pr_notice("[Performance] AP_get_ipi Stanley kernel tick:%llu\n",
+		pr_debug("[Performance] AP_get_ipi Stanley kernel tick:%llu\n",
 			arch_counter_get_cntvct());
 
 #endif
@@ -1040,7 +1040,7 @@ static int SCP_sensorHub_report_raw_data(struct data_unit_t *data_t)
 		if (data_t->time_stamp > raw_enable_time)
 			err = obj->dispatch_data_cb[sensor_id](data_t, NULL);
 		else
-			pr_info("ac:%d, e:%lld, d:%lld\n", data_t->flush_action,
+			pr_debug("ac:%d, e:%lld, d:%lld\n", data_t->flush_action,
 				raw_enable_time, data_t->time_stamp);
 	} else if (data_t->flush_action == FLUSH_ACTION) {
 		mutex_lock(&flush_mtx);
@@ -1094,7 +1094,7 @@ static int SCP_sensorHub_report_alt_data(struct data_unit_t *data_t)
 		if (data_t->time_stamp > alt_enable_time)
 			err = obj->dispatch_data_cb[alt_id](data_t, NULL);
 		else
-			pr_info("ac:%d, e:%lld, d:%lld\n", data_t->flush_action,
+			pr_debug("ac:%d, e:%lld, d:%lld\n", data_t->flush_action,
 				alt_enable_time, data_t->time_stamp);
 	} else if (data_t->flush_action == FLUSH_ACTION) {
 		mutex_lock(&flush_mtx);
@@ -1240,7 +1240,7 @@ static int sensor_send_dram_info_to_hub(void)
 		break;
 	}
 	if (retry < total)
-		pr_notice("[sensorHub] sensor_send_dram_info_to_hub success\n");
+		pr_debug("[sensorHub] sensor_send_dram_info_to_hub success\n");
 	return SCP_SENSOR_HUB_SUCCESS;
 }
 
@@ -2123,7 +2123,7 @@ int sensor_set_cmd_to_hub(uint8_t sensorType,
 	case CUST_ACTION_GET_SENSOR_INFO:
 		if (req.set_cust_rsp.getInfo.action !=
 			CUST_ACTION_GET_SENSOR_INFO) {
-			pr_info("scp_sensorHub_req_send failed action!\n");
+			pr_debug("scp_sensorHub_req_send failed action!\n");
 			return -1;
 		}
 		memcpy((struct sensorInfo_t *)data,
@@ -2153,7 +2153,7 @@ static void restoring_enable_sensorHub_sensor(int handle)
 		ret = nanohub_external_write((const uint8_t *)&cmd,
 			sizeof(struct ConfigCmd));
 		if (ret < 0)
-			pr_notice("failed registerlistener handle:%d, cmd:%d\n",
+			pr_debug("failed registerlistener handle:%d, cmd:%d\n",
 				handle, cmd.cmd);
 
 		cmd.cmd = CONFIG_CMD_FLUSH;
@@ -2163,7 +2163,7 @@ static void restoring_enable_sensorHub_sensor(int handle)
 			ret = nanohub_external_write((const uint8_t *)&cmd,
 				sizeof(struct ConfigCmd));
 			if (ret < 0)
-				pr_notice("failed flush handle:%d\n", handle);
+				pr_debug("failed flush handle:%d\n", handle);
 		}
 		mutex_unlock(&flush_mtx);
 	}
@@ -2380,7 +2380,7 @@ static void sensorHub_shutdown(struct platform_device *pdev)
 			ret = nanohub_external_write((const uint8_t *)&cmd,
 				sizeof(struct ConfigCmd));
 			if (ret < 0)
-				pr_notice("failed registerlistener handle:%d, cmd:%d\n",
+				pr_debug("failed registerlistener handle:%d, cmd:%d\n",
 					handle, cmd.cmd);
 		}
 	}

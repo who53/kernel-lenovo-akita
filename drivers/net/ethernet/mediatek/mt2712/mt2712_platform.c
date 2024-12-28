@@ -218,7 +218,7 @@ static int probe(struct platform_device *pdev)
 	/* Get MAC address if available (DT) */
 	mac_addr = of_get_mac_address(np);
 	if (mac_addr) {
-		dev_info(&pdev->dev, "mac addr is %pM\n", mac_addr);
+		dev_dbg(&pdev->dev, "mac addr is %pM\n", mac_addr);
 		ether_addr_copy(dev->dev_addr, mac_addr);
 	} else {
 		dev_warn(&pdev->dev, "no valid MAC address supplied, using a random one\n");
@@ -255,7 +255,7 @@ static int probe(struct platform_device *pdev)
 	}
 
 	dev->irq = irq;
-	dev_info(&pdev->dev, "irq number is %d\n", irq);
+	dev_dbg(&pdev->dev, "irq number is %d\n", irq);
 
 	ret = get_clk(pdev, pdata);
 	if (ret < 0) {

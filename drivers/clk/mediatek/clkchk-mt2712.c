@@ -21,7 +21,7 @@
 
 #define TAG	"[clkchk] "
 
-#define clk_warn(fmt, args...)	pr_warn(TAG fmt, ##args)
+#define clk_warn(fmt, args...)	pr_debug(TAG fmt, ##args)
 
 #if !CLKDBG_CCF_API_4_4
 

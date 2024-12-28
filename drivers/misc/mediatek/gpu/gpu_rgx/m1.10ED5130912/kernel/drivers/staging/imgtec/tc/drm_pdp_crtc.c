@@ -166,7 +166,7 @@ void pdp_crtc_set_plane_enabled(struct drm_crtc *crtc, bool enable)
 					     0, enable);
 		break;
 	case PDP_VERSION_PLATO:
-		dev_info(crtc->dev->dev, "Set plane: %s\n",
+		dev_dbg(crtc->dev->dev, "Set plane: %s\n",
 			enable ? "enable" : "disable");
 
 		value = plato_read_reg32(pdp_crtc->pdp_reg,
@@ -202,7 +202,7 @@ static void pdp_crtc_set_syncgen_enabled(struct drm_crtc *crtc, bool enable)
 					       enable);
 		break;
 	case PDP_VERSION_PLATO:
-		dev_info(crtc->dev->dev, "Set syncgen: %s\n",
+		dev_dbg(crtc->dev->dev, "Set syncgen: %s\n",
 		enable ? "enable" : "disable");
 
 		value = plato_read_reg32(pdp_crtc->pdp_reg,
@@ -537,7 +537,7 @@ static int pdp_crtc_helper_mode_set(struct drm_crtc *crtc,
 	ok = pdp_clocks_set(crtc, adjusted_mode);
 
 	if (!ok) {
-		dev_info(crtc->dev->dev, "%s failed\n", __func__);
+		dev_dbg(crtc->dev->dev, "%s failed\n", __func__);
 		return 0;
 	}
 
@@ -581,7 +581,7 @@ static int pdp_crtc_helper_mode_set(struct drm_crtc *crtc,
 					       pdp_crtc->pdp_reg, true);
 		break;
 	case PDP_VERSION_PLATO:
-		dev_info(crtc->dev->dev,
+		dev_dbg(crtc->dev->dev,
 			 "setting mode to %dx%d\n",
 			 adjusted_mode->hdisplay, adjusted_mode->vdisplay);
 

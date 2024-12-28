@@ -157,7 +157,7 @@ static u32 pmic_pwrap_read(u32 RegNum)
 
 	return_value = regmap_read(pwrap_regmap, RegNum, &pmic_reg);
 	if (return_value != 0) {
-		pr_notice(
+		pr_debug(
 			"[Power/PMIC][pmic_read_interface] Reg[%x]= pmic_wrap read data fail\n",
 			RegNum);
 		return return_value;
@@ -173,7 +173,7 @@ static u32 pmic_pwrap_write(u32 RegNum, u32 val)
 
 	return_value = regmap_read(pwrap_regmap, RegNum, &pmic_reg);
 	if (return_value != 0) {
-		pr_notice(
+		pr_debug(
 			"[Power/PMIC][pmic_config_interface] Reg[%x]= pmic_wrap read data fail\n",
 			RegNum);
 		return return_value;
@@ -184,7 +184,7 @@ static u32 pmic_pwrap_write(u32 RegNum, u32 val)
 
 	return_value = regmap_write(pwrap_regmap, RegNum, pmic_reg);
 	if (return_value != 0) {
-		pr_notice(
+		pr_debug(
 			"[Power/PMIC][pmic_config_interface] Reg[%x]= pmic_wrap read data fail\n",
 			RegNum);
 		return return_value;
@@ -1530,14 +1530,14 @@ static inline int accdet_setup_pmic_irq(struct platform_device *accdet_device)
 
 	node = of_get_child_by_name(accdet_device->dev.of_node, "accdet-pmic");
 	if (!node) {
-		dev_info(&accdet_device->dev,
+		dev_dbg(&accdet_device->dev,
 			"failed to find accdet-pmic sub node\n");
 		return -ENODEV;
 	}
 
 	irq_pmic = irq_of_parse_and_map(node, 0);
 	if (irq_pmic <= 0) {
-		dev_info(&accdet_device->dev, "failed to get accdet-pmic irq\n");
+		dev_dbg(&accdet_device->dev, "failed to get accdet-pmic irq\n");
 		return -EINVAL;
 	}
 
@@ -1545,7 +1545,7 @@ static inline int accdet_setup_pmic_irq(struct platform_device *accdet_device)
 				   IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
 				   "mt6397-accdet", accdet_device);
 	if (ret) {
-		dev_info(&accdet_device->dev, "request accdet-pmic irq fail\n");
+		dev_dbg(&accdet_device->dev, "request accdet-pmic irq fail\n");
 		return ret;
 	}
 

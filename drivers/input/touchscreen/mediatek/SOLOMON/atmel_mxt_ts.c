@@ -634,7 +634,7 @@ static void mxt_debug_msg_enable(struct mxt_data *data)
 	data->debug_v2_enabled = true;
 	mutex_unlock(&data->debug_msg_lock);
 
-	dev_info(dev, "Enabled message output\n");
+	dev_dbg(dev, "Enabled message output\n");
 }
 
 static void mxt_debug_msg_disable(struct mxt_data *data)
@@ -644,7 +644,7 @@ static void mxt_debug_msg_disable(struct mxt_data *data)
 	if (!data->debug_v2_enabled)
 		return;
 
-	dev_info(dev, "disabling message output\n");
+	dev_dbg(dev, "disabling message output\n");
 	data->debug_v2_enabled = false;
 
 	mutex_lock(&data->debug_msg_lock);
@@ -652,7 +652,7 @@ static void mxt_debug_msg_disable(struct mxt_data *data)
 	data->debug_msg_data = NULL;
 	data->debug_msg_count = 0;
 	mutex_unlock(&data->debug_msg_lock);
-	dev_info(dev, "Disabled message output\n");
+	dev_dbg(dev, "Disabled message output\n");
 }
 static void mxt_debug_msg_add(struct mxt_data *data, u8 *msg)
 {
@@ -819,7 +819,7 @@ static int mxt_lookup_bootloader_address(struct mxt_data *data, bool retry)
 	}
 
 	data->bootloader_addr = bootloader;
-    dev_info(&data->client->dev, "mxt: bootloader i2c address 0x%02x \n", bootloader);
+    dev_dbg(&data->client->dev, "mxt: bootloader i2c address 0x%02x \n", bootloader);
 	return 0;
 }
 
@@ -1355,10 +1355,10 @@ static void mxt_proc_t81_message(struct mxt_data *data, u8 *message)
 		input_sync(dev);
 		input_report_key(dev, KEY_POWER, 0);
 		input_sync(dev);
-		dev_info(&data->client->dev, "Report a power key event\n");
+		dev_dbg(&data->client->dev, "Report a power key event\n");
 	}
 
-	dev_info(&data->client->dev, "%s: id: 0x%x, status: 0x%x, xdelta: 0x%x, ydelta: 0x%x\n",
+	dev_dbg(&data->client->dev, "%s: id: 0x%x, status: 0x%x, xdelta: 0x%x, ydelta: 0x%x\n",
 		__func__, id, status, xdelta, ydelta);
 
 	return;
@@ -1474,9 +1474,9 @@ static void mxt_proc_t42_messages(struct mxt_data *data, u8 *msg)
 	u8 status = msg[1];
 
 	if (status & MXT_T42_MSG_TCHSUP)
-		dev_info(dev, "T42 suppress\n");
+		dev_dbg(dev, "T42 suppress\n");
 	else
-		dev_info(dev, "T42 normal\n");
+		dev_dbg(dev, "T42 normal\n");
 }
 
 static int mxt_proc_t48_messages(struct mxt_data *data, u8 *msg)
@@ -2036,7 +2036,7 @@ static int mxt_read_object(struct mxt_data *data,
 
 	reg = object->start_address;
 	if (data->debug_enabled)
-		dev_info(&data->client->dev, "read from object %d, reg 0x%02x, val 0x%x\n",
+		dev_dbg(&data->client->dev, "read from object %d, reg 0x%02x, val 0x%x\n",
 				(int)type, reg + offset, *val);
 	return __mxt_read_reg(data->client, reg + offset, 1, val);
 }
@@ -2064,7 +2064,7 @@ static int mxt_write_object(struct mxt_data *data,
 
 	reg = object->start_address;
 	if (data->debug_enabled)
-		dev_info(&data->client->dev, "write to object %d, reg 0x%02x, val 0x%x\n",
+		dev_dbg(&data->client->dev, "write to object %d, reg 0x%02x, val 0x%x\n",
 				(int)type, reg + offset, val);
 	ret = __mxt_write_reg(data->client, reg + offset, 1, &val);
 
@@ -2111,7 +2111,7 @@ static int mxt_read_lockdown_info(struct mxt_data *data)
 	if (ret)
 		dev_err(dev, "Failed to read lockdown info!\n");
 
-	dev_info(dev, "Lockdown info: %02X %02X %02X %02X %02X %02X %02X %02X",
+	dev_dbg(dev, "Lockdown info: %02X %02X %02X %02X %02X %02X %02X %02X",
 			data->lockdown_info[0], data->lockdown_info[1],
 			data->lockdown_info[2], data->lockdown_info[3],
 			data->lockdown_info[4], data->lockdown_info[5],
@@ -2214,14 +2214,14 @@ static int mxt_update_cfg(struct mxt_data *data, const struct firmware *cfg)
 	 */
 	if (info_crc == data->info_crc) {
 		if (config_crc == 0 || data->config_crc == 0) {
-			dev_info(dev, "CRC zero, attempting to apply config\n");
+			dev_dbg(dev, "CRC zero, attempting to apply config\n");
 		} else if (config_crc == data->config_crc) {
-			dev_info(dev, "Config CRC 0x%06X: OK\n",
+			dev_dbg(dev, "Config CRC 0x%06X: OK\n",
 				data->config_crc);
 			ret = 0;
 			goto release;
 		} else {
-			dev_info(dev, "Config CRC 0x%06X: does not match file 0x%06X\n",
+			dev_dbg(dev, "Config CRC 0x%06X: does not match file 0x%06X\n",
 				 data->config_crc, config_crc);
 		}
 	} else {
@@ -2366,7 +2366,7 @@ static int mxt_update_cfg(struct mxt_data *data, const struct firmware *cfg)
 	ret = mxt_soft_reset(data);
 	if (ret)
 		goto release_mem;
-	dev_info(dev, "Config successfully updated\n");
+	dev_dbg(dev, "Config successfully updated\n");
 
 	/* T7 config may have changed */
 	mxt_init_t7_power_cfg(data);
@@ -2638,7 +2638,7 @@ static int mxt_read_t38_object(struct mxt_data *data)
 	config_info->cfg_version.date = info[5];
 	data->t38_config = info;
 
-	dev_info(dev, "%s: T38 address: 0x%x\n"
+	dev_dbg(dev, "%s: T38 address: 0x%x\n"
 		"data: 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x\n",
 		__func__, data->T38_address, info[0], info[1],
 		info[2], info[3], info[4], info[5]);
@@ -3068,7 +3068,7 @@ static int mxt_read_t100_config(struct mxt_data *data)
 	if (tchaux & MXT_T100_TCHAUX_AREA)
 		data->t100_aux_area = aux++;
 
-	dev_info(&client->dev,
+	dev_dbg(&client->dev,
 		 "T100 Touchscreen size X%uY%u\n", data->max_x, data->max_y);
 
 	return 0;
@@ -3280,7 +3280,7 @@ retry_bootloader:
 				return error;
 			}
 
-			dev_info(&client->dev, "Trying alternate bootloader address\n");
+			dev_dbg(&client->dev, "Trying alternate bootloader address\n");
 			alt_bootloader_addr = true;
 			goto retry_bootloader;
 		} else {
@@ -3531,7 +3531,7 @@ static int mxt_load_fw(struct device *dev)
 	/* Check for incorrect enc file */
 	ret = mxt_check_firmware_format(dev, fw);
 	if (ret) {
-		dev_info(dev, "text format, convert it to binary!\n");
+		dev_dbg(dev, "text format, convert it to binary!\n");
 		len = mxt_convert_text_to_binary(buffer, len);
 		if (len <= 0)
 			goto release_firmware;
@@ -3561,7 +3561,7 @@ static int mxt_load_fw(struct device *dev)
 		ret = mxt_check_bootloader(data, MXT_WAITING_FRAME_DATA, false);
 		AM("\n");
 		if (ret)
-			dev_info(dev, "bootloader status abnormal, but will try updating anyway\n");
+			dev_dbg(dev, "bootloader status abnormal, but will try updating anyway\n");
 	} else {
 
 		msleep(100);
@@ -3577,7 +3577,7 @@ static int mxt_load_fw(struct device *dev)
 		mxt_wait_for_chg(data);
 		ret = mxt_check_bootloader(data, MXT_WAITING_FRAME_DATA, true);
 		if (ret)
-			dev_info(dev, "bootloader status abnormal, but will try updating anyway\n");
+			dev_dbg(dev, "bootloader status abnormal, but will try updating anyway\n");
 
 		frame_size = ((*(buffer + pos) << 8) | *(buffer + pos + 1));
 
@@ -3660,12 +3660,12 @@ static bool is_need_to_update_fw(struct mxt_data *data)
 	int data_pos;
 	int i;
 	u32 info_crc, config_crc;
-	dev_info(dev, "Enter mxt_check_fw_version\n");
+	dev_dbg(dev, "Enter mxt_check_fw_version\n");
 
 	config_name = data->cfg_name;
 
 	if (config_name == NULL) {
-		dev_info(dev, "Not found matched config!\n");
+		dev_dbg(dev, "Not found matched config!\n");
 		return -ENOENT;
 	}
 
@@ -3716,10 +3716,10 @@ static bool is_need_to_update_fw(struct mxt_data *data)
 
 	if (info_crc == data->info_crc) {
 		ret = 0;//FW is the same
-		dev_info(dev, "Firmware does not need updating\n");
+		dev_dbg(dev, "Firmware does not need updating\n");
 	} else {
 		ret = 1;//FW is different
-		dev_info(dev, "Firmware needs updating\n");
+		dev_dbg(dev, "Firmware needs updating\n");
 	}
 
 	release:
@@ -3738,7 +3738,7 @@ static ssize_t mxt_update_fw_store(struct device *dev,
 	if (error)
 		return error;
 	if(!is_need_to_update_fw(data)){
-		dev_info(dev, "no need to update fw\n");
+		dev_dbg(dev, "no need to update fw\n");
 		return count;
 	}
 	error = mxt_load_fw(dev);
@@ -3746,7 +3746,7 @@ static ssize_t mxt_update_fw_store(struct device *dev,
 		dev_err(dev, "The firmware update failed(%d)\n", error);
 		count = error;
 	} else {
-		dev_info(dev, "The firmware update succeeded\n");
+		dev_dbg(dev, "The firmware update succeeded\n");
 
 		data->suspended = false;
 
@@ -3940,7 +3940,7 @@ static ssize_t mxt_sys_suspend_store(struct device *dev,
 
 		value = ctrl & mask3;
 
-		dev_info(dev, "%s: t100 configuration write: 0x%x\n",__func__, value);
+		dev_dbg(dev, "%s: t100 configuration write: 0x%x\n",__func__, value);
 
 		error = __mxt_write_reg(client,t100_obj->start_address, 1,&value);
 		if (error)
@@ -3950,7 +3950,7 @@ static ssize_t mxt_sys_suspend_store(struct device *dev,
 		if (error)
 			dev_err(&client->dev, "%s: i2c sent failed\n", __func__);
 		value = ctrl | mask2;
-		dev_info(&client->dev, "%s: t81_configuration write:0x%x\n",__func__,value);
+		dev_dbg(&client->dev, "%s: t81_configuration write:0x%x\n",__func__,value);
 
 		error = __mxt_write_reg(client,t81_obj->start_address, 1,&value);
 		if (error)
@@ -3961,7 +3961,7 @@ static ssize_t mxt_sys_suspend_store(struct device *dev,
 			dev_err(&client->dev, "%s: i2c sent failed\n", __func__);
 
 		value = ctrl & mask1;
-		dev_info(&client->dev, "%s: else t81 configuration write 0x%x\n",__func__,value);
+		dev_dbg(&client->dev, "%s: else t81 configuration write 0x%x\n",__func__,value);
 
 		error = __mxt_write_reg(client,t81_obj->start_address, 1,&value);
 		if (error)
@@ -5068,7 +5068,7 @@ static int fb_notifier_callback(struct notifier_block *self,
 
 		} else if (*blank == FB_BLANK_POWERDOWN) {
 			if (flush_work(&mxt->fb_notify_work))
-				pr_warn("%s: waited resume worker finished\n", __func__);
+				pr_debug("%s: waited resume worker finished\n", __func__);
 
 			/* Disable general touch event reporting */
 			mxt_config_ctrl_clear(mxt, mxt->T100_address, 0x02);

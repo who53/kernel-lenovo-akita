@@ -66,8 +66,8 @@ uint64_t sdsp_elf_pa[2] = { 0, 0 };
 #endif
 
 #define KREE_DEBUG(fmt...) pr_debug("[KREE]" fmt)
-#define KREE_INFO(fmt...) pr_info("[KREE]" fmt)
-#define KREE_ERR(fmt...) pr_info("[KREE][ERR]" fmt)
+#define KREE_INFO(fmt...) pr_debug("[KREE]" fmt)
+#define KREE_ERR(fmt...) pr_debug("[KREE][ERR]" fmt)
 
 static const struct file_operations fops = {.owner = THIS_MODULE,
 	.open = gz_dev_open,
@@ -206,7 +206,7 @@ static int get_gz_version(void *args)
 	}
 	version_str[i] = '\0';
 
-	dev_info(gz_device.this_device, "GZ version: %s\n", version_str);
+	dev_dbg(gz_device.this_device, "GZ version: %s\n", version_str);
 	KREE_DEBUG("GZ version is : %s.....\n", version_str);
 
 err_get_char:

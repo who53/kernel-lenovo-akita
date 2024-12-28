@@ -90,9 +90,9 @@ static void tinysys_time_sync(void)
 		mdelay(5);
 	} while (timeout > 0);
 #if 0
-	pr_notice("SCP: timer sync log:%d, %u, %u\n", ret, ts_ctl.ts_h,
+	pr_debug("SCP: timer sync log:%d, %u, %u\n", ret, ts_ctl.ts_h,
 			ts_ctl.ts_l);
-	pr_notice("SCP: timer sync log:%d, %u, %u\n", ret, ts_ctl.clk_h,
+	pr_debug("SCP: timer sync log:%d, %u, %u\n", ret, ts_ctl.clk_h,
 			ts_ctl.clk_l);
 #endif
 

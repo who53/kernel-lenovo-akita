@@ -77,7 +77,7 @@ static int dbmd4_uart_sync(struct dbmdx_private *p)
 	u32 expected_divider;
 	u32 clock_rate;
 
-	dev_info(p->dev, "%s: start boot sync\n", __func__);
+	dev_dbg(p->dev, "%s: start boot sync\n", __func__);
 
 	memset(sync_buf, 0, sizeof(sync_buf));
 	memset(rx_divider, 0, sizeof(rx_divider));
@@ -102,7 +102,7 @@ static int dbmd4_uart_sync(struct dbmdx_private *p)
 	clock_rate = p->master_pll_rate;
 
 	if (clock_rate == 0) {
-		dev_info(uart_p->dev,
+		dev_dbg(uart_p->dev,
 			"%s: No master clock defined, cannot verify divider\n",
 			__func__);
 		return 0;
@@ -260,7 +260,7 @@ static int dbmd4_uart_load_firmware(const void *fw_data, size_t fw_size,
 		}
 	}
 
-	dev_info(p->dev, "%s: ---------> firmware loaded\n", __func__);
+	dev_dbg(p->dev, "%s: ---------> firmware loaded\n", __func__);
 
 	return 0;
 }

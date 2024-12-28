@@ -1955,7 +1955,7 @@ static int r8a66597_probe(struct platform_device *pdev)
 	if (ret)
 		goto err_add_udc;
 
-	dev_info(dev, "version %s\n", DRIVER_VERSION);
+	dev_dbg(dev, "version %s\n", DRIVER_VERSION);
 	return 0;
 
 err_add_udc:

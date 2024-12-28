@@ -33,7 +33,7 @@ struct mtk_simple_regulator_device *mtk_simple_regulator_device_register(
 	int ret = 0;
 	struct mtk_simple_regulator_device *mreg_dev = NULL;
 
-	pr_info("%s: name = %s\n", __func__, name);
+	pr_debug("%s: name = %s\n", __func__, name);
 	mreg_dev = kzalloc(sizeof(struct mtk_simple_regulator_device),
 		GFP_KERNEL);
 	if (!mreg_dev)
@@ -89,7 +89,7 @@ static int __init mtk_simple_regulator_class_init(void)
 {
 	mreg_class = class_create(THIS_MODULE, "mtk_simple_regulator");
 	if (IS_ERR(mreg_class)) {
-		pr_info("%s: Unable to create mreg class, errno = %ld\n",
+		pr_debug("%s: Unable to create mreg class, errno = %ld\n",
 			__func__, PTR_ERR(mreg_class));
 		return PTR_ERR(mreg_class);
 	}

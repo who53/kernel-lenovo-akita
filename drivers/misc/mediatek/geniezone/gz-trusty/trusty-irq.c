@@ -92,7 +92,7 @@ static void trusty_irq_enable_irqset(struct trusty_irq_state *is,
 
 	hlist_for_each_entry(trusty_irq, &irqset->inactive, node) {
 		if (trusty_irq->enable) {
-			dev_info(is->dev,
+			dev_dbg(is->dev,
 				 "%s: percpu irq %d already enabled, cpu %d\n",
 				 __func__, trusty_irq->irq, smp_processor_id());
 			continue;
@@ -112,7 +112,7 @@ static void trusty_irq_disable_irqset(struct trusty_irq_state *is,
 
 	hlist_for_each_entry(trusty_irq, &irqset->inactive, node) {
 		if (!trusty_irq->enable) {
-			dev_info(is->dev,
+			dev_dbg(is->dev,
 				 "irq %d already disabled, percpu %d, cpu %d\n",
 				 trusty_irq->irq, trusty_irq->percpu,
 				 smp_processor_id());
@@ -129,7 +129,7 @@ static void trusty_irq_disable_irqset(struct trusty_irq_state *is,
 	}
 	hlist_for_each_entry_safe(trusty_irq, n, &irqset->pending, node) {
 		if (!trusty_irq->enable) {
-			dev_info(is->dev,
+			dev_dbg(is->dev,
 				 "pending irq %d already disabled, percpu %d, cpu %d\n",
 				 trusty_irq->irq, trusty_irq->percpu,
 				 smp_processor_id());
@@ -304,7 +304,7 @@ static int trusty_irq_create_irq_mapping(struct trusty_irq_state *is, int irq)
 	irq_pos = oirq.args[0];
 
 	if (irq_pos >= oirq.args_count) {
-		dev_info(is->dev, "irq pos is out of range: %d\n", irq_pos);
+		dev_dbg(is->dev, "irq pos is out of range: %d\n", irq_pos);
 		return -EINVAL;
 	}
 
@@ -332,7 +332,7 @@ static int trusty_irq_init_normal_irq(struct trusty_irq_state *is, int tirq)
 #if 0
 	irq = trusty_irq_create_irq_mapping(is, tirq);
 	if (irq < 0) {
-		dev_info(is->dev,
+		dev_dbg(is->dev,
 			 "trusty_irq_create_irq_mapping failed (%d)\n", irq);
 		return irq;
 	}
@@ -348,7 +348,7 @@ static int trusty_irq_init_normal_irq(struct trusty_irq_state *is, int tirq)
 
 		if (irq < 32) {
 			ret = -EINVAL;
-			dev_info(is->dev, "SPI only, no %d\n", irq);
+			dev_dbg(is->dev, "SPI only, no %d\n", irq);
 			goto err_request_irq;
 		}
 
@@ -379,7 +379,7 @@ static int trusty_irq_init_normal_irq(struct trusty_irq_state *is, int tirq)
 	ret = request_irq(irq, trusty_irq_handler, IRQF_NO_THREAD,
 			  "trusty", trusty_irq);
 	if (ret) {
-		dev_info(is->dev, "request_irq failed %d\n", ret);
+		dev_dbg(is->dev, "request_irq failed %d\n", ret);
 		goto err_request_irq;
 	}
 	return 0;
@@ -404,7 +404,7 @@ static int trusty_irq_init_per_cpu_irq(struct trusty_irq_state *is, int tirq)
 #if 0
 	irq = trusty_irq_create_irq_mapping(is, tirq);
 	if (irq <= 0) {
-		dev_info(is->dev,
+		dev_dbg(is->dev,
 			 "trusty_irq_create_irq_mapping failed (%d)\n", irq);
 		return irq;
 	}
@@ -440,7 +440,7 @@ static int trusty_irq_init_per_cpu_irq(struct trusty_irq_state *is, int tirq)
 
 		if (irq >= 32) {
 			ret = -EINVAL;
-			dev_info(is->dev, "Not support SPI %d\n", irq);
+			dev_dbg(is->dev, "Not support SPI %d\n", irq);
 			goto err_request_percpu_irq;
 		}
 
@@ -466,7 +466,7 @@ static int trusty_irq_init_per_cpu_irq(struct trusty_irq_state *is, int tirq)
 	ret = request_percpu_irq(irq, trusty_irq_handler, "trusty",
 				 trusty_irq_handler_data);
 	if (ret) {
-		dev_info(is->dev, "request_percpu_irq failed %d\n", ret);
+		dev_dbg(is->dev, "request_percpu_irq failed %d\n", ret);
 		goto err_request_percpu_irq;
 	}
 
@@ -509,7 +509,7 @@ static int trusty_irq_init_one(struct trusty_irq_state *is,
 		ret = trusty_irq_init_normal_irq(is, irq);
 
 	if (ret)
-		dev_info(is->dev, "init irq %d failed, ignored irq\n", irq);
+		dev_dbg(is->dev, "init irq %d failed, ignored irq\n", irq);
 
 	return irq + 1;
 }
@@ -578,7 +578,7 @@ static int trusty_irq_probe(struct platform_device *pdev)
 			   *pnode = pdev->dev.parent->of_node;
 
 	if (!node || !pnode) {
-		dev_info(&pdev->dev, "of_node required\n");
+		dev_dbg(&pdev->dev, "of_node required\n");
 		return -EINVAL;
 	}
 
@@ -588,11 +588,11 @@ static int trusty_irq_probe(struct platform_device *pdev)
 
 	ret = of_property_read_u32(pnode, "tee-id", &tee_id);
 	if (ret != 0 || !is_tee_id(tee_id)) {
-		dev_info(&pdev->dev, "tee_id is not set on device tree\n");
+		dev_dbg(&pdev->dev, "tee_id is not set on device tree\n");
 		return -EINVAL;
 	}
 
-	dev_info(&pdev->dev, "--- init trusty-irq for MTEE %d ---\n", tee_id);
+	dev_dbg(&pdev->dev, "--- init trusty-irq for MTEE %d ---\n", tee_id);
 
 	is = kzalloc(sizeof(struct trusty_irq_state), GFP_KERNEL);
 	if (!is) {
@@ -614,7 +614,7 @@ static int trusty_irq_probe(struct platform_device *pdev)
 	ret = trusty_call_notifier_register(is->trusty_dev,
 					    &is->trusty_call_notifier);
 	if (ret) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "failed to register trusty call notifier\n");
 		goto err_trusty_call_notifier_register;
 	}
@@ -627,7 +627,7 @@ static int trusty_irq_probe(struct platform_device *pdev)
 	ret = cpuhp_state_add_instance(trusty_irq_cpuhp_slot,
 				       &is->cpuhp_node);
 	if (ret < 0) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "cpuhp_state_add_instance failed %d\n", ret);
 		goto err_add_cpuhp_instance;
 	}

@@ -120,7 +120,7 @@ int ps_data_report(int value, int status)
 
 	memset(&event, 0, sizeof(struct sensor_event));
 
-	pr_notice("[ALS/PS]%s! %d, %d\n", __func__, value, status);
+	pr_debug("[ALS/PS]%s! %d, %d\n", __func__, value, status);
 	event.flush_action = DATA_ACTION;
 	event.word[0] = value + 1;
 	event.status = status;
@@ -991,7 +991,7 @@ int ps_report_interrupt_data(int value)
 	struct alsps_context *cxt = NULL;
 	/* int err =0; */
 	cxt = alsps_context_obj;
-	pr_notice("[ALS/PS] [%s]:value=%d\n", __func__, value);
+	pr_debug("[ALS/PS] [%s]:value=%d\n", __func__, value);
 	if (cxt->is_get_valid_ps_data_after_enable == false) {
 		if (value != ALSPS_INVALID_VALUE) {
 			cxt->is_get_valid_ps_data_after_enable = true;

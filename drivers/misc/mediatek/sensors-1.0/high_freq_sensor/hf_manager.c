@@ -385,10 +385,10 @@ static void hf_manager_find_best_param(uint8_t sensor_id,
 	*latency = tmp_latency;
 
 	if (tmp_action == HF_MANAGER_SENSOR_ENABLE)
-		pr_notice("%s: %d,%d,%lld,%lld\n", __func__,
+		pr_debug("%s: %d,%d,%lld,%lld\n", __func__,
 			sensor_id, tmp_action, tmp_delay, tmp_latency);
 	else if (tmp_action == HF_MANAGER_SENSOR_DISABLE)
-		pr_notice("%s: %d,%d\n", __func__, sensor_id, tmp_action);
+		pr_debug("%s: %d,%d\n", __func__, sensor_id, tmp_action);
 }
 
 static bool device_rebatch(uint8_t sensor_id,
@@ -526,7 +526,7 @@ static int hf_manager_drive_device(struct hf_client *client,
 		return -EINVAL;
 	}
 
-	pr_notice("%s: %s: %d,%d,%lld,%lld\n", __func__, device->dev_name,
+	pr_debug("%s: %s: %d,%d,%lld,%lld\n", __func__, device->dev_name,
 		cmd->sensor_id, cmd->action, cmd->delay, cmd->latency);
 
 	switch (cmd->action) {
@@ -570,7 +570,7 @@ static int hf_manager_open(struct inode *inode, struct file *filp)
 	client->leader_pid = current->group_leader->pid;
 	client->pid = current->pid;
 
-	pr_notice("%s: [%s][%d:%d]\n", __func__, current->comm,
+	pr_debug("%s: [%s][%d:%d]\n", __func__, current->comm,
 		current->group_leader->pid, current->pid);
 
 	INIT_LIST_HEAD(&client->list);
@@ -609,7 +609,7 @@ static int hf_manager_release(struct inode *inode, struct file *filp)
 	unsigned long flags;
 	struct hf_client *client = filp->private_data;
 
-	pr_notice("%s: [%s][%d:%d]\n", __func__, current->comm,
+	pr_debug("%s: [%s][%d:%d]\n", __func__, current->comm,
 		current->group_leader->pid, current->pid);
 
 	filp->private_data = NULL;

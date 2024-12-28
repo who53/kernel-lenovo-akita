@@ -35,7 +35,7 @@ uint32_t TEECK_Icnt_Counter(KREE_SESSION_HANDLE session,
 
 	ret = KREE_TeeServiceCall(session, TZCMD_ICNT_COUNT, paramTypes, param);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("ServiceCall error %d\n", ret);
+		pr_debug("ServiceCall error %d\n", ret);
 
 	*a = param[0].value.a;
 	*b = param[1].value.a;
@@ -53,7 +53,7 @@ uint32_t TEECK_Icnt_Rate(KREE_SESSION_HANDLE session, uint32_t *a)
 
 	ret = KREE_TeeServiceCall(session, TZCMD_ICNT_RATE, paramTypes, param);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("ServiceCall error %d\n", ret);
+		pr_debug("ServiceCall error %d\n", ret);
 
 	*a = param[0].value.a;
 
@@ -71,7 +71,7 @@ int update_counter_thread(void *data)
 
 	ret = KREE_CreateSession(TZ_TA_ICNT_UUID, &icnt_session);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("CreateSession error %d\n", ret);
+		pr_debug("CreateSession error %d\n", ret);
 		return 1;
 	}
 
@@ -103,7 +103,7 @@ int update_counter_thread(void *data)
 
 	ret = KREE_CloseSession(icnt_session);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("CloseSession error %d\n", ret);
+		pr_debug("CloseSession error %d\n", ret);
 		return 1;
 	}
 

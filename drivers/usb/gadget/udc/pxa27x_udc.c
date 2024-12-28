@@ -2319,7 +2319,7 @@ static void irq_udc_reset(struct pxa_udc *udc)
 	u32 udccr = udc_readl(udc, UDCCR);
 	struct pxa_ep *ep = &udc->pxa_ep[0];
 
-	dev_info(udc->dev, "USB reset\n");
+	dev_dbg(udc->dev, "USB reset\n");
 	udc_writel(udc, UDCISR1, UDCISR1_IRRS);
 	udc->stats.irqs_reset++;
 

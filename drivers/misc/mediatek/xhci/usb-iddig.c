@@ -237,13 +237,13 @@ static int otg_iddig_probe(struct platform_device *pdev)
 
 	pinctrl = devm_pinctrl_get(dev);
 	if (IS_ERR(pinctrl)) {
-		dev_info(&pdev->dev, "Cannot find usb pinctrl!\n");
+		dev_dbg(&pdev->dev, "Cannot find usb pinctrl!\n");
 		return -1;
 	}
 
 	pinctrl_iddig_init = pinctrl_lookup_state(pinctrl, "iddig_init");
 	if (IS_ERR(pinctrl_iddig_init))
-		dev_info(&pdev->dev, "Cannot find usb pinctrl iddig_init\n");
+		dev_dbg(&pdev->dev, "Cannot find usb pinctrl iddig_init\n");
 	else
 		pinctrl_select_state(pinctrl, pinctrl_iddig_init);
 
@@ -252,10 +252,10 @@ static int otg_iddig_probe(struct platform_device *pdev)
 	pinctrl_iddig_enable = pinctrl_lookup_state(pinctrl, "iddig_enable");
 	pinctrl_iddig_disable = pinctrl_lookup_state(pinctrl, "iddig_disable");
 	if (IS_ERR(pinctrl_iddig_enable))
-		dev_info(&pdev->dev, "Cannot find usb pinctrl iddig_enable\n");
+		dev_dbg(&pdev->dev, "Cannot find usb pinctrl iddig_enable\n");
 
 	if (IS_ERR(pinctrl_iddig_disable))
-		dev_info(&pdev->dev, "Cannot find usb pinctrl iddig_disable\n");
+		dev_dbg(&pdev->dev, "Cannot find usb pinctrl iddig_disable\n");
 	else
 		pinctrl_select_state(pinctrl, pinctrl_iddig_disable);
 #endif
@@ -276,7 +276,7 @@ static int otg_iddig_probe(struct platform_device *pdev)
 #ifdef CONFIG_SYSFS
 	retval = sysfs_create_group(&pdev->dev.kobj, &otg_attr_group);
 	if (retval < 0) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			"Cannot register USB bus sysfs attributes: %d\n",
 			retval);
 		return retval;
@@ -348,7 +348,7 @@ static ssize_t otg_mode_show(struct device *dev,
 		struct device_attribute *attr, char *buf)
 {
 	if (!dev) {
-		dev_info(dev, "otg_mode_store no dev\n");
+		dev_dbg(dev, "otg_mode_store no dev\n");
 		return 0;
 	}
 
@@ -361,7 +361,7 @@ static ssize_t otg_mode_store(struct device *dev, struct device_attribute *attr,
 	unsigned int mode;
 
 	if (!dev) {
-		dev_info(dev, "%s no dev\n", __func__);
+		dev_dbg(dev, "%s no dev\n", __func__);
 		return count;
 	}
 

@@ -362,7 +362,7 @@ static void oc_int_work(struct work_struct *work)
 	name = oc_work->name;
 	mutex_unlock(&oc_int_mutex);
 	if (pmic_check_intNo(intNo, &spNo, &sp_conNo, &sp_irqNo)) {
-		pr_notice(PMICTAG "[%s] fail intNo=%d\n", __func__, intNo);
+		pr_debug(PMICTAG "[%s] fail intNo=%d\n", __func__, intNo);
 		return;
 	}
 	switch (intNo) {
@@ -375,7 +375,7 @@ static void oc_int_work(struct work_struct *work)
 		oc_reg = PMIC_RGS_VIO28_OC_STATUS;
 		break;
 	default:
-		pr_notice(PMICTAG "[%s] %s no need to handle\n",
+		pr_debug(PMICTAG "[%s] %s no need to handle\n",
 			__func__, oc_work->name);
 		return;
 	}
@@ -389,7 +389,7 @@ static void oc_int_work(struct work_struct *work)
 	upmu_set_reg_value((sp_interrupts[spNo].status + 0x2 * sp_conNo),
 			   1 << sp_irqNo);
 	pmic_enable_interrupt(intNo, 1, "PMIC");
-	pr_info("[%s] %s is resolved\n", __func__, name);
+	pr_debug("[%s] %s is resolved\n", __func__, name);
 }
 
 #if ENABLE_ALL_OC_IRQ
@@ -403,7 +403,7 @@ static void oc_int_handler(enum PMIC_IRQ_ENUM intNo, const char *int_name)
 #endif
 
 	if (pmic_check_intNo(intNo, &spNo, &sp_conNo, &sp_irqNo)) {
-		pr_notice(PMICTAG "[%s] fail intNo=%d\n", __func__, intNo);
+		pr_debug(PMICTAG "[%s] fail intNo=%d\n", __func__, intNo);
 		return;
 	}
 	times = sp_interrupts[spNo].sp_irqs[sp_conNo][sp_irqNo].times;
@@ -422,35 +422,35 @@ static void oc_int_handler(enum PMIC_IRQ_ENUM intNo, const char *int_name)
 	case INT_VA12_OC:
 	case INT_VUSB_OC:
 		/* keep OC interrupt and keep tracking */
-		pr_notice(PMICTAG "[PMIC_INT] PMIC OC: %s\n", int_name);
+		pr_debug(PMICTAG "[PMIC_INT] PMIC OC: %s\n", int_name);
 		if (times >= 10) {
 			pmic_enable_interrupt(intNo, 0, "PMIC");
-			pr_notice("disable OC interrupt: %s\n", int_name);
+			pr_debug("disable OC interrupt: %s\n", int_name);
 		}
 		break;
 	case INT_VIO18_OC:
-		pr_notice("VIO18_PG_DEB=%d,RGS_VIO18_PG_STATUS=%d\n",
+		pr_debug("VIO18_PG_DEB=%d,RGS_VIO18_PG_STATUS=%d\n",
 			pmic_get_register_value(PMIC_VIO18_PG_DEB),
 			pmic_get_register_value(PMIC_RGS_VIO18_PG_STATUS));
-		pr_notice("RG_INT_EN_VIO18_OC=0x%x\n",
+		pr_debug("RG_INT_EN_VIO18_OC=0x%x\n",
 			pmic_get_register_value(PMIC_RG_INT_EN_VIO18_OC));
-		pr_notice("RG_INT_MASK_VIO18_OC=0x%x\n",
+		pr_debug("RG_INT_MASK_VIO18_OC=0x%x\n",
 			pmic_get_register_value(PMIC_RG_INT_MASK_VIO18_OC));
-		pr_notice("RG_INT_STATUS_VIO18_OC=0x%x\n",
+		pr_debug("RG_INT_STATUS_VIO18_OC=0x%x\n",
 			pmic_get_register_value(PMIC_RG_INT_STATUS_VIO18_OC));
-		pr_notice("RG_INT_RAW_STATUS_VIO18_OC=0x%x\n",
+		pr_debug("RG_INT_RAW_STATUS_VIO18_OC=0x%x\n",
 			pmic_get_register_value(
 				PMIC_RG_INT_RAW_STATUS_VIO18_OC));
-		pr_notice("LDO_VIO18_CON0=0x%x,LDO_VIO18_MON=0x%x\n",
+		pr_debug("LDO_VIO18_CON0=0x%x,LDO_VIO18_MON=0x%x\n",
 			upmu_get_reg_value(MT6359_LDO_VIO18_CON0),
 			upmu_get_reg_value(MT6359_LDO_VIO18_MON));
-		pr_notice("LDO_VIO18_OP_EN=0x%x,LDO_VIO18_OP_CFG=0x%x\n",
+		pr_debug("LDO_VIO18_OP_EN=0x%x,LDO_VIO18_OP_CFG=0x%x\n",
 			upmu_get_reg_value(MT6359_LDO_VIO18_OP_EN),
 			upmu_get_reg_value(MT6359_LDO_VIO18_OP_CFG));
-		pr_notice("VIO18_ANA_CON0=0x%x,VIO18_ANA_CON1=0x%x\n",
+		pr_debug("VIO18_ANA_CON0=0x%x,VIO18_ANA_CON1=0x%x\n",
 			upmu_get_reg_value(MT6359_VIO18_ANA_CON0),
 			upmu_get_reg_value(MT6359_VIO18_ANA_CON1));
-		pr_notice("XO_FPM_ISEL_M=0x%x\n",
+		pr_debug("XO_FPM_ISEL_M=0x%x\n",
 			pmic_get_register_value(PMIC_XO_FPM_ISEL_M));
 		if (times >= 2) {
 #if defined(CONFIG_MTK_AEE_FEATURE)
@@ -461,7 +461,7 @@ static void oc_int_handler(enum PMIC_IRQ_ENUM intNo, const char *int_name)
 				int_name);
 #endif
 			pmic_enable_interrupt(intNo, 0, "PMIC");
-			pr_notice("disable OC interrupt: %s\n", int_name);
+			pr_debug("disable OC interrupt: %s\n", int_name);
 		}
 		break;
 	default:
@@ -476,7 +476,7 @@ static void oc_int_handler(enum PMIC_IRQ_ENUM intNo, const char *int_name)
 				int_name);
 #endif
 			pmic_enable_interrupt(intNo, 0, "PMIC");
-			pr_notice("disable OC interrupt: %s\n", int_name);
+			pr_debug("disable OC interrupt: %s\n", int_name);
 		}
 		break;
 	}
@@ -495,7 +495,7 @@ static void md_oc_int_handler(enum PMIC_IRQ_ENUM intNo, const char *int_name)
 	unsigned int times;
 
 	if (pmic_check_intNo(intNo, &spNo, &sp_conNo, &sp_irqNo)) {
-		pr_notice(PMICTAG "[%s] fail intNo=%d\n", __func__, intNo);
+		pr_debug(PMICTAG "[%s] fail intNo=%d\n", __func__, intNo);
 		return;
 	}
 	times = sp_interrupts[spNo].sp_irqs[sp_conNo][sp_irqNo].times;
@@ -505,14 +505,14 @@ static void md_oc_int_handler(enum PMIC_IRQ_ENUM intNo, const char *int_name)
 		break;
 	case INT_VFE28_OC:
 		data_int32 = 1 << 1;
-		pr_notice("Reg[0x1B8A]=0x%x,Reg[0x1B88]=0x%x,Reg[0x1B8C]=0x%x,Reg[0x1B92]=0x%x\n"
+		pr_debug("Reg[0x1B8A]=0x%x,Reg[0x1B88]=0x%x,Reg[0x1B8C]=0x%x,Reg[0x1B92]=0x%x\n"
 			, upmu_get_reg_value(0x1B8A),
 			upmu_get_reg_value(0x1B88),
 			upmu_get_reg_value(0x1B8C),
 			upmu_get_reg_value(0x1B92));
 		if (times >= 10) {
 			pmic_enable_interrupt(intNo, 0, "PMIC");
-			pr_notice("disable OC interrupt: %s\n", int_name);
+			pr_debug("disable OC interrupt: %s\n", int_name);
 		}
 		break;
 	case INT_VRF12_OC:
@@ -534,9 +534,9 @@ static void md_oc_int_handler(enum PMIC_IRQ_ENUM intNo, const char *int_name)
 					(char *)&data_int32, 4);
 #endif
 	if (ret)
-		pr_notice("[%s] - exec_ccci_kern_func_by_md_id - msg fail\n"
+		pr_debug("[%s] - exec_ccci_kern_func_by_md_id - msg fail\n"
 			  , __func__);
-	pr_info("[%s]Send msg pass\n", __func__);
+	pr_debug("[%s]Send msg pass\n", __func__);
 }
 #endif
 
@@ -554,7 +554,7 @@ void wake_up_pmic(void)
 		pmic_wake_lock(&pmicThread_lock);
 		wake_up_process(pmic_thread_handle);
 	} else {
-		pr_notice(PMICTAG "[%s] pmic_thread_handle not ready\n"
+		pr_debug(PMICTAG "[%s] pmic_thread_handle not ready\n"
 			, __func__);
 		return;
 	}
@@ -575,11 +575,11 @@ void pmic_enable_interrupt(enum PMIC_IRQ_ENUM intNo, unsigned int en, char *str)
 
 	if (pmic_check_intNo(intNo, &spNo, &sp_conNo, &sp_irqNo)) {
 		if (intNo == INT_ENUM_MAX) {
-			pr_info(PMICTAG "[%s] disable intNo=%d\n", __func__,
+			pr_debug(PMICTAG "[%s] disable intNo=%d\n", __func__,
 				intNo);
 			return;
 		}
-		pr_notice(PMICTAG "[%s] fail intNo=%d\n", __func__, intNo);
+		pr_debug(PMICTAG "[%s] fail intNo=%d\n", __func__, intNo);
 		return;
 	}
 	enable_reg = sp_interrupts[spNo].enable + 0x6 * sp_conNo;
@@ -610,7 +610,7 @@ void pmic_mask_interrupt(enum PMIC_IRQ_ENUM intNo, char *str)
 	unsigned int mask_reg;
 
 	if (pmic_check_intNo(intNo, &spNo, &sp_conNo, &sp_irqNo)) {
-		pr_notice(PMICTAG "[%s] fail intNo=%d\n", __func__, intNo);
+		pr_debug(PMICTAG "[%s] fail intNo=%d\n", __func__, intNo);
 		return;
 	}
 	mask_reg = sp_interrupts[spNo].mask + 0x6 * sp_conNo;
@@ -631,7 +631,7 @@ void pmic_unmask_interrupt(enum PMIC_IRQ_ENUM intNo, char *str)
 	unsigned int mask_reg;
 
 	if (pmic_check_intNo(intNo, &spNo, &sp_conNo, &sp_irqNo)) {
-		pr_notice(PMICTAG "[%s] fail intNo=%d\n", __func__, intNo);
+		pr_debug(PMICTAG "[%s] fail intNo=%d\n", __func__, intNo);
 		return;
 	}
 	mask_reg = sp_interrupts[spNo].mask + 0x6 * sp_conNo;
@@ -652,11 +652,11 @@ void pmic_register_interrupt_callback(enum PMIC_IRQ_ENUM intNo,
 	unsigned int spNo, sp_conNo, sp_irqNo;
 
 	if (pmic_check_intNo(intNo, &spNo, &sp_conNo, &sp_irqNo)) {
-		pr_notice(PMICTAG "[%s] fail intNo=%d\n", __func__, intNo);
+		pr_debug(PMICTAG "[%s] fail intNo=%d\n", __func__, intNo);
 		return;
 	} else if (sp_interrupts[spNo].sp_irqs[sp_conNo][sp_irqNo].callback !=
 									NULL) {
-		pr_notice(PMICTAG "[%s] register callback conflict intNo=%d\n"
+		pr_debug(PMICTAG "[%s] register callback conflict intNo=%d\n"
 			, __func__, intNo);
 		return;
 	}
@@ -673,7 +673,7 @@ void pmic_register_oc_interrupt_callback(enum PMIC_IRQ_ENUM intNo)
 	unsigned int spNo, sp_conNo, sp_irqNo;
 
 	if (pmic_check_intNo(intNo, &spNo, &sp_conNo, &sp_irqNo)) {
-		pr_notice(PMICTAG "[%s] fail intNo=%d\n", __func__, intNo);
+		pr_debug(PMICTAG "[%s] fail intNo=%d\n", __func__, intNo);
 		return;
 	}
 	IRQLOG("[%s] intNo=%d\n", __func__, intNo);
@@ -750,7 +750,7 @@ static void pmic_sp_irq_handler(unsigned int spNo,
 	for (i = 0; i < PMIC_INT_WIDTH; i++) {
 		if (sp_int_status & (1 << i)) {
 			sp_irq = &(sp_interrupts[spNo].sp_irqs[sp_conNo][i]);
-			pr_info("[PMIC_INT][%s]\n", sp_irq->name);
+			pr_debug("[PMIC_INT][%s]\n", sp_irq->name);
 			sp_irq->times++;
 			if (sp_irq->callback != NULL)
 				sp_irq->callback();
@@ -854,7 +854,7 @@ static void irq_thread_init(void)
 					    (void *)NULL, "pmic_thread");
 	if (IS_ERR(pmic_thread_handle)) {
 		pmic_thread_handle = NULL;
-		pr_notice(PMICTAG "[pmic_thread_kthread] creation fails\n");
+		pr_debug(PMICTAG "[pmic_thread_kthread] creation fails\n");
 	} else {
 		IRQLOG("[pmic_thread_kthread] kthread_create Done\n");
 	}
@@ -924,10 +924,10 @@ void PMIC_EINT_SETTING(struct platform_device *pdev)
 		ret = request_irq(g_pmic_irq, (irq_handler_t)mt_pmic_eint_irq,
 			IRQF_TRIGGER_NONE, "pmic-eint", NULL);
 		if (ret > 0)
-			pr_notice(PMICTAG "EINT IRQ NOT AVAILABLE\n");
+			pr_debug(PMICTAG "EINT IRQ NOT AVAILABLE\n");
 		enable_irq_wake(g_pmic_irq);
 	} else
-		pr_notice(PMICTAG "can't find compatible node\n");
+		pr_debug(PMICTAG "can't find compatible node\n");
 
 	INIT_WORK(&g_oc_work.work, oc_int_work);
 }
@@ -1102,12 +1102,12 @@ int pmic_irq_debug_init(struct dentry *debug_dir)
 	struct dentry *pmic_irq_dir;
 
 	if (IS_ERR(debug_dir) || !debug_dir) {
-		pr_notice(PMICTAG "dir mtk_pmic does not exist\n");
+		pr_debug(PMICTAG "dir mtk_pmic does not exist\n");
 		return -1;
 	}
 	pmic_irq_dir = debugfs_create_dir("pmic_irq", debug_dir);
 	if (IS_ERR(pmic_irq_dir) || !pmic_irq_dir) {
-		pr_notice(PMICTAG "fail to mkdir /sys/kernel/debug/mtk_pmic/pmic_irq\n"
+		pr_debug(PMICTAG "fail to mkdir /sys/kernel/debug/mtk_pmic/pmic_irq\n"
 			  );
 		return -1;
 	}

@@ -201,7 +201,7 @@ static inline struct lpc32xx_udc *to_udc(struct usb_gadget *g)
 #define ep_err(epp, fmt, arg...) \
 	dev_err(epp->udc->dev, "%s: " fmt, __func__, ## arg)
 #define ep_info(epp, fmt, arg...) \
-	dev_info(epp->udc->dev, "%s: " fmt, __func__, ## arg)
+	dev_dbg(epp->udc->dev, "%s: " fmt, __func__, ## arg)
 #define ep_warn(epp, fmt, arg...) \
 	dev_warn(epp->udc->dev, "%s:" fmt, __func__, ## arg)
 
@@ -626,11 +626,11 @@ static void isp1301_udc_configure(struct lpc32xx_udc *udc)
 	i2c_smbus_write_byte_data(udc->isp1301_i2c_client,
 		ISP1301_I2C_INTERRUPT_RISING, INT_VBUS_VLD);
 
-	dev_info(udc->dev, "ISP1301 Vendor ID  : 0x%04x\n",
+	dev_dbg(udc->dev, "ISP1301 Vendor ID  : 0x%04x\n",
 		 i2c_smbus_read_word_data(udc->isp1301_i2c_client, 0x00));
-	dev_info(udc->dev, "ISP1301 Product ID : 0x%04x\n",
+	dev_dbg(udc->dev, "ISP1301 Product ID : 0x%04x\n",
 		 i2c_smbus_read_word_data(udc->isp1301_i2c_client, 0x02));
-	dev_info(udc->dev, "ISP1301 Version ID : 0x%04x\n",
+	dev_dbg(udc->dev, "ISP1301 Version ID : 0x%04x\n",
 		 i2c_smbus_read_word_data(udc->isp1301_i2c_client, 0x14));
 }
 
@@ -3038,7 +3038,7 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
 		goto phy_fail;
 	}
 
-	dev_info(udc->dev, "ISP1301 I2C device at address 0x%x\n",
+	dev_dbg(udc->dev, "ISP1301 I2C device at address 0x%x\n",
 		 udc->isp1301_i2c_client->addr);
 
 	pdev->dev.dma_mask = &lpc32xx_usbd_dmamask;
@@ -3198,7 +3198,7 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
 	/* Disable clocks for now */
 	udc_clk_set(udc, 0);
 
-	dev_info(udc->dev, "%s version %s\n", driver_name, DRIVER_VERSION);
+	dev_dbg(udc->dev, "%s version %s\n", driver_name, DRIVER_VERSION);
 	return 0;
 
 add_gadget_fail:

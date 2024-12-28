@@ -79,28 +79,28 @@ static int otg_tcp_notifier_call(struct notifier_block *nb,
 
 	switch (event) {
 	case TCP_NOTIFY_SOURCE_VBUS:
-		pr_info("%s source vbus = %dmv\n",
+		pr_debug("%s source vbus = %dmv\n",
 				__func__, noti->vbus_state.mv);
 		otg_power_enable = (noti->vbus_state.mv) ? true : false;
 		tcpc_power_work_call(otg_power_enable);
 		break;
 	case TCP_NOTIFY_TYPEC_STATE:
-		pr_info("%s, TCP_NOTIFY_TYPEC_STATE, old_state=%d, new_state=%d\n",
+		pr_debug("%s, TCP_NOTIFY_TYPEC_STATE, old_state=%d, new_state=%d\n",
 				__func__, noti->typec_state.old_state,
 				noti->typec_state.new_state);
 
 		if (noti->typec_state.old_state == TYPEC_UNATTACHED &&
 			noti->typec_state.new_state == TYPEC_ATTACHED_SRC) {
-			pr_info("%s OTG Plug in\n", __func__);
+			pr_debug("%s OTG Plug in\n", __func__);
 			tcpc_otg_enable();
 		} else if ((noti->typec_state.old_state == TYPEC_ATTACHED_SRC ||
 			noti->typec_state.old_state == TYPEC_ATTACHED_SNK) &&
 			noti->typec_state.new_state == TYPEC_UNATTACHED) {
 			if (otg_on) {
-				pr_info("%s OTG Plug out\n", __func__);
+				pr_debug("%s OTG Plug out\n", __func__);
 				tcpc_otg_disable();
 			} else {
-				pr_info("%s USB Plug out\n", __func__);
+				pr_debug("%s USB Plug out\n", __func__);
 				mt_usb_disconnect();
 			}
 		}
@@ -125,16 +125,16 @@ static int otg_tcp_notifier_call(struct notifier_block *nb,
 #endif
 		break;
 	case TCP_NOTIFY_DR_SWAP:
-		pr_info("%s TCP_NOTIFY_DR_SWAP, new role=%d\n",
+		pr_debug("%s TCP_NOTIFY_DR_SWAP, new role=%d\n",
 				__func__, noti->swap_state.new_role);
 		if (otg_on &&
 			noti->swap_state.new_role == PD_ROLE_UFP) {
-			pr_info("%s switch role to device\n", __func__);
+			pr_debug("%s switch role to device\n", __func__);
 			tcpc_otg_disable();
 			mt_usb_connect();
 		} else if (!otg_on &&
 			noti->swap_state.new_role == PD_ROLE_DFP) {
-			pr_info("%s switch role to host\n", __func__);
+			pr_debug("%s switch role to host\n", __func__);
 			mt_usb_disconnect();
 			tcpc_otg_enable();
 		}
@@ -152,7 +152,7 @@ static int __init mtk_typec_init(void)
 
 	otg_tcpc_dev = tcpc_dev_get_by_name("type_c_port0");
 	if (!otg_tcpc_dev) {
-		pr_info("%s get tcpc device type_c_port0 fail\n", __func__);
+		pr_debug("%s get tcpc device type_c_port0 fail\n", __func__);
 		return -ENODEV;
 	}
 
@@ -160,7 +160,7 @@ static int __init mtk_typec_init(void)
 	ret = register_tcp_dev_notifier(otg_tcpc_dev, &otg_nb,
 		TCP_NOTIFY_TYPE_USB|TCP_NOTIFY_TYPE_VBUS|TCP_NOTIFY_TYPE_MISC);
 	if (ret < 0) {
-		pr_info("%s register tcpc notifer fail\n", __func__);
+		pr_debug("%s register tcpc notifer fail\n", __func__);
 		return -EINVAL;
 	}
 

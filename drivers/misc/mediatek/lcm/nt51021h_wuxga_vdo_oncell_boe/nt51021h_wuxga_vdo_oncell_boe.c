@@ -137,7 +137,7 @@ void lcm_request_gpio_control(struct device *dev)
 {
 	int ret;
 
-	pr_notice("[Kernel/LCM] %s enter\n", __func__);
+	pr_debug("[Kernel/LCM] %s enter\n", __func__);
 
 	GPIO_LCD_RST = of_get_named_gpio(dev->of_node, "gpio_lcd_rst", 0);
 	gpio_request(GPIO_LCD_RST, "GPIO_LCD_RST");
@@ -153,19 +153,19 @@ void lcm_request_gpio_control(struct device *dev)
 	lcd_pinctrl1 = devm_pinctrl_get(dev);
 	if (IS_ERR(lcd_pinctrl1)) {
 		ret = PTR_ERR(lcd_pinctrl1);
-		pr_notice(" Cannot find lcd_pinctrl1 %d!\n", ret);
+		pr_debug(" Cannot find lcd_pinctrl1 %d!\n", ret);
 	}
 
 	lcd_disp_pwm = pinctrl_lookup_state(lcd_pinctrl1, "disp_pwm");
 	if (IS_ERR(lcd_pinctrl1)) {
 		ret = PTR_ERR(lcd_pinctrl1);
-		pr_notice(" Cannot find lcd_disp_pwm %d!\n", ret);
+		pr_debug(" Cannot find lcd_disp_pwm %d!\n", ret);
 	}
 
 	lcd_disp_pwm_gpio = pinctrl_lookup_state(lcd_pinctrl1, "disp_pwm_gpio");
 	if (IS_ERR(lcd_pinctrl1)) {
 		ret = PTR_ERR(lcd_pinctrl1);
-		pr_notice(" Cannot find lcd_disp_pwm_gpio %d!\n", ret);
+		pr_debug(" Cannot find lcd_disp_pwm_gpio %d!\n", ret);
 	}
 
 }
@@ -210,9 +210,9 @@ static struct platform_driver lcm_driver = {
 
 static int __init lcm_drv_init(void)
 {
-	pr_notice("LCM: Register lcm driver\n");
+	pr_debug("LCM: Register lcm driver\n");
 	if (platform_driver_register(&lcm_driver)) {
-		pr_notice("LCM: failed to register disp driver\n");
+		pr_debug("LCM: failed to register disp driver\n");
 		return -ENODEV;
 	}
 
@@ -222,7 +222,7 @@ static int __init lcm_drv_init(void)
 static void __exit lcm_drv_exit(void)
 {
 	platform_driver_unregister(&lcm_driver);
-	pr_notice("LCM: Unregister lcm driver done\n");
+	pr_debug("LCM: Unregister lcm driver done\n");
 }
 
 late_initcall(lcm_drv_init);

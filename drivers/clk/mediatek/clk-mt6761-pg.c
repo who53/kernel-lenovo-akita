@@ -568,36 +568,36 @@ static void ram_console_update(void)
 		}
 
 		if (DBG_ID >= (DBG_ID_NUM / 2))
-			pr_notice("%s %s MTCMOS PWR hang at %s flow step %d\n",
+			pr_debug("%s %s MTCMOS PWR hang at %s flow step %d\n",
 				"[clkmgr]",
 				syss[(DBG_ID - (DBG_ID_NUM / 2))].name,
 				DBG_STA ? "pwron":"pdn",
 				DBG_STEP);
 		else
-			pr_notice("%s %s MTCMOS BUS hang at %s flow step %d\n",
+			pr_debug("%s %s MTCMOS BUS hang at %s flow step %d\n",
 				"[clkmgr]",
 				syss[DBG_ID].name,
 				DBG_STA ? "pwron":"pdn",
 				DBG_STEP);
 
 		for (j = 1; j <= i; j++)
-			pr_notice("%s: clk[%d] = 0x%x\n", __func__, j, data[j]);
+			pr_debug("%s: clk[%d] = 0x%x\n", __func__, j, data[j]);
 
-		pr_notice("INFRA_TOPAXI_SI0_STA =0x%x\n",
+		pr_debug("INFRA_TOPAXI_SI0_STA =0x%x\n",
 			spm_read(INFRA_TOPAXI_SI0_STA));
-		pr_notice("INFRA_TOPAXI_SI1_STA =0x%x\n",
+		pr_debug("INFRA_TOPAXI_SI1_STA =0x%x\n",
 			spm_read(INFRA_TOPAXI_SI1_STA));
-		pr_notice("INFRA_TOPAXI_SI2_STA =0x%x\n",
+		pr_debug("INFRA_TOPAXI_SI2_STA =0x%x\n",
 			spm_read(INFRA_TOPAXI_SI2_STA));
-		pr_notice("INFRA_TOPAXI_SI3_STA =0x%x\n",
+		pr_debug("INFRA_TOPAXI_SI3_STA =0x%x\n",
 			spm_read(INFRA_TOPAXI_SI3_STA));
-		pr_notice("INFRA_TOPAXI_SI4_STA =0x%x\n",
+		pr_debug("INFRA_TOPAXI_SI4_STA =0x%x\n",
 			spm_read(INFRA_TOPAXI_SI4_STA));
-		pr_notice("INFRA_TOPAXI_MI_STA =0x%x\n",
+		pr_debug("INFRA_TOPAXI_MI_STA =0x%x\n",
 			spm_read(INFRA_TOPAXI_MI_STA));
-		pr_notice("INFRA_MCI_SI0_STA =0x%x\n",
+		pr_debug("INFRA_MCI_SI0_STA =0x%x\n",
 			spm_read(INFRA_MCI_SI0_STA));
-		pr_notice("INFRA_MCI_SI2_STA =0x%x\n",
+		pr_debug("INFRA_MCI_SI2_STA =0x%x\n",
 			spm_read(INFRA_MCI_SI2_STA));
 	}
 
@@ -2434,7 +2434,7 @@ static int enable_subsys(enum subsys_id id, enum mtcmos_op action)
 
 	if (!mtk_is_mtcmos_enable()) {
 #if MT_CCF_DEBUG
-		pr_notice("[CCF] skip %s: sys=%s, id=%d\n",
+		pr_debug("[CCF] skip %s: sys=%s, id=%d\n",
 			__func__, sys->name, id);
 #endif
 		switch (id) {
@@ -2454,7 +2454,7 @@ static int enable_subsys(enum subsys_id id, enum mtcmos_op action)
 
 #if CONTROL_LIMIT
 	#if MT_CCF_DEBUG
-	pr_notice("[CCF] %s: sys=%s, id=%d, action = %s\n",
+	pr_debug("[CCF] %s: sys=%s, id=%d, action = %s\n",
 		__func__, sys->name, id, action?"PWN":"BUS_PROT");
 	#endif
 	if (allow[id] == 0) {
@@ -2497,7 +2497,7 @@ static int disable_subsys(enum subsys_id id, enum mtcmos_op action)
 
 	if (!mtk_is_mtcmos_enable()) {
 #if MT_CCF_DEBUG
-		pr_notice("[CCF] skip %s: sys=%s, id=%d\n",
+		pr_debug("[CCF] skip %s: sys=%s, id=%d\n",
 			__func__, sys->name, id);
 #endif
 		switch (id) {
@@ -2517,7 +2517,7 @@ static int disable_subsys(enum subsys_id id, enum mtcmos_op action)
 
 #if CONTROL_LIMIT
 	#if MT_CCF_DEBUG
-	pr_notice("[CCF] %s: sys=%s, id=%d, action = %s\n",
+	pr_debug("[CCF] %s: sys=%s, id=%d, action = %s\n",
 		__func__, sys->name, id, action?"PWN":"BUS_PROT");
 	#endif
 	if (allow[id] == 0) {
@@ -2610,7 +2610,7 @@ int pg_prepare(struct clk_hw *hw)
 			break;
 
 #if MT_CCF_DEBUG
-		pr_notice("[CCF] %s 1: sys=%s, pre_clk=%s\n", __func__,
+		pr_debug("[CCF] %s 1: sys=%s, pre_clk=%s\n", __func__,
 			__clk_get_name(hw->clk),
 			pg->pre_clk1_list->cg[i] ?
 			pg->pre_clk1_list->cg[i]:NULL);
@@ -2637,7 +2637,7 @@ int pg_prepare(struct clk_hw *hw)
 			break;
 
 #if MT_CCF_DEBUG
-		pr_notice("[CCF] %s 2: sys=%s, pre_clk=%s\n", __func__,
+		pr_debug("[CCF] %s 2: sys=%s, pre_clk=%s\n", __func__,
 			__clk_get_name(hw->clk),
 			pg->pre_clk2_list->cg[i] ?
 			pg->pre_clk2_list->cg[i]:NULL);
@@ -2693,7 +2693,7 @@ void pg_unprepare(struct clk_hw *hw)
 		else
 			break;
 #if MT_CCF_DEBUG
-		pr_notice("[CCF] %s: sys=%s, pre_clk=%s\n", __func__,
+		pr_debug("[CCF] %s: sys=%s, pre_clk=%s\n", __func__,
 			__clk_get_name(hw->clk),
 			pg->pre_clk2_list->cg[i] ?
 			pg->pre_clk2_list->cg[i]:NULL);
@@ -2717,7 +2717,7 @@ void pg_unprepare(struct clk_hw *hw)
 		else
 			break;
 #if MT_CCF_DEBUG
-		pr_notice("[CCF] %s: sys=%s, pre_clk=%s\n", __func__,
+		pr_debug("[CCF] %s: sys=%s, pre_clk=%s\n", __func__,
 			__clk_get_name(hw->clk),
 			pg->pre_clk1_list->cg[i] ?
 			pg->pre_clk1_list->cg[i]:NULL);
@@ -2877,7 +2877,7 @@ static void __init init_clk_scpsys(struct clk_onecell_data *clk_data)
 			clk_data->clks[pg->id] = clk;
 
 #if MT_CCF_DEBUG
-		pr_notice("[CCF] %s: pgate %3d: %s\n", __func__, i, pg->name);
+		pr_debug("[CCF] %s: pgate %3d: %s\n", __func__, i, pg->name);
 #endif				/* MT_CCF_DEBUG */
 	}
 }
@@ -2943,7 +2943,7 @@ static void __init mt_scpsys_init(struct device_node *node)
 
 	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
 	if (r)
-		pr_notice("[CCF] %s:could not register clock provide\n",
+		pr_debug("[CCF] %s:could not register clock provide\n",
 			__func__);
 
 	if (mtk_is_mtcmos_enable()) {
@@ -3012,41 +3012,41 @@ void subsys_if_on(void)
 		pr_debug("suspend warning: SYS_MD1 is on!!!\n");
 
 	if ((sta & (1U << 1)) && (sta_s & (1U << 1))) {
-		pr_notice("suspend warning: SYS_CONN is on!!!\n");
+		pr_debug("suspend warning: SYS_CONN is on!!!\n");
 		ret++;
 	}
 	if ((sta & (1U << 2)) && (sta_s & (1U << 2)))
 		pr_debug("suspend warning: SYS_DPY is on!!!\n");
 
 	if ((sta & (1U << 3)) && (sta_s & (1U << 3))) {
-		pr_notice("suspend warning: SYS_DIS is on!!!\n");
+		pr_debug("suspend warning: SYS_DIS is on!!!\n");
 		ret++;
 	}
 	if ((sta & (1U << 4)) && (sta_s & (1U << 4))) {
-		pr_notice("suspend warning: SYS_MFG is on!!!\n");
+		pr_debug("suspend warning: SYS_MFG is on!!!\n");
 		ret++;
 	}
 	if ((sta & (1U << 5)) && (sta_s & (1U << 5))) {
-		pr_notice("suspend warning: SYS_ISP is on!!!\n");
+		pr_debug("suspend warning: SYS_ISP is on!!!\n");
 		ret++;
 	}
 	if ((sta & (1U << 6)) && (sta_s & (1U << 6)))
 		pr_debug("suspend warning: SYS_IFR is on!!!\n");
 
 	if ((sta & (1U << 7)) && (sta_s & (1U << 7))) {
-		pr_notice("suspend warning: SYS_MFG_CORE0 is on!!!\n");
+		pr_debug("suspend warning: SYS_MFG_CORE0 is on!!!\n");
 		ret++;
 	}
 	if ((sta & (1U << 23)) && (sta_s & (1U << 23))) {
-		pr_notice("suspend warning: SYS_MFG_ASYNC is on!!!\n");
+		pr_debug("suspend warning: SYS_MFG_ASYNC is on!!!\n");
 		ret++;
 	}
 	if ((sta & (1U << 25)) && (sta_s & (1U << 25))) {
-		pr_notice("suspend warning: SYS_CAM is on!!!\n");
+		pr_debug("suspend warning: SYS_CAM is on!!!\n");
 		ret++;
 	}
 	if ((sta & (1U << 26)) && (sta_s & (1U << 26))) {
-		pr_notice("suspend warning: SYS_VCODEC is on!!!\n");
+		pr_debug("suspend warning: SYS_VCODEC is on!!!\n");
 		ret++;
 	}
 	if (ret > 0)

@@ -110,7 +110,7 @@ static int deep_buffer_dl_hdoutput_set(struct snd_kcontrol *kcontrol,
 	/* pr_debug("%s()\n", __func__); */
 	if (ucontrol->value.enumerated.item[0] >
 	    ARRAY_SIZE(deep_buffer_dl_HD_output)) {
-		pr_warn("%s(), return -EINVAL\n", __func__);
+		pr_debug("%s(), return -EINVAL\n", __func__);
 		return -EINVAL;
 	}
 
@@ -212,12 +212,12 @@ mtk_deep_buffer_dl_pointer(struct snd_pcm_substream *substream)
 	cur = GetBufferCtrlReg(deep_buffer_mem_blk_io, aud_buffer_ctrl_cur);
 
 	if (!base || !cur) {
-		pr_warn("%s(), GetBufferCtrlReg return invalid value\n",
+		pr_debug("%s(), GetBufferCtrlReg return invalid value\n",
 			__func__);
 	} else {
 		hw_ptr = Afe_Get_Reg(cur);
 		if (hw_ptr == 0)
-			pr_warn("%s(), hw_ptr == 0\n", __func__);
+			pr_debug("%s(), hw_ptr == 0\n", __func__);
 		else
 			ptr_bytes = hw_ptr - Afe_Get_Reg(base);
 
@@ -598,7 +598,7 @@ static struct snd_soc_platform_driver mtk_deep_buffer_dl_soc_platform = {
 
 static int mtk_deep_buffer_dl_probe(struct platform_device *pdev)
 {
-	pr_info("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 
 	pdev->dev.coherent_dma_mask = DMA_BIT_MASK(64);
 	if (!pdev->dev.dma_mask)

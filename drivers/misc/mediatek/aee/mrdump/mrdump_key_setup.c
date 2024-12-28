@@ -71,19 +71,19 @@ static int __init mrdump_key_probe(struct platform_device *pdev)
 	const char *source_str, *interrupts;
 	char node_name[] = "mediatek, mrdump_ext_rst-eint";
 
-	pr_notice("%s:%d\n", __func__, __LINE__);
+	pr_debug("%s:%d\n", __func__, __LINE__);
 	node = of_find_compatible_node(NULL, NULL, node_name);
 	if (!node) {
-		pr_notice("MRDUMP_KEY:node %s is not exist\n", node_name);
+		pr_debug("MRDUMP_KEY:node %s is not exist\n", node_name);
 		goto out;
 	}
 
 	if (of_property_read_string(node, "interrupts", &interrupts)) {
-		pr_notice("mrdump_key:no interrupts attribute from dws config\n");
+		pr_debug("mrdump_key:no interrupts attribute from dws config\n");
 		goto out;
 	}
 
-	pr_notice("%s:default to %s\n", __func__,
+	pr_debug("%s:default to %s\n", __func__,
 		(source == MRDUMP_EINT) ? "EINT":"SYSRST");
 
 
@@ -91,14 +91,14 @@ static int __init mrdump_key_probe(struct platform_device *pdev)
 	if (!of_property_read_string(node, "force_mode", &source_str)) {
 		if (strcmp(source_str, "SYSRST") == 0) {
 			source = MRDUMP_SYSRST;
-			pr_notice("%s:force_mode=%s\n", __func__, "SYSRST");
+			pr_debug("%s:force_mode=%s\n", __func__, "SYSRST");
 		} else if (strcmp(source_str, "EINT") == 0) {
 			source = MRDUMP_EINT;
-			pr_notice("%s:force_mode=%s\n", __func__, "EINT");
+			pr_debug("%s:force_mode=%s\n", __func__, "EINT");
 		} else
-			pr_notice("%s:no valid force_mode\n", __func__);
+			pr_debug("%s:no valid force_mode\n", __func__);
 	} else
-		pr_notice("%s:no force_mode\n", __func__);
+		pr_debug("%s:no force_mode\n", __func__);
 
 
 
@@ -106,32 +106,32 @@ static int __init mrdump_key_probe(struct platform_device *pdev)
 	if (!of_property_read_string(node, "mode", &mode_str)) {
 		if (strcmp(mode_str, "RST") == 0)
 			mode = WD_REQ_RST_MODE;
-		pr_notice("%s:mode=%s\n", __func__,
+		pr_debug("%s:mode=%s\n", __func__,
 			(strcmp(mode_str, "RST") == 0)?"RST":"IRQ");
 	} else
-		pr_notice("MRDUMP_KEY: no mode property,default IRQ");
+		pr_debug("MRDUMP_KEY: no mode property,default IRQ");
 
 	res = get_wd_api(&wd_api);
 	if (res < 0) {
-		pr_notice("MRDUMP_KEY: get_wd_api failed:%d\n", res);
+		pr_debug("MRDUMP_KEY: get_wd_api failed:%d\n", res);
 		goto out;
 	}
 
 	if (source == MRDUMP_SYSRST) {
 		res = wd_api->wd_debug_key_sysrst_config(1, mode);
 		if (res == -1)
-			pr_notice("%s: sysrst failed\n", __func__);
+			pr_debug("%s: sysrst failed\n", __func__);
 		else
-			pr_notice("%s: enable MRDUMP_KEY SYSRST mode\n"
+			pr_debug("%s: enable MRDUMP_KEY SYSRST mode\n"
 					, __func__);
 #ifdef CONFIG_MTK_PMIC_COMMON
-		pr_notice("%s: configure PMIC for smart reset\n"
+		pr_debug("%s: configure PMIC for smart reset\n"
 				, __func__);
 		if (long_press_mode == LONG_PRESS_SHUTDOWN) {
-			pr_notice("long_press_mode = SHUTDOWN\n");
+			pr_debug("long_press_mode = SHUTDOWN\n");
 			pmic_enable_smart_reset(1, 1);
 		} else {
-			pr_notice("long_press_mode = NONE\n");
+			pr_debug("long_press_mode = NONE\n");
 			pmic_enable_smart_reset(1, 0);
 		}
 
@@ -139,12 +139,12 @@ static int __init mrdump_key_probe(struct platform_device *pdev)
 	} else if (source == MRDUMP_EINT) {
 		res = wd_api->wd_debug_key_eint_config(1, mode);
 		if (res == -1)
-			pr_notice("%s: eint failed\n", __func__);
+			pr_debug("%s: eint failed\n", __func__);
 		else
-			pr_notice("%s: enabled MRDUMP_KEY EINT mode\n"
+			pr_debug("%s: enabled MRDUMP_KEY EINT mode\n"
 					, __func__);
 	} else {
-		pr_notice("%s:source %d is not match\n"
+		pr_debug("%s:source %d is not match\n"
 			"disable MRDUMP_KEY\n", __func__, source);
 	}
 #endif
@@ -162,26 +162,26 @@ static void mrdump_key_shutdown(struct platform_device *pdev)
 #endif
 
 #ifdef CONFIG_MTK_PMIC_COMMON
-	pr_notice("restore pmic long_press_mode = SHUTDOWN\n");
+	pr_debug("restore pmic long_press_mode = SHUTDOWN\n");
 	pmic_enable_smart_reset(0, 0);
 #endif
 
 #if defined(CONFIG_MTK_WATCHDOG_COMMON) || defined(CONFIG_MACH_MT6757)
-	pr_notice("restore RGU to default value\n");
+	pr_debug("restore RGU to default value\n");
 	res = get_wd_api(&wd_api);
 	if (res < 0)
-		pr_notice("%s: get_wd_api failed:%d\n", __func__, res);
+		pr_debug("%s: get_wd_api failed:%d\n", __func__, res);
 	else {
 		res = wd_api->wd_debug_key_eint_config(0, WD_REQ_RST_MODE);
 		if (res == -1)
-			pr_notice("%s: disable EINT failed\n", __func__);
+			pr_debug("%s: disable EINT failed\n", __func__);
 		else
-			pr_notice("%s:disable EINT mode\n", __func__);
+			pr_debug("%s:disable EINT mode\n", __func__);
 		res = wd_api->wd_debug_key_sysrst_config(0, WD_REQ_RST_MODE);
 		if (res == -1)
-			pr_notice("%s: disable SYSRST failed\n", __func__);
+			pr_debug("%s: disable SYSRST failed\n", __func__);
 		else
-			pr_notice("%s:disable SYSRST OK\n", __func__);
+			pr_debug("%s:disable SYSRST OK\n", __func__);
 	}
 #endif
 }

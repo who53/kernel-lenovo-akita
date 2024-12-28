@@ -98,7 +98,7 @@ static int dbmd2_uart_sync(struct dbmdx_private *p)
 
 	size_t size = uart_p->boot_lock_buffer_size;
 
-	dev_info(p->dev, "%s: start boot sync\n", __func__);
+	dev_dbg(p->dev, "%s: start boot sync\n", __func__);
 
 	buf = kzalloc(size, GFP_KERNEL);
 	if (!buf)
@@ -327,7 +327,7 @@ static int dbmd2_uart_load_firmware(const void *fw_data, size_t fw_size,
 		}
 	}
 
-	dev_info(p->dev, "%s: ---------> firmware loaded\n", __func__);
+	dev_dbg(p->dev, "%s: ---------> firmware loaded\n", __func__);
 
 	return 0;
 }

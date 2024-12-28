@@ -65,7 +65,7 @@ int scp_awake_lock(enum scp_core_id scp_id)
 	unsigned int tmp;
 
 	if (scp_id >= SCP_CORE_TOTAL) {
-		pr_notice("%s: SCP ID >= SCP_CORE_TOTAL\n", __func__);
+		pr_debug("%s: SCP ID >= SCP_CORE_TOTAL\n", __func__);
 		return ret;
 	}
 
@@ -73,7 +73,7 @@ int scp_awake_lock(enum scp_core_id scp_id)
 	core_id = core_ids[scp_id];
 
 	if (is_scp_ready(scp_id) == 0) {
-		pr_notice("%s: %s not enabled\n", __func__, core_id);
+		pr_debug("%s: %s not enabled\n", __func__, core_id);
 		return ret;
 	}
 
@@ -93,13 +93,13 @@ int scp_awake_lock(enum scp_core_id scp_id)
 	while (++count != SCP_AWAKE_TIMEOUT) {
 #if SCP_RECOVERY_SUPPORT
 		if (atomic_read(&scp_reset_status) == RESET_STATUS_START) {
-			pr_notice("%s: resetting scp, break\n", __func__);
+			pr_debug("%s: resetting scp, break\n", __func__);
 			break;
 		}
 #endif  // SCP_RECOVERY_SUPPORT
 		tmp = readl(INFRA_IRQ_SET);
 		if ((tmp & 0xf0) != 0xA0) {
-			pr_notice("%s: INFRA_IRQ_SET %x\n", __func__, tmp);
+			pr_debug("%s: INFRA_IRQ_SET %x\n", __func__, tmp);
 			break;
 		}
 		if (!((tmp & 0x0f) & (1 << AP_AWAKE_LOCK))) {
@@ -116,14 +116,14 @@ int scp_awake_lock(enum scp_core_id scp_id)
 		*scp_awake_count = *scp_awake_count + 1;
 
 	if (ret == -1) {
-		pr_notice("%s: awake %s fail..\n", __func__, core_id);
+		pr_debug("%s: awake %s fail..\n", __func__, core_id);
 		WARN_ON(1);
 #if SCP_RECOVERY_SUPPORT
 		if (scp_set_reset_status() == RESET_STATUS_STOP) {
-			pr_notice("%s: start to reset scp...\n", __func__);
+			pr_debug("%s: start to reset scp...\n", __func__);
 			scp_send_reset_wq(RESET_TYPE_AWAKE);
 		} else
-			pr_notice("%s: scp resetting\n", __func__);
+			pr_debug("%s: scp resetting\n", __func__);
 #endif
 	}
 
@@ -149,7 +149,7 @@ int scp_awake_unlock(enum scp_core_id scp_id)
 	unsigned int tmp;
 
 	if (scp_id >= SCP_CORE_TOTAL) {
-		pr_notice("%s: SCP ID >= SCP_CORE_TOTAL\n", __func__);
+		pr_debug("%s: SCP ID >= SCP_CORE_TOTAL\n", __func__);
 		return -1;
 	}
 
@@ -157,7 +157,7 @@ int scp_awake_unlock(enum scp_core_id scp_id)
 	core_id = core_ids[scp_id];
 
 	if (is_scp_ready(scp_id) == 0) {
-		pr_notice("%s: %s not enabled\n", __func__, core_id);
+		pr_debug("%s: %s not enabled\n", __func__, core_id);
 		return -1;
 	}
 
@@ -177,13 +177,13 @@ int scp_awake_unlock(enum scp_core_id scp_id)
 	while (++count != SCP_AWAKE_TIMEOUT) {
 #if SCP_RECOVERY_SUPPORT
 		if (atomic_read(&scp_reset_status) == RESET_STATUS_START) {
-			pr_notice("%s: scp is being reset, break\n", __func__);
+			pr_debug("%s: scp is being reset, break\n", __func__);
 			break;
 		}
 #endif  // SCP_RECOVERY_SUPPORT
 		tmp = readl(INFRA_IRQ_SET);
 		if ((tmp & 0xf0) != 0xA0) {
-			pr_notice("%s: INFRA7_IRQ_SET %x\n", __func__, tmp);
+			pr_debug("%s: INFRA7_IRQ_SET %x\n", __func__, tmp);
 			break;
 		}
 		if (!((tmp & 0x0f) & (1 << AP_AWAKE_UNLOCK))) {
@@ -198,7 +198,7 @@ int scp_awake_unlock(enum scp_core_id scp_id)
 	/* scp unlock awake success*/
 	if (ret != -1) {
 		if (*scp_awake_count <= 0)
-			pr_notice("%s:%s awake_count=%d NOT SYNC!\n",
+			pr_debug("%s:%s awake_count=%d NOT SYNC!\n",
 				__func__, core_id, *scp_awake_count);
 
 		if (*scp_awake_count > 0)

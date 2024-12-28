@@ -328,7 +328,7 @@ static int mobicore_start(void)
 		goto err_mcp_cmd;
 
 	/* CMP version is meaningless in this case and is thus not printed */
-	mc_dev_info("\n"
+	mc_dev_dbg("\n"
 		    "    product_id        = %s\n"
 		    "    version_mci       = 0x%08x\n"
 		    "    version_so        = 0x%08x\n"
@@ -392,7 +392,7 @@ static int mobicore_start(void)
 	if (!dynamic_lpae)
 		g_ctx.f_lpae = true;
 #endif
-	mc_dev_info("SWd uses %sLPAE MMU table format\n",
+	mc_dev_dbg("SWd uses %sLPAE MMU table format\n",
 		    g_ctx.f_lpae ? "" : "non-");
 
 #ifdef MC_PM_RUNTIME
@@ -430,7 +430,7 @@ static int mobicore_start(void)
 
 	for (--core; core >= 0 && mc_active_core() != core; --core) {
 		ret = mc_switch_core(core);
-		mc_dev_info("Switch to core %d (%u Hz): %d\n", core, freq, ret);
+		mc_dev_dbg("Switch to core %d (%u Hz): %d\n", core, freq, ret);
 		if (!ret)
 			break;
 	}
@@ -575,7 +575,7 @@ static int mobicore_probe(struct platform_device *pdev)
 		g_ctx.mcd->of_node = pdev->dev.of_node;
 
 #ifdef MOBICORE_COMPONENT_BUILD_TAG
-	mc_dev_info("MobiCore %s\n", MOBICORE_COMPONENT_BUILD_TAG);
+	mc_dev_dbg("MobiCore %s\n", MOBICORE_COMPONENT_BUILD_TAG);
 #endif
 	/* Hardware does not support ARM TrustZone -> Cannot continue! */
 	if (!has_security_extensions()) {
@@ -680,7 +680,7 @@ static int __init mobicore_init(void)
 	 * Do not remove or change the following trace.
 	 * The string "MobiCore" is used to detect if the TEE is in of the image
 	 */
-	mc_dev_info("MobiCore mcDrvModuleApi version is %d.%d\n",
+	mc_dev_dbg("MobiCore mcDrvModuleApi version is %d.%d\n",
 		    MCDRVMODULEAPI_VERSION_MAJOR, MCDRVMODULEAPI_VERSION_MINOR);
 #ifdef MC_DEVICE_PROPNAME
 	return platform_driver_register(&mc_plat_driver);

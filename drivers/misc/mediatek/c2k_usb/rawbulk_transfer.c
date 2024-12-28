@@ -37,7 +37,7 @@
 #endif
 
 #define terr(t, fmt, args...) \
-	pr_notice("[Error] Rawbulk [%s]:" fmt "\n", t->name, ##args)
+	pr_debug("[Error] Rawbulk [%s]:" fmt "\n", t->name, ##args)
 
 #define STOP_UPSTREAM   0x1
 #define STOP_DOWNSTREAM 0x2

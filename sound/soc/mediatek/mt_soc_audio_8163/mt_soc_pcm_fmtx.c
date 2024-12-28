@@ -534,7 +534,7 @@ static int mtk_pcm_fmtx_copy(struct snd_pcm_substream *substream,
 			pr_debug("size_1 = 0x%x, size_2 = 0x%x\n",
 				size_1, size_2);
 			if (!access_ok(VERIFY_READ, data_w_ptr, size_1)) {
-				pr_warn("[%s] data_w_ptr = %p, size_1 = %d",
+				pr_debug("[%s] data_w_ptr = %p, size_1 = %d",
 					__func__, data_w_ptr, size_1);
 			} else {
 				if ((copy_from_user((Afe_Block->pucVirtBufAddr +
@@ -554,7 +554,7 @@ static int mtk_pcm_fmtx_copy(struct snd_pcm_substream *substream,
 
 			if (!access_ok(VERIFY_READ, data_w_ptr + size_1,
 				size_2)) {
-				pr_warn("[%s]2 w_ptr = %p,size_1=%d,size_2=%d",
+				pr_debug("[%s]2 w_ptr = %p,size_1=%d,size_2=%d",
 					__func__, data_w_ptr, size_1, size_2);
 			} else {
 				pr_debug

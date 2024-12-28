@@ -120,13 +120,13 @@ void __iomem *sspm_base;
 phys_addr_t sspm_sbuf_get(unsigned int offset)
 {
 	if (!is_sspm_ready()) {
-		pr_notice("[SSPM] device resource is not ready\n");
+		pr_debug("[SSPM] device resource is not ready\n");
 		return 0;
 	}
 
 	if (offset < SSPM_SHARE_REGION_BASE ||
 		offset > SSPM_SHARE_REGION_BASE + SSPM_SHARE_REGION_SIZE) {
-		pr_notice("[SSPM] illegal sbuf request: 0x%x\n", offset);
+		pr_debug("[SSPM] illegal sbuf request: 0x%x\n", offset);
 		return 0;
 	} else {
 		return (phys_addr_t)(sspm_base + offset);

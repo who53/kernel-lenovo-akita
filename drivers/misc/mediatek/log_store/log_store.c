@@ -46,7 +46,7 @@ void store_log_to_emmc_enable(bool value)
 {
 
 	if (sram_dram_buff == NULL) {
-		pr_notice("%s: sram dram buff is NULL.\n", __func__);
+		pr_debug("%s: sram dram buff is NULL.\n", __func__);
 		return;
 	}
 
@@ -58,7 +58,7 @@ void store_log_to_emmc_enable(bool value)
 		sram_header->save_to_emmc = 0;
 	}
 
-	pr_notice(
+	pr_debug(
 		"log_store: sram_dram_buff flag 0x%x, reboot count %d, %d.\n",
 		sram_dram_buff->flag, sram_header->reboot_count,
 		sram_header->save_to_emmc);
@@ -78,7 +78,7 @@ int set_emmc_config(int type, int value)
 	int file_size;
 
 	if (type >= EMMC_STORE_TYPE_NR || type < 0) {
-		pr_notice("invalid config type: %d.\n", type);
+		pr_debug("invalid config type: %d.\n", type);
 		return -1;
 	}
 
@@ -87,7 +87,7 @@ int set_emmc_config(int type, int value)
 
 	fd = sys_open(EXPDB_PATH, O_RDWR, 0);
 	if (fd < 0) {
-		pr_notice("log_store can't open expdb file: %d.\n", fd);
+		pr_debug("log_store can't open expdb file: %d.\n", fd);
 		set_fs(fs);
 		return -1;
 	}
@@ -96,7 +96,7 @@ int set_emmc_config(int type, int value)
 	sys_lseek(fd, file_size - LOG_BLOCK_SIZE, 0);
 	sys_read(fd, (char *)&pEmmc, sizeof(struct log_emmc_header));
 	if (pEmmc.sig != LOG_EMMC_SIG) {
-		pr_notice("log_store emmc header error.\n");
+		pr_debug("log_store emmc header error.\n");
 		sys_close(fd);
 		set_fs(fs);
 		return -1;
@@ -112,7 +112,7 @@ int set_emmc_config(int type, int value)
 	sys_write(fd, (char *)&pEmmc, sizeof(struct log_emmc_header));
 	sys_close(fd);
 	set_fs(fs);
-	pr_notice("type:%d, value:%d.\n", type, value);
+	pr_debug("type:%d, value:%d.\n", type, value);
 	return 0;
 }
 
@@ -127,7 +127,7 @@ int read_emmc_config(struct log_emmc_header *log_header)
 
 	fd = sys_open(EXPDB_PATH, O_RDWR, 0);
 	if (fd < 0) {
-		pr_notice("log_store can't open expdb file: %d.\n", fd);
+		pr_debug("log_store can't open expdb file: %d.\n", fd);
 		set_fs(fs);
 		return -1;
 	}
@@ -136,7 +136,7 @@ int read_emmc_config(struct log_emmc_header *log_header)
 	sys_lseek(fd, file_size - LOG_BLOCK_SIZE, 0);
 	sys_read(fd, (char *)log_header, sizeof(struct log_emmc_header));
 	if (log_header->sig != LOG_EMMC_SIG) {
-		pr_notice("log_store emmc header error.\n");
+		pr_debug("log_store emmc header error.\n");
 		sys_close(fd);
 		set_fs(fs);
 		return -1;
@@ -173,7 +173,7 @@ static void *remap_lowmem(phys_addr_t start, phys_addr_t size)
 	vaddr = vmap(pages, page_count, VM_MAP, prot);
 	kfree(pages);
 	if (!vaddr) {
-		pr_notice("%s: Failed to map %u pages\n", __func__, page_count);
+		pr_debug("%s: Failed to map %u pages\n", __func__, page_count);
 		return NULL;
 	}
 
@@ -222,43 +222,43 @@ static int __init log_store_late_init(void)
 	struct proc_dir_entry *entry;
 
 	if (sram_dram_buff == NULL) {
-		pr_notice("log_store: sram header DRAM buff is null.\n");
+		pr_debug("log_store: sram header DRAM buff is null.\n");
 		dram_log_store_status = BUFF_ALLOC_ERROR;
 		return -1;
 	}
 
 	if (sram_dram_buff->buf_addr == 0 || sram_dram_buff->buf_size == 0) {
-		pr_notice("log_store: sram header DRAM buff is null.\n");
+		pr_debug("log_store: sram header DRAM buff is null.\n");
 		dram_log_store_status = BUFF_ALLOC_ERROR;
 		return -1;
 	}
-	pr_notice("log store:sram_dram_buff addr 0x%x, size 0x%x.\n",
+	pr_debug("log store:sram_dram_buff addr 0x%x, size 0x%x.\n",
 		sram_dram_buff->buf_addr, sram_dram_buff->buf_size);
 
 	pbuff = remap_lowmem(sram_dram_buff->buf_addr,
 		sram_dram_buff->buf_size);
-	pr_notice(
+	pr_debug(
 			"[PHY layout]log_store_mem   :   0x%08llx - 0x%08llx (0x%llx)\n",
 			(unsigned long long)sram_dram_buff->buf_addr,
 			(unsigned long long)sram_dram_buff->buf_addr
 			+ sram_dram_buff->buf_size - 1,
 			(unsigned long long)sram_dram_buff->buf_size);
 	if (pbuff == NULL) {
-		pr_notice("log_store: ioremap_wc failed.\n");
+		pr_debug("log_store: ioremap_wc failed.\n");
 		dram_log_store_status = BUFF_ERROR;
 		return -1;
 	}
 
 /* check buff flag */
 	if (dram_curlog_header->sig != LOG_STORE_SIG) {
-		pr_notice("log store: log sig: 0x%x.\n",
+		pr_debug("log store: log sig: 0x%x.\n",
 			dram_curlog_header->sig);
 		dram_log_store_status = BUFF_ERROR;
 		return 0;
 	}
 
 	dram_log_store_status = BUFF_READY;
-	pr_notice("buff %p, sig %x size %x pl %x, sz %x lk %x, sz %x p %x, l %x\n",
+	pr_debug("buff %p, sig %x size %x pl %x, sz %x lk %x, sz %x p %x, l %x\n",
 		pbuff, dram_curlog_header->sig,
 		dram_curlog_header->buff_size,
 		dram_curlog_header->off_pl, dram_curlog_header->sz_pl,
@@ -267,7 +267,7 @@ static int __init log_store_late_init(void)
 
 	entry = proc_create("pl_lk", 0444, NULL, &pl_lk_file_ops);
 	if (!entry) {
-		pr_notice("log_store: failed to create proc entry\n");
+		pr_debug("log_store: failed to create proc entry\n");
 		return 1;
 	}
 
@@ -282,7 +282,7 @@ static void store_printk_buff(void)
 	int size;
 
 	if (sram_dram_buff == NULL) {
-		pr_notice("log_store: sram_dram_buff is null.\n");
+		pr_debug("log_store: sram_dram_buff is null.\n");
 		return;
 	}
 	buff = log_buf_addr_get();
@@ -292,7 +292,7 @@ static void store_printk_buff(void)
 	sram_dram_buff->klog_size = size;
 	if (early_log_disable == false)
 		sram_dram_buff->flag |= BUFF_EARLY_PRINTK;
-	pr_notice(
+	pr_debug(
 		"log_store printk log buff addr:0x%x, size 0x%x. buff flag 0x%x.\n",
 		sram_dram_buff->klog_addr, sram_dram_buff->klog_size,
 		sram_dram_buff->flag);
@@ -300,10 +300,10 @@ static void store_printk_buff(void)
 
 void disable_early_log(void)
 {
-	pr_notice("log_store: disable_early_log.\n");
+	pr_debug("log_store: disable_early_log.\n");
 	early_log_disable = true;
 	if (sram_dram_buff == NULL) {
-		pr_notice("log_store: sram_dram_buff is null.\n");
+		pr_debug("log_store: sram_dram_buff is null.\n");
 		return;
 	}
 
@@ -318,10 +318,10 @@ static int __init log_store_early_init(void)
 		CONFIG_MTK_DRAM_LOG_STORE_SIZE);
 	dram_curlog_header = &(sram_header->dram_curlog_header);
 
-	pr_notice("log_store: sram header address 0x%p.\n",
+	pr_debug("log_store: sram header address 0x%p.\n",
 		sram_header);
 	if (sram_header->sig != SRAM_HEADER_SIG) {
-		pr_notice("log_store: sram header sig 0x%x.\n",
+		pr_debug("log_store: sram header sig 0x%x.\n",
 			sram_header->sig);
 		sram_log_store_status = BUFF_ERROR;
 		sram_header = NULL;
@@ -330,7 +330,7 @@ static int __init log_store_early_init(void)
 
 	sram_dram_buff = &(sram_header->dram_buf);
 	if (sram_dram_buff->sig != DRAM_HEADER_SIG) {
-		pr_notice("log_store: sram header DRAM sig error");
+		pr_debug("log_store: sram header DRAM sig error");
 		sram_log_store_status = BUFF_ERROR;
 		sram_dram_buff = NULL;
 		return -1;
@@ -339,7 +339,7 @@ static int __init log_store_early_init(void)
 	/* store printk log buff information to DRAM */
 	store_printk_buff();
 
-	pr_notice("sig 0x%x flag 0x%x add 0x%x size 0x%x offsize 0x%x point 0x%x\n",
+	pr_debug("sig 0x%x flag 0x%x add 0x%x size 0x%x offsize 0x%x point 0x%x\n",
 		sram_dram_buff->sig, sram_dram_buff->flag,
 		sram_dram_buff->buf_addr, sram_dram_buff->buf_size,
 		sram_dram_buff->buf_offsize, sram_dram_buff->buf_point);

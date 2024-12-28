@@ -37,7 +37,7 @@
 #include <mach/mtk_pmic_wrap.h>
 
 #define hal_rtc_xinfo(fmt, args...)		\
-		pr_notice(fmt, ##args)
+		pr_debug(fmt, ##args)
 
 u16 rtc_read(u16 addr)
 {

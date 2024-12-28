@@ -403,7 +403,7 @@ static int mtk_pcm_I2S0dl1_open(struct snd_pcm_substream *substream)
 		&constraints_sample_rates);
 
 	if (ret < 0)
-		pr_warn("snd_pcm_hw_constraint_integer failed\n");
+		pr_debug("snd_pcm_hw_constraint_integer failed\n");
 
 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
 		pr_debug(" mtkalsa_I2S0dl1_playback_constraints\n");
@@ -411,7 +411,7 @@ static int mtk_pcm_I2S0dl1_open(struct snd_pcm_substream *substream)
 		pr_debug(" mtkalsa_I2S0dl1_playback_constraints\n");
 
 	if (ret < 0) {
-		pr_warn("ret < 0 mtk_pcm_I2S0dl1_close\n");
+		pr_debug("ret < 0 mtk_pcm_I2S0dl1_close\n");
 		mtk_pcm_I2S0dl1_close(substream);
 		return ret;
 	}
@@ -498,7 +498,7 @@ static int mtk_pcm_I2S0dl1_close(struct snd_pcm_substream *substream)
 	AfeControlSramUnLock();
 	AudDrv_Clk_Off();
 	AudDrv_ANA_Clk_Off();
-	pr_warn("-%s\n", __func__);
+	pr_debug("-%s\n", __func__);
 	return 0;
 }
 
@@ -730,9 +730,9 @@ static int mtk_pcm_I2S0dl1_copy(struct snd_pcm_substream *substream,
 
 		if (Afe_WriteIdx_tmp + copy_size < Afe_Block->u4BufferSize) {
 			if (!access_ok(VERIFY_READ, data_w_ptr, copy_size)) {
-				pr_warn("w_ptr = %p, size = %d", data_w_ptr,
+				pr_debug("w_ptr = %p, size = %d", data_w_ptr,
 					copy_size);
-				pr_warn(" Size = %d, Remained = %d\n",
+				pr_debug(" Size = %d, Remained = %d\n",
 					Afe_Block->u4BufferSize,
 					Afe_Block->u4DataRemained);
 			} else {
@@ -774,9 +774,9 @@ static int mtk_pcm_I2S0dl1_copy(struct snd_pcm_substream *substream,
 			pr_debug("size_1 = 0x%x, size_2 = 0x%x\n",
 				size_1, size_2);
 			if (!access_ok(VERIFY_READ, data_w_ptr, size_1)) {
-				pr_warn("w_ptr = %p, size_1 = %d,", data_w_ptr,
+				pr_debug("w_ptr = %p, size_1 = %d,", data_w_ptr,
 					size_1);
-				pr_warn(" Size = %d, Remained = %d\n",
+				pr_debug(" Size = %d, Remained = %d\n",
 					Afe_Block->u4BufferSize,
 					Afe_Block->u4DataRemained);
 			} else {

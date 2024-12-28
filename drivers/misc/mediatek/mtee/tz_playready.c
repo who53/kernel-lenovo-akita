@@ -34,7 +34,7 @@ uint32_t TEE_update_pr_time_intee(KREE_SESSION_HANDLE session)
 	rtc = rtc_class_open(CONFIG_RTC_HCTOSYS_DEVICE);
 
 	if (rtc == NULL) {
-		pr_warn("%s: unable to open rtc device (%s)\n",
+		pr_debug("%s: unable to open rtc device (%s)\n",
 				__FILE__, CONFIG_RTC_HCTOSYS_DEVICE);
 		goto err_open;
 	}
@@ -78,16 +78,16 @@ uint32_t TEE_update_pr_time_intee(KREE_SESSION_HANDLE session)
 	ret = KREE_TeeServiceCall(session, TZCMD_PLAYREADY_SET_CURRENT_COUNTER,
 				paramTypes, param);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("ServiceCall TZCMD_PLAYREADY_SET_CURRENT_COUNTER error %d\n",
+		pr_debug("ServiceCall TZCMD_PLAYREADY_SET_CURRENT_COUNTER error %d\n",
 			ret);
 
 	if (param[2].value.a == PR_TIME_FILE_ERROR_SIGN) {
 		file_result = PR_TIME_FILE_ERROR_SIGN;
-		pr_warn("ServiceCall TZCMD_PLAYREADY_SET_CURRENT_COUNTER file_result %d\n",
+		pr_debug("ServiceCall TZCMD_PLAYREADY_SET_CURRENT_COUNTER file_result %d\n",
 			file_result);
 	} else if (param[2].value.a == PR_TIME_FILE_OK_SIGN) {
 		file_result = PR_TIME_FILE_OK_SIGN;
-		pr_warn("ServiceCall TZCMD_PLAYREADY_SET_CURRENT_COUNTER file_result %d\n",
+		pr_debug("ServiceCall TZCMD_PLAYREADY_SET_CURRENT_COUNTER file_result %d\n",
 			file_result);
 	}
 
@@ -119,7 +119,7 @@ uint32_t TEE_update_pr_time_infile(KREE_SESSION_HANDLE session)
 	ret = KREE_TeeServiceCall(session, TZCMD_PLAYREADY_GET_CURRENT_COUNTER,
 					paramTypes, param);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("ServiceCall error %d\n", ret);
+		pr_debug("ServiceCall error %d\n", ret);
 		goto tz_error;
 	}
 
@@ -129,7 +129,7 @@ uint32_t TEE_update_pr_time_infile(KREE_SESSION_HANDLE session)
 			sizeof(struct TZ_JG_SECURECLOCK_INFO), &u8Offset);
 		filp_close(file, NULL);
 	} else {
-		pr_warn("FILE_Open PR_TIME_FILE_SAVE_PATH return NULL\n");
+		pr_debug("FILE_Open PR_TIME_FILE_SAVE_PATH return NULL\n");
 	}
 
 tz_error:
@@ -156,7 +156,7 @@ uint32_t TEE_Icnt_pr_time(KREE_SESSION_HANDLE session)
 	rtc = rtc_class_open(CONFIG_RTC_HCTOSYS_DEVICE);
 
 	if (rtc == NULL) {
-		pr_warn("%s: unable to open rtc device (%s)\n",
+		pr_debug("%s: unable to open rtc device (%s)\n",
 			__FILE__, CONFIG_RTC_HCTOSYS_DEVICE);
 		goto err_open;
 	}
@@ -186,7 +186,7 @@ uint32_t TEE_Icnt_pr_time(KREE_SESSION_HANDLE session)
 	ret = KREE_TeeServiceCall(session, TZCMD_PLAYREADY_INC_CURRENT_COUNTER,
 				paramTypes, param);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("ServiceCall error %d\n", ret);
+		pr_debug("ServiceCall error %d\n", ret);
 
 #if 0
 	pr_debug("securetime increase result: %d %d %d %d %d %d %d\n"
@@ -216,7 +216,7 @@ int update_securetime_thread(void *data)
 
 	ret = KREE_CreateSession(TZ_TA_PLAYREADY_UUID, &icnt_session);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("CreateSession error %d\n", ret);
+		pr_debug("CreateSession error %d\n", ret);
 		return 1;
 	}
 
@@ -250,7 +250,7 @@ int update_securetime_thread(void *data)
 
 	ret = KREE_CloseSession(icnt_session);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("CloseSession error %d\n", ret);
+		pr_debug("CloseSession error %d\n", ret);
 
 	return 0;
 }

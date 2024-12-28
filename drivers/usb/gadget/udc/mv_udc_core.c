@@ -165,7 +165,7 @@ static int process_ep_req(struct mv_udc *udc, int index,
 					break;
 			}
 		} else {
-			dev_info(&udc->dev->dev,
+			dev_dbg(&udc->dev->dev,
 				"complete_tr error: ep=%d %s: error = 0x%x\n",
 				index >> 1, direction ? "SEND" : "RECV",
 				errors);
@@ -240,7 +240,7 @@ static void done(struct mv_ep *ep, struct mv_req *req, int status)
 	usb_gadget_unmap_request(&udc->gadget, &req->req, ep_dir(ep));
 
 	if (status && (status != -ESHUTDOWN))
-		dev_info(&udc->dev->dev, "complete %s req %p stat %d len %u/%u",
+		dev_dbg(&udc->dev->dev, "complete %s req %p stat %d len %u/%u",
 			ep->ep.name, &req->req, status,
 			req->req.actual, req->req.length);
 
@@ -472,7 +472,7 @@ static int mv_ep_enable(struct usb_ep *_ep,
 	/* Check if the Endpoint is Primed */
 	if ((readl(&udc->op_regs->epprime) & bit_pos)
 		|| (readl(&udc->op_regs->epstatus) & bit_pos)) {
-		dev_info(&udc->dev->dev,
+		dev_dbg(&udc->dev->dev,
 			"ep=%d %s: Init ERROR: ENDPTPRIME=0x%x,"
 			" ENDPTSTATUS=0x%x, bit_pos=0x%x\n",
 			(unsigned)ep->ep_num, direction ? "SEND" : "RECV",
@@ -1432,7 +1432,7 @@ static void prime_status_complete(struct usb_ep *ep, struct usb_request *_req)
 
 	udc = mvep->udc;
 
-	dev_info(&udc->dev->dev, "switch to test mode %d\n", req->test_mode);
+	dev_dbg(&udc->dev->dev, "switch to test mode %d\n", req->test_mode);
 
 	spin_lock_irqsave(&udc->lock, flags);
 	if (req->test_mode) {
@@ -1896,12 +1896,12 @@ static void irq_process_reset(struct mv_udc *udc)
 	writel((u32)~0, &udc->op_regs->epflush);
 
 	if (readl(&udc->op_regs->portsc[0]) & PORTSCX_PORT_RESET) {
-		dev_info(&udc->dev->dev, "usb bus reset\n");
+		dev_dbg(&udc->dev->dev, "usb bus reset\n");
 		udc->usb_state = USB_STATE_DEFAULT;
 		/* reset all the queues, stop all USB activities */
 		gadget_reset(udc, udc->driver);
 	} else {
-		dev_info(&udc->dev->dev, "USB reset portsc 0x%x\n",
+		dev_dbg(&udc->dev->dev, "USB reset portsc 0x%x\n",
 			readl(&udc->op_regs->portsc));
 
 		/*
@@ -2063,7 +2063,7 @@ static void mv_udc_vbus_work(struct work_struct *work)
 		return;
 
 	vbus = udc->pdata->vbus->poll();
-	dev_info(&udc->dev->dev, "vbus is %d\n", vbus);
+	dev_dbg(&udc->dev->dev, "vbus is %d\n", vbus);
 
 	if (vbus == VBUS_HIGH)
 		mv_udc_vbus_session(&udc->gadget, 1);
@@ -2279,7 +2279,7 @@ static int mv_udc_probe(struct platform_device *pdev)
 				pdata->vbus->irq, NULL,
 				mv_udc_vbus_irq, IRQF_ONESHOT, "vbus", udc);
 		if (retval) {
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				"Can not request irq for VBUS, "
 				"disable clock gating\n");
 			udc->clock_gating = 0;
@@ -2311,7 +2311,7 @@ static int mv_udc_probe(struct platform_device *pdev)
 		goto err_create_workqueue;
 
 	platform_set_drvdata(pdev, udc);
-	dev_info(&pdev->dev, "successful probe UDC device %s clock gating.\n",
+	dev_dbg(&pdev->dev, "successful probe UDC device %s clock gating.\n",
 		udc->clock_gating ? "with" : "without");
 
 	return 0;
@@ -2342,7 +2342,7 @@ static int mv_udc_suspend(struct device *dev)
 
 	if (udc->pdata->vbus && udc->pdata->vbus->poll)
 		if (udc->pdata->vbus->poll() == VBUS_HIGH) {
-			dev_info(&udc->dev->dev, "USB cable is connected!\n");
+			dev_dbg(&udc->dev->dev, "USB cable is connected!\n");
 			return -EAGAIN;
 		}
 

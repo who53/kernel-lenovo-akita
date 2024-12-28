@@ -587,7 +587,7 @@ static int Audio_ModemPcm_ASRC_Set(struct snd_kcontrol *kcontrol,
 	pr_debug("+%s()\n", __func__);
 	if (ucontrol->value.enumerated.item[0] >
 		ARRAY_SIZE(InterModemPcm_ASRC_Switch)) {
-		pr_warn("return -EINVAL\n");
+		pr_debug("return -EINVAL\n");
 		return -EINVAL;
 	}
 	mModemPcm_ASRC_on = (bool) ucontrol->value.integer.value[0];
@@ -658,7 +658,7 @@ static int audio_dpd_set(struct snd_kcontrol *kcontrol,
 	}
 
 	if (get_afe_platform_ops()->set_dpd_module == NULL) {
-		pr_warn("%s(), set_dpd_module not implement\n", __func__);
+		pr_debug("%s(), set_dpd_module not implement\n", __func__);
 		return 0;
 	}
 

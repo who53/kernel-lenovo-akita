@@ -39,12 +39,12 @@ int __weak ipanic_atflog_buffer(void *data, unsigned char *buffer,
 
 void __weak sysrq_sched_debug_show_at_AEE(void)
 {
-	pr_notice("%s weak function at %s\n", __func__, __FILE__);
+	pr_debug("%s weak function at %s\n", __func__, __FILE__);
 }
 
 __weak void console_unlock(void)
 {
-	pr_notice("%s weak function\n", __func__);
+	pr_debug("%s weak function\n", __func__);
 }
 
 static inline unsigned long get_linear_memory_size(void)
@@ -65,11 +65,11 @@ static void aee_exception_reboot(void)
 
 	res = get_wd_api(&wd_api);
 	if (res < 0) {
-		pr_info("arch_reset, get wd api error %d\n", res);
+		pr_debug("arch_reset, get wd api error %d\n", res);
 		while (1)
 			cpu_relax();
 	} else {
-		pr_info("exception reboot\n");
+		pr_debug("exception reboot\n");
 		mode += WD_SW_RESET_KEEP_DDR_RESERVE;
 		wd_api->wd_sw_reset(mode);
 	}

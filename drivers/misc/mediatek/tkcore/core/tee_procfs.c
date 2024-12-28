@@ -199,7 +199,7 @@ static size_t ulog_rb(struct klog *klog,
 			n = copy_to_user(&buf[len], tmpbuf, copy_len);
 
 			if (copy_len == n) {
-				pr_warn("tkcoredrv: failed to copy flag to user");
+				pr_debug("tkcoredrv: failed to copy flag to user");
 				return len;
 			}
 
@@ -214,7 +214,7 @@ static size_t ulog_rb(struct klog *klog,
 				&klog->tee_rb[ulog->rseq % klog->tee_rb_len],
 				copy_len);
 			if (copy_len == n) {
-				pr_warn("tkcoredrv: failed to copy klog to user\n");
+				pr_debug("tkcoredrv: failed to copy klog to user\n");
 				return len;
 			}
 
@@ -240,7 +240,7 @@ static ssize_t tee_log_read(struct file *file, char __user *buf,
 
 	ulog = (struct ulog *) file->private_data;
 	if (ulog == NULL) {
-		pr_warn("tkcoredrv: file not open correctly\n");
+		pr_debug("tkcoredrv: file not open correctly\n");
 		return -EINVAL;
 	}
 
@@ -308,7 +308,7 @@ int tee_log_open(struct inode *inode, struct file *file)
 	if (unlikely(ret)) {
 		kfree(ulog);
 
-		pr_warn("tkcoredrv: open file failed with %d\n", ret);
+		pr_debug("tkcoredrv: open file failed with %d\n", ret);
 		return ret;
 	}
 
@@ -427,7 +427,7 @@ static ssize_t tee_trace_write(struct file *filp, const char __user *buf,
 	struct tee *tee = filp->private_data;
 
 	if (tee == NULL) {
-		pr_warn("bad proc fp\n");
+		pr_debug("bad proc fp\n");
 		return -EINVAL;
 	}
 
@@ -475,7 +475,7 @@ static ssize_t tee_trace_write(struct file *filp, const char __user *buf,
 					return len;
 				}
 
-				pr_warn(
+				pr_debug(
 					"trace config Failed with 0x%llx\n",
 					(uint64_t) param.a0);
 
@@ -519,7 +519,7 @@ static ssize_t copy_to_user_str(char __user *buf, ssize_t count, loff_t *pos,
 
 	__pos = *pos;
 	if (__pos > strlen(version) + 1) {
-		pr_warn("invalid pos: %lld len: %zu\n",
+		pr_debug("invalid pos: %lld len: %zu\n",
 			__pos, strlen(version));
 		return -EINVAL;
 	}
@@ -714,7 +714,7 @@ static void log_rb(struct klog *klog)
 		uint32_t copy_len, i, k;
 
 		if (rb_overrun(rseq, wseq, klog->tee_rb_len)) {
-			pr_info("---- interrupted\n");
+			pr_debug("---- interrupted\n");
 			rseq = log_ctl->info.tee_read_seq =
 				wseq - klog->tee_rb_len;
 		}
@@ -743,7 +743,7 @@ static void log_rb(struct klog *klog)
 
 		if (((i == copy_len) && (p - line == LINE_LENGTH))
 				|| (i != copy_len)) {
-			pr_info("%s\n", line);
+			pr_debug("%s\n", line);
 			p = line;
 			log_ctl->info.tee_read_seq = rseq;
 		}
@@ -807,11 +807,11 @@ static int register_klog_irq(struct klog *klog)
 #endif
 
 	if (irq_num < 0) {
-		pr_warn("tkcoredrv: unknown tee_log_irq id\n");
+		pr_debug("tkcoredrv: unknown tee_log_irq id\n");
 		return -1;
 	}
 
-	pr_info("tkcoredrv: tee_log_irq id = %d\n",
+	pr_debug("tkcoredrv: tee_log_irq id = %d\n",
 			irq_num);
 
 	r = request_irq(irq_num,
@@ -843,7 +843,7 @@ static int init_tos_version(struct tee *tee)
 	tee_version_major = param.a0;
 	tee_version_minor = param.a1;
 
-	pr_info("tkcoreos-rev: 0.%d.%d-gp\n",
+	pr_debug("tkcoreos-rev: 0.%d.%d-gp\n",
 		tee_version_major, tee_version_minor);
 
 	return 0;

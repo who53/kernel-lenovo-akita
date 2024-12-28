@@ -230,7 +230,7 @@ static int aw87519_i2c_read(struct aw87519 *aw87519,
 ***************************************************************************/
 static unsigned int aw87519_hw_on(struct aw87519 *aw87519)
 {
-	pr_info("%s enter\n", __func__);
+	pr_debug("%s enter\n", __func__);
 
 	if (aw87519 && gpio_is_valid(aw87519->reset_gpio)) {
 		gpio_set_value_cansleep(aw87519->reset_gpio, 0);
@@ -248,7 +248,7 @@ static unsigned int aw87519_hw_on(struct aw87519 *aw87519)
 
 static unsigned int aw87519_hw_off(struct aw87519 *aw87519)
 {
-	pr_info("%s enter\n", __func__);
+	pr_debug("%s enter\n", __func__);
 
 	if (aw87519 && gpio_is_valid(aw87519->reset_gpio)) {
 		gpio_set_value_cansleep(aw87519->reset_gpio, 0);
@@ -268,7 +268,7 @@ unsigned char aw87519_right_audio_receiver(void)
 	unsigned int i;
 	unsigned int length;
 
-	pr_info("%s enter\n", __func__);
+	pr_debug("%s enter\n", __func__);
 	if (aw87519 == NULL)
 		return 2;
 
@@ -297,7 +297,7 @@ unsigned char aw87519_right_audio_speaker(void)
 	unsigned int i;
 	unsigned int length;
 
-	pr_info("%s enter\n", __func__);
+	pr_debug("%s enter\n", __func__);
 
 	if (aw87519 == NULL)
 		return 2;
@@ -327,7 +327,7 @@ unsigned char aw87519_right_audio_hvload(void)
 	unsigned int i;
 	unsigned int length;
 
-	pr_info("%s enter\n", __func__);
+	pr_debug("%s enter\n", __func__);
 
 	if (aw87519 == NULL)
 		return 2;
@@ -373,7 +373,7 @@ static void aw87519_hvload_cfg_loaded(const struct firmware *cont,
 	int i = 0;
 	int ram_timer_val = 2000;
 
-	pr_info("%s enter\n", __func__);
+	pr_debug("%s enter\n", __func__);
 	hvload_load_cont++;
 	if (!cont) {
 		pr_err("%s: failed to read %s\n", __func__,
@@ -382,17 +382,17 @@ static void aw87519_hvload_cfg_loaded(const struct firmware *cont,
 		if (hvload_load_cont <= 2) {
 			schedule_delayed_work(&aw87519->ram_work,
 					      msecs_to_jiffies(ram_timer_val));
-			pr_info("%s:restart hrtimer to load firmware\n",
+			pr_debug("%s:restart hrtimer to load firmware\n",
 				__func__);
 		}
 		return;
 	}
 
-	pr_info("%s: loaded %s - size: %zu\n", __func__, aw87519_hvload_name,
+	pr_debug("%s: loaded %s - size: %zu\n", __func__, aw87519_hvload_name,
 		cont ? cont->size : 0);
 
 	for (i = 0; i < cont->size; i = i + 2)
-		pr_info("%s: addr:0x%04x, data:0x%02x\n",
+		pr_debug("%s: addr:0x%04x, data:0x%02x\n",
 			__func__, *(cont->data + i), *(cont->data + i + 1));
 
 	/* aw87519 ram update */
@@ -407,12 +407,12 @@ static void aw87519_hvload_cfg_loaded(const struct firmware *cont,
 	release_firmware(cont);
 	aw87519->hvload_cfg_update_flag = 1;
 
-	pr_info("%s: fw update complete\n", __func__);
+	pr_debug("%s: fw update complete\n", __func__);
 }
 
 static int aw87519_hvload_update(struct aw87519 *aw87519)
 {
-	pr_info("%s enter\n", __func__);
+	pr_debug("%s enter\n", __func__);
 	return request_firmware_nowait(THIS_MODULE,
 				       FW_ACTION_HOTPLUG,
 				       aw87519_hvload_name,
@@ -426,7 +426,7 @@ static void aw87519_drcv_cfg_loaded(const struct firmware *cont, void *context)
 	int i = 0;
 	int ram_timer_val = 2000;
 
-	pr_info("%s enter\n", __func__);
+	pr_debug("%s enter\n", __func__);
 	drcv_load_cont++;
 
 	if (!cont) {
@@ -435,17 +435,17 @@ static void aw87519_drcv_cfg_loaded(const struct firmware *cont, void *context)
 		if (drcv_load_cont <= 2) {
 			schedule_delayed_work(&aw87519->ram_work,
 					      msecs_to_jiffies(ram_timer_val));
-			pr_info("%s:restart hrtimer to load firmware\n",
+			pr_debug("%s:restart hrtimer to load firmware\n",
 				__func__);
 		}
 		return;
 	}
 
-	pr_info("%s: loaded %s - size: %zu\n", __func__, aw87519_drcv_name,
+	pr_debug("%s: loaded %s - size: %zu\n", __func__, aw87519_drcv_name,
 		cont ? cont->size : 0);
 
 	for (i = 0; i < cont->size; i = i + 2)
-		pr_info("%s: addr:0x%04x, data:0x%02x\n",
+		pr_debug("%s: addr:0x%04x, data:0x%02x\n",
 			__func__, *(cont->data + i), *(cont->data + i + 1));
 
 	/* aw87519 ram update */
@@ -460,12 +460,12 @@ static void aw87519_drcv_cfg_loaded(const struct firmware *cont, void *context)
 	release_firmware(cont);
 	aw87519->drcv_cfg_update_flag = 1;
 
-	pr_info("%s: fw update complete\n", __func__);
+	pr_debug("%s: fw update complete\n", __func__);
 }
 
 static int aw87519_drcv_update(struct aw87519 *aw87519)
 {
-	pr_info("%s enter\n", __func__);
+	pr_debug("%s enter\n", __func__);
 	return request_firmware_nowait(THIS_MODULE,
 				       FW_ACTION_HOTPLUG,
 				       aw87519_drcv_name,
@@ -479,7 +479,7 @@ static void aw87519_kspk_cfg_loaded(const struct firmware *cont, void *context)
 	int i = 0;
 	int ram_timer_val = 2000;
 
-	pr_info("%s enter\n", __func__);
+	pr_debug("%s enter\n", __func__);
 	kspk_load_cont++;
 	if (!cont) {
 		pr_err("%s: failed to read %s\n", __func__, aw87519_kspk_name);
@@ -487,17 +487,17 @@ static void aw87519_kspk_cfg_loaded(const struct firmware *cont, void *context)
 		if (kspk_load_cont <= 2) {
 			schedule_delayed_work(&aw87519->ram_work,
 					      msecs_to_jiffies(ram_timer_val));
-			pr_info("%s:restart hrtimer to load firmware\n",
+			pr_debug("%s:restart hrtimer to load firmware\n",
 				__func__);
 		}
 		return;
 	}
 
-	pr_info("%s: loaded %s - size: %zu\n", __func__, aw87519_kspk_name,
+	pr_debug("%s: loaded %s - size: %zu\n", __func__, aw87519_kspk_name,
 		cont ? cont->size : 0);
 
 	for (i = 0; i < cont->size; i = i + 2)
-		pr_info("%s: addr:0x%04x, data:0x%02x\n",
+		pr_debug("%s: addr:0x%04x, data:0x%02x\n",
 			__func__, *(cont->data + i), *(cont->data + i + 1));
 
 	/* aw87519 ram update */
@@ -512,13 +512,13 @@ static void aw87519_kspk_cfg_loaded(const struct firmware *cont, void *context)
 	release_firmware(cont);
 	aw87519->kspk_cfg_update_flag = 1;
 
-	pr_info("%s: fw update complete\n", __func__);
+	pr_debug("%s: fw update complete\n", __func__);
 }
 
 #ifdef AWINIC_CFG_UPDATE_DELAY
 static int aw87519_kspk_update(struct aw87519 *aw87519)
 {
-	pr_info("%s enter\n", __func__);
+	pr_debug("%s enter\n", __func__);
 
 	return request_firmware_nowait(THIS_MODULE,
 				       FW_ACTION_HOTPLUG,
@@ -530,7 +530,7 @@ static int aw87519_kspk_update(struct aw87519 *aw87519)
 
 static void aw87519_cfg_work_routine(struct work_struct *work)
 {
-	pr_info("%s enter\n", __func__);
+	pr_debug("%s enter\n", __func__);
 	if (aw87519->kspk_cfg_update_flag == 0)
 		aw87519_kspk_update(aw87519);
 	if (aw87519->drcv_cfg_update_flag == 0)
@@ -736,7 +736,7 @@ static int aw87519_parse_dt(struct device *dev, struct device_node *np)
 {
 	aw87519->reset_gpio = of_get_named_gpio(np, "reset-gpio", 0);
 	if (aw87519->reset_gpio >= 0) {
-		dev_info(dev, "%s: reset gpio provided ok\n", __func__);
+		dev_dbg(dev, "%s: reset gpio provided ok\n", __func__);
 	} else {
 		dev_err(dev, "%s: no reset gpio provided failed\n", __func__);
 		return -1;
@@ -747,7 +747,7 @@ static int aw87519_parse_dt(struct device *dev, struct device_node *np)
 
 static int aw87519_hw_reset(struct aw87519 *aw87519)
 {
-	pr_info("%s enter\n", __func__);
+	pr_debug("%s enter\n", __func__);
 
 	if (aw87519 && gpio_is_valid(aw87519->reset_gpio)) {
 		gpio_set_value_cansleep(aw87519->reset_gpio, 0);
@@ -775,11 +775,11 @@ static int aw87519_read_chipid(struct aw87519 *aw87519)
 		aw87519_i2c_write(aw87519, 0x64, 0x2C);
 		ret = aw87519_i2c_read(aw87519, AW87519_REG_CHIPID, &reg_val);
 		if (reg_val == AW87519_CHIPID) {
-			pr_info("%s This Chip is  AW87519 chipid=0x%x\n",
+			pr_debug("%s This Chip is  AW87519 chipid=0x%x\n",
 				__func__, reg_val);
 			return 0;
 		}
-		pr_info("%s: aw87519 chipid=0x%x error\n", __func__, reg_val);
+		pr_debug("%s: aw87519 chipid=0x%x error\n", __func__, reg_val);
 		cnt++;
 		usleep_range(2000, 2500);
 	}
@@ -796,7 +796,7 @@ static int aw87519_i2c_probe(struct i2c_client *client,
 	struct device_node *np = client->dev.of_node;
 	int ret = -1;
 
-	pr_info("%s Enter\n", __func__);
+	pr_debug("%s Enter\n", __func__);
 
 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
 		dev_err(&client->dev, "%s: i2c check failed\n", __func__);
@@ -850,7 +850,7 @@ static int aw87519_i2c_probe(struct i2c_client *client,
 
 	ret = sysfs_create_group(&client->dev.kobj, &aw87519_attribute_group);
 	if (ret < 0) {
-		dev_info(&client->dev, "%s error creating sysfs attr files\n",
+		dev_dbg(&client->dev, "%s error creating sysfs attr files\n",
 			 __func__);
 	}
 
@@ -914,12 +914,12 @@ static int __init aw87519_pa_init(void)
 {
 	int ret;
 
-	pr_info("%s enter\n", __func__);
-	pr_info("%s: driver version: %s\n", __func__, AW87519_RIGHT_DRIVER_VERSION);
+	pr_debug("%s enter\n", __func__);
+	pr_debug("%s: driver version: %s\n", __func__, AW87519_RIGHT_DRIVER_VERSION);
 
 	ret = i2c_add_driver(&aw87519_i2c_driver);
 	if (ret) {
-		pr_info("%s Unable to register driver (%d)\n", __func__, ret);
+		pr_debug("%s Unable to register driver (%d)\n", __func__, ret);
 		return ret;
 	}
 	return 0;
@@ -927,7 +927,7 @@ static int __init aw87519_pa_init(void)
 
 static void __exit aw87519_pa_exit(void)
 {
-	pr_info("%s enter\n", __func__);
+	pr_debug("%s enter\n", __func__);
 	i2c_del_driver(&aw87519_i2c_driver);
 }
 

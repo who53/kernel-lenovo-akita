@@ -30,11 +30,11 @@
 #ifdef CONFIG_MTK_AEE_FEATURE
 #define MMDVFSERR(string, args...)	\
 	do {				\
-		pr_notice("error: "string, ##args);	\
+		pr_debug("error: "string, ##args);	\
 		aee_kernel_warning(MMDVFS_LOG_TAG, "error: "string, ##args); \
 	} while (0)
 #else
-#define MMDVFSERR(string, args...) pr_notice("error: "string, ##args)
+#define MMDVFSERR(string, args...) pr_debug("error: "string, ##args)
 #endif
 
 extern void mmdvfs_internal_handle_state_change(

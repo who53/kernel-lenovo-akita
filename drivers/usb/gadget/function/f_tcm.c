@@ -406,7 +406,7 @@ static void bot_set_alt(struct f_uas *fu)
 	if (ret)
 		goto err_wq;
 	fu->flags |= USBG_ENABLED;
-	pr_info("Using the BOT protocol\n");
+	pr_debug("Using the BOT protocol\n");
 	return;
 err_wq:
 	usb_ep_disable(fu->ep_out);
@@ -873,7 +873,7 @@ static void uasp_set_alt(struct f_uas *fu)
 		goto err_wq;
 	fu->flags |= USBG_ENABLED;
 
-	pr_info("Using the UAS protocol\n");
+	pr_debug("Using the UAS protocol\n");
 	return;
 err_wq:
 	usb_ep_disable(fu->ep_status);
@@ -942,7 +942,7 @@ static int get_cmd_dir(const unsigned char *cdb)
 		break;
 	default:
 #define CMD_DIR_MSG "target: Unknown data direction for SCSI Opcode 0x%02x\n"
-		pr_warn(CMD_DIR_MSG, cdb[0]);
+		pr_debug(CMD_DIR_MSG, cdb[0]);
 #undef CMD_DIR_MSG
 		ret = -EINVAL;
 	}

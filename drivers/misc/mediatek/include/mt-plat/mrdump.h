@@ -234,12 +234,12 @@ static inline void mrdump_rsvmem(void)
 
 __weak void dis_D_inner_flush_all(void)
 {
-	pr_notice("%s:weak function.\n", __func__);
+	pr_debug("%s:weak function.\n", __func__);
 }
 
 __weak void __inner_flush_dcache_all(void)
 {
-	pr_notice("%s:weak function.\n", __func__);
+	pr_debug("%s:weak function.\n", __func__);
 }
 
 #endif

@@ -362,7 +362,7 @@ static void aee_save_reg_stack_sram(int cpu)
 
 __weak void aee_wdt_zap_locks(void)
 {
-	pr_notice("%s:weak function\n", __func__);
+	pr_debug("%s:weak function\n", __func__);
 }
 
 void aee_wdt_atf_info(unsigned int cpu, struct pt_regs *regs)
@@ -516,10 +516,10 @@ void notrace aee_wdt_atf_entry(void)
 	if (mtk_rgu_status_is_sysrst() || mtk_rgu_status_is_eintrst()) {
 #ifdef CONFIG_MTK_PMIC_COMMON
 		if (pmic_get_register_value(PMIC_JUST_SMART_RST) == 1) {
-			pr_notice("SMART RESET: TRUE\n");
+			pr_debug("SMART RESET: TRUE\n");
 			aee_sram_fiq_log("SMART RESET: TRUE\n");
 		} else {
-			pr_notice("SMART RESET: FALSE\n");
+			pr_debug("SMART RESET: FALSE\n");
 			aee_sram_fiq_log("SMART RESET: FALSE\n");
 		}
 #endif
@@ -618,7 +618,7 @@ int __init mrdump_wdt_init(void)
 		wdt_percpu_log_length[i] = 0;
 		wdt_percpu_preempt_cnt[i] = 0;
 		if (wdt_percpu_log_buf[i] == NULL)
-			pr_notice("\n aee_common_init : kmalloc fail\n");
+			pr_debug("\n aee_common_init : kmalloc fail\n");
 	}
 	memset(wdt_log_buf, 0, sizeof(wdt_log_buf));
 	memset(regs_buffer_bin, 0, sizeof(regs_buffer_bin));
@@ -638,16 +638,16 @@ int __init mrdump_wdt_init(void)
 					mt_secure_call(MTK_SIP_KERNEL_WDT,
 					(u32) &aee_wdt_atf_entry, 0, 0, 0));
 #endif
-	pr_notice("\n MTK_SIP_KERNEL_WDT - 0x%p\n", &aee_wdt_atf_entry);
+	pr_debug("\n MTK_SIP_KERNEL_WDT - 0x%p\n", &aee_wdt_atf_entry);
 
 	if ((atf_aee_debug_phy_addr == 0)
 			|| (atf_aee_debug_phy_addr == 0xFFFFFFFF)) {
-		pr_notice("\n invalid atf_aee_debug_phy_addr\n");
+		pr_debug("\n invalid atf_aee_debug_phy_addr\n");
 	} else {
 		/* use the last 16KB in ATF log buffer */
 		atf_aee_debug_virt_addr = ioremap(atf_aee_debug_phy_addr,
 				ATF_AEE_DEBUG_BUF_LENGTH);
-		pr_notice("\n atf_aee_debug_virt_addr = 0x%p\n",
+		pr_debug("\n atf_aee_debug_virt_addr = 0x%p\n",
 				atf_aee_debug_virt_addr);
 		if (atf_aee_debug_virt_addr)
 			memset_io(atf_aee_debug_virt_addr, 0,

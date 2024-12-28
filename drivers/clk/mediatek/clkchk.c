@@ -73,7 +73,7 @@ static void print_enabled_clks(void)
 {
 	const char * const *cn = clkchk_cfg->all_clk_names;
 
-	pr_warn("enabled clks:\n");
+	pr_debug("enabled clks:\n");
 
 	for (; *cn != NULL; cn++) {
 		struct clk *c = __clk_lookup(*cn);
@@ -92,7 +92,7 @@ static void print_enabled_clks(void)
 			__clk_get_enable_count(c) <= 0U)
 			continue;
 
-		pr_warn("[%-17s: %8s, %3d, %3d, %10ld, %17s]\n",
+		pr_debug("[%-17s: %8s, %3d, %3d, %10ld, %17s]\n",
 			clk_hw_get_name(c_hw),
 			ccf_state(c_hw),
 			clk_hw_is_prepared(c_hw),
@@ -139,7 +139,7 @@ static void check_pll_off(void)
 
 	/* invalid. output debug info */
 
-	pr_warn("unexpected unclosed PLL: %s\n", buf);
+	pr_debug("unexpected unclosed PLL: %s\n", buf);
 	print_enabled_clks();
 
 #if AEE_EXCP_CHECK_PLL_FAIL
@@ -174,7 +174,7 @@ int clkchk_init(struct clkchk_cfg_t *cfg)
 
 	if (cfg == NULL || cfg->compatible == NULL
 		|| cfg->all_clk_names == NULL || cfg->off_pll_names == NULL) {
-		pr_warn("Invalid clkchk_cfg.\n");
+		pr_debug("Invalid clkchk_cfg.\n");
 		return -EINVAL;
 	}
 

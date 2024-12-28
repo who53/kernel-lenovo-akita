@@ -84,7 +84,7 @@ static idle_footprint_t fp[NR_IDLE_TYPES] = {
 int __attribute__((weak)) mtk_idle_trigger_wfi(
 	int idle_type, unsigned int idle_flag, int cpu)
 {
-	pr_notice("Power/swap %s is not implemented!\n", __func__);
+	pr_debug("Power/swap %s is not implemented!\n", __func__);
 
 	do {
 		isb();
@@ -387,14 +387,14 @@ int mtk_idle_notifier_register(struct notifier_block *n)
 	symname = kallsyms_lookup((unsigned long)n->notifier_call,
 			NULL, NULL, NULL, namebuf);
 	if (symname) {
-		pr_info("Power/swap [mt_idle_ntf] <%02d>%08lx (%s)\n",
+		pr_debug("Power/swap [mt_idle_ntf] <%02d>%08lx (%s)\n",
 			index++, (unsigned long)n->notifier_call, symname);
 	} else {
-		pr_info("Power/swap [mt_idle_ntf] <%02d>%08lx\n",
+		pr_debug("Power/swap [mt_idle_ntf] <%02d>%08lx\n",
 			index++, (unsigned long)n->notifier_call);
 	}
 	#else
-	pr_info("Power/swap [mt_idle_ntf] <%02d>%08lx\n",
+	pr_debug("Power/swap [mt_idle_ntf] <%02d>%08lx\n",
 			index++, (unsigned long)n->notifier_call);
 	#endif
 

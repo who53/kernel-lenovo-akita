@@ -252,7 +252,7 @@ static int mtk_capture2_pcm_open(struct snd_pcm_substream *substream)
 					    SNDRV_PCM_HW_PARAM_PERIODS);
 
 	if (ret < 0) {
-		pr_warn("mtk_capture2_pcm_close\n");
+		pr_debug("mtk_capture2_pcm_close\n");
 		mtk_capture2_pcm_close(substream);
 		return ret;
 	}

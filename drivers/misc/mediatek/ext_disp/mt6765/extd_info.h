@@ -72,7 +72,7 @@ struct EXTD_DRIVER {
 	int (*set_audio_enable)(int enable);
 	int (*set_audio_format)(int format);
 	int (*set_resolution)(int resolution);
-	int (*get_dev_info)(int is_sf, void *info);
+	int (*get_dev_dbg)(int is_sf, void *info);
 	int (*get_capability)(void *info);
 	int (*get_edid)(void *info);
 	int (*wait_vsync)(void);

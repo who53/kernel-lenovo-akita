@@ -72,7 +72,7 @@ s32 pwrap_wacs2(u32 write, u32 adr, u32 wdata, u32 *rdata)
 	if (mt_wrp.wacs2_hal != NULL)
 		return mt_wrp.wacs2_hal(write, adr, wdata, rdata);
 
-	pr_notice("[WRAP]driver need registered!!");
+	pr_debug("[WRAP]driver need registered!!");
 	return -5;
 
 }
@@ -94,53 +94,53 @@ s32 pwrap_write(u32 adr, u32 wdata)
 	s32 ret = 0;
 
 	if ((adr == 0x1508) && ((wdata & 0x1) == 0x0)) {
-		pr_notice("[PWRAP] Illegal write 0x1508 bit 0 to 0\n");
-		pr_notice("[PWRAP] Error: %s, line: %d\n", __func__, __LINE__);
-		pr_notice("[PWRAP] addr: 0x%x, wdata: 0x%x\n", adr, wdata);
+		pr_debug("[PWRAP] Illegal write 0x1508 bit 0 to 0\n");
+		pr_debug("[PWRAP] Error: %s, line: %d\n", __func__, __LINE__);
+		pr_debug("[PWRAP] addr: 0x%x, wdata: 0x%x\n", adr, wdata);
 		return -1;
 	} else if (adr == 0x1510 || adr == 0x1512 || adr == 0x1514) {
 		ret = pwrap_wacs2(PWRAP_WRITE, 0x1510, 0xB, 0);
 		if (ret != 0) {
-			pr_notice("[PWRAP] Recovery Fail, ret=%d\n", ret);
-			pr_notice("[PWRAP] %s, line: %d\n", __func__, __LINE__);
-			pr_notice("[PWRAP] adr:0x%x, wdata:0x%x\n", adr, wdata);
+			pr_debug("[PWRAP] Recovery Fail, ret=%d\n", ret);
+			pr_debug("[PWRAP] %s, line: %d\n", __func__, __LINE__);
+			pr_debug("[PWRAP] adr:0x%x, wdata:0x%x\n", adr, wdata);
 			return ret;
 		}
 	} else if (adr == 0x1516 || adr == 0x1518 || adr == 0x151a) {
 		ret = pwrap_wacs2(PWRAP_WRITE, 0x1516, 0x10A, 0);
 		if (ret != 0) {
-			pr_notice("[PWRAP] Recovery Fail, ret=%d\n", ret);
-			pr_notice("[PWRAP] %s, line: %d\n", __func__, __LINE__);
-			pr_notice("[PWRAP] adr:0x%x, wdata:0x%x\n", adr, wdata);
+			pr_debug("[PWRAP] Recovery Fail, ret=%d\n", ret);
+			pr_debug("[PWRAP] %s, line: %d\n", __func__, __LINE__);
+			pr_debug("[PWRAP] adr:0x%x, wdata:0x%x\n", adr, wdata);
 			return ret;
 		}
 	} else if ((adr == 0x19D0) && ((wdata & 0x1) == 0x0)) {
-		pr_notice("[PWRAP] Illegal write 0x19D0 bit 0 to 0\n");
-		pr_notice("[PWRAP] Error: %s, line: %d\n", __func__, __LINE__);
-		pr_notice("[PWRAP] addr: 0x%x, wdata: 0x%x\n", adr, wdata);
+		pr_debug("[PWRAP] Illegal write 0x19D0 bit 0 to 0\n");
+		pr_debug("[PWRAP] Error: %s, line: %d\n", __func__, __LINE__);
+		pr_debug("[PWRAP] addr: 0x%x, wdata: 0x%x\n", adr, wdata);
 		return -1;
 	} else if (adr == 0x19D8 || adr == 0x19DA || adr == 0x19DC) {
 		ret = pwrap_wacs2(PWRAP_WRITE, 0x19D8, 0xB, 0);
 		if (ret != 0) {
-			pr_notice("[PWRAP] Recovery Fail, ret=%d\n", ret);
-			pr_notice("[PWRAP] %s, line: %d\n", __func__, __LINE__);
-			pr_notice("[PWRAP] adr:0x%x, wdata:0x%x\n", adr, wdata);
+			pr_debug("[PWRAP] Recovery Fail, ret=%d\n", ret);
+			pr_debug("[PWRAP] %s, line: %d\n", __func__, __LINE__);
+			pr_debug("[PWRAP] adr:0x%x, wdata:0x%x\n", adr, wdata);
 			return ret;
 		}
 	} else if (adr == 0x19DE || adr == 0x19E0 || adr == 0x19E2) {
 		ret = pwrap_wacs2(PWRAP_WRITE, 0x19DE, 0xA, 0);
 		if (ret != 0) {
-			pr_notice("[PWRAP] Recovery Fail, ret=%d\n", ret);
-			pr_notice("[PWRAP] %s, line: %d\n", __func__, __LINE__);
-			pr_notice("[PWRAP] adr:0x%x, wdata:0x%x\n", adr, wdata);
+			pr_debug("[PWRAP] Recovery Fail, ret=%d\n", ret);
+			pr_debug("[PWRAP] %s, line: %d\n", __func__, __LINE__);
+			pr_debug("[PWRAP] adr:0x%x, wdata:0x%x\n", adr, wdata);
 			return ret;
 		}
 	} else {
 		ret = pwrap_wacs2(PWRAP_WRITE, adr, wdata, 0);
 		if (ret != 0) {
-			pr_notice("[PWRAP] Write Fail, ret=%d\n", ret);
-			pr_notice("[PWRAP] %s, line: %d\n", __func__, __LINE__);
-			pr_notice("[PWRAP] adr:0x%x, wdata:0x%x\n", adr, wdata);
+			pr_debug("[PWRAP] Write Fail, ret=%d\n", ret);
+			pr_debug("[PWRAP] %s, line: %d\n", __func__, __LINE__);
+			pr_debug("[PWRAP] adr:0x%x, wdata:0x%x\n", adr, wdata);
 			return ret;
 		}
 	}
@@ -190,7 +190,7 @@ static ssize_t mt_pwrap_store(struct device_driver *driver,
 	if (mt_wrp.store_hal != NULL)
 		return mt_wrp.store_hal(buf, count);
 
-	pr_notice("[WRAP]driver need registered!!");
+	pr_debug("[WRAP]driver need registered!!");
 	return count;
 }
 
@@ -224,10 +224,10 @@ static int __init mt_pwrap_init(void)
 
 	ret = driver_register(&mt_wrp.driver);
 	if (ret)
-		pr_notice("[WRAP]Fail to register mt_wrp");
+		pr_debug("[WRAP]Fail to register mt_wrp");
 	ret = driver_create_file(&mt_wrp.driver, &driver_attr_pwrap);
 	if (ret)
-		pr_notice("[WRAP]Fail to create mt_wrp sysfs files");
+		pr_debug("[WRAP]Fail to create mt_wrp sysfs files");
 	/* PWRAPLOG("pwrap_init_ops\n"); */
 	register_syscore_ops(&pwrap_syscore_ops);
 	return ret;
@@ -277,7 +277,7 @@ s32 pwrap_read(u32 adr, u32 *rdata)
 		ret = regmap_read(pmic_regmap, adr, rdata);
 		spin_unlock_irqrestore(&wrp_lock, flags);
 	} else
-		pr_notice("%s %d Error.\n", __func__, __LINE__);
+		pr_debug("%s %d Error.\n", __func__, __LINE__);
 	return ret;
 }
 EXPORT_SYMBOL(pwrap_read);
@@ -292,7 +292,7 @@ s32 pwrap_write(u32 adr, u32 wdata)
 		ret = regmap_write(pmic_regmap, adr, wdata);
 		spin_unlock_irqrestore(&wrp_lock, flags);
 	} else
-		pr_notice("%s %d Error.\n", __func__, __LINE__);
+		pr_debug("%s %d Error.\n", __func__, __LINE__);
 	return ret;
 }
 EXPORT_SYMBOL(pwrap_write);
@@ -301,17 +301,17 @@ static int __init mt_pwrap_init(void)
 {
 	struct device_node *node, *pwrap_node;
 
-	pr_info("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 	node = of_find_compatible_node(NULL, NULL, "mediatek,pwraph");
 	pwrap_node = of_parse_phandle(node, "mediatek,pwrap-regmap", 0);
 	if (pwrap_node) {
 		pmic_regmap = pwrap_node_to_regmap(pwrap_node);
 		if (IS_ERR(pmic_regmap)) {
-			pr_notice("%s %d Error.\n", __func__, __LINE__);
+			pr_debug("%s %d Error.\n", __func__, __LINE__);
 			return PTR_ERR(pmic_regmap);
 		}
 	} else {
-		pr_notice("%s %d Error.\n", __func__, __LINE__);
+		pr_debug("%s %d Error.\n", __func__, __LINE__);
 		return -EINVAL;
 	}
 	return 0;

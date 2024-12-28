@@ -530,7 +530,7 @@ static int rt5081_pmu_bled_probe(struct platform_device *pdev)
 	}
 
 	rt5081_pmu_bled_irq_register(pdev);
-	dev_info(&pdev->dev, "%s successfully\n", __func__);
+	dev_dbg(&pdev->dev, "%s successfully\n", __func__);
 	return 0;
 out_rt_flash_register:
 	led_classdev_unregister(&rt5081_pmu_bled_dev);
@@ -548,7 +548,7 @@ static int rt5081_pmu_bled_remove(struct platform_device *pdev)
 
 	platform_device_unregister(bled_data->rt_flash_dev);
 	led_classdev_unregister(&rt5081_pmu_bled_dev);
-	dev_info(bled_data->dev, "%s successfully\n", __func__);
+	dev_dbg(bled_data->dev, "%s successfully\n", __func__);
 	return 0;
 }
 

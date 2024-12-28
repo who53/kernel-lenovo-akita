@@ -1217,7 +1217,7 @@ static int acc_bind_config(struct usb_configuration *c)
 	struct acc_dev *dev = _acc_dev;
 	int ret;
 
-	pr_info("acc_bind_config\n");
+	pr_debug("acc_bind_config\n");
 
 	/* allocate a string ID for our interface */
 	if (acc_string_defs[INTERFACE_STRING_INDEX].id == 0) {
@@ -1387,7 +1387,7 @@ static struct usb_function *acc_alloc(struct usb_function_instance *fi)
 {
 	struct acc_dev *dev = _acc_dev;
 
-	pr_info("acc_alloc\n");
+	pr_debug("acc_alloc\n");
 
 	dev->function.name = "accessory";
 	dev->function.strings = acc_strings,

@@ -159,7 +159,7 @@ static int Audio_USB_MD_Select_Control_Set(struct snd_kcontrol *kcontrol,
 					   struct snd_ctl_elem_value *ucontrol)
 {
 	if (ucontrol->value.enumerated.item[0] > ARRAY_SIZE(md_choose)) {
-		pr_warn("return -EINVAL\n");
+		pr_debug("return -EINVAL\n");
 		return -EINVAL;
 	}
 	usb_md_select = ucontrol->value.integer.value[0];
@@ -190,7 +190,7 @@ static int Audio_USB_MD_UL_Select_Ctl_Set(struct snd_kcontrol *kcontrol,
 					  struct snd_ctl_elem_value *ucontrol)
 {
 	if (ucontrol->value.enumerated.item[0] > ARRAY_SIZE(ul_choose)) {
-		pr_warn("return -EINVAL\n");
+		pr_debug("return -EINVAL\n");
 		return -EINVAL;
 	}
 
@@ -254,7 +254,7 @@ static int Audio_USB_Lpbk_Set(struct snd_kcontrol *kcontrol,
 			      struct snd_ctl_elem_value *ucontrol)
 {
 	if (ucontrol->value.enumerated.item[0] > ARRAY_SIZE(on_off_str)) {
-		pr_warn("return -EINVAL\n");
+		pr_debug("return -EINVAL\n");
 		return -EINVAL;
 	}
 	usb_lpbk_enable = ucontrol->value.integer.value[0];
@@ -542,7 +542,7 @@ static int mtk_voice_usb_open(struct snd_pcm_substream *substream)
 					    SNDRV_PCM_HW_PARAM_PERIODS);
 
 	if (ret < 0) {
-		pr_warn("mtk_voice_usb_close\n");
+		pr_debug("mtk_voice_usb_close\n");
 		mtk_voice_usb_close(substream);
 		return ret;
 	}
@@ -845,7 +845,7 @@ mtk_voice_usb_pointer_cap(struct snd_pcm_substream *substream)
 		/* sram (device memory) need 8 byte algin for arm64*/
 		HW_Cur_ReadIdx = word_size_align(Afe_Get_Reg(AFE_AWB_CUR));
 		if (HW_Cur_ReadIdx == 0) {
-			pr_warn("%s(), HW_Cur_ReadIdx == 0\n", __func__);
+			pr_debug("%s(), HW_Cur_ReadIdx == 0\n", __func__);
 			HW_Cur_ReadIdx = Awb_Block->pucPhysBufAddr;
 		}
 		HW_memory_index = HW_Cur_ReadIdx - Awb_Block->pucPhysBufAddr;
@@ -870,7 +870,7 @@ mtk_voice_usb_pointer_cap(struct snd_pcm_substream *substream)
 
 		/* buffer overflow */
 		if (Awb_Block->u4DataRemained > Awb_Block->u4BufferSize) {
-			pr_warn("%s overflow RIdx:%x, Wdx:%x, Re:%x,Size:%x\n",
+			pr_debug("%s overflow RIdx:%x, Wdx:%x, Re:%x,Size:%x\n",
 				__func__, Awb_Block->u4DMAReadIdx,
 				Awb_Block->u4WriteIdx,
 				Awb_Block->u4DataRemained,
@@ -973,7 +973,7 @@ static int mtk_voice_usb_copy_cap(struct snd_pcm_substream *substream,
 
 	if (DMA_Read_Ptr + read_size < Awb_Block->u4BufferSize) {
 		if (DMA_Read_Ptr != Awb_Block->u4DMAReadIdx) {
-			pr_warn("%s 1, read_size:0x%x, Remained:0x%x, Ptr:0x%x, ReadIdx:0x%x\n",
+			pr_debug("%s 1, read_size:0x%x, Remained:0x%x, Ptr:0x%x, ReadIdx:0x%x\n",
 				__func__, read_size, Awb_Block->u4DataRemained,
 				DMA_Read_Ptr, Awb_Block->u4DMAReadIdx);
 		}
@@ -1010,7 +1010,7 @@ static int mtk_voice_usb_copy_cap(struct snd_pcm_substream *substream,
 		unsigned int size_2 = read_size - size_1;
 
 		if (DMA_Read_Ptr != Awb_Block->u4DMAReadIdx) {
-			pr_warn("%s 2, size1:0x%x, Remained:0x%x, Read_Ptr:0x%x, ReadIdx:0x%x\n",
+			pr_debug("%s 2, size1:0x%x, Remained:0x%x, Read_Ptr:0x%x, ReadIdx:0x%x\n",
 				__func__, size_1, Awb_Block->u4DataRemained,
 				DMA_Read_Ptr, Awb_Block->u4DMAReadIdx);
 		}
@@ -1038,14 +1038,14 @@ static int mtk_voice_usb_copy_cap(struct snd_pcm_substream *substream,
 			Awb_Block->u4WriteIdx, Awb_Block->u4DataRemained);
 
 		if (DMA_Read_Ptr != Awb_Block->u4DMAReadIdx) {
-			pr_warn("%s 3, size2:%x, empty:%x, rp:0x%x, ridx:%x\n",
+			pr_debug("%s 3, size2:%x, empty:%x, rp:0x%x, ridx:%x\n",
 				__func__, size_2, Awb_Block->u4DataRemained,
 				DMA_Read_Ptr, Awb_Block->u4DMAReadIdx);
 		}
 		if (copy_to_user((void __user *)(Read_Data_Ptr + size_1),
 				 (Awb_Block->pucVirtBufAddr +
 				 DMA_Read_Ptr), size_2)) {
-			pr_warn("%s Fail userPtr:%p,Addr:%p,ridx:0x%x,Ptr:0x%x,size:0x%x",
+			pr_debug("%s Fail userPtr:%p,Addr:%p,ridx:0x%x,Ptr:0x%x,size:0x%x",
 				__func__, Read_Data_Ptr,
 				Awb_Block->pucVirtBufAddr,
 				Awb_Block->u4DMAReadIdx,
@@ -1125,7 +1125,7 @@ static int mtk_voice_usb_copy_play(struct snd_pcm_substream *substream,
 		/* copy once */
 		if (Afe_WriteIdx_tmp + copy_size < Afe_Block->u4BufferSize) {
 			if (!access_ok(VERIFY_READ, data_w_ptr, copy_size)) {
-				pr_warn("0ptr invalid data_w_ptr=%p, size=%d u4BufferSize=%d, u4DataRemained=%d",
+				pr_debug("0ptr invalid data_w_ptr=%p, size=%d u4BufferSize=%d, u4DataRemained=%d",
 				data_w_ptr, copy_size,
 				Afe_Block->u4BufferSize,
 				Afe_Block->u4DataRemained);
@@ -1138,7 +1138,7 @@ static int mtk_voice_usb_copy_play(struct snd_pcm_substream *substream,
 				    Afe_WriteIdx_tmp),
 				    data_w_ptr,
 				    copy_size)) {
-					pr_warn("[AudioWarn] Fail copy from user\n");
+					pr_debug("[AudioWarn] Fail copy from user\n");
 					return -1;
 				}
 			}
@@ -1164,7 +1164,7 @@ static int mtk_voice_usb_copy_play(struct snd_pcm_substream *substream,
 			pr_debug("size_1=0x%x, size_2=0x%x\n", size_1, size_2);
 
 			if (!access_ok(VERIFY_READ, data_w_ptr, size_1)) {
-				pr_warn("1ptr invalid data_w_ptr=%p, size_1=%d u4BufferSize=%d, u4DataRemained=%d",
+				pr_debug("1ptr invalid data_w_ptr=%p, size_1=%d u4BufferSize=%d, u4DataRemained=%d",
 					data_w_ptr, size_1,
 					Afe_Block->u4BufferSize,
 					Afe_Block->u4DataRemained);
@@ -1177,7 +1177,7 @@ static int mtk_voice_usb_copy_play(struct snd_pcm_substream *substream,
 				      Afe_WriteIdx_tmp),
 				      data_w_ptr,
 				      size_1))) {
-					pr_warn(" Fail 1 copy from user");
+					pr_debug(" Fail 1 copy from user");
 					return -1;
 				}
 			}
@@ -1190,7 +1190,7 @@ static int mtk_voice_usb_copy_play(struct snd_pcm_substream *substream,
 
 			if (!access_ok(VERIFY_READ, data_w_ptr +
 			size_1, size_2)) {
-				pr_warn("2ptr data_w_ptr=%p, size_1=%d, size_2=%d Size=%d, u4DataRemained=%d",
+				pr_debug("2ptr data_w_ptr=%p, size_1=%d, size_2=%d Size=%d, u4DataRemained=%d",
 					data_w_ptr, size_1, size_2,
 					Afe_Block->u4BufferSize,
 					Afe_Block->u4DataRemained));
@@ -1202,7 +1202,7 @@ static int mtk_voice_usb_copy_play(struct snd_pcm_substream *substream,
 				if ((copy_from_user((Afe_Block->pucVirtBufAddr +
 					Afe_WriteIdx_tmp),
 					(data_w_ptr + size_1), size_2))) {
-					pr_warn("write Fail 2 copy from user");
+					pr_debug("write Fail 2 copy from user");
 					return -1;
 				}
 			}

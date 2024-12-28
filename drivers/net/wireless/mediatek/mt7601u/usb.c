@@ -279,7 +279,7 @@ static int mt7601u_probe(struct usb_interface *usb_intf,
 
 	asic_rev = mt7601u_rr(dev, MT_ASIC_VERSION);
 	mac_rev = mt7601u_rr(dev, MT_MAC_CSR0);
-	dev_info(dev->dev, "ASIC revision: %08x MAC revision: %08x\n",
+	dev_dbg(dev->dev, "ASIC revision: %08x MAC revision: %08x\n",
 		 asic_rev, mac_rev);
 
 	/* Note: vendor driver skips this check for MT7601U */

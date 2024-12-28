@@ -273,13 +273,13 @@ do { \
 #define STPSDIO_PR_INFO(fmt, arg...) \
 do { \
 	if (gStpSdioDbgLvl >= STPSDIO_LOG_INFO) \
-		pr_info(DFT_TAG "[I]%s:"  fmt, __func__, ##arg); \
+		pr_debug(DFT_TAG "[I]%s:"  fmt, __func__, ##arg); \
 } while (0)
 
 #define STPSDIO_PR_WARN(fmt, arg...)	\
 do { \
 	if (gStpSdioDbgLvl >= STPSDIO_LOG_WARN) \
-		pr_warn(DFT_TAG "[W]%s:"  fmt, __func__, ##arg); \
+		pr_debug(DFT_TAG "[W]%s:"  fmt, __func__, ##arg); \
 } while (0)
 
 #define STPSDIO_PR_ERR(fmt, arg...)	\
@@ -2739,11 +2739,11 @@ static INT32 stp_sdio_probe(const MTK_WCN_HIF_SDIO_CLTCTX clt_ctx,
 
 #if 0				/* controlled by 6620_launcher & WMT */
 	/*set STP sdio mode */
-	pr_warn(DFT_TAG "%s: set stp sdio mode\n", __func__);
+	pr_debug(DFT_TAG "%s: set stp sdio mode\n", __func__);
 	mtk_wcn_stp_set_sdio_mode(1);
 
 	/*indicate the stp the sdio ready */
-	pr_warn(DFT_TAG "%s: stp enable\n", __func__);
+	pr_debug(DFT_TAG "%s: stp enable\n", __func__);
 	mtk_wcn_stp_enable(1);
 #endif
 
@@ -2927,23 +2927,23 @@ ssize_t stp_sdio_rxdbg_read(struct file *filp, char __user *buf, size_t count, l
 		idx = (stp_sdio_rxdbg_cnt - 1 - i) & STP_SDIO_TXDBG_COUNT_MASK;
 		len = stp_sdio_rxdbg_buffer[idx].bus_rxlen;
 		if (len == 0) {
-			pr_warn(DFT_TAG "idx(0x%x) 0 == len dump skip\n",
+			pr_debug(DFT_TAG "idx(0x%x) 0 == len dump skip\n",
 				stp_sdio_rxdbg_cnt);
 		}
-		pr_warn(DFT_TAG "idx(0x%x) chisr_rxlen(%d) bus_rxlen(%d) ts(%d)\n",
+		pr_debug(DFT_TAG "idx(0x%x) chisr_rxlen(%d) bus_rxlen(%d) ts(%d)\n",
 			stp_sdio_rxdbg_cnt, stp_sdio_rxdbg_buffer[idx].chisr_rxlen, len,
 			stp_sdio_rxdbg_buffer[idx].ts);
 		for (j = 0; j < STP_SDIO_RX_BUF_SIZE && j < len; j += 16) {
 			pbuf = &stp_sdio_rxdbg_buffer[idx].rx_pkt_buf[j];
-			pr_warn(DFT_TAG "[0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x ",
+			pr_debug(DFT_TAG "[0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x ",
 					pbuf[0], pbuf[1], pbuf[2], pbuf[3], pbuf[4], pbuf[5], pbuf[6],
 					pbuf[7]);
-			pr_warn(DFT_TAG "0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x]\n",
+			pr_debug(DFT_TAG "0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x]\n",
 				pbuf[8], pbuf[9], pbuf[10], pbuf[11], pbuf[12], pbuf[13],
 				pbuf[14], pbuf[15]);
 			msleep(20);
 		}
-		pr_warn(DFT_TAG "dump ok\n");
+		pr_debug(DFT_TAG "dump ok\n");
 	}
 
 	return 0;
@@ -2961,7 +2961,7 @@ ssize_t stp_sdio_rxdbg_write(struct file *filp, const char __user *buf, size_t c
 {
 	ULONG len = count;
 
-	pr_warn(DFT_TAG "write parameter len = %lu\n\r", len);
+	pr_debug(DFT_TAG "write parameter len = %lu\n\r", len);
 
 	return len;
 }
@@ -2979,7 +2979,7 @@ INT32 stp_sdio_rxdbg_setup(VOID)
 
 	gStpSdioRxDbgEntry = proc_create(STP_SDIO_RXDBG_PROCNAME, 0644, NULL, &stp_sdio_rxdbg_fops);
 	if (gStpSdioRxDbgEntry == NULL) {
-		pr_warn(DFT_TAG "Unable to create /proc entry\n\r");
+		pr_debug(DFT_TAG "Unable to create /proc entry\n\r");
 		return -1;
 	}
 
@@ -3023,11 +3023,11 @@ static VOID stp_sdio_txperf_dump(VOID)
 	pkt_num = stp_sdio_txperf_txed_pkt_num;
 	lmt_cnt = stp_sdio_txperf_pkt_num_lmt_cnt;
 
-	pr_warn(DFT_TAG "txwait_fifo_left(%d), txwait_to_send(%d), txwait_count(%d)\n",
+	pr_debug(DFT_TAG "txwait_fifo_left(%d), txwait_to_send(%d), txwait_count(%d)\n",
 		fifo, data, cnt);
 	if (cnt)
-		pr_warn(DFT_TAG "avg left(%d), to_send(%d)\n", (fifo / cnt), (data / cnt));
-	pr_warn(DFT_TAG "tx_worker_cnt(%d), pkt_num(%d), pkt_num_lmt_cnt(%d)\n",
+		pr_debug(DFT_TAG "avg left(%d), to_send(%d)\n", (fifo / cnt), (data / cnt));
+	pr_debug(DFT_TAG "tx_worker_cnt(%d), pkt_num(%d), pkt_num_lmt_cnt(%d)\n",
 		wkr, pkt_num, lmt_cnt);
 
 #endif
@@ -3187,7 +3187,7 @@ ssize_t stp_sdio_txdbg_write(struct file *filp, const char __user *buf, size_t c
 {
 	ULONG len = count;
 
-	pr_warn(DFT_TAG "write parameter len = %lu\n\r", len);
+	pr_debug(DFT_TAG "write parameter len = %lu\n\r", len);
 
 	return len;
 }
@@ -3284,7 +3284,7 @@ INT32 stp_sdio_txdbg_setup(VOID)
 {
 	gStpSdioTxDbgEntry = proc_create(STP_SDIO_TXDBG_PROCNAME, 0644, NULL, &stp_sdio_txdbg_fops);
 	if (gStpSdioTxDbgEntry == NULL) {
-		pr_warn(DFT_TAG "Unable to create /proc entry\n\r");
+		pr_debug(DFT_TAG "Unable to create /proc entry\n\r");
 		return -1;
 	}
 
@@ -3336,7 +3336,7 @@ INT32 stp_sdio_owndbg_setup(VOID)
 {
 	gStpSdioOwnEntry = proc_create(STP_SDIO_OWNDBG_PROCNAME, 0644, NULL, &stp_sdio_own_fops);
 	if (gStpSdioOwnEntry == NULL) {
-		pr_warn(DFT_TAG "Unable to create /proc entry\n\r");
+		pr_debug(DFT_TAG "Unable to create /proc entry\n\r");
 		return -1;
 	}
 

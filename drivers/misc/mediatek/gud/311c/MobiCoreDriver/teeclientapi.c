@@ -748,7 +748,7 @@ u32 teec_open_session(struct teec_context *context,
 
 	session->imp.context = context->imp;
 	session->imp.active = true;
-	mc_dev_info(" created session ID %x", session->imp.session_id);
+	mc_dev_dbg(" created session ID %x", session->imp.session_id);
 
 	/* Let TA go through entry points */
 	mc_dev_devel(" let TA go through entry points");

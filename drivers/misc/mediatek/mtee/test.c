@@ -38,7 +38,7 @@ uint32_t TEECK_Test_Add(KREE_SESSION_HANDLE session, uint32_t a, uint32_t b)
 
 	ret = KREE_TeeServiceCall(session, TZCMD_TEST_ADD, paramTypes, param);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("ServiceCall error %d\n", ret);
+		pr_debug("ServiceCall error %d\n", ret);
 		param[2].value.a = 0;
 	}
 
@@ -64,7 +64,7 @@ void tz_test(void)
 
 	ret = KREE_CreateSession(TZ_TA_TEST_UUID, &test_session);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("CreateSession error %d\n", ret);
+		pr_debug("CreateSession error %d\n", ret);
 		return;
 	}
 
@@ -83,7 +83,7 @@ void tz_test(void)
 
 	ret = KREE_CreateSession(TZ_TA_MEM_UUID, &mem_session);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("Create memory session error %d\n", ret);
+		pr_debug("Create memory session error %d\n", ret);
 		return;
 	}
 
@@ -96,7 +96,7 @@ void tz_test(void)
 	shm_param.size = size;
 	ret = KREE_RegisterSharedmem(mem_session, &shm_handle, &shm_param);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("KREE_RegisterSharedmem Error: %s\n",
+		pr_debug("KREE_RegisterSharedmem Error: %s\n",
 			TZ_GetErrorString(ret));
 		return;
 	}
@@ -115,14 +115,14 @@ void tz_test(void)
 							TZPT_VALUE_OUTPUT),
 					param);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("TZCMD_TEST_ADD_MEM error %d\n", ret);
+		pr_debug("TZCMD_TEST_ADD_MEM error %d\n", ret);
 		return;
 	}
 	pr_debug("KREE ADD MEM result = 0x%x\n", param[2].value.a);
 
 	ret = KREE_AllocSecuremem(mem_session, &mem_handle, 0, 1024);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("Secure memory allocate error %d\n", ret);
+		pr_debug("Secure memory allocate error %d\n", ret);
 		return;
 	}
 
@@ -137,7 +137,7 @@ void tz_test(void)
 
 	ret = KREE_ReferenceSecuremem(mem_session, mem_handle);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("KREE_ReferenceSecuremem Error: %d\n", ret);
+		pr_debug("KREE_ReferenceSecuremem Error: %d\n", ret);
 
 	param[0].value.a = (uint32_t) mem_handle;
 	ret = KREE_TeeServiceCall(test_session, TZCMD_TEST_DO_B,
@@ -151,26 +151,26 @@ void tz_test(void)
 	/* Free/Unreference secure memory */
 	ret = KREE_UnreferenceSecuremem(mem_session, mem_handle);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("KREE_UnReferenceSecureMem Error 1: %d\n", ret);
+		pr_debug("KREE_UnReferenceSecureMem Error 1: %d\n", ret);
 
 	ret = KREE_UnreferenceSecuremem(mem_session, mem_handle);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("KREE_UnReferenceSecureMem Error 2: %d\n", ret);
+		pr_debug("KREE_UnReferenceSecureMem Error 2: %d\n", ret);
 
 	ret = KREE_UnregisterSharedmem(mem_session, shm_handle);
 	if (ret != TZ_RESULT_SUCCESS) {
-		pr_warn("KREE_UnregisterSharedmem Error: %s\n",
+		pr_debug("KREE_UnregisterSharedmem Error: %s\n",
 			TZ_GetErrorString(ret));
 		return;
 	}
 
 	ret = KREE_CloseSession(test_session);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("CloseSession error %d\n", ret);
+		pr_debug("CloseSession error %d\n", ret);
 
 	ret = KREE_CloseSession(mem_session);
 	if (ret != TZ_RESULT_SUCCESS)
-		pr_warn("Close memory session error %d\n", ret);
+		pr_debug("Close memory session error %d\n", ret);
 
 	pr_debug("KREE test done!!!!\n");
 }

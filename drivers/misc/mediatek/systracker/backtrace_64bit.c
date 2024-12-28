@@ -53,7 +53,7 @@ void  __attribute__((weak)) consys_print
 	(unsigned long long time_stamp,
 		unsigned int cpu, unsigned int t)
 {
-	pr_notice("NO %s !!!\n", __func__);
+	pr_debug("NO %s !!!\n", __func__);
 }
 
 void save_sys_bt(unsigned long long time_stamp,

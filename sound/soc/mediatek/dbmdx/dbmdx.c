@@ -306,7 +306,7 @@ static int dbmdx_set_active_interface(struct dbmdx_private *p,
 	p->chip = p->interfaces[interface_idx];
 	p->active_interface = p->interface_types[interface_idx];
 
-	dev_info(p->dev, "%s: switched to interface#: %d\n",
+	dev_dbg(p->dev, "%s: switched to interface#: %d\n",
 		__func__, interface_idx);
 
 	return 0;
@@ -717,11 +717,11 @@ static int dbmdx_verify_checksum(struct dbmdx_private *p,
 	if (ret) {
 		switch (size) {
 		case 4:
-			dev_info(p->dev,
+			dev_dbg(p->dev,
 				"%s: Got:      0x%02x 0x%02x 0x%02x 0x%02x\n",
 				__func__,
 				got[0], got[1], got[2], got[3]);
-			dev_info(p->dev,
+			dev_dbg(p->dev,
 				"%s: Expected: 0x%02x 0x%02x 0x%02x 0x%02x\n",
 				__func__,
 				expect[0], expect[1], expect[2], expect[3]);
@@ -1084,7 +1084,7 @@ static int dbmdx_va_set_speed(struct dbmdx_private *p,
 {
 	int ret;
 
-	dev_info(p->dev, "%s: set speed to %u\n",
+	dev_dbg(p->dev, "%s: set speed to %u\n",
 		__func__, speed);
 
 	ret = dbmdx_send_cmd(
@@ -1124,7 +1124,7 @@ static int dbmdx_set_backlog_len(struct dbmdx_private *p, u32 history)
 
 	history &= ~(1 << 12);
 
-	dev_info(p->dev, "%s: history 0x%x\n", __func__, (u32)history);
+	dev_dbg(p->dev, "%s: history 0x%x\n", __func__, (u32)history);
 
 	/* If history is specified in ms, we should verify that
 	 * FW audio buffer size in large enough to contain the history
@@ -3419,7 +3419,7 @@ static ssize_t dbmdx_acoustic_model_build_from_multichunk_file(
 		target_pos += encoded_size;
 		amodel_chunks_size[*num_of_amodel_chunks] = encoded_size;
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: Added chunk #%d, (%d bytes), target_pos=%d\n",
 				__func__, *num_of_amodel_chunks,
 				(int)encoded_size, (int)target_pos);
@@ -3484,7 +3484,7 @@ static ssize_t dbmdx_acoustic_model_build_from_svt_multichunk_file(
 			break;
 
 	if (i == file_size) {
-		dev_info(p->dev, "%s: Detected svt dummy model file\n",
+		dev_dbg(p->dev, "%s: Detected svt dummy model file\n",
 				__func__);
 		return dbmdx_va_amodel_load_dummy_model(p,
 							0x1,
@@ -3890,7 +3890,7 @@ static int dbmdx_firmware_ready(const struct firmware *fw,
 	memset(fw_version, 0, 200);
 	dbmdx_get_firmware_version(fw->data, fw->size, fw_version, 200);
 	if (strlen(fw_version) > 15)
-		dev_info(p->dev, "%s: firmware: %s\n", __func__, fw_version);
+		dev_dbg(p->dev, "%s: firmware: %s\n", __func__, fw_version);
 
 	/* check if the chip interface is ready to boot */
 	ret = p->chip->can_boot(p);
@@ -5388,7 +5388,7 @@ static int dbmdx_va_ve_send_idle_usecase_config(struct dbmdx_private *p,
 	}
 
 	if (p->va_ve_flags.idle_usecase_active) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s IDLE usecase has been already configured\n",
 			__func__);
 		return 0;
@@ -5544,7 +5544,7 @@ static int dbmdx_va_ve_send_idle_usecase_config(struct dbmdx_private *p,
 		
 
 		msleep(100);
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 					"%s mic initialization\n",
 				__func__);
 		mic_init_flag=0;
@@ -6208,7 +6208,7 @@ static int dbmdx_va_ve_send_usecase_config(struct dbmdx_private *p,
 
 		if(mic_opened_first){
 			msleep(100);
-			dev_info(p->dev,
+			dev_dbg(p->dev,
 				"%s mic opened first\n",
 					__func__);
 			mic_opened_first=0;	
@@ -6429,7 +6429,7 @@ static int dbmdx_va_ve_start_usecase(struct dbmdx_private *p,
 		return -EINVAL;
 	}
 	if (p->start_usecase_disabled && !force_usecase_start) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s Usecase start is disabled! Please start manually\n",
 			__func__);
 		return 0;
@@ -6852,7 +6852,7 @@ static int dbmdx_va_usecase_update(struct dbmdx_private *p,
 	if (usecase == NULL) {
 
                 if (p->va_ve_flags.idle_usecase_active) {
-			dev_info(p->dev,
+			dev_dbg(p->dev,
 				"%s IDLE usecase has been already configured\n",
 				__func__);
 			return 0;
@@ -7452,7 +7452,7 @@ static int dbmdx_usecase_manager(struct dbmdx_private *p, unsigned int cmd)
 			}
 		}
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: Required mode: (%x), Current mode: (%x)\n",
 			__func__, (int)usecase_mode,
 			p->va_ve_flags.usecase_mode);
@@ -7510,7 +7510,7 @@ static int dbmdx_config_va_mode(struct dbmdx_private *p)
 		goto out;
 	}
 
-	dev_info(p->dev, "%s: Reported FW ID is: 0x%x\n", __func__, cur_val);
+	dev_dbg(p->dev, "%s: Reported FW ID is: 0x%x\n", __func__, cur_val);
 
 	usleep_range(DBMDX_USLEEP_BEFORE_INIT_CONFIG,
 		DBMDX_USLEEP_BEFORE_INIT_CONFIG + 1000);
@@ -7681,7 +7681,7 @@ static int dbmdx_config_va_mode(struct dbmdx_private *p)
 		goto out;
 	}
 
-	dev_info(p->dev, "%s: VA firmware 0x%x ready\n", __func__, fwver);
+	dev_dbg(p->dev, "%s: VA firmware 0x%x ready\n", __func__, fwver);
 
 	ret = dbmdx_set_mode(p, DBMDX_IDLE);
 	if (ret < 0) {
@@ -7714,7 +7714,7 @@ static int dbmdx_config_va_ve_mode(struct dbmdx_private *p)
 		goto out;
 	}
 
-	dev_info(p->dev, "%s: Reported FW ID is: 0x%x\n", __func__, cur_val);
+	dev_dbg(p->dev, "%s: Reported FW ID is: 0x%x\n", __func__, cur_val);
 
 	usleep_range(DBMDX_USLEEP_BEFORE_INIT_CONFIG,
 		DBMDX_USLEEP_BEFORE_INIT_CONFIG + 1000);
@@ -7805,7 +7805,7 @@ static int dbmdx_config_va_ve_mode(struct dbmdx_private *p)
 		goto out;
 	}
 
-	dev_info(p->dev, "%s: VA_VE firmware 0x%x ready\n", __func__, fwver);
+	dev_dbg(p->dev, "%s: VA_VE firmware 0x%x ready\n", __func__, fwver);
 
 	ret = 0;
 out:
@@ -8199,17 +8199,17 @@ static int dbmdx_vqe_get_version(struct dbmdx_private *p)
 	if (ret)
 		goto out;
 
-	dev_info(p->dev, "%s: firmware product major: 0x%x\n",
+	dev_dbg(p->dev, "%s: firmware product major: 0x%x\n",
 		__func__, info.major);
-	dev_info(p->dev, "%s: firmware product minor: 0x%x\n",
+	dev_dbg(p->dev, "%s: firmware product minor: 0x%x\n",
 		__func__, info.minor);
-	dev_info(p->dev, "%s: firmware version: 0x%x\n",
+	dev_dbg(p->dev, "%s: firmware version: 0x%x\n",
 		__func__, info.version);
-	dev_info(p->dev, "%s: firmware patch version: 0x%x\n",
+	dev_dbg(p->dev, "%s: firmware patch version: 0x%x\n",
 		__func__, info.patch);
-	dev_info(p->dev, "%s: firmware debug version: 0x%x\n",
+	dev_dbg(p->dev, "%s: firmware debug version: 0x%x\n",
 		__func__, info.debug);
-	dev_info(p->dev, "%s: firmware tuning version: 0x%x\n",
+	dev_dbg(p->dev, "%s: firmware tuning version: 0x%x\n",
 		__func__, info.tuning);
 out:
 	return ret;
@@ -8485,7 +8485,7 @@ static int dbmdx_request_and_load_fw_va_ve_mode(struct dbmdx_private *p)
 
 	do {
 		if (p->va_chip_enabled) {
-			dev_info(p->dev, "%s: request VA firmware - %s\n",
+			dev_dbg(p->dev, "%s: request VA firmware - %s\n",
 				__func__, p->pdata->va_firmware_name);
 			ret =
 			request_firmware((const struct firmware **)&p->va_fw,
@@ -8499,7 +8499,7 @@ static int dbmdx_request_and_load_fw_va_ve_mode(struct dbmdx_private *p)
 			}
 			if (p->pdata->boot_options &
 						DBMDX_BOOT_OPT_SEND_PREBOOT) {
-				dev_info(p->dev,
+				dev_dbg(p->dev,
 				"%s: request VA preboot firmware - %s\n",
 					 __func__,
 					 p->pdata->va_preboot_firmware_name);
@@ -8518,7 +8518,7 @@ static int dbmdx_request_and_load_fw_va_ve_mode(struct dbmdx_private *p)
 		}
 
 		if (p->va_ve_chip_enabled) {
-			dev_info(p->dev, "%s: request VA_VE firmware - %s\n",
+			dev_dbg(p->dev, "%s: request VA_VE firmware - %s\n",
 				__func__, p->pdata->va_ve_firmware_name);
 			ret =
 			request_firmware((const struct firmware **)&p->va_ve_fw,
@@ -8533,7 +8533,7 @@ static int dbmdx_request_and_load_fw_va_ve_mode(struct dbmdx_private *p)
 
 			if (p->pdata->boot_options_va_ve &
 				DBMDX_BOOT_OPT_SEND_PREBOOT) {
-				dev_info(p->dev,
+				dev_dbg(p->dev,
 				"%s: request VA_VE  preboot firmware - %s\n",
 					 __func__,
 					 p->pdata->va_ve_preboot_firmware_name);
@@ -8674,7 +8674,7 @@ static int dbmdx_request_and_load_fw(struct dbmdx_private *p,
 	if (p->pdata->feature_va && va) {
 		/* request VA firmware */
 		do {
-			dev_info(p->dev, "%s: request VA firmware - %s\n",
+			dev_dbg(p->dev, "%s: request VA firmware - %s\n",
 				 __func__, p->pdata->va_firmware_name);
 			ret =
 			request_firmware((const struct firmware **)&p->va_fw,
@@ -8689,7 +8689,7 @@ static int dbmdx_request_and_load_fw(struct dbmdx_private *p,
 			}
 			if (p->pdata->boot_options &
 					DBMDX_BOOT_OPT_SEND_PREBOOT) {
-				dev_info(p->dev,
+				dev_dbg(p->dev,
 				"%s: request VA preboot firmware - %s\n",
 				__func__,
 				p->pdata->va_preboot_firmware_name);
@@ -8722,7 +8722,7 @@ static int dbmdx_request_and_load_fw(struct dbmdx_private *p,
 		/* request VQE firmware */
 		do {
 
-			dev_info(p->dev, "%s: request VQE firmware - %s\n",
+			dev_dbg(p->dev, "%s: request VQE firmware - %s\n",
 				 __func__, p->pdata->vqe_firmware_name);
 			ret =
 			request_firmware((const struct firmware **)&p->vqe_fw,
@@ -8746,7 +8746,7 @@ static int dbmdx_request_and_load_fw(struct dbmdx_private *p,
 		}
 
 		if (p->pdata->feature_fw_overlay) {
-			dev_info(p->dev,
+			dev_dbg(p->dev,
 				"%s: request VQE non-overlay firmware - %s\n",
 				__func__,
 				p->pdata->vqe_non_overlay_firmware_name);
@@ -9537,12 +9537,12 @@ static ssize_t dbmdx_reboot_store(struct device *dev,
 		vqe = 1;
 	else if (!strncmp(buf, "help", min_t(int, size, 4))) {
 #ifdef DBMDX_VA_VE_SUPPORT
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: Commands: va_ve | va_ve_debug | va_ve_record | help\n",
 			__func__);
 
 #else
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: Commands: shutdown | va | va_resume | va_debug | vqe | help\n",
 			__func__);
 #endif
@@ -9550,14 +9550,14 @@ static ssize_t dbmdx_reboot_store(struct device *dev,
 	}
 
 	if (shutdown) {
-		dev_info(p->dev, "%s: Shutting down DBMDX...\n", __func__);
+		dev_dbg(p->dev, "%s: Shutting down DBMDX...\n", __func__);
 		ret = dbmdx_shutdown(p);
 		if (ret != 0) {
 			dev_err(p->dev, "%s: Error shutting down DBMDX\n",
 				__func__);
 			return -EIO;
 		}
-		dev_info(p->dev, "%s: DBMDX was shut down\n", __func__);
+		dev_dbg(p->dev, "%s: DBMDX was shut down\n", __func__);
 		return size;
 	}
 
@@ -9583,19 +9583,19 @@ static ssize_t dbmdx_reboot_store(struct device *dev,
 
 	if (va_resume) {
 		if (p->active_fw == DBMDX_FW_POWER_OFF_VA) {
-			dev_info(p->dev, "%s: DBMDX Resume Start\n", __func__);
+			dev_dbg(p->dev, "%s: DBMDX Resume Start\n", __func__);
 			ret = dbmdx_perform_recovery(p);
 			if (ret) {
 				dev_err(p->dev, "%s: DBMDX resume failed\n",
 					__func__);
 				return -EIO;
 			}
-			dev_info(p->dev, "%s: Resume Done\n", __func__);
+			dev_dbg(p->dev, "%s: Resume Done\n", __func__);
 			return size;
 		}
 	}
 
-	dev_info(p->dev, "%s: Reboot Start\n", __func__);
+	dev_dbg(p->dev, "%s: Reboot Start\n", __func__);
 
 	/*
 	 * if VQE needs to be loaded and not VA but both features are enabled
@@ -9673,7 +9673,7 @@ static ssize_t dbmdx_va_debug_store(struct device *dev,
 		p->sleep_disabled = false;
 		ret = 0;
 	} else if (!strncmp(buf, "help", min_t(int, size, 4))) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: Commands: clk_output | uart_dbg | clk_uart_output | disable_dbg | pm_suspend | pm_resume | disable_sleep | enable_sleep | help\n",
 			__func__);
 		ret = 0;
@@ -9712,7 +9712,7 @@ static ssize_t dbmdx_vqe_debug_store(struct device *dev,
 		p->sleep_disabled = false;
 		ret = 0;
 	} else if (!strncmp(buf, "help", min_t(int, size, 4))) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: Commands: disable_sleep | enable_sleep | help\n",
 			__func__);
 		ret = 0;
@@ -9832,7 +9832,7 @@ static ssize_t dbmdx_va_ve_debug_store(struct device *dev,
 						DBMDX_CHANGE_CLOCK_DISABLED;
 		ret = 0;
 	} else if (!strncmp(buf, "help", min_t(int, size, 4))) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: Commands: mic_override_enable | mic_override_disable | start_usecase_enable | start_usecase_disable | change_to_host_clk_enable_d4 | change_to_host_clk_disable_d4 | change_to_int_clk_enable_d4 | change_to_int_clk_disable_d4 | change_clk_src_enable_d4 | change_clk_src_disable_d4 | change_to_host_clk_enable_d2 | change_to_host_clk_disable_d2 | change_to_int_clk_enable_d2 | change_to_int_clk_disable_d2 | change_clk_src_enable_d2 | change_clk_src_disable_d2 | change_clk_src_enable | change_clk_src_disable | help\n",
 			__func__);
 		ret = 0;
@@ -10150,7 +10150,7 @@ out_pm_mode:
 	p->unlock(p);
 	return size;
 print_usage:
-	dev_info(p->dev,
+	dev_dbg(p->dev,
 		"%s: Usage: qed_expiration=[4000-16000] / qed_no_signal=[500-2800] / qed_min_query_duration=[500-1000]\n",
 		__func__);
 	return ret;
@@ -10367,26 +10367,26 @@ static ssize_t dbmdx_va_speed_cfg_store(struct device *dev,
 
 	if (type == 0) {
 		p->pdata->va_speed_cfg[index].cfg = new_value;
-		dev_info(p->dev, "%s: va_speed_cfg[%u].cfg was set to %8.8x\n",
+		dev_dbg(p->dev, "%s: va_speed_cfg[%u].cfg was set to %8.8x\n",
 			__func__, index, new_value);
 	} else if (type == 1) {
 		p->pdata->va_speed_cfg[index].uart_baud = new_value;
-		dev_info(p->dev, "%s: va_speed_cfg[%u].uart_baud was set to %u\n",
+		dev_dbg(p->dev, "%s: va_speed_cfg[%u].uart_baud was set to %u\n",
 			__func__, index, new_value);
 	} else if (type == 2) {
 		p->pdata->va_speed_cfg[index].i2c_rate = new_value;
-		dev_info(p->dev, "%s: va_speed_cfg[%u].i2c_rate was set to %u\n",
+		dev_dbg(p->dev, "%s: va_speed_cfg[%u].i2c_rate was set to %u\n",
 			__func__, index, new_value);
 	} else if (type == 3) {
 		p->pdata->va_speed_cfg[index].spi_rate = new_value;
-		dev_info(p->dev, "%s: va_speed_cfg[%u].spi_rate was set to %u\n",
+		dev_dbg(p->dev, "%s: va_speed_cfg[%u].spi_rate was set to %u\n",
 			__func__, index, new_value);
 	}
 
 	p->unlock(p);
 
 	for (i = 0; i < DBMDX_VA_NR_OF_SPEEDS; i++)
-		dev_info(dev, "%s: VA speed cfg %8.8x: 0x%8.8x %u %u %u\n",
+		dev_dbg(dev, "%s: VA speed cfg %8.8x: 0x%8.8x %u %u %u\n",
 			__func__,
 			i,
 			pdata->va_speed_cfg[i].cfg,
@@ -10396,7 +10396,7 @@ static ssize_t dbmdx_va_speed_cfg_store(struct device *dev,
 
 	return size;
 print_usage:
-	dev_info(p->dev,
+	dev_dbg(p->dev,
 		"%s: Usage: index=[0/1/2] type=[cfg/uart/i2c/spi] value=newval\n",
 		__func__);
 	return ret;
@@ -10497,7 +10497,7 @@ static ssize_t dbmdx_va_cfg_values_store(struct device *dev,
 
 	p->pdata->va_cfg_value[index] = new_value;
 
-	dev_info(p->dev, "%s: va_cfg_value[%u] was set to %u\n",
+	dev_dbg(p->dev, "%s: va_cfg_value[%u] was set to %u\n",
 		__func__, index, new_value);
 
 	p->unlock(p);
@@ -10508,7 +10508,7 @@ static ssize_t dbmdx_va_cfg_values_store(struct device *dev,
 
 	return size;
 print_usage:
-	dev_info(p->dev,
+	dev_dbg(p->dev,
 		"%s: Usage: index=[0-%u] value=newval\n",
 		__func__, (u32)(pdata->va_cfg_values));
 	return ret;
@@ -10606,7 +10606,7 @@ static ssize_t dbmdx_va_mic_cfg_store(struct device *dev,
 
 	p->pdata->va_mic_config[index] = new_value;
 
-	dev_info(p->dev, "%s: va_mic_config[%u] was set to %u\n",
+	dev_dbg(p->dev, "%s: va_mic_config[%u] was set to %u\n",
 		__func__, index, new_value);
 
 	p->unlock(p);
@@ -10617,7 +10617,7 @@ static ssize_t dbmdx_va_mic_cfg_store(struct device *dev,
 
 	return size;
 print_usage:
-	dev_info(p->dev,
+	dev_dbg(p->dev,
 		"%s: Usage: index=[0-%d] value=newval\n",
 		__func__, (VA_MIC_CONFIG_SIZE - 1));
 	return ret;
@@ -10737,7 +10737,7 @@ static int dbmdx_set_sv_recognition_mode(struct dbmdx_private *p,
 
 	p->va_flags.sv_recognition_mode = mode;
 
-	dev_info(p->dev, "%s: SV amodel mode was set to %d\n",
+	dev_dbg(p->dev, "%s: SV amodel mode was set to %d\n",
 		 __func__, cur_val);
 	return 0;
 }
@@ -10773,7 +10773,7 @@ static int dbmdx_set_okg_recognition_mode(struct dbmdx_private *p,
 
 	p->va_flags.okg_recognition_mode = mode;
 
-	dev_info(p->dev, "%s: OKG amodel enabled:\t%s\n", __func__,
+	dev_dbg(p->dev, "%s: OKG amodel enabled:\t%s\n", __func__,
 		(p->va_flags.okg_recognition_mode ==
 			OKG_RECOGNITION_MODE_ENABLED) ? "Yes" : "No");
 
@@ -10905,7 +10905,7 @@ static int dbmdx_va_amodel_okg_load_file(struct dbmdx_private *p,
 		return -ENOENT;
 	}
 
-	dev_info(p->dev, "%s: OKG firmware requested\n", __func__);
+	dev_dbg(p->dev, "%s: OKG firmware requested\n", __func__);
 
 	dev_dbg(p->dev, "%s OKG=%zu bytes\n",
 		__func__, va_okg_fw->size);
@@ -10959,7 +10959,7 @@ static int dbmdx_va_amodel_okg_load(struct dbmdx_private *p,
 	cur_amodel = &(p->okg_amodel);
 
 	if (p->va_flags.okg_a_model_downloaded_to_fw) {
-		dev_info(p->dev, "%s: OKG model has been already loaded\n",
+		dev_dbg(p->dev, "%s: OKG model has been already loaded\n",
 			__func__);
 		return 0;
 	}
@@ -11085,7 +11085,7 @@ static int dbmdx_va_amodel_okg_load(struct dbmdx_private *p,
 		goto out_finish_loading;
 	}
 
-	dev_info(p->dev, "%s: OKG acoustic model sent successfully\n",
+	dev_dbg(p->dev, "%s: OKG acoustic model sent successfully\n",
 		__func__);
 
 	p->va_flags.okg_a_model_downloaded_to_fw = 1;
@@ -11140,7 +11140,7 @@ static int dbmdx_send_asrp_params_buf(struct dbmdx_private *p,
 
 		dev_dbg(p->dev, "%s, size = %d\n", __func__, (int)size);
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: ---------> ASRP Params download start\n",
 			__func__);
 
@@ -11160,7 +11160,7 @@ static int dbmdx_send_asrp_params_buf(struct dbmdx_private *p,
 			continue;
 		}
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: ---------> ASRP Params download done.\n",
 			__func__);
 
@@ -11213,7 +11213,7 @@ static int dbmdx_load_asrp_params_file(struct dbmdx_private *p,
 		return -ENOENT;
 	}
 
-	dev_info(p->dev, "%s: ASRP Params requested\n", __func__);
+	dev_dbg(p->dev, "%s: ASRP Params requested\n", __func__);
 
 	dev_dbg(p->dev, "%s ASRP=%zu bytes\n",
 		__func__, va_asrp_fw->size);
@@ -11335,9 +11335,9 @@ static int dbmdx_va_load_asrp_params(struct dbmdx_private *p,
 		goto out_finish_loading;
 	}
 
-	dev_info(p->dev, "%s: ASRP Control: 0x%x\n", __func__, val);
+	dev_dbg(p->dev, "%s: ASRP Control: 0x%x\n", __func__, val);
 
-	dev_info(p->dev, "%s: ASRP Params sent successfully\n",
+	dev_dbg(p->dev, "%s: ASRP Params sent successfully\n",
 		__func__);
 
 out_finish_loading:
@@ -11546,7 +11546,7 @@ static int dbmdx_va_amodel_send(struct dbmdx_private *p,  const void *data,
 
 		fw_in_boot_mode = true;
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: ---------> acoustic model download start\n",
 			__func__);
 
@@ -11556,7 +11556,7 @@ static int dbmdx_va_amodel_send(struct dbmdx_private *p,  const void *data,
 		p->wakeup_toggle(p);
 
 		for (chunk_ind = 0; chunk_ind < num_of_chunks; chunk_ind++) {
-			dev_info(p->dev,
+			dev_dbg(p->dev,
 				"%s: Sending amodel chunk %d (%d bytes)\n",
 			__func__, chunk_ind, (int)chunk_sizes[chunk_ind]);
 
@@ -11802,7 +11802,7 @@ static int dbmdx_va_amodel_load_single(struct dbmdx_private *p,
 		goto out_finish_loading;
 	}
 
-	dev_info(p->dev, "%s: acoustic model sent successfully\n", __func__);
+	dev_dbg(p->dev, "%s: acoustic model sent successfully\n", __func__);
 
 	p->va_flags.a_model_downloaded_to_fw = 1;
 
@@ -12066,7 +12066,7 @@ static int dbmdx_va_amodel_load_dual(struct dbmdx_private *p,
 		goto out_finish_loading;
 	}
 
-	dev_info(p->dev, "%s: acoustic model sent successfully\n", __func__);
+	dev_dbg(p->dev, "%s: acoustic model sent successfully\n", __func__);
 
 	p->va_flags.a_model_downloaded_to_fw = 1;
 
@@ -12290,7 +12290,7 @@ static int dbmdx_va_amodel_update(struct dbmdx_private *p, int val)
 			return -EAGAIN;
 		}
 
-		dev_info(p->dev, "%s: VA firmware not active, switching\n",
+		dev_dbg(p->dev, "%s: VA firmware not active, switching\n",
 			__func__);
 
 		p->lock(p);
@@ -12464,7 +12464,7 @@ static int dbmdx_va_amodel_update(struct dbmdx_private *p, int val)
 		 * special case - don't load a-model, simply enforce detection
 		 * and exit
 		 */
-		dev_info(p->dev, "%s: direct detection requisted\n", __func__);
+		dev_dbg(p->dev, "%s: direct detection requisted\n", __func__);
 		/*p->va_detection_mode = DETECTION_MODE_PHRASE; */
 		if (sv_model_selected) {
 			p->va_flags.sv_recognition_mode =
@@ -12568,7 +12568,7 @@ static int dbmdx_va_amodel_update(struct dbmdx_private *p, int val)
 #endif
 	if (p->pdata->auto_detection && !p->va_flags.auto_detection_disabled &&
 		!do_not_set_detection_mode) {
-		dev_info(p->dev, "%s: enforcing DETECTION opmode\n",
+		dev_dbg(p->dev, "%s: enforcing DETECTION opmode\n",
 			 __func__);
 		ret = dbmdx_trigger_detection(p);
 		if (ret) {
@@ -12879,7 +12879,7 @@ static ssize_t dbmdx_va_load_external_usecase_store(struct device *dev,
 
 	p->external_usecase_loaded = true;
 
-	dev_info(p->dev, "%s: External usecase was loaded successfully\n",
+	dev_dbg(p->dev, "%s: External usecase was loaded successfully\n",
 				__func__);
 	ret = 0;
 
@@ -12942,7 +12942,7 @@ static ssize_t dbmdx_va_usecase_mode_store(struct device *dev,
 	if (ret)
 		return -EINVAL;
 
-	dev_info(p->dev, "%s: Required mode: (%x), Current mode: (%x)\n",
+	dev_dbg(p->dev, "%s: Required mode: (%x), Current mode: (%x)\n",
 			__func__, (int)val, p->va_ve_flags.usecase_mode);
 
 	/* flush pending buffering work if any */
@@ -13101,18 +13101,18 @@ static ssize_t dbmdx_user_selected_chip_store(struct device *dev,
 		if (p && p->va_ve_chip_enabled)
 			p->usr_selected_chip = DBMDX_CHIP_VA_VE;
 		else {
-			dev_info(p->dev, "%s: VA_VE chip disabled\n", __func__);
+			dev_dbg(p->dev, "%s: VA_VE chip disabled\n", __func__);
 			return -EINVAL;
 		}
 	} else if (!strncmp(buf, "va", min_t(int, size, 2))) {
 		if (p && p->va_chip_enabled)
 			p->usr_selected_chip = DBMDX_CHIP_VA;
 		else {
-			dev_info(p->dev, "%s: VA chip disabled\n", __func__);
+			dev_dbg(p->dev, "%s: VA chip disabled\n", __func__);
 			return -EINVAL;
 		}
 	} else
-		dev_info(p->dev, "%s: Chip types: va | va_ve\n", __func__);
+		dev_dbg(p->dev, "%s: Chip types: va | va_ve\n", __func__);
 
 	return size;
 
@@ -13187,7 +13187,7 @@ static ssize_t dbmdx_va_ve_mic_cfg_store(struct device *dev,
 
 	p->pdata->va_ve_mic_config[index] = new_value;
 
-	dev_info(p->dev, "%s: va_ve_mic_config[%u] was set to %u\n",
+	dev_dbg(p->dev, "%s: va_ve_mic_config[%u] was set to %u\n",
 		__func__, index, new_value);
 
 	p->unlock(p);
@@ -13198,7 +13198,7 @@ static ssize_t dbmdx_va_ve_mic_cfg_store(struct device *dev,
 
 	return size;
 print_usage:
-	dev_info(p->dev,
+	dev_dbg(p->dev,
 		"%s: Usage: index=[0-%d] value=newval\n",
 		__func__, (VA_VE_MIC_CONFIG_SIZE - 1));
 	return ret;
@@ -13360,7 +13360,7 @@ static ssize_t dbmdx_asrp_delay_store(struct device *dev,
 
 	p->pdata->asrp_delay = val;
 
-	dev_info(p->dev, "%s: ASRP Delay was set to 0x%x\n", __func__,
+	dev_dbg(p->dev, "%s: ASRP Delay was set to 0x%x\n", __func__,
 		p->pdata->asrp_delay);
 
 	return size;
@@ -13407,7 +13407,7 @@ static ssize_t dbmdx_asrp_gain_store(struct device *dev,
 
 		p->pdata->asrp_rx_out_gain = val & 0xFFFF;
 
-		dev_info(p->dev, "%s: ASRP RX OUT Gain was set to 0x%x\n",
+		dev_dbg(p->dev, "%s: ASRP RX OUT Gain was set to 0x%x\n",
 			__func__, p->pdata->asrp_rx_out_gain);
 
 
@@ -13415,14 +13415,14 @@ static ssize_t dbmdx_asrp_gain_store(struct device *dev,
 
 		p->pdata->asrp_vcpf_out_gain = val & 0xFFFF;
 
-		dev_info(p->dev, "%s: ASRP VCPF OUT Gain was set to 0x%x\n",
+		dev_dbg(p->dev, "%s: ASRP VCPF OUT Gain was set to 0x%x\n",
 			__func__, p->pdata->asrp_vcpf_out_gain);
 
 	} else {
 
 		p->pdata->asrp_tx_out_gain = val;
 
-		dev_info(p->dev, "%s: ASRP TX OUT Gain was set to 0x%x\n",
+		dev_dbg(p->dev, "%s: ASRP TX OUT Gain was set to 0x%x\n",
 			__func__, p->pdata->asrp_tx_out_gain);
 	}
 
@@ -13498,7 +13498,7 @@ static ssize_t dbmdx_va_ve_cfg_values_store(struct device *dev,
 
 	p->pdata->va_ve_cfg_value[index] = new_value;
 
-	dev_info(p->dev, "%s: va_ve_cfg_value[%u] was set to %u\n",
+	dev_dbg(p->dev, "%s: va_ve_cfg_value[%u] was set to %u\n",
 		__func__, index, new_value);
 
 	p->unlock(p);
@@ -13509,7 +13509,7 @@ static ssize_t dbmdx_va_ve_cfg_values_store(struct device *dev,
 
 	return size;
 print_usage:
-	dev_info(p->dev,
+	dev_dbg(p->dev,
 		"%s: Usage: index=[0-%u] value=newval\n",
 		__func__, (u32)(pdata->va_ve_cfg_values));
 	return ret;
@@ -13577,7 +13577,7 @@ static ssize_t dbmdx_ref_playback_active_store(struct device *dev,
 
 	p->reference_playback_active = val;
 
-	dev_info(p->dev, "%s: Reference Playback Active: %s\n",
+	dev_dbg(p->dev, "%s: Reference Playback Active: %s\n",
 		__func__, p->reference_playback_active ? "ON" : "OFF");
 
 	return size;
@@ -13615,7 +13615,7 @@ static ssize_t dbmdx_va_alsa_streaming_options_store(struct device *dev,
 
 	p->pdata->alsa_streaming_options = val;
 
-	dev_info(p->dev, "%s: alsa_streaming options was set to 0x%x\n",
+	dev_dbg(p->dev, "%s: alsa_streaming options was set to 0x%x\n",
 		__func__, p->pdata->alsa_streaming_options);
 
 	return size;
@@ -14011,7 +14011,7 @@ static ssize_t dbmdx_reset_store(struct device *dev,
 
 		dbmdx_reset_set(p);
 
-		dev_info(p->dev, "%s: DBMDX Chip is in Reset state\n",
+		dev_dbg(p->dev, "%s: DBMDX Chip is in Reset state\n",
 			__func__);
 
 	} else
@@ -14322,7 +14322,7 @@ static ssize_t dbmdx_va_direct_write_store(struct device *dev,
 
 	return size;
 print_usage:
-	dev_info(p->dev,
+	dev_dbg(p->dev,
 		"%s: Usage: reg=regaddr value=newval\n", __func__);
 	return ret;
 }
@@ -14422,7 +14422,7 @@ static ssize_t dbmdx_va_direct_read_store(struct device *dev,
 
 	return size;
 print_usage:
-	dev_info(p->dev,
+	dev_dbg(p->dev,
 		"%s: Usage: reg=regaddr\n", __func__);
 	return ret;
 }
@@ -15685,7 +15685,7 @@ static ssize_t dbmdx_vqe_use_case_store(struct device *dev,
 	}
 
 	if (p->active_fw != DBMDX_FW_VQE) {
-		dev_info(p->dev, "%s: VQE firmware not active, switching\n",
+		dev_dbg(p->dev, "%s: VQE firmware not active, switching\n",
 			__func__);
 		if (p->va_flags.mode != DBMDX_IDLE) {
 			p->lock(p);
@@ -15707,7 +15707,7 @@ static ssize_t dbmdx_vqe_use_case_store(struct device *dev,
 
 	}
 
-	dev_info(p->dev, "%s: VQE firmware use case: %lu\n", __func__, val);
+	dev_dbg(p->dev, "%s: VQE firmware use case: %lu\n", __func__, val);
 
 	p->lock(p);
 
@@ -16354,7 +16354,7 @@ static int dbmdx_perform_recovery(struct dbmdx_private *p)
 	int current_audio_channels;
 	struct va_flags	saved_va_flags;
 
-	dev_info(p->dev, "%s: active FW - %s\n", __func__,
+	dev_dbg(p->dev, "%s: active FW - %s\n", __func__,
 			dbmdx_fw_type_to_str(active_fw));
 
 	if (active_fw == DBMDX_FW_VA) {
@@ -17193,7 +17193,7 @@ static int dbmdx_dai_hw_params(struct snd_pcm_substream *substream,
 		}
 	}
 
-	dev_info(p->dev, "%s: DAI channels %d, Channel operation set to %d\n",
+	dev_dbg(p->dev, "%s: DAI channels %d, Channel operation set to %d\n",
 		__func__, channels, p->pcm_achannel_op);
 
 	switch (params_format(params)) {
@@ -17734,13 +17734,13 @@ static int dbmdx_vqe_use_case_put(struct snd_kcontrol *kcontrol,
 	}
 
 	if (p->active_fw != DBMDX_FW_VQE) {
-		dev_info(p->dev, "%s: VQE firmware not active, switching\n",
+		dev_dbg(p->dev, "%s: VQE firmware not active, switching\n",
 			__func__);
 		p->lock(p);
 		ret = dbmdx_switch_to_vqe_firmware(p, 0);
 		p->unlock(p);
 		if (ret != 0) {
-			dev_info(p->dev,
+			dev_dbg(p->dev,
 				"%s: Error switching to VQE firmware\n",
 				__func__);
 			return -EIO;
@@ -18137,7 +18137,7 @@ static int dbmdx_external_amodel_put(const unsigned int __user *bytes,
 	if (!data_buf)
 		return -ENOMEM;
 
-	dev_info(p->dev, "%s: Buffer size is %d\n", __func__, size);
+	dev_dbg(p->dev, "%s: Buffer size is %d\n", __func__, size);
 
 #ifdef SOC_TLV_HEADER_ENABLED
 	/* Skips the TLV header. */
@@ -18271,7 +18271,7 @@ static int dbmdx_microphone_mode_set(struct snd_kcontrol *kcontrol,
 #endif
 	int ret = 0;
 
-	dev_info(p->dev, "%s: value:%lu\n", __func__,
+	dev_dbg(p->dev, "%s: value:%lu\n", __func__,
 			ucontrol->value.integer.value[0]);
 
 	switch (ucontrol->value.integer.value[0]) {
@@ -18613,7 +18613,7 @@ int dbmdx_dev_probe(struct snd_soc_codec *codec)
 				__func__);
 			goto out_err;
 		}
-		dev_info(codec->dev,
+		dev_dbg(codec->dev,
 			 "%s: %d VA controls registered\n",
 			 __func__, (int)(ARRAY_SIZE(dbmdx_va_snd_controls)));
 	}
@@ -18628,7 +18628,7 @@ int dbmdx_dev_probe(struct snd_soc_codec *codec)
 				__func__);
 			ret = -EIO;
 		}
-		dev_info(codec->dev,
+		dev_dbg(codec->dev,
 			 "%s: %d VA_VE controls added\n",
 			 __func__, (int)(ARRAY_SIZE(dbmdx_va_ve_snd_controls)));
 	}
@@ -18643,13 +18643,13 @@ int dbmdx_dev_probe(struct snd_soc_codec *codec)
 				__func__);
 			goto out_err;
 		}
-		dev_info(codec->dev,
+		dev_dbg(codec->dev,
 			 "%s: %d VQE controls registered\n",
 			 __func__, (int)(ARRAY_SIZE(dbmdx_vqe_snd_controls)));
 	}
 	ret = 0;
 
-	dev_info(codec->dev, "%s: success\n", __func__);
+	dev_dbg(codec->dev, "%s: success\n", __func__);
 
 out_err:
 	return ret;
@@ -18717,7 +18717,7 @@ int dbmdx_remote_add_codec_controls(struct snd_soc_codec *codec)
 				__func__);
 			ret = -EIO;
 		}
-		dev_info(codec->dev,
+		dev_dbg(codec->dev,
 			 "%s: %d VA controls added\n",
 			 __func__, (int)(ARRAY_SIZE(dbmdx_va_snd_controls)));
 	}
@@ -18731,7 +18731,7 @@ int dbmdx_remote_add_codec_controls(struct snd_soc_codec *codec)
 				__func__);
 			ret = -EIO;
 		}
-		dev_info(codec->dev,
+		dev_dbg(codec->dev,
 			 "%s: %d VA_VE controls added\n",
 			 __func__, (int)(ARRAY_SIZE(dbmdx_va_ve_snd_controls)));
 	}
@@ -18744,7 +18744,7 @@ int dbmdx_remote_add_codec_controls(struct snd_soc_codec *codec)
 				"%s(): adding VQE controls failed\n", __func__);
 			ret = -EIO;
 		}
-		dev_info(codec->dev,
+		dev_dbg(codec->dev,
 			 "%s: %d VQE controls added\n",
 			 __func__, (int)(ARRAY_SIZE(dbmdx_vqe_snd_controls)));
 	}
@@ -18836,10 +18836,10 @@ static int dbmdx_process_detection_irq(struct dbmdx_private *p,
 			return -EIO;
 		}
 
-		dev_info(p->dev, "%s: WordID: 0x%x\n", __func__, event_id);
+		dev_dbg(p->dev, "%s: WordID: 0x%x\n", __func__, event_id);
 
 		if (event_id != DBMDX_QED_WORDID) {
-			dev_info(p->dev,
+			dev_dbg(p->dev,
 				"%s: WordID doesn't match QED\n", __func__);
 			p->unlock(p);
 			p->va_flags.buffering_paused = 0;
@@ -18857,7 +18857,7 @@ static int dbmdx_process_detection_irq(struct dbmdx_private *p,
 			return -EIO;
 		}
 
-		dev_info(p->dev, "%s: QED Reported, detection type: 0x%x\n",
+		dev_dbg(p->dev, "%s: QED Reported, detection type: 0x%x\n",
 			__func__, val);
 
 		p->va_flags.qed_active = 0;
@@ -18879,11 +18879,11 @@ static int dbmdx_process_detection_irq(struct dbmdx_private *p,
 	if ((p->va_detection_mode == DETECTION_MODE_VOICE_ENERGY) &&
 		(p->va_flags.sv_recognition_mode ==
 		SV_RECOGNITION_MODE_VOICE_ENERGY)) {
-		dev_info(p->dev, "%s: VOICE ENERGY\n", __func__);
+		dev_dbg(p->dev, "%s: VOICE ENERGY\n", __func__);
 		event_id = 0;
 		sv_passphrase_detected = true;
 	} else if (p->va_detection_mode == DETECTION_MODE_PHRASE)  {
-		dev_info(p->dev, "%s: PASSPHRASE\n", __func__);
+		dev_dbg(p->dev, "%s: PASSPHRASE\n", __func__);
 #ifdef DMBDX_OKG_AMODEL_SUPPORT
 		if (p->va_flags.okg_recognition_mode ==
 				OKG_RECOGNITION_MODE_ENABLED) {
@@ -18898,7 +18898,7 @@ static int dbmdx_process_detection_irq(struct dbmdx_private *p,
 			}
 
 			if (event_id & OKG_EVENT_ID) {
-				dev_info(p->dev,
+				dev_dbg(p->dev,
 					"%s: OKG PASSPHRASE detected\n",
 					__func__);
 				ret = dbmdx_send_cmd(p,
@@ -18948,7 +18948,7 @@ static int dbmdx_process_detection_irq(struct dbmdx_private *p,
 
 			sv_passphrase_detected = true;
 
-			dev_info(p->dev, "%s: last WordID: %d, EventID: %d\n",
+			dev_dbg(p->dev, "%s: last WordID: %d, EventID: %d\n",
 				__func__, event_id, (event_id & 0xff));
 
 			event_id = (event_id & 0xff);
@@ -18967,7 +18967,7 @@ static int dbmdx_process_detection_irq(struct dbmdx_private *p,
 		}
 #endif
 	} else if (p->va_detection_mode == DETECTION_MODE_VOICE_COMMAND) {
-		dev_info(p->dev, "%s: VOICE_COMMAND\n", __func__);
+		dev_dbg(p->dev, "%s: VOICE_COMMAND\n", __func__);
 
 		ret = dbmdx_send_cmd(p, DBMDX_REGN_VT_ENGINE_WORDID, &event_id);
 
@@ -18983,9 +18983,9 @@ static int dbmdx_process_detection_irq(struct dbmdx_private *p,
 
 		/*for determining voice command, mask should be up to 0x100 */
 		event_id += 0x100;
-		dev_info(p->dev, "%s: last WordID:%d\n", __func__, event_id);
+		dev_dbg(p->dev, "%s: last WordID:%d\n", __func__, event_id);
 	} else if (p->va_detection_mode == DETECTION_MODE_DUAL) {
-		dev_info(p->dev, "%s: VOICE_DUAL\n", __func__);
+		dev_dbg(p->dev, "%s: VOICE_DUAL\n", __func__);
 
 		ret = dbmdx_send_cmd(p, DBMDX_REGN_VT_ENGINE_WORDID, &event_id);
 
@@ -18996,7 +18996,7 @@ static int dbmdx_process_detection_irq(struct dbmdx_private *p,
 			goto out_unlock;
 		}
 
-		dev_info(p->dev, "%s: last WordID: %d, EventID: %d\n",
+		dev_dbg(p->dev, "%s: last WordID: %d, EventID: %d\n",
 			__func__, event_id, (event_id & 0xff));
 
 		event_id = (event_id & 0xff);
@@ -19011,7 +19011,7 @@ static int dbmdx_process_detection_irq(struct dbmdx_private *p,
 		goto out_unlock;
 	}
 
-	dev_info(p->dev, "%s: Score:%d\n", __func__, score);
+	dev_dbg(p->dev, "%s: Score:%d\n", __func__, score);
 
 	p->va_last_word_id = event_id;
 
@@ -19133,7 +19133,7 @@ static int dbmdx_process_detection_irq(struct dbmdx_private *p,
 		"VOICE_WAKEUP EVENT_TYPE=Detection EVENT_ID=%d SCORE=%d",
 			event_id, score);
 #endif
-		dev_info(p->dev, "%s: Sending uevent: %s\n",
+		dev_dbg(p->dev, "%s: Sending uevent: %s\n",
 			__func__, uevent_buf);
 
 		ret = kobject_uevent_env(&p->dev->kobj, KOBJ_CHANGE,
@@ -19304,7 +19304,7 @@ static void dbmdx_sv_work(struct work_struct *work)
 	do {
 		if (p->pdata->max_detection_buffer_size > 0 &&
 			total >= p->pdata->max_detection_buffer_size) {
-			dev_info(p->dev,
+			dev_dbg(p->dev,
 				"%s: buffering mode ended - reached requested max buffer size",
 				__func__);
 			break;
@@ -19332,7 +19332,7 @@ static void dbmdx_sv_work(struct work_struct *work)
 		}
 
 		if (nr_samples == 0xffff) {
-			dev_info(p->dev,
+			dev_dbg(p->dev,
 				"%s: buffering mode ended - fw in idle mode",
 				__func__);
 			p->unlock(p);
@@ -19431,7 +19431,7 @@ static void dbmdx_sv_work(struct work_struct *work)
 
 	} while (p->va_flags.buffering);
 
-	dev_info(p->dev, "%s: audio buffer read, total of %u bytes\n",
+	dev_dbg(p->dev, "%s: audio buffer read, total of %u bytes\n",
 		__func__, total);
 
 
@@ -19489,7 +19489,7 @@ out:
 		snprintf(uevent_buf, sizeof(uevent_buf),
 			"VOICE_WAKEUP EVENT_TYPE=BufferingDone");
 
-		dev_info(p->dev, "%s: Sending uevent: %s\n",
+		dev_dbg(p->dev, "%s: Sending uevent: %s\n",
 			__func__, uevent_buf);
 
 		ret = kobject_uevent_env(&p->dev->kobj, KOBJ_CHANGE,
@@ -19703,7 +19703,7 @@ static void dbmdx_pcm_streaming_work_mod_0(struct work_struct *work)
 		}
 
 		if (nr_samples == 0xffff) {
-			dev_info(p->dev,
+			dev_dbg(p->dev,
 				"%s: buffering mode ended - fw in idle mode",
 				__func__);
 			p->unlock(p);
@@ -19834,7 +19834,7 @@ static void dbmdx_pcm_streaming_work_mod_0(struct work_struct *work)
 
 	} while (p->va_flags.pcm_worker_active);
 
-	dev_info(p->dev, "%s: audio buffer read, total of %u bytes\n",
+	dev_dbg(p->dev, "%s: audio buffer read, total of %u bytes\n",
 		__func__, total);
 
 out:
@@ -20067,7 +20067,7 @@ static void dbmdx_pcm_streaming_work_mod_1(struct work_struct *work)
 		}
 
 		if (avail_samples == 0xffff) {
-			dev_info(p->dev,
+			dev_dbg(p->dev,
 				"%s: buffering mode ended - fw in idle mode",
 				__func__);
 			break;
@@ -20167,7 +20167,7 @@ static void dbmdx_pcm_streaming_work_mod_1(struct work_struct *work)
 
 	} while (p->va_flags.pcm_worker_active);
 
-	dev_info(p->dev, "%s: audio buffer read, total of %u bytes\n",
+	dev_dbg(p->dev, "%s: audio buffer read, total of %u bytes\n",
 		__func__, total);
 
 	p->lock(p);
@@ -20215,13 +20215,13 @@ static irqreturn_t dbmdx_sv_interrupt_soft(int irq, void *dev)
 		dbmdx_schedule_work(p, &p->uevent_work);
 #endif
 
-		dev_info(p->dev, "%s - SV EVENT\n", __func__);
+		dev_dbg(p->dev, "%s - SV EVENT\n", __func__);
 	}
 #if defined(DBMDX_VA_VE_SUPPORT) && defined(DBMDX_QED_SUPPORTED)
 	else if ((p->device_ready) &&
 		(p->pdata->qed_enabled && p->va_flags.qed_active)) {
 
-		dev_info(p->dev, "%s - Potential QED EVENT\n", __func__);
+		dev_dbg(p->dev, "%s - Potential QED EVENT\n", __func__);
 #ifdef DBMDX_PROCESS_DETECTION_IRQ_WITHOUT_WORKER
 		dbmdx_process_detection_irq(p, false);
 #else
@@ -20822,7 +20822,7 @@ static int dbmdx_common_probe(struct dbmdx_private *p)
 #endif
 	}
 
-	dev_info(p->dev, "%s: registered DBMDX codec driver version = %s\n",
+	dev_dbg(p->dev, "%s: registered DBMDX codec driver version = %s\n",
 		__func__, DRIVER_VERSION);
 
 	return 0;
@@ -20990,7 +20990,7 @@ static int dbmdx_va_chip_probe(struct dbmdx_private *p)
 	p->pdata->gpio_d2strap1 = of_get_named_gpio(np, "d2-strap1", 0);
 #endif
 	if (gpio_is_valid(p->pdata->gpio_d2strap1)) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: valid d2 strap1 gpio: %d\n",
 			__func__,
 			p->pdata->gpio_d2strap1);
@@ -21023,7 +21023,7 @@ static int dbmdx_va_chip_probe(struct dbmdx_private *p)
 #endif
 		}
 	} else {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: missing or invalid d2 strap1 gpio: %d\n",
 			__func__,
 			p->pdata->gpio_d2strap1);
@@ -21035,7 +21035,7 @@ static int dbmdx_va_chip_probe(struct dbmdx_private *p)
 	p->pdata->gpio_wakeup = of_get_named_gpio(np, "wakeup-gpio", 0);
 #endif
 	if (!gpio_is_valid(p->pdata->gpio_wakeup)) {
-		dev_info(p->dev, "%s: wakeup gpio not specified\n", __func__);
+		dev_dbg(p->dev, "%s: wakeup gpio not specified\n", __func__);
 		p->pdata->gpio_wakeup = -1;
 	} else {
 		ret = gpio_request(p->pdata->gpio_wakeup, "DBMDX wakeup");
@@ -21101,7 +21101,7 @@ static int dbmdx_va_ve_chip_probe(struct dbmdx_private *p)
 		ret = -EINVAL;
 		goto err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no reset_gpio_shared definition in dev-tree\n",
 			__func__);
 		p->pdata->reset_gpio_shared = 0;
@@ -21110,7 +21110,7 @@ static int dbmdx_va_ve_chip_probe(struct dbmdx_private *p)
 		if (p->pdata->reset_gpio_shared > 1)
 			p->pdata->reset_gpio_shared = 1;
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: using reset_gpio_shared of %d from dev-tree\n",
 			 __func__, p->pdata->reset_gpio_shared);
 
@@ -21152,7 +21152,7 @@ static int dbmdx_va_ve_chip_probe(struct dbmdx_private *p)
 						"wakeup-va_ve-gpio", 0);
 #endif
 	if (!gpio_is_valid(p->pdata->gpio_wakeup_va_ve)) {
-		dev_info(p->dev, "%s: wakeup va_ve gpio not specified\n",
+		dev_dbg(p->dev, "%s: wakeup va_ve gpio not specified\n",
 			__func__);
 		p->pdata->gpio_wakeup_va_ve = -1;
 	} else {
@@ -21232,13 +21232,13 @@ static int dbmdx_of_get_clk_info(struct dbmdx_private *p,
 				   dbmdx_of_clk_rate_names[dbmdx_clk],
 				   &rate);
 	if (ret != 0) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			 "%s: no %s definition in device-tree\n",
 			 __func__,
 			 dbmdx_of_clk_rate_names[dbmdx_clk]);
 		rate = -1;
 	} else
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			 "%s: using %s at %dHZ from device-tree\n",
 			 __func__,
 			 dbmdx_of_clk_names[dbmdx_clk],
@@ -21246,7 +21246,7 @@ static int dbmdx_of_get_clk_info(struct dbmdx_private *p,
 
 	clk = clk_get(p->dev, dbmdx_of_clk_names[dbmdx_clk]);
 	if (IS_ERR(clk)) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			 "%s: no %s definition in device-tree\n",
 			 __func__,
 			 dbmdx_of_clk_names[dbmdx_clk]);
@@ -21256,7 +21256,7 @@ static int dbmdx_of_get_clk_info(struct dbmdx_private *p,
 		/* If clock rate not specified in dts, try to detect */
 		if (rate == -1) {
 			rate = clk_get_rate(clk);
-			dev_info(p->dev,
+			dev_dbg(p->dev,
 				 "%s: using %s at %dHZ\n",
 				 __func__,
 				 dbmdx_of_clk_names[dbmdx_clk],
@@ -21265,7 +21265,7 @@ static int dbmdx_of_get_clk_info(struct dbmdx_private *p,
 			/* verify which rate can be set */
 			rrate = clk_round_rate(clk, rate);
 			if (rrate !=  rate) {
-				dev_info(p->dev,
+				dev_dbg(p->dev,
 					 "%s: rounded rate %d to %d\n",
 					 __func__,
 					 rate, rrate);
@@ -21301,10 +21301,10 @@ static int dbmdx_get_va_devtree_pdata(struct device *dev,
 	if (ret != 0) {
 		/* set default name */
 		pdata->va_firmware_name = DBMD2_VA_FIRMWARE_NAME;
-		dev_info(dev, "%s: using default VA firmware name: %s\n",
+		dev_dbg(dev, "%s: using default VA firmware name: %s\n",
 			 __func__, pdata->va_firmware_name);
 	} else
-		dev_info(dev, "%s: using device-tree VA firmware name: %s\n",
+		dev_dbg(dev, "%s: using device-tree VA firmware name: %s\n",
 			__func__, pdata->va_firmware_name);
 
 	ret = of_property_read_string(np,
@@ -21314,11 +21314,11 @@ static int dbmdx_get_va_devtree_pdata(struct device *dev,
 		/* set default name */
 		pdata->va_preboot_firmware_name =
 			DBMD4_VA_PREBOOT_FIRMWARE_NAME;
-		dev_info(dev,
+		dev_dbg(dev,
 			"%s: using default VA preboot firmware name: %s\n",
 			 __func__, pdata->va_preboot_firmware_name);
 	} else
-		dev_info(dev,
+		dev_dbg(dev,
 			"%s: using device-tree VA preboot firmware name: %s\n",
 			__func__, pdata->va_preboot_firmware_name);
 
@@ -21382,7 +21382,7 @@ static int dbmdx_get_va_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no buffering_timeout, setting to %d\n",
 				__func__, MAX_RETRIES_TO_WRITE_TOBUF);
 		p->pdata->buffering_timeout = MAX_RETRIES_TO_WRITE_TOBUF;
@@ -21392,7 +21392,7 @@ static int dbmdx_get_va_devtree_pdata(struct device *dev,
 			p->pdata->buffering_timeout =
 					MIN_RETRIES_TO_WRITE_TOBUF;
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: using buffering_timeout of %u from dev tree\n",
 			 __func__, p->pdata->buffering_timeout);
 	}
@@ -21415,7 +21415,7 @@ static int dbmdx_get_va_devtree_pdata(struct device *dev,
 		goto out_err;
 	}
 
-	dev_info(p->dev, "%s: using min_samples_chunk_size of %d\n",
+	dev_dbg(p->dev, "%s: using min_samples_chunk_size of %d\n",
 			 __func__, p->pdata->min_samples_chunk_size);
 
 	ret = of_property_read_u32(np, "max_detection_buffer_size",
@@ -21426,7 +21426,7 @@ static int dbmdx_get_va_devtree_pdata(struct device *dev,
 		goto out_err;
 	}
 
-	dev_info(p->dev, "%s: using max_detection_buffer_size of %d\n",
+	dev_dbg(p->dev, "%s: using max_detection_buffer_size of %d\n",
 			 __func__, p->pdata->max_detection_buffer_size);
 
 
@@ -21438,7 +21438,7 @@ static int dbmdx_get_va_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no va buffering pcm rate, setting to 16000\n",
 				__func__);
 		p->pdata->va_buffering_pcm_rate = 16000;
@@ -21447,7 +21447,7 @@ static int dbmdx_get_va_devtree_pdata(struct device *dev,
 			p->pdata->va_buffering_pcm_rate != 32000)
 			p->pdata->va_buffering_pcm_rate = 16000;
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: using va_buffering_pcm_rate of %u from dev tree\n",
 			 __func__, p->pdata->va_buffering_pcm_rate);
 	}
@@ -21470,7 +21470,7 @@ static int dbmdx_get_va_devtree_pdata(struct device *dev,
 			ret = -EIO;
 			goto out_free_va_resources;
 		}
-		dev_info(dev,
+		dev_dbg(dev,
 			"%s: using %u VA configuration values from dev-tree\n",
 				__func__, pdata->va_cfg_values);
 		for (i = 0; i < pdata->va_cfg_values; i++)
@@ -21487,7 +21487,7 @@ static int dbmdx_get_va_devtree_pdata(struct device *dev,
 			__func__);
 		goto out_free_va_resources;
 	}
-	dev_info(dev,
+	dev_dbg(dev,
 		"%s: using %u VA mic configuration values from device-tree\n",
 		__func__, VA_MIC_CONFIG_SIZE);
 	for (i = 0; i < VA_MIC_CONFIG_SIZE; i++)
@@ -21502,7 +21502,7 @@ static int dbmdx_get_va_devtree_pdata(struct device *dev,
 			__func__);
 		goto out_free_va_resources;
 	}
-	dev_info(dev, "%s: VA default mic config: 0x%8.8x\n",
+	dev_dbg(dev, "%s: VA default mic config: 0x%8.8x\n",
 		 __func__, pdata->va_initial_mic_config);
 
 
@@ -21513,7 +21513,7 @@ static int dbmdx_get_va_devtree_pdata(struct device *dev,
 		pdata->va_mic_gain_config[DBMDX_DIGITAL_MIC_DIGITAL_GAIN]
 		= 0x1000;
 	else {
-		dev_info(dev,
+		dev_dbg(dev,
 		"%s: using digital mic gain config 0x%04X from device-tree\n",
 		__func__,
 		pdata->va_mic_gain_config[DBMDX_DIGITAL_MIC_DIGITAL_GAIN]);
@@ -21526,7 +21526,7 @@ static int dbmdx_get_va_devtree_pdata(struct device *dev,
 		pdata->va_mic_gain_config[DBMDX_ANALOG_MIC_ANALOG_GAIN]
 		= 0x1000;
 	else {
-		dev_info(dev,
+		dev_dbg(dev,
 		"%s: using analog mic gain config 0x%04X from device-tree\n",
 		__func__,
 		pdata->va_mic_gain_config[DBMDX_ANALOG_MIC_ANALOG_GAIN]);
@@ -21539,7 +21539,7 @@ static int dbmdx_get_va_devtree_pdata(struct device *dev,
 		pdata->va_mic_gain_config[DBMDX_ANALOG_MIC_DIGITAL_GAIN]
 		= 0x1000;
 	else {
-		dev_info(dev,
+		dev_dbg(dev,
 		"%s: using analog mic digital gain 0x%04X from device-tree\n",
 		__func__,
 		pdata->va_mic_gain_config[DBMDX_ANALOG_MIC_DIGITAL_GAIN]);
@@ -21549,14 +21549,14 @@ static int dbmdx_get_va_devtree_pdata(struct device *dev,
 				   "va_backlog_length",
 				   &p->pdata->va_backlog_length);
 	if (ret != 0) {
-		dev_info(dev,
+		dev_dbg(dev,
 			"%s: no va_backlog_length definition in device-tree\n",
 			__func__);
 		p->pdata->va_backlog_length = 1;
 	} else {
 		if (p->pdata->va_backlog_length > 0xfff)
 			p->pdata->va_backlog_length = 0xfff;
-		dev_info(dev,
+		dev_dbg(dev,
 			"%s: using backlog length of %d from device-tree\n",
 			 __func__, p->pdata->va_backlog_length);
 	}
@@ -21566,14 +21566,14 @@ static int dbmdx_get_va_devtree_pdata(struct device *dev,
 				   "va_backlog_length_okg",
 				   &p->pdata->va_backlog_length_okg);
 	if (ret != 0) {
-		dev_info(dev,
+		dev_dbg(dev,
 			"%s: no va_backlog_length_okg def. in device-tree\n",
 			__func__);
 		p->pdata->va_backlog_length_okg = 1000;
 	} else {
 		if (p->pdata->va_backlog_length_okg > 0xfff)
 			p->pdata->va_backlog_length_okg = 0xfff;
-		dev_info(dev,
+		dev_dbg(dev,
 			"%s: using OKG backlog length of %d from device-tree\n",
 			 __func__, p->pdata->va_backlog_length_okg);
 	}
@@ -21626,10 +21626,10 @@ static int dbmdx_get_va_ve_devtree_pdata(struct device *dev,
 	if (ret != 0) {
 		/* set default name */
 		pdata->va_ve_firmware_name = DBMD2_VA_VE_FIRMWARE_NAME;
-		dev_info(dev, "%s: using default VA_VE firmware name: %s\n",
+		dev_dbg(dev, "%s: using default VA_VE firmware name: %s\n",
 			 __func__, pdata->va_ve_firmware_name);
 	} else
-		dev_info(dev, "%s: using device-tree VA_VE firmware name: %s\n",
+		dev_dbg(dev, "%s: using device-tree VA_VE firmware name: %s\n",
 			__func__, pdata->va_ve_firmware_name);
 
 	ret = of_property_read_string(np,
@@ -21639,11 +21639,11 @@ static int dbmdx_get_va_ve_devtree_pdata(struct device *dev,
 		/* set default name */
 		pdata->va_ve_preboot_firmware_name =
 			DBMD2_VA_PREBOOT_FIRMWARE_NAME;
-		dev_info(dev,
+		dev_dbg(dev,
 			"%s: using default VA_VE preboot firmware name: %s\n",
 			 __func__, pdata->va_ve_preboot_firmware_name);
 	} else
-		dev_info(dev,
+		dev_dbg(dev,
 			"%s: using device-tree VA_VE preboot fw. name: %s\n",
 			__func__, pdata->va_ve_preboot_firmware_name);
 
@@ -21667,7 +21667,7 @@ static int dbmdx_get_va_ve_devtree_pdata(struct device *dev,
 			ret = -EIO;
 			goto out_free_va_ve_resources;
 		}
-		dev_info(dev,
+		dev_dbg(dev,
 			"%s: using %u VA_VE conf. values from dev-tree\n",
 				__func__, pdata->va_ve_cfg_values);
 		for (i = 0; i < pdata->va_ve_cfg_values; i++)
@@ -21685,7 +21685,7 @@ static int dbmdx_get_va_ve_devtree_pdata(struct device *dev,
 		for (i = 0; i < VA_VE_MIC_CONFIG_SIZE; i++)
 			pdata->va_ve_mic_config[i] = 0;
 	} else {
-		dev_info(dev,
+		dev_dbg(dev,
 			"%s: using %u VA_VE mic conf. values from dev-tree\n",
 			__func__, VA_VE_MIC_CONFIG_SIZE);
 		for (i = 0; i < VA_VE_MIC_CONFIG_SIZE; i++)
@@ -21729,10 +21729,10 @@ static int dbmdx_get_vqe_devtree_pdata(struct device *dev,
 	if (ret != 0) {
 		/* set default name */
 		pdata->vqe_firmware_name = DBMD2_VQE_FIRMWARE_NAME;
-		dev_info(dev, "%s: using default VQE firmware name: %s\n",
+		dev_dbg(dev, "%s: using default VQE firmware name: %s\n",
 				__func__, pdata->vqe_firmware_name);
 	} else
-		dev_info(dev, "%s: using device-tree VQE firmware name: %s\n",
+		dev_dbg(dev, "%s: using device-tree VQE firmware name: %s\n",
 			__func__, pdata->vqe_firmware_name);
 
 	/* read name of VQE firmware, non-overlay */
@@ -21742,11 +21742,11 @@ static int dbmdx_get_vqe_devtree_pdata(struct device *dev,
 	if (ret != 0) {
 		/* set default name */
 		pdata->vqe_non_overlay_firmware_name = DBMD2_VQE_FIRMWARE_NAME;
-		dev_info(dev,
+		dev_dbg(dev,
 			"%s: using default VQE non-overlay firmware name: %s\n",
 			 __func__, pdata->vqe_non_overlay_firmware_name);
 	} else
-		dev_info(dev,
+		dev_dbg(dev,
 			"%s: using device-tree VQE non-overlay firmware name: %s\n",
 			 __func__, pdata->vqe_non_overlay_firmware_name);
 
@@ -21772,7 +21772,7 @@ static int dbmdx_get_vqe_devtree_pdata(struct device *dev,
 			goto out_free_vqe_resources;
 		}
 
-		dev_info(dev,
+		dev_dbg(dev,
 		"%s: using %u VQE configuration values from device-tree\n",
 			__func__, pdata->vqe_cfg_values);
 
@@ -21803,7 +21803,7 @@ static int dbmdx_get_vqe_devtree_pdata(struct device *dev,
 			ret = -EIO;
 			goto out_free_vqe_resources_2;
 		}
-		dev_info(dev,
+		dev_dbg(dev,
 			"%s: using %u VQE modes values from device-tree\n",
 			__func__, pdata->vqe_modes_values);
 
@@ -21814,7 +21814,7 @@ static int dbmdx_get_vqe_devtree_pdata(struct device *dev,
 
 	of_property_read_u32(np, "vqe-tdm-bypass-config",
 				&pdata->vqe_tdm_bypass_config);
-	dev_info(dev, "%s: VQE TDM bypass config: 0x%8.8x\n", __func__,
+	dev_dbg(dev, "%s: VQE TDM bypass config: 0x%8.8x\n", __func__,
 			pdata->vqe_tdm_bypass_config);
 	pdata->vqe_tdm_bypass_config &= 0x7;
 
@@ -21858,7 +21858,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no project_sub_type, setting to %d\n",
 				__func__, 0);
 #ifdef DBMDX_VA_VE_SUPPORT
@@ -21868,7 +21868,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 #endif
 	} else {
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: using project_sub_type of %u from dev tree\n",
 			 __func__, pdata->project_sub_type);
 	}
@@ -21876,21 +21876,21 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 
 	/* check for features */
 	if (of_find_property(np, "feature-va", NULL)) {
-		dev_info(dev, "%s: VA feature activated\n", __func__);
+		dev_dbg(dev, "%s: VA feature activated\n", __func__);
 		pdata->feature_va = 1;
 		p->va_chip_enabled = true;
 	}
 	if (of_find_property(np, "feature-vqe", NULL)) {
-		dev_info(dev, "%s: VQE feature activated\n", __func__);
+		dev_dbg(dev, "%s: VQE feature activated\n", __func__);
 		pdata->feature_vqe = 1;
 	}
 	if (of_find_property(np, "feature-firmware-overlay", NULL)) {
-		dev_info(dev, "%s: Firmware overlay activated\n", __func__);
+		dev_dbg(dev, "%s: Firmware overlay activated\n", __func__);
 		pdata->feature_fw_overlay = 1;
 	}
 #ifdef DBMDX_VA_VE_SUPPORT
 	if (of_find_property(np, "feature-va_ve", NULL)) {
-		dev_info(dev, "%s: VA_VE feature activated\n", __func__);
+		dev_dbg(dev, "%s: VA_VE feature activated\n", __func__);
 		pdata->feature_va_ve = 1;
 
 		if (pdata->project_sub_type ==
@@ -21912,7 +21912,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 			p->mics_connected_to_va_ve_chip = true;
 			p->asrp_runs_on_vt = false;
 		} else {
-			dev_info(dev, "%s: Unknown project type %u\n", __func__,
+			dev_dbg(dev, "%s: Unknown project type %u\n", __func__,
 				pdata->project_sub_type);
 			p->va_chip_enabled = true;
 			p->va_ve_chip_enabled = true;
@@ -21943,11 +21943,11 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 	}
 #endif
 	if (of_find_property(np, "multi-interface-support", NULL)) {
-		dev_info(dev, "%s: Multi Interface Probe is supported\n",
+		dev_dbg(dev, "%s: Multi Interface Probe is supported\n",
 			__func__);
 		pdata->multi_interface_support = 1;
 	} else {
-		dev_info(dev, "%s: Multi Interface Probe is not supported\n",
+		dev_dbg(dev, "%s: Multi Interface Probe is not supported\n",
 			__func__);
 		pdata->multi_interface_support = 0;
 	}
@@ -22019,7 +22019,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 			ret = -EINVAL;
 			goto out_err;
 		}
-		dev_info(dev,
+		dev_dbg(dev,
 			"%s: using %u VA speed configuration values from device-tree\n",
 			__func__,
 			DBMDX_VA_NR_OF_SPEEDS);
@@ -22040,7 +22040,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no hw_revision definition in device-tree.\n",
 			__func__);
 		p->pdata->hw_rev = DBMDX_DEFAULT_HW_REV;
@@ -22054,7 +22054,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no wakeup_disabled definition in dev-tree\n",
 			__func__);
 		p->pdata->wakeup_disabled = 0;
@@ -22063,7 +22063,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		if (p->pdata->wakeup_disabled > 1)
 			p->pdata->wakeup_disabled = 1;
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: using wakeup_disabled of %d from dev-tree\n",
 			 __func__, p->pdata->wakeup_disabled);
 
@@ -22077,7 +22077,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no use_gpio_for_wakeup definition in dev-tree\n",
 			__func__);
 		p->pdata->use_gpio_for_wakeup = 1;
@@ -22086,7 +22086,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		if (p->pdata->use_gpio_for_wakeup > 1)
 			p->pdata->use_gpio_for_wakeup = 1;
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: using use_gpio_for_wakeup of %d from dev-tree\n",
 			 __func__, p->pdata->use_gpio_for_wakeup);
 
@@ -22100,7 +22100,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no send_wakeup_seq definition in device-tree\n",
 			__func__);
 		p->pdata->send_wakeup_seq = 0;
@@ -22109,7 +22109,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		if (p->pdata->send_wakeup_seq > 1)
 			p->pdata->send_wakeup_seq = 1;
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: using send_wakeup_seq of %d from device-tree\n",
 			 __func__, p->pdata->send_wakeup_seq);
 
@@ -22123,7 +22123,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no wakeup_set_value definition in device-tree\n",
 			__func__);
 		p->pdata->wakeup_set_value = 1;
@@ -22132,7 +22132,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		if (p->pdata->wakeup_set_value > 1)
 			p->pdata->wakeup_set_value = 1;
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: using wakeup_set_value of %d from device-tree\n",
 			 __func__, p->pdata->wakeup_set_value);
 
@@ -22145,12 +22145,12 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 		"%s: no firmware_id definition in device-tree. assuming d2\n",
 			__func__);
 		p->pdata->firmware_id = DBMDX_FIRMWARE_ID_DBMD2;
 	} else {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: using firmware_id of 0x%8x from device-tree\n",
 			 __func__, p->pdata->firmware_id);
 	}
@@ -22162,7 +22162,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no boot_options definition in device-tree.\n",
 			__func__);
 		p->pdata->boot_options = DBMDX_BOOT_MODE_NORMAL_BOOT;
@@ -22175,7 +22175,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no amodel_options definition in device-tree.\n",
 			__func__);
 		p->pdata->amodel_options = DBMDX_AMODEL_DEFAULT_OPTIONS;
@@ -22191,7 +22191,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no wakeup_va_ve_disabled def. in dev-tree\n",
 			__func__);
 		p->pdata->wakeup_va_ve_disabled = 0;
@@ -22200,7 +22200,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		if (p->pdata->wakeup_va_ve_disabled > 1)
 			p->pdata->wakeup_va_ve_disabled = 1;
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 		"%s: using wakeup_va_ve_disabled of %d from dev-tree\n",
 			 __func__, p->pdata->wakeup_va_ve_disabled);
 
@@ -22214,7 +22214,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no use_gpio_for_wakeup_va_ve def. in dev-tree\n",
 			__func__);
 		p->pdata->use_gpio_for_wakeup_va_ve = 1;
@@ -22223,7 +22223,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		if (p->pdata->use_gpio_for_wakeup_va_ve > 1)
 			p->pdata->use_gpio_for_wakeup_va_ve = 1;
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 		"%s: using use_gpio_for_wakeup_va_ve of %d from dev-tree\n",
 			 __func__, p->pdata->use_gpio_for_wakeup_va_ve);
 
@@ -22237,7 +22237,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no send_wakeup_va_ve_seq def. in device-tree\n",
 			__func__);
 		p->pdata->send_wakeup_va_ve_seq = 0;
@@ -22246,7 +22246,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		if (p->pdata->send_wakeup_va_ve_seq > 1)
 			p->pdata->send_wakeup_va_ve_seq = 1;
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 		"%s: using send_wakeup_va_ve_seq of %d from device-tree\n",
 			 __func__, p->pdata->send_wakeup_va_ve_seq);
 
@@ -22260,7 +22260,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no wakeup_va_ve_set_value def. in device-tree\n",
 			__func__);
 		p->pdata->wakeup_va_ve_set_value = 1;
@@ -22269,7 +22269,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		if (p->pdata->wakeup_va_ve_set_value > 1)
 			p->pdata->wakeup_va_ve_set_value = 1;
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 		"%s: using wakeup_va_ve_set_value of %d from device-tree\n",
 			 __func__, p->pdata->wakeup_va_ve_set_value);
 
@@ -22282,12 +22282,12 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 		"%s: no firmware_id_va_ve def. in device-tree. assuming d2\n",
 			__func__);
 		p->pdata->firmware_id_va_ve = DBMDX_FIRMWARE_ID_DBMD2;
 	} else {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 		"%s: using firmware_id_va_ve of 0x%8x from device-tree\n",
 			 __func__, p->pdata->firmware_id_va_ve);
 	}
@@ -22299,7 +22299,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no boot_options_va_ve def. in device-tree.\n",
 			__func__);
 		p->pdata->boot_options_va_ve = DBMDX_BOOT_MODE_NORMAL_BOOT;
@@ -22313,14 +22313,14 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no change_clock_src_enabled def. in dev-tree\n",
 			__func__);
 		p->pdata->change_clock_src_enabled =
 					DBMDX_CHANGE_CLOCK_DISABLED;
 	} else {
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 		"%s: using change_clock_src_enabled of: %0x02x from dev-tree\n",
 			__func__, p->pdata->change_clock_src_enabled);
 	}
@@ -22333,7 +22333,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no qed_enabled def. in dev-tree\n",
 			__func__);
 		p->pdata->qed_enabled = 0;
@@ -22342,7 +22342,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		if (p->pdata->qed_enabled > 1)
 			p->pdata->qed_enabled = 1;
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 		"%s: using qed_enabled of: %0x02x from dev-tree\n",
 			__func__, p->pdata->qed_enabled);
 	}
@@ -22355,7 +22355,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no va_ve_separate_clocks def. in dev-tree\n",
 			__func__);
 		p->pdata->va_ve_separate_clocks = 0;
@@ -22364,7 +22364,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		if (p->pdata->va_ve_separate_clocks > 1)
 			p->pdata->va_ve_separate_clocks = 1;
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 		"%s: using va_ve_separate_clocks of: %0x02x from dev-tree\n",
 			__func__, p->pdata->va_ve_separate_clocks);
 	}
@@ -22376,7 +22376,7 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no va_ve_mic_mask def. in device-tree.\n",
 			__func__);
 		p->pdata->va_ve_mic_mask = 0x0001;
@@ -22388,12 +22388,12 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no asrp_delay definition in device-tree.\n",
 			__func__);
 		p->pdata->asrp_delay = 0;
 	} else {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 		"%s: using asrp_delay of 0x%x from device-tree\n",
 			 __func__, p->pdata->asrp_delay);
 	}
@@ -22405,12 +22405,12 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no asrp_tx_out_gain definition in device-tree.\n",
 			__func__);
 		p->pdata->asrp_tx_out_gain = 0;
 	} else {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 		"%s: using asrp_tx_out_gain of 0x%x from device-tree\n",
 			 __func__, p->pdata->asrp_tx_out_gain);
 	}
@@ -22422,12 +22422,12 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no asrp_vcpf_out_gain def. in device-tree.\n",
 			__func__);
 		p->pdata->asrp_vcpf_out_gain = 0;
 	} else {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 		"%s: using asrp_vcpf_out_gain of 0x%x from device-tree\n",
 			 __func__, p->pdata->asrp_vcpf_out_gain);
 	}
@@ -22439,12 +22439,12 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no asrp_rx_out_gain definition in device-tree.\n",
 			__func__);
 		p->pdata->asrp_rx_out_gain = 0;
 	} else {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 		"%s: using asrp_rx_out_gain of 0x%x from device-tree\n",
 			 __func__, p->pdata->asrp_rx_out_gain);
 	}
@@ -22454,10 +22454,10 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 	if (ret != 0) {
 		/* set default name */
 		pdata->default_streaming_usecase = NULL;
-		dev_info(dev, "%s: No default streaming usecase was set\n",
+		dev_dbg(dev, "%s: No default streaming usecase was set\n",
 			 __func__);
 	} else
-		dev_info(dev,
+		dev_dbg(dev,
 			"%s: using device-tree default streaming usecase: %s\n",
 			__func__, pdata->default_streaming_usecase);
 
@@ -22468,18 +22468,18 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no default_va_clock def. in device-tree.\n",
 			__func__);
 		p->pdata->default_va_clock = DEFAULT_D4_CLOCK_HZ;
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: using default_va_clock of %u Hz (default)\n",
 			 __func__, p->pdata->default_va_clock);
 
 	} else {
 		if (p->pdata->default_va_clock == 0)
 			p->pdata->default_va_clock = DEFAULT_D4_CLOCK_HZ;
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 		"%s: using default_va_clock of %u Hz from device-tree\n",
 			 __func__, p->pdata->default_va_clock);
 	}
@@ -22492,18 +22492,18 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no default_va_ve_clock def. in device-tree.\n",
 			__func__);
 		p->pdata->default_va_ve_clock = DEFAULT_D2_CLOCK_HZ;
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: using default_va_ve_clock of %u Hz (default)\n",
 			 __func__, p->pdata->default_va_ve_clock);
 
 	} else {
 		if (p->pdata->default_va_ve_clock == 0)
 			p->pdata->default_va_ve_clock = DEFAULT_D2_CLOCK_HZ;
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 		"%s: using default_va_ve_clock of %u Hz from device-tree\n",
 			 __func__, p->pdata->default_va_ve_clock);
 	}
@@ -22516,17 +22516,17 @@ static int dbmdx_get_devtree_pdata(struct device *dev,
 		ret = -EINVAL;
 		goto out_err;
 	} else if (ret ==  -EINVAL) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: no alsa_streaming_options def. in device-tree.\n",
 			__func__);
 		p->pdata->alsa_streaming_options =
 					DBMDX_ALSA_STREAMING_DEFAULT_OPTIONS;
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 		"%s: using default alsa_streaming_options of 0x%x\n",
 			 __func__, p->pdata->alsa_streaming_options);
 
 	} else {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 		"%s: using alsa_streaming_options of 0x%x from device-tree\n",
 			 __func__, p->pdata->alsa_streaming_options);
 	}
@@ -22675,7 +22675,7 @@ static int dbmdx_get_fw_interfaces(struct dbmdx_private *p,
 		return -EIO;
 	}
 
-	dev_info(p->dev,
+	dev_dbg(p->dev,
 		"%s: %s uses %d interfaces from device-tree\n",
 		__func__, tag, nr_interfaces);
 
@@ -22815,7 +22815,7 @@ static int dbmdx_interface_probe_multi(struct dbmdx_private *p)
 	p->interfaces = interfaces;
 	p->interface_types = interface_types;
 
-	dev_info(p->dev, "%s: found %u interfaces\n", __func__, nr_interfaces);
+	dev_dbg(p->dev, "%s: found %u interfaces\n", __func__, nr_interfaces);
 
 
 	return 0;
@@ -22903,7 +22903,7 @@ static int dbmdx_platform_get_clk_info(struct dbmdx_private *p,
 	struct dbmdx_platform_data *pdata = p->pdata;
 
 	rate = pdata->clock_rates[dbmdx_clk];
-	dev_info(p->dev,
+	dev_dbg(p->dev,
 		 "%s: using %s at %dHZ\n",
 		 __func__,
 		 dbmdx_of_clk_names[dbmdx_clk],
@@ -22911,7 +22911,7 @@ static int dbmdx_platform_get_clk_info(struct dbmdx_private *p,
 
 	clk = clk_get(p->dev, dbmdx_of_clk_names[dbmdx_clk]);
 	if (IS_ERR(clk)) {
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			 "%s: no %s definition\n",
 			 __func__,
 			 dbmdx_of_clk_names[dbmdx_clk]);
@@ -22921,7 +22921,7 @@ static int dbmdx_platform_get_clk_info(struct dbmdx_private *p,
 		/* If clock rate not specified in dts, try to detect */
 		if (rate == -1) {
 			rate = clk_get_rate(clk);
-			dev_info(p->dev,
+			dev_dbg(p->dev,
 				 "%s: using %s at %dHZ\n",
 				 __func__,
 				 dbmdx_of_clk_names[dbmdx_clk],
@@ -22930,7 +22930,7 @@ static int dbmdx_platform_get_clk_info(struct dbmdx_private *p,
 			/* verify which rate can be set */
 			rrate = clk_round_rate(clk, rate);
 			if (rrate !=  rate) {
-				dev_info(p->dev,
+				dev_dbg(p->dev,
 					 "%s: rounded rate %d to %d\n",
 					 __func__,
 					 rate, rrate);
@@ -22953,13 +22953,13 @@ static int verify_platform_data(struct device *dev,
 
 	/* check for features */
 	if (pdata->feature_va) {
-		dev_info(dev, "%s: VA feature activated\n", __func__);
+		dev_dbg(dev, "%s: VA feature activated\n", __func__);
 		p->va_chip_enabled = true;
 	} else
-		dev_info(dev, "%s: VA feature not activated\n", __func__);
+		dev_dbg(dev, "%s: VA feature not activated\n", __func__);
 #ifdef DBMDX_VA_VE_SUPPORT
 	if (pdata->feature_va_ve) {
-		dev_info(dev, "%s: VA_VE feature activated\n", __func__);
+		dev_dbg(dev, "%s: VA_VE feature activated\n", __func__);
 
 		if (pdata->project_sub_type ==
 			DBMDX_VA_VE_PROJECT_SUB_TYPE_VT_ASRP) {
@@ -22976,24 +22976,24 @@ static int verify_platform_data(struct device *dev,
 			p->va_ve_chip_enabled = true;
 
 		} else {
-			dev_info(dev, "%s: Unknown project type %u\n", __func__,
+			dev_dbg(dev, "%s: Unknown project type %u\n", __func__,
 				pdata->project_sub_type);
 			p->va_chip_enabled = true;
 			p->va_ve_chip_enabled = true;
 		}
 
 	} else
-		dev_info(dev, "%s: VA_VE feature not activated\n", __func__);
+		dev_dbg(dev, "%s: VA_VE feature not activated\n", __func__);
 #endif
 	if (pdata->feature_vqe)
-		dev_info(dev, "%s: VQE feature activated\n", __func__);
+		dev_dbg(dev, "%s: VQE feature activated\n", __func__);
 	else
-		dev_info(dev, "%s: VQE feature not activated\n", __func__);
+		dev_dbg(dev, "%s: VQE feature not activated\n", __func__);
 
 	if (pdata->feature_fw_overlay)
-		dev_info(dev, "%s: Firmware overlay activated\n", __func__);
+		dev_dbg(dev, "%s: Firmware overlay activated\n", __func__);
 	else
-		dev_info(dev, "%s: Firmware overlay not activated\n", __func__);
+		dev_dbg(dev, "%s: Firmware overlay not activated\n", __func__);
 
 /* check if enabled features make sense */
 #ifdef DBMDX_VA_VE_SUPPORT
@@ -23017,10 +23017,10 @@ static int verify_platform_data(struct device *dev,
 		pdata->multi_interface_support = 1;
 
 	if (pdata->multi_interface_support)
-		dev_info(dev, "%s: Multi Interface Probe is supported\n",
+		dev_dbg(dev, "%s: Multi Interface Probe is supported\n",
 			__func__);
 	else
-		dev_info(dev, "%s: Multi Interface Probe is not supported\n",
+		dev_dbg(dev, "%s: Multi Interface Probe is not supported\n",
 			__func__);
 
 #ifdef DBMDX_VA_VE_SUPPORT
@@ -23029,24 +23029,24 @@ static int verify_platform_data(struct device *dev,
 #else
 	if (pdata->feature_va) {
 #endif
-		dev_info(dev, "%s: VA firmware name: %s\n",
+		dev_dbg(dev, "%s: VA firmware name: %s\n",
 				 __func__, pdata->va_firmware_name);
 
-		dev_info(dev, "%s: VA preboot firmware name: %s\n",
+		dev_dbg(dev, "%s: VA preboot firmware name: %s\n",
 				 __func__, pdata->va_preboot_firmware_name);
 
 		if (pdata->auto_buffering != 0 &&
 		    pdata->auto_buffering != 1)
 			pdata->auto_buffering = 0;
 
-		dev_info(dev, "%s: using auto_buffering of %d\n",
+		dev_dbg(dev, "%s: using auto_buffering of %d\n",
 			 __func__, pdata->auto_buffering);
 
 		if (pdata->auto_detection != 0 &&
 			pdata->auto_detection != 1)
 			pdata->auto_detection = 1;
 
-		dev_info(dev, "%s: using auto_detection of %d\n",
+		dev_dbg(dev, "%s: using auto_detection of %d\n",
 			 __func__, pdata->auto_detection);
 
 		if (pdata->detection_after_buffering < 0 ||
@@ -23055,28 +23055,28 @@ static int verify_platform_data(struct device *dev,
 			pdata->detection_after_buffering =
 					DETECTION_AFTER_BUFFERING_OFF;
 
-		dev_info(dev, "%s: using detection_after_buffering of %d\n",
+		dev_dbg(dev, "%s: using detection_after_buffering of %d\n",
 			 __func__, pdata->detection_after_buffering);
 
 		if (pdata->send_uevent_on_detection != 0 &&
 			pdata->send_uevent_on_detection != 1)
 			pdata->send_uevent_on_detection = 0;
 
-		dev_info(dev, "%s: using send_uevent_on_detection of %d\n",
+		dev_dbg(dev, "%s: using send_uevent_on_detection of %d\n",
 			__func__, pdata->send_uevent_on_detection);
 
 		if (pdata->send_uevent_after_buffering != 0 &&
 			pdata->send_uevent_after_buffering != 1)
 			pdata->send_uevent_after_buffering = 0;
 
-		dev_info(dev, "%s: using send_uevent_after_buffering of %d\n",
+		dev_dbg(dev, "%s: using send_uevent_after_buffering of %d\n",
 			__func__, pdata->send_uevent_after_buffering);
 
 		if (p->pdata->buffering_timeout < MIN_RETRIES_TO_WRITE_TOBUF)
 			p->pdata->buffering_timeout =
 					MIN_RETRIES_TO_WRITE_TOBUF;
 
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: using buffering_timeout of %u\n",
 			 __func__, p->pdata->buffering_timeout);
 
@@ -23084,20 +23084,20 @@ static int verify_platform_data(struct device *dev,
 		pdata->detection_buffer_channels > MAX_SUPPORTED_CHANNELS)
 			pdata->detection_buffer_channels = 0;
 
-		dev_info(p->dev, "%s: using detection_buffer_channels of %d\n",
+		dev_dbg(p->dev, "%s: using detection_buffer_channels of %d\n",
 			 __func__, pdata->detection_buffer_channels);
 
-		dev_info(p->dev, "%s: using min_samples_chunk_size of %d\n",
+		dev_dbg(p->dev, "%s: using min_samples_chunk_size of %d\n",
 			 __func__, pdata->min_samples_chunk_size);
 
-		dev_info(p->dev, "%s: using max_detection_buffer_size of %d\n",
+		dev_dbg(p->dev, "%s: using max_detection_buffer_size of %d\n",
 			 __func__, pdata->max_detection_buffer_size);
 
 		if (pdata->va_buffering_pcm_rate != 16000 &&
 			pdata->va_buffering_pcm_rate != 32000)
 			pdata->va_buffering_pcm_rate = 16000;
 
-		dev_info(p->dev, "%s: using va_buffering_pcm_rate of %u\n",
+		dev_dbg(p->dev, "%s: using va_buffering_pcm_rate of %u\n",
 			__func__, pdata->va_buffering_pcm_rate);
 
 		for (i = 0; i < pdata->va_cfg_values; i++)
@@ -23108,7 +23108,7 @@ static int verify_platform_data(struct device *dev,
 			dev_dbg(dev, "%s: VA mic cfg %8.8x: 0x%8.8x\n",
 				__func__, i, pdata->va_mic_config[i]);
 
-		dev_info(dev, "%s: VA default mic config: 0x%8.8x\n",
+		dev_dbg(dev, "%s: VA default mic config: 0x%8.8x\n",
 			 __func__, pdata->va_initial_mic_config);
 
 		for (i = 0; i < 3; i++)
@@ -23118,14 +23118,14 @@ static int verify_platform_data(struct device *dev,
 		if (pdata->va_backlog_length > 0xfff)
 			pdata->va_backlog_length = 0xfff;
 
-		dev_info(dev, "%s: using backlog length of %d\n",
+		dev_dbg(dev, "%s: using backlog length of %d\n",
 			 __func__, pdata->va_backlog_length);
 
 #ifdef DMBDX_OKG_AMODEL_SUPPORT
 		if (pdata->va_backlog_length_okg > 0xfff)
 			pdata->va_backlog_length_okg = 0xfff;
 
-		dev_info(dev, "%s: using OKG backlog length of %d\n",
+		dev_dbg(dev, "%s: using OKG backlog length of %d\n",
 			 __func__, pdata->va_backlog_length_okg);
 #endif
 
@@ -23133,7 +23133,7 @@ static int verify_platform_data(struct device *dev,
 			pdata->pcm_streaming_mode != 1)
 			pdata->pcm_streaming_mode = 0;
 
-		dev_info(dev, "%s: using pcm_streaming_mode of %d\n",
+		dev_dbg(dev, "%s: using pcm_streaming_mode of %d\n",
 			 __func__, pdata->pcm_streaming_mode);
 
 		dev_dbg(p->dev, "va-interfaces:\n");
@@ -23145,10 +23145,10 @@ static int verify_platform_data(struct device *dev,
 
 #ifdef DBMDX_VA_VE_SUPPORT
 	if (pdata->feature_va_ve) {
-		dev_info(dev, "%s: VA_VE firmware name: %s\n",
+		dev_dbg(dev, "%s: VA_VE firmware name: %s\n",
 				 __func__, pdata->va_ve_firmware_name);
 
-		dev_info(dev, "%s: VA_VE preboot firmware name: %s\n",
+		dev_dbg(dev, "%s: VA_VE preboot firmware name: %s\n",
 				 __func__, pdata->va_ve_preboot_firmware_name);
 
 		for (i = 0; i < pdata->va_ve_cfg_values; i++)
@@ -23167,10 +23167,10 @@ static int verify_platform_data(struct device *dev,
 	}
 #endif
 	if (pdata->feature_vqe) {
-		dev_info(dev, "%s: VQE firmware name: %s\n",
+		dev_dbg(dev, "%s: VQE firmware name: %s\n",
 				__func__, pdata->vqe_firmware_name);
 
-		dev_info(dev, "%s: VQE non-overlay firmware name: %s\n",
+		dev_dbg(dev, "%s: VQE non-overlay firmware name: %s\n",
 			 __func__, pdata->vqe_non_overlay_firmware_name);
 		for (i = 0; i < pdata->vqe_cfg_values; i++)
 			dev_dbg(dev, "%s: VQE cfg %8.8x: 0x%8.8x\n",
@@ -23180,7 +23180,7 @@ static int verify_platform_data(struct device *dev,
 			dev_dbg(dev, "%s: VQE mode %8.8x: 0x%8.8x\n",
 				__func__, i, pdata->vqe_modes_value[i]);
 
-		dev_info(dev, "%s: VQE TDM bypass config: 0x%8.8x\n",
+		dev_dbg(dev, "%s: VQE TDM bypass config: 0x%8.8x\n",
 			__func__,
 			pdata->vqe_tdm_bypass_config);
 
@@ -23204,119 +23204,119 @@ static int verify_platform_data(struct device *dev,
 			pdata->va_speed_cfg[i].i2c_rate,
 			pdata->va_speed_cfg[i].spi_rate);
 
-	dev_info(dev, "%s: using hw revision of 0x%8x\n",
+	dev_dbg(dev, "%s: using hw revision of 0x%8x\n",
 		 __func__, pdata->hw_rev);
 
 	if (pdata->wakeup_disabled > 1)
 		pdata->wakeup_disabled = 1;
 
-	dev_info(dev, "%s: using wakeup_disabled of %d\n",
+	dev_dbg(dev, "%s: using wakeup_disabled of %d\n",
 		 __func__, pdata->wakeup_disabled);
 
 
 	if (pdata->use_gpio_for_wakeup > 1)
 		pdata->use_gpio_for_wakeup = 1;
 
-	dev_info(dev, "%s: using use_gpio_for_wakeup of %d\n",
+	dev_dbg(dev, "%s: using use_gpio_for_wakeup of %d\n",
 		 __func__, pdata->use_gpio_for_wakeup);
 
 	if (pdata->send_wakeup_seq > 1)
 		pdata->send_wakeup_seq = 1;
 
-	dev_info(dev, "%s: using send_wakeup_seq of %d\n",
+	dev_dbg(dev, "%s: using send_wakeup_seq of %d\n",
 		 __func__, pdata->send_wakeup_seq);
 
 	if (pdata->wakeup_set_value > 1)
 		pdata->wakeup_set_value = 1;
 
-	dev_info(dev, "%s: using wakeup_set_value of %d\n",
+	dev_dbg(dev, "%s: using wakeup_set_value of %d\n",
 		 __func__, pdata->wakeup_set_value);
 
-	dev_info(dev, "%s: using firmware_id of 0x%8x\n",
+	dev_dbg(dev, "%s: using firmware_id of 0x%8x\n",
 		 __func__, pdata->firmware_id);
 
-	dev_info(dev, "%s: using boot_options of 0x%8x\n",
+	dev_dbg(dev, "%s: using boot_options of 0x%8x\n",
 		 __func__, pdata->boot_options);
 
-	dev_info(dev, "%s: using amodel_options of 0x%8x\n",
+	dev_dbg(dev, "%s: using amodel_options of 0x%8x\n",
 		 __func__, pdata->amodel_options);
 
 #ifdef DBMDX_VA_VE_SUPPORT
 	if (pdata->wakeup_va_ve_disabled > 1)
 		pdata->wakeup_va_ve_disabled = 1;
 
-	dev_info(dev, "%s: using wakeup_va_ve_disabled of %d\n",
+	dev_dbg(dev, "%s: using wakeup_va_ve_disabled of %d\n",
 		 __func__, pdata->wakeup_va_ve_disabled);
 
 	if (pdata->use_gpio_for_wakeup_va_ve > 1)
 		pdata->use_gpio_for_wakeup_va_ve = 1;
 
-	dev_info(dev, "%s: using use_gpio_for_wakeup_va_ve of %d\n",
+	dev_dbg(dev, "%s: using use_gpio_for_wakeup_va_ve of %d\n",
 		 __func__, pdata->use_gpio_for_wakeup_va_ve);
 
 	if (pdata->send_wakeup_va_ve_seq > 1)
 		pdata->send_wakeup_va_ve_seq = 1;
 
-	dev_info(dev, "%s: using send_wakeup_va_ve_seq of %d\n",
+	dev_dbg(dev, "%s: using send_wakeup_va_ve_seq of %d\n",
 		 __func__, pdata->send_wakeup_va_ve_seq);
 
 	if (pdata->wakeup_va_ve_set_value > 1)
 		pdata->wakeup_va_ve_set_value = 1;
 
-	dev_info(dev, "%s: using wakeup_va_ve_set_value of %d\n",
+	dev_dbg(dev, "%s: using wakeup_va_ve_set_value of %d\n",
 		 __func__, pdata->wakeup_va_ve_set_value);
 
-	dev_info(dev, "%s: using firmware_id_va_ve of 0x%8x\n",
+	dev_dbg(dev, "%s: using firmware_id_va_ve of 0x%8x\n",
 		 __func__, pdata->firmware_id_va_ve);
 
-	dev_info(dev, "%s: using boot_options_va_ve of 0x%8x\n",
+	dev_dbg(dev, "%s: using boot_options_va_ve of 0x%8x\n",
 		 __func__, pdata->boot_options_va_ve);
 
 	pdata->change_clock_src_enabled &= DBMDX_CHANGE_CLOCK_MASK;
 
-	dev_info(dev, "%s: using change_clock_src_enabled of: %0x02x\n",
+	dev_dbg(dev, "%s: using change_clock_src_enabled of: %0x02x\n",
 		__func__, p->pdata->change_clock_src_enabled);
 #ifdef DBMDX_QED_SUPPORTED
 	if (pdata->qed_enabled > 1)
 		pdata->qed_enabled = 1;
 
-	dev_info(dev, "%s: using qed_enabled of %d\n",
+	dev_dbg(dev, "%s: using qed_enabled of %d\n",
 		 __func__, pdata->qed_enabled);
 #endif
 	if (pdata->va_ve_separate_clocks > 1)
 		pdata->va_ve_separate_clocks = 1;
 
-	dev_info(dev, "%s: using va_ve_separate_clocks of %d\n",
+	dev_dbg(dev, "%s: using va_ve_separate_clocks of %d\n",
 		 __func__, pdata->va_ve_separate_clocks);
 
-	dev_info(dev, "%s: using va_ve_mic_mask of 0x%8x\n",
+	dev_dbg(dev, "%s: using va_ve_mic_mask of 0x%8x\n",
 		 __func__, pdata->va_ve_mic_mask);
 
-	dev_info(dev, "%s: using asrp_delay of 0x%8x\n",
+	dev_dbg(dev, "%s: using asrp_delay of 0x%8x\n",
 		 __func__, pdata->asrp_delay);
 
-	dev_info(dev, "%s: using asrp_tx_out_gain of 0x%8x\n",
+	dev_dbg(dev, "%s: using asrp_tx_out_gain of 0x%8x\n",
 		 __func__, pdata->asrp_tx_out_gain);
 
-	dev_info(dev, "%s: using asrp_vcpf_out_gain of 0x%8x\n",
+	dev_dbg(dev, "%s: using asrp_vcpf_out_gain of 0x%8x\n",
 		 __func__, pdata->asrp_vcpf_out_gain);
 
-	dev_info(dev, "%s: using asrp_rx_out_gain of 0x%8x\n",
+	dev_dbg(dev, "%s: using asrp_rx_out_gain of 0x%8x\n",
 		 __func__, pdata->asrp_rx_out_gain);
 
 	if (pdata->default_va_clock == 0)
 		p->pdata->default_va_clock = DEFAULT_D4_CLOCK_HZ;
 
-	dev_info(p->dev, "%s: using default_va_clock of %u Hz\n",
+	dev_dbg(p->dev, "%s: using default_va_clock of %u Hz\n",
 			 __func__, pdata->default_va_clock);
 
 	if (pdata->default_va_ve_clock == 0)
 		p->pdata->default_va_ve_clock = DEFAULT_D2_CLOCK_HZ;
 
-	dev_info(p->dev, "%s: using default_va_ve_clock of %u Hz\n",
+	dev_dbg(p->dev, "%s: using default_va_ve_clock of %u Hz\n",
 			 __func__, pdata->default_va_ve_clock);
 
-	dev_info(p->dev, "%s: using alsa_streaming_options of 0x%x\n",
+	dev_dbg(p->dev, "%s: using alsa_streaming_options of 0x%x\n",
 			 __func__, pdata->alsa_streaming_options);
 
 
@@ -23326,7 +23326,7 @@ static int verify_platform_data(struct device *dev,
 		pdata->va_recovery_disabled != 1)
 		pdata->va_recovery_disabled = 0;
 
-	dev_info(dev,
+	dev_dbg(dev,
 		"%s: using va_recovery_disabled of %d\n",
 		 __func__, pdata->va_recovery_disabled);
 
@@ -23334,7 +23334,7 @@ static int verify_platform_data(struct device *dev,
 		pdata->low_power_mode_disabled != 1)
 		pdata->low_power_mode_disabled = 0;
 
-	dev_info(dev,
+	dev_dbg(dev,
 		"%s: using low_power_mode_disabled of %d\n",
 		 __func__, pdata->low_power_mode_disabled);
 
@@ -23342,15 +23342,15 @@ static int verify_platform_data(struct device *dev,
 		pdata->uart_low_speed_enabled != 1)
 		pdata->uart_low_speed_enabled = 0;
 
-	dev_info(p->dev,
+	dev_dbg(p->dev,
 		"%s: using uart_low_speed_enabled of %d\n",
 		 __func__, pdata->uart_low_speed_enabled);
 
-	dev_info(p->dev,
+	dev_dbg(p->dev,
 		"%s: using min_samples_chunk_size of %d\n",
 		 __func__, pdata->min_samples_chunk_size);
 
-	dev_info(p->dev,
+	dev_dbg(p->dev,
 		"%s: using max_detection_buffer_size of %d\n",
 		 __func__, pdata->max_detection_buffer_size);
 
@@ -23451,7 +23451,7 @@ static int dbmdx_find_chip_interface(struct chip_interface **chip,
 
 	if (spi_dev) {
 		/* got spi command interface */
-		dev_info(&spi_dev->dev, "%s: spi interface node %p\n",
+		dev_dbg(&spi_dev->dev, "%s: spi interface node %p\n",
 				__func__, spi_dev);
 
 		/* got spi command interface */
@@ -23504,7 +23504,7 @@ static int dbmdx_find_chip_interface_by_name(const char *iface_name,
 
 	if (spi_dev) {
 		/* got spi command interface */
-		dev_info(&spi_dev->dev, "%s: spi interface node %p\n",
+		dev_dbg(&spi_dev->dev, "%s: spi interface node %p\n",
 				__func__, spi_dev);
 
 		/* got spi command interface */
@@ -23644,7 +23644,7 @@ static int dbmdx_interface_probe_multi(struct dbmdx_private *p)
 	p->interfaces = interfaces;
 	p->interface_types = interface_types;
 
-	dev_info(p->dev, "%s: found %u interfaces\n", __func__, nr_interfaces);
+	dev_dbg(p->dev, "%s: found %u interfaces\n", __func__, nr_interfaces);
 
 
 	return 0;
@@ -23673,7 +23673,7 @@ static int dbmdx_platform_probe(struct platform_device *pdev)
 	struct dbmdx_private *p;
 	int ret = 0;
 
-	dev_info(&pdev->dev, "%s: DBMDX codec driver version = %s\n",
+	dev_dbg(&pdev->dev, "%s: DBMDX codec driver version = %s\n",
 		__func__, DRIVER_VERSION);
 
 	/*wt change for i2s*/
@@ -23738,7 +23738,7 @@ static int dbmdx_platform_probe(struct platform_device *pdev)
 
 	p->vregulator = devm_regulator_get(p->dev, "dbmdx_regulator");
 	if (IS_ERR(p->vregulator)) {
-		dev_info(p->dev, "%s: Can't get voltage regulator\n",
+		dev_dbg(p->dev, "%s: Can't get voltage regulator\n",
 			__func__);
 		p->vregulator = NULL;
 	}
@@ -23820,7 +23820,7 @@ static int dbmdx_platform_probe(struct platform_device *pdev)
 	dbmdx_snd_init(p);
 #endif
 
-	dev_info(p->dev, "%s: successfully probed\n", __func__);
+	dev_dbg(p->dev, "%s: successfully probed\n", __func__);
 	return 0;
 
 out_err_destroy_workqueue:

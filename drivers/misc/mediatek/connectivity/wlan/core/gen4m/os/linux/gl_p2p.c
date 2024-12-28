@@ -1645,7 +1645,7 @@ static int p2pOpen(IN struct net_device *prDev)
 
 	ASSERT(prDev);
 
-#if 0 /* Move after device name set. (mtk_p2p_set_local_dev_info) */
+#if 0 /* Move after device name set. (mtk_p2p_set_local_dev_dbg) */
 	prGlueInfo = *((struct GLUE_INFO **) netdev_priv(prDev));
 	ASSERT(prGlueInfo);
 

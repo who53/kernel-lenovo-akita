@@ -263,7 +263,7 @@ int send_i2c_cmd_boot(struct dbmdx_private *p, u32 command)
 	u8 send[3];
 	int ret = 0;
 
-	dev_info(i2c_p->dev, "%s: command = %x\n", __func__, command);
+	dev_dbg(i2c_p->dev, "%s: command = %x\n", __func__, command);
 
 	send[0] = (command >> 16) & 0xff;
 	send[1] = (command >>  8) & 0xff;
@@ -413,7 +413,7 @@ int i2c_verify_chip_id(struct dbmdx_private *p)
 		return -EILSEQ;
 	}
 
-	dev_info(i2c_p->dev,
+	dev_dbg(i2c_p->dev,
 			"%s: Chip ID was successfully verified: 0x%2x%2x\n",
 				__func__,
 				recv_chip_rev_id_high,
@@ -797,11 +797,11 @@ int i2c_common_probe(struct i2c_client *client,
 		 * boot address
 		 */
 		pdata->operation_addr = pdata->boot_addr;
-		dev_info(p->dev, "%s: setting operational addr to boot address\n",
+		dev_dbg(p->dev, "%s: setting operational addr to boot address\n",
 			__func__);
 	}
 #endif
-	dev_info(p->dev, "%s: setting operational addr to 0x%2.2x\n",
+	dev_dbg(p->dev, "%s: setting operational addr to 0x%2.2x\n",
 			__func__, pdata->operation_addr);
 
 #ifdef CONFIG_OF
@@ -812,7 +812,7 @@ int i2c_common_probe(struct i2c_client *client,
 		 * read-chunk-size not set, set it to default
 		 */
 		pdata->read_chunk_size = DEFAULT_I2C_READ_CHUNK_SIZE;
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: Setting i2c read chunk to default val: %u bytes\n",
 			__func__, pdata->read_chunk_size);
 	}
@@ -822,7 +822,7 @@ int i2c_common_probe(struct i2c_client *client,
 	if (pdata->read_chunk_size == 0)
 		pdata->read_chunk_size = DEFAULT_I2C_READ_CHUNK_SIZE;
 
-	dev_info(p->dev, "%s: Setting i2c read chunk to %u bytes\n",
+	dev_dbg(p->dev, "%s: Setting i2c read chunk to %u bytes\n",
 			__func__, pdata->read_chunk_size);
 
 #ifdef CONFIG_OF
@@ -833,7 +833,7 @@ int i2c_common_probe(struct i2c_client *client,
 		 * write-chunk-size not set, set it to default
 		 */
 		pdata->write_chunk_size = DEFAULT_I2C_WRITE_CHUNK_SIZE;
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: Setting i2c write chunk to default val: %u bytes\n",
 			__func__, pdata->write_chunk_size);
 	}
@@ -843,7 +843,7 @@ int i2c_common_probe(struct i2c_client *client,
 	if (pdata->write_chunk_size == 0)
 		pdata->write_chunk_size = DEFAULT_I2C_WRITE_CHUNK_SIZE;
 
-	dev_info(p->dev, "%s: Setting i2c write chunk to %u bytes\n",
+	dev_dbg(p->dev, "%s: Setting i2c write chunk to %u bytes\n",
 			__func__, pdata->write_chunk_size);
 
 	p->pdata = pdata;
@@ -882,7 +882,7 @@ int i2c_common_probe(struct i2c_client *client,
 
 	i2c_set_clientdata(client, &p->chip);
 
-	dev_info(&client->dev, "%s: successfully probed\n", __func__);
+	dev_dbg(&client->dev, "%s: successfully probed\n", __func__);
 	ret = 0;
 	goto out;
 #ifdef CONFIG_OF

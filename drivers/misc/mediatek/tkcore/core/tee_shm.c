@@ -132,7 +132,7 @@ static struct tee_shm *tee_shm_alloc_ns(struct tee *tee, size_t size,
 	struct tee_shm *shm;
 
 	if (size == 0) {
-		pr_warn("invalid size %zu flags 0x%x\n",
+		pr_debug("invalid size %zu flags 0x%x\n",
 			size, flags);
 		return NULL;
 	}
@@ -242,12 +242,12 @@ void tee_shm_free(struct tee_shm *shm)
 	tee = shm->tee;
 
 	if (tee == NULL) {
-		pr_warn("tkcoredrv: %s(): NULL tee\n",
+		pr_debug("tkcoredrv: %s(): NULL tee\n",
 			__func__);
 		return;
 	}
 	if (shm->tee == NULL) {
-		pr_warn("tkcoredrv: %s(): invalid shm\n", __func__);
+		pr_debug("tkcoredrv: %s(): invalid shm\n", __func__);
 		return;
 	}
 
@@ -936,7 +936,7 @@ void tee_shm_put(struct tee_context *ctx, struct tee_shm *shm)
 	WARN_ON(!(shm->flags & TEE_SHM_MEMREF));
 
 	if (shm_test_nonsecure(shm->flags)) {
-		pr_warn("invalid shared memory flags: 0x%x\n",
+		pr_debug("invalid shared memory flags: 0x%x\n",
 			shm->flags);
 		return;
 	}

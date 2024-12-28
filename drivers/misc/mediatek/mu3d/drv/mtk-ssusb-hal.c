@@ -261,7 +261,7 @@ static int mt_usb_uart_probe(struct platform_device *pdev)
 
 	ap_uart0_base = devm_ioremap(dev, res->start, resource_size(res));
 	if (IS_ERR(ap_uart0_base)) {
-		dev_info(dev, "failed to remap usb2uart regs\n");
+		dev_dbg(dev, "failed to remap usb2uart regs\n");
 		return PTR_ERR(ap_uart0_base);
 	}
 

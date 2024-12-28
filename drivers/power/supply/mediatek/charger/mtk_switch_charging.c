@@ -293,9 +293,9 @@ static void swchg_select_charging_current_limit(struct charger_manager *info)
 		pdata->charging_current_limit =
 				info->data.apple_2_1a_charger_current;
 	} else if (info->chr_type == POGO_CHARGER) {
-		pr_info("[%s] set Pogo charger current\n", __func__);
-		pr_info("Pogo intpu current: %d\n", info->data.pogo_charger_input_current);
-		pr_info("Pogo charger current limit: %d \n", info->data.pogo_charger_current);
+		pr_debug("[%s] set Pogo charger current\n", __func__);
+		pr_debug("Pogo intpu current: %d\n", info->data.pogo_charger_input_current);
+		pr_debug("Pogo charger current limit: %d \n", info->data.pogo_charger_current);
 		pdata->input_current_limit =
 				info->data.pogo_charger_input_current;
 		pdata->charging_current_limit =
@@ -718,11 +718,11 @@ int charger_dev_event(struct notifier_block *nb, unsigned long event, void *v)
 	switch (event) {
 	case CHARGER_DEV_NOTIFY_EOC:
 		charger_manager_notifier(info, CHARGER_NOTIFY_EOC);
-		pr_info("%s: end of charge\n", __func__);
+		pr_debug("%s: end of charge\n", __func__);
 		break;
 	case CHARGER_DEV_NOTIFY_RECHG:
 		charger_manager_notifier(info, CHARGER_NOTIFY_START_CHARGING);
-		pr_info("%s: recharge\n", __func__);
+		pr_debug("%s: recharge\n", __func__);
 		break;
 	case CHARGER_DEV_NOTIFY_SAFETY_TIMEOUT:
 		info->safety_timeout = true;

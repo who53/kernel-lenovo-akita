@@ -295,7 +295,7 @@ static int pmic_ldo_vaud18_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vaud18 don't have en_cb\n");
+		pr_debug("ldo vaud18 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -320,7 +320,7 @@ static int pmic_ldo_vaud18_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vaud18 don't have enable callback\n");
+			pr_debug("ldo vaud18 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -338,7 +338,7 @@ static int pmic_ldo_vaud18_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vaud18 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vaud18 don't have da_en_cb\n");
+		pr_debug("ldo vaud18 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -358,7 +358,7 @@ static int pmic_ldo_vsim1_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vsim1 don't have en_cb\n");
+		pr_debug("ldo vsim1 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -383,7 +383,7 @@ static int pmic_ldo_vsim1_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vsim1 don't have enable callback\n");
+			pr_debug("ldo vsim1 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -401,7 +401,7 @@ static int pmic_ldo_vsim1_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vsim1 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vsim1 don't have da_en_cb\n");
+		pr_debug("ldo vsim1 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -428,7 +428,7 @@ static int pmic_ldo_vsim1_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vsim1 don't have vol_cb\n");
+		pr_debug("ldo vsim1 don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -448,7 +448,7 @@ static int pmic_ldo_vsim1_get_voltage_sel(
 
 	PMICLOG("ldo vsim1 get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vsim1 don't have da_vol_cb\n");
+		pr_debug("ldo vsim1 don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -490,7 +490,7 @@ static int pmic_buck_vs1_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("buck vs1 don't have en_cb\n");
+		pr_debug("buck vs1 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -515,7 +515,7 @@ static int pmic_buck_vs1_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("buck vs1 don't have enable callback\n");
+			pr_debug("buck vs1 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -533,7 +533,7 @@ static int pmic_buck_vs1_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("buck vs1 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("buck vs1 don't have da_en_cb\n");
+		pr_debug("buck vs1 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -557,7 +557,7 @@ static int pmic_buck_vs1_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(selector);
 	else {
-		pr_notice("buck vs1 don't have vol_cb\n");
+		pr_debug("buck vs1 don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -574,7 +574,7 @@ static int pmic_buck_vs1_get_voltage_sel(struct regulator_dev *rdev)
 
 	PMICLOG("buck vs1 get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("buck vs1 don't have da_vol_cb\n");
+		pr_debug("buck vs1 don't have da_vol_cb\n");
 		return -1;
 	}
 
@@ -594,7 +594,7 @@ static int pmic_buck_vgpu11_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("buck vgpu11 don't have en_cb\n");
+		pr_debug("buck vgpu11 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -619,7 +619,7 @@ static int pmic_buck_vgpu11_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("buck vgpu11 don't have enable callback\n");
+			pr_debug("buck vgpu11 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -637,7 +637,7 @@ static int pmic_buck_vgpu11_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("buck vgpu11 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("buck vgpu11 don't have da_en_cb\n");
+		pr_debug("buck vgpu11 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -661,7 +661,7 @@ static int pmic_buck_vgpu11_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(selector);
 	else {
-		pr_notice("buck vgpu11 don't have vol_cb\n");
+		pr_debug("buck vgpu11 don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -678,7 +678,7 @@ static int pmic_buck_vgpu11_get_voltage_sel(struct regulator_dev *rdev)
 
 	PMICLOG("buck vgpu11 get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("buck vgpu11 don't have da_vol_cb\n");
+		pr_debug("buck vgpu11 don't have da_vol_cb\n");
 		return -1;
 	}
 
@@ -698,7 +698,7 @@ static int pmic_ldo_vibr_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vibr don't have en_cb\n");
+		pr_debug("ldo vibr don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -723,7 +723,7 @@ static int pmic_ldo_vibr_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vibr don't have enable callback\n");
+			pr_debug("ldo vibr don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -741,7 +741,7 @@ static int pmic_ldo_vibr_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vibr is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vibr don't have da_en_cb\n");
+		pr_debug("ldo vibr don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -768,7 +768,7 @@ static int pmic_ldo_vibr_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vibr don't have vol_cb\n");
+		pr_debug("ldo vibr don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -788,7 +788,7 @@ static int pmic_ldo_vibr_get_voltage_sel(
 
 	PMICLOG("ldo vibr get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vibr don't have da_vol_cb\n");
+		pr_debug("ldo vibr don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -830,7 +830,7 @@ static int pmic_ldo_vrf12_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vrf12 don't have en_cb\n");
+		pr_debug("ldo vrf12 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -855,7 +855,7 @@ static int pmic_ldo_vrf12_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vrf12 don't have enable callback\n");
+			pr_debug("ldo vrf12 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -873,7 +873,7 @@ static int pmic_ldo_vrf12_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vrf12 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vrf12 don't have da_en_cb\n");
+		pr_debug("ldo vrf12 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -900,7 +900,7 @@ static int pmic_ldo_vrf12_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vrf12 don't have vol_cb\n");
+		pr_debug("ldo vrf12 don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -920,7 +920,7 @@ static int pmic_ldo_vrf12_get_voltage_sel(
 
 	PMICLOG("ldo vrf12 get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vrf12 don't have da_vol_cb\n");
+		pr_debug("ldo vrf12 don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -962,7 +962,7 @@ static int pmic_ldo_vusb_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vusb don't have en_cb\n");
+		pr_debug("ldo vusb don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -987,7 +987,7 @@ static int pmic_ldo_vusb_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vusb don't have enable callback\n");
+			pr_debug("ldo vusb don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -1005,7 +1005,7 @@ static int pmic_ldo_vusb_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vusb is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vusb don't have da_en_cb\n");
+		pr_debug("ldo vusb don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -1025,7 +1025,7 @@ static int pmic_ldo_vsram_proc2_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vsram_proc2 don't have en_cb\n");
+		pr_debug("ldo vsram_proc2 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -1050,7 +1050,7 @@ static int pmic_ldo_vsram_proc2_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vsram_proc2 don't have enable callback\n");
+			pr_debug("ldo vsram_proc2 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -1068,7 +1068,7 @@ static int pmic_ldo_vsram_proc2_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vsram_proc2 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vsram_proc2 don't have da_en_cb\n");
+		pr_debug("ldo vsram_proc2 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -1092,7 +1092,7 @@ static int pmic_ldo_vsram_proc2_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(selector);
 	else {
-		pr_notice("ldo vsram_proc2 don't have vol_cb\n");
+		pr_debug("ldo vsram_proc2 don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -1109,7 +1109,7 @@ static int pmic_ldo_vsram_proc2_get_voltage_sel(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vsram_proc2 get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vsram_proc2 don't have da_vol_cb\n");
+		pr_debug("ldo vsram_proc2 don't have da_vol_cb\n");
 		return -1;
 	}
 
@@ -1129,7 +1129,7 @@ static int pmic_ldo_vio18_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vio18 don't have en_cb\n");
+		pr_debug("ldo vio18 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -1154,7 +1154,7 @@ static int pmic_ldo_vio18_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vio18 don't have enable callback\n");
+			pr_debug("ldo vio18 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -1172,7 +1172,7 @@ static int pmic_ldo_vio18_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vio18 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vio18 don't have da_en_cb\n");
+		pr_debug("ldo vio18 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -1199,7 +1199,7 @@ static int pmic_ldo_vio18_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vio18 don't have vol_cb\n");
+		pr_debug("ldo vio18 don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -1219,7 +1219,7 @@ static int pmic_ldo_vio18_get_voltage_sel(
 
 	PMICLOG("ldo vio18 get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vio18 don't have da_vol_cb\n");
+		pr_debug("ldo vio18 don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -1261,7 +1261,7 @@ static int pmic_ldo_vcamio_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vcamio don't have en_cb\n");
+		pr_debug("ldo vcamio don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -1286,7 +1286,7 @@ static int pmic_ldo_vcamio_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vcamio don't have enable callback\n");
+			pr_debug("ldo vcamio don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -1304,7 +1304,7 @@ static int pmic_ldo_vcamio_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vcamio is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vcamio don't have da_en_cb\n");
+		pr_debug("ldo vcamio don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -1331,7 +1331,7 @@ static int pmic_ldo_vcamio_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vcamio don't have vol_cb\n");
+		pr_debug("ldo vcamio don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -1351,7 +1351,7 @@ static int pmic_ldo_vcamio_get_voltage_sel(
 
 	PMICLOG("ldo vcamio get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vcamio don't have da_vol_cb\n");
+		pr_debug("ldo vcamio don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -1393,7 +1393,7 @@ static int pmic_ldo_vcn18_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vcn18 don't have en_cb\n");
+		pr_debug("ldo vcn18 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -1418,7 +1418,7 @@ static int pmic_ldo_vcn18_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vcn18 don't have enable callback\n");
+			pr_debug("ldo vcn18 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -1436,7 +1436,7 @@ static int pmic_ldo_vcn18_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vcn18 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vcn18 don't have da_en_cb\n");
+		pr_debug("ldo vcn18 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -1456,7 +1456,7 @@ static int pmic_ldo_vfe28_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vfe28 don't have en_cb\n");
+		pr_debug("ldo vfe28 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -1481,7 +1481,7 @@ static int pmic_ldo_vfe28_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vfe28 don't have enable callback\n");
+			pr_debug("ldo vfe28 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -1499,7 +1499,7 @@ static int pmic_ldo_vfe28_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vfe28 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vfe28 don't have da_en_cb\n");
+		pr_debug("ldo vfe28 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -1519,7 +1519,7 @@ static int pmic_ldo_vcn13_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vcn13 don't have en_cb\n");
+		pr_debug("ldo vcn13 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -1544,7 +1544,7 @@ static int pmic_ldo_vcn13_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vcn13 don't have enable callback\n");
+			pr_debug("ldo vcn13 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -1562,7 +1562,7 @@ static int pmic_ldo_vcn13_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vcn13 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vcn13 don't have da_en_cb\n");
+		pr_debug("ldo vcn13 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -1589,7 +1589,7 @@ static int pmic_ldo_vcn13_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vcn13 don't have vol_cb\n");
+		pr_debug("ldo vcn13 don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -1609,7 +1609,7 @@ static int pmic_ldo_vcn13_get_voltage_sel(
 
 	PMICLOG("ldo vcn13 get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vcn13 don't have da_vol_cb\n");
+		pr_debug("ldo vcn13 don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -1651,7 +1651,7 @@ static int pmic_ldo_vcn33_1_bt_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vcn33_1_bt don't have en_cb\n");
+		pr_debug("ldo vcn33_1_bt don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -1676,7 +1676,7 @@ static int pmic_ldo_vcn33_1_bt_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vcn33_1_bt don't have enable callback\n");
+			pr_debug("ldo vcn33_1_bt don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -1694,7 +1694,7 @@ static int pmic_ldo_vcn33_1_bt_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vcn33_1_bt is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vcn33_1_bt don't have da_en_cb\n");
+		pr_debug("ldo vcn33_1_bt don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -1721,7 +1721,7 @@ static int pmic_ldo_vcn33_1_bt_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vcn33_1_bt don't have vol_cb\n");
+		pr_debug("ldo vcn33_1_bt don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -1741,7 +1741,7 @@ static int pmic_ldo_vcn33_1_bt_get_voltage_sel(
 
 	PMICLOG("ldo vcn33_1_bt get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vcn33_1_bt don't have da_vol_cb\n");
+		pr_debug("ldo vcn33_1_bt don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -1783,7 +1783,7 @@ static int pmic_ldo_vcn33_1_wifi_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vcn33_1_wifi don't have en_cb\n");
+		pr_debug("ldo vcn33_1_wifi don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -1808,7 +1808,7 @@ static int pmic_ldo_vcn33_1_wifi_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("vcn33_1_wifi don't have enable callback\n");
+			pr_debug("vcn33_1_wifi don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -1826,7 +1826,7 @@ static int pmic_ldo_vcn33_1_wifi_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vcn33_1_wifi is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vcn33_1_wifi don't have da_en_cb\n");
+		pr_debug("ldo vcn33_1_wifi don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -1853,7 +1853,7 @@ static int pmic_ldo_vcn33_1_wifi_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vcn33_1_wifi don't have vol_cb\n");
+		pr_debug("ldo vcn33_1_wifi don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -1873,7 +1873,7 @@ static int pmic_ldo_vcn33_1_wifi_get_voltage_sel(
 
 	PMICLOG("ldo vcn33_1_wifi get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vcn33_1_wifi don't have da_vol_cb\n");
+		pr_debug("ldo vcn33_1_wifi don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -1915,7 +1915,7 @@ static int pmic_ldo_vaux18_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vaux18 don't have en_cb\n");
+		pr_debug("ldo vaux18 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -1940,7 +1940,7 @@ static int pmic_ldo_vaux18_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vaux18 don't have enable callback\n");
+			pr_debug("ldo vaux18 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -1958,7 +1958,7 @@ static int pmic_ldo_vaux18_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vaux18 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vaux18 don't have da_en_cb\n");
+		pr_debug("ldo vaux18 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -1978,7 +1978,7 @@ static int pmic_buck_vmodem_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("buck vmodem don't have en_cb\n");
+		pr_debug("buck vmodem don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -2003,7 +2003,7 @@ static int pmic_buck_vmodem_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("buck vmodem don't have enable callback\n");
+			pr_debug("buck vmodem don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -2021,7 +2021,7 @@ static int pmic_buck_vmodem_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("buck vmodem is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("buck vmodem don't have da_en_cb\n");
+		pr_debug("buck vmodem don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -2045,7 +2045,7 @@ static int pmic_buck_vmodem_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(selector);
 	else {
-		pr_notice("buck vmodem don't have vol_cb\n");
+		pr_debug("buck vmodem don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -2062,7 +2062,7 @@ static int pmic_buck_vmodem_get_voltage_sel(struct regulator_dev *rdev)
 
 	PMICLOG("buck vmodem get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("buck vmodem don't have da_vol_cb\n");
+		pr_debug("buck vmodem don't have da_vol_cb\n");
 		return -1;
 	}
 
@@ -2082,7 +2082,7 @@ static int pmic_buck_vpu_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("buck vpu don't have en_cb\n");
+		pr_debug("buck vpu don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -2107,7 +2107,7 @@ static int pmic_buck_vpu_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("buck vpu don't have enable callback\n");
+			pr_debug("buck vpu don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -2125,7 +2125,7 @@ static int pmic_buck_vpu_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("buck vpu is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("buck vpu don't have da_en_cb\n");
+		pr_debug("buck vpu don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -2149,7 +2149,7 @@ static int pmic_buck_vpu_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(selector);
 	else {
-		pr_notice("buck vpu don't have vol_cb\n");
+		pr_debug("buck vpu don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -2166,7 +2166,7 @@ static int pmic_buck_vpu_get_voltage_sel(struct regulator_dev *rdev)
 
 	PMICLOG("buck vpu get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("buck vpu don't have da_vol_cb\n");
+		pr_debug("buck vpu don't have da_vol_cb\n");
 		return -1;
 	}
 
@@ -2186,7 +2186,7 @@ static int pmic_buck_vcore_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("buck vcore don't have en_cb\n");
+		pr_debug("buck vcore don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -2211,7 +2211,7 @@ static int pmic_buck_vcore_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("buck vcore don't have enable callback\n");
+			pr_debug("buck vcore don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -2229,7 +2229,7 @@ static int pmic_buck_vcore_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("buck vcore is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("buck vcore don't have da_en_cb\n");
+		pr_debug("buck vcore don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -2253,7 +2253,7 @@ static int pmic_buck_vcore_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(selector);
 	else {
-		pr_notice("buck vcore don't have vol_cb\n");
+		pr_debug("buck vcore don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -2270,7 +2270,7 @@ static int pmic_buck_vcore_get_voltage_sel(struct regulator_dev *rdev)
 
 	PMICLOG("buck vcore get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("buck vcore don't have da_vol_cb\n");
+		pr_debug("buck vcore don't have da_vol_cb\n");
 		return -1;
 	}
 
@@ -2290,7 +2290,7 @@ static int pmic_ldo_vsram_others_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vsram_others don't have en_cb\n");
+		pr_debug("ldo vsram_others don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -2315,7 +2315,7 @@ static int pmic_ldo_vsram_others_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("vsram_others don't have enable callback\n");
+			pr_debug("vsram_others don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -2333,7 +2333,7 @@ static int pmic_ldo_vsram_others_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vsram_others is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vsram_others don't have da_en_cb\n");
+		pr_debug("ldo vsram_others don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -2357,7 +2357,7 @@ static int pmic_ldo_vsram_others_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(selector);
 	else {
-		pr_notice("ldo vsram_others don't have vol_cb\n");
+		pr_debug("ldo vsram_others don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -2374,7 +2374,7 @@ static int pmic_ldo_vsram_others_get_voltage_sel(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vsram_others get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vsram_others don't have da_vol_cb\n");
+		pr_debug("ldo vsram_others don't have da_vol_cb\n");
 		return -1;
 	}
 
@@ -2394,7 +2394,7 @@ static int pmic_buck_vs2_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("buck vs2 don't have en_cb\n");
+		pr_debug("buck vs2 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -2419,7 +2419,7 @@ static int pmic_buck_vs2_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("buck vs2 don't have enable callback\n");
+			pr_debug("buck vs2 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -2437,7 +2437,7 @@ static int pmic_buck_vs2_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("buck vs2 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("buck vs2 don't have da_en_cb\n");
+		pr_debug("buck vs2 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -2461,7 +2461,7 @@ static int pmic_buck_vs2_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(selector);
 	else {
-		pr_notice("buck vs2 don't have vol_cb\n");
+		pr_debug("buck vs2 don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -2478,7 +2478,7 @@ static int pmic_buck_vs2_get_voltage_sel(struct regulator_dev *rdev)
 
 	PMICLOG("buck vs2 get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("buck vs2 don't have da_vol_cb\n");
+		pr_debug("buck vs2 don't have da_vol_cb\n");
 		return -1;
 	}
 
@@ -2498,7 +2498,7 @@ static int pmic_ldo_vefuse_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vefuse don't have en_cb\n");
+		pr_debug("ldo vefuse don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -2523,7 +2523,7 @@ static int pmic_ldo_vefuse_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vefuse don't have enable callback\n");
+			pr_debug("ldo vefuse don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -2541,7 +2541,7 @@ static int pmic_ldo_vefuse_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vefuse is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vefuse don't have da_en_cb\n");
+		pr_debug("ldo vefuse don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -2568,7 +2568,7 @@ static int pmic_ldo_vefuse_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vefuse don't have vol_cb\n");
+		pr_debug("ldo vefuse don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -2588,7 +2588,7 @@ static int pmic_ldo_vefuse_get_voltage_sel(
 
 	PMICLOG("ldo vefuse get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vefuse don't have da_vol_cb\n");
+		pr_debug("ldo vefuse don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -2630,7 +2630,7 @@ static int pmic_ldo_vxo22_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vxo22 don't have en_cb\n");
+		pr_debug("ldo vxo22 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -2655,7 +2655,7 @@ static int pmic_ldo_vxo22_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vxo22 don't have enable callback\n");
+			pr_debug("ldo vxo22 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -2673,7 +2673,7 @@ static int pmic_ldo_vxo22_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vxo22 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vxo22 don't have da_en_cb\n");
+		pr_debug("ldo vxo22 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -2700,7 +2700,7 @@ static int pmic_ldo_vxo22_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vxo22 don't have vol_cb\n");
+		pr_debug("ldo vxo22 don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -2720,7 +2720,7 @@ static int pmic_ldo_vxo22_get_voltage_sel(
 
 	PMICLOG("ldo vxo22 get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vxo22 don't have da_vol_cb\n");
+		pr_debug("ldo vxo22 don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -2762,7 +2762,7 @@ static int pmic_buck_vpa_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("buck vpa don't have en_cb\n");
+		pr_debug("buck vpa don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -2787,7 +2787,7 @@ static int pmic_buck_vpa_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("buck vpa don't have enable callback\n");
+			pr_debug("buck vpa don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -2805,7 +2805,7 @@ static int pmic_buck_vpa_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("buck vpa is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("buck vpa don't have da_en_cb\n");
+		pr_debug("buck vpa don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -2829,7 +2829,7 @@ static int pmic_buck_vpa_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(selector);
 	else {
-		pr_notice("buck vpa don't have vol_cb\n");
+		pr_debug("buck vpa don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -2846,7 +2846,7 @@ static int pmic_buck_vpa_get_voltage_sel(struct regulator_dev *rdev)
 
 	PMICLOG("buck vpa get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("buck vpa don't have da_vol_cb\n");
+		pr_debug("buck vpa don't have da_vol_cb\n");
 		return -1;
 	}
 
@@ -2866,7 +2866,7 @@ static int pmic_ldo_vrfck_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vrfck don't have en_cb\n");
+		pr_debug("ldo vrfck don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -2891,7 +2891,7 @@ static int pmic_ldo_vrfck_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vrfck don't have enable callback\n");
+			pr_debug("ldo vrfck don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -2909,7 +2909,7 @@ static int pmic_ldo_vrfck_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vrfck is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vrfck don't have da_en_cb\n");
+		pr_debug("ldo vrfck don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -2936,7 +2936,7 @@ static int pmic_ldo_vrfck_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vrfck don't have vol_cb\n");
+		pr_debug("ldo vrfck don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -2956,7 +2956,7 @@ static int pmic_ldo_vrfck_get_voltage_sel(
 
 	PMICLOG("ldo vrfck get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vrfck don't have da_vol_cb\n");
+		pr_debug("ldo vrfck don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -2998,7 +2998,7 @@ static int pmic_ldo_vbif28_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vbif28 don't have en_cb\n");
+		pr_debug("ldo vbif28 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -3023,7 +3023,7 @@ static int pmic_ldo_vbif28_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vbif28 don't have enable callback\n");
+			pr_debug("ldo vbif28 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -3041,7 +3041,7 @@ static int pmic_ldo_vbif28_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vbif28 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vbif28 don't have da_en_cb\n");
+		pr_debug("ldo vbif28 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -3061,7 +3061,7 @@ static int pmic_buck_vproc2_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("buck vproc2 don't have en_cb\n");
+		pr_debug("buck vproc2 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -3086,7 +3086,7 @@ static int pmic_buck_vproc2_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("buck vproc2 don't have enable callback\n");
+			pr_debug("buck vproc2 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -3104,7 +3104,7 @@ static int pmic_buck_vproc2_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("buck vproc2 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("buck vproc2 don't have da_en_cb\n");
+		pr_debug("buck vproc2 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -3128,7 +3128,7 @@ static int pmic_buck_vproc2_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(selector);
 	else {
-		pr_notice("buck vproc2 don't have vol_cb\n");
+		pr_debug("buck vproc2 don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -3145,7 +3145,7 @@ static int pmic_buck_vproc2_get_voltage_sel(struct regulator_dev *rdev)
 
 	PMICLOG("buck vproc2 get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("buck vproc2 don't have da_vol_cb\n");
+		pr_debug("buck vproc2 don't have da_vol_cb\n");
 		return -1;
 	}
 
@@ -3165,7 +3165,7 @@ static int pmic_ldo_vio28_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vio28 don't have en_cb\n");
+		pr_debug("ldo vio28 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -3190,7 +3190,7 @@ static int pmic_ldo_vio28_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vio28 don't have enable callback\n");
+			pr_debug("ldo vio28 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -3208,7 +3208,7 @@ static int pmic_ldo_vio28_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vio28 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vio28 don't have da_en_cb\n");
+		pr_debug("ldo vio28 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -3235,7 +3235,7 @@ static int pmic_ldo_vio28_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vio28 don't have vol_cb\n");
+		pr_debug("ldo vio28 don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -3255,7 +3255,7 @@ static int pmic_ldo_vio28_get_voltage_sel(
 
 	PMICLOG("ldo vio28 get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vio28 don't have da_vol_cb\n");
+		pr_debug("ldo vio28 don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -3297,7 +3297,7 @@ static int pmic_ldo_vemc_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vemc don't have en_cb\n");
+		pr_debug("ldo vemc don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -3322,7 +3322,7 @@ static int pmic_ldo_vemc_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vemc don't have enable callback\n");
+			pr_debug("ldo vemc don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -3340,7 +3340,7 @@ static int pmic_ldo_vemc_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vemc is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vemc don't have da_en_cb\n");
+		pr_debug("ldo vemc don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -3367,7 +3367,7 @@ static int pmic_ldo_vemc_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vemc don't have vol_cb\n");
+		pr_debug("ldo vemc don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -3387,7 +3387,7 @@ static int pmic_ldo_vemc_get_voltage_sel(
 
 	PMICLOG("ldo vemc get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vemc don't have da_vol_cb\n");
+		pr_debug("ldo vemc don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -3429,7 +3429,7 @@ static int pmic_ldo_vcn33_2_bt_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vcn33_2_bt don't have en_cb\n");
+		pr_debug("ldo vcn33_2_bt don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -3454,7 +3454,7 @@ static int pmic_ldo_vcn33_2_bt_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vcn33_2_bt don't have enable callback\n");
+			pr_debug("ldo vcn33_2_bt don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -3472,7 +3472,7 @@ static int pmic_ldo_vcn33_2_bt_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vcn33_2_bt is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vcn33_2_bt don't have da_en_cb\n");
+		pr_debug("ldo vcn33_2_bt don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -3499,7 +3499,7 @@ static int pmic_ldo_vcn33_2_bt_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vcn33_2_bt don't have vol_cb\n");
+		pr_debug("ldo vcn33_2_bt don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -3519,7 +3519,7 @@ static int pmic_ldo_vcn33_2_bt_get_voltage_sel(
 
 	PMICLOG("ldo vcn33_2_bt get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vcn33_2_bt don't have da_vol_cb\n");
+		pr_debug("ldo vcn33_2_bt don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -3561,7 +3561,7 @@ static int pmic_ldo_vcn33_2_wifi_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vcn33_2_wifi don't have en_cb\n");
+		pr_debug("ldo vcn33_2_wifi don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -3586,7 +3586,7 @@ static int pmic_ldo_vcn33_2_wifi_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("vcn33_2_wifi don't have enable callback\n");
+			pr_debug("vcn33_2_wifi don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -3604,7 +3604,7 @@ static int pmic_ldo_vcn33_2_wifi_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vcn33_2_wifi is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vcn33_2_wifi don't have da_en_cb\n");
+		pr_debug("ldo vcn33_2_wifi don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -3631,7 +3631,7 @@ static int pmic_ldo_vcn33_2_wifi_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vcn33_2_wifi don't have vol_cb\n");
+		pr_debug("ldo vcn33_2_wifi don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -3651,7 +3651,7 @@ static int pmic_ldo_vcn33_2_wifi_get_voltage_sel(
 
 	PMICLOG("ldo vcn33_2_wifi get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vcn33_2_wifi don't have da_vol_cb\n");
+		pr_debug("ldo vcn33_2_wifi don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -3693,7 +3693,7 @@ static int pmic_ldo_va12_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo va12 don't have en_cb\n");
+		pr_debug("ldo va12 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -3718,7 +3718,7 @@ static int pmic_ldo_va12_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo va12 don't have enable callback\n");
+			pr_debug("ldo va12 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -3736,7 +3736,7 @@ static int pmic_ldo_va12_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo va12 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo va12 don't have da_en_cb\n");
+		pr_debug("ldo va12 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -3763,7 +3763,7 @@ static int pmic_ldo_va12_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo va12 don't have vol_cb\n");
+		pr_debug("ldo va12 don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -3783,7 +3783,7 @@ static int pmic_ldo_va12_get_voltage_sel(
 
 	PMICLOG("ldo va12 get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo va12 don't have da_vol_cb\n");
+		pr_debug("ldo va12 don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -3825,7 +3825,7 @@ static int pmic_buck_vproc1_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("buck vproc1 don't have en_cb\n");
+		pr_debug("buck vproc1 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -3850,7 +3850,7 @@ static int pmic_buck_vproc1_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("buck vproc1 don't have enable callback\n");
+			pr_debug("buck vproc1 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -3868,7 +3868,7 @@ static int pmic_buck_vproc1_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("buck vproc1 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("buck vproc1 don't have da_en_cb\n");
+		pr_debug("buck vproc1 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -3892,7 +3892,7 @@ static int pmic_buck_vproc1_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(selector);
 	else {
-		pr_notice("buck vproc1 don't have vol_cb\n");
+		pr_debug("buck vproc1 don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -3909,7 +3909,7 @@ static int pmic_buck_vproc1_get_voltage_sel(struct regulator_dev *rdev)
 
 	PMICLOG("buck vproc1 get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("buck vproc1 don't have da_vol_cb\n");
+		pr_debug("buck vproc1 don't have da_vol_cb\n");
 		return -1;
 	}
 
@@ -3929,7 +3929,7 @@ static int pmic_ldo_va09_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo va09 don't have en_cb\n");
+		pr_debug("ldo va09 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -3954,7 +3954,7 @@ static int pmic_ldo_va09_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo va09 don't have enable callback\n");
+			pr_debug("ldo va09 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -3972,7 +3972,7 @@ static int pmic_ldo_va09_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo va09 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo va09 don't have da_en_cb\n");
+		pr_debug("ldo va09 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -3999,7 +3999,7 @@ static int pmic_ldo_va09_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo va09 don't have vol_cb\n");
+		pr_debug("ldo va09 don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -4019,7 +4019,7 @@ static int pmic_ldo_va09_get_voltage_sel(
 
 	PMICLOG("ldo va09 get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo va09 don't have da_vol_cb\n");
+		pr_debug("ldo va09 don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -4061,7 +4061,7 @@ static int pmic_ldo_vrf18_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vrf18 don't have en_cb\n");
+		pr_debug("ldo vrf18 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -4086,7 +4086,7 @@ static int pmic_ldo_vrf18_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vrf18 don't have enable callback\n");
+			pr_debug("ldo vrf18 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -4104,7 +4104,7 @@ static int pmic_ldo_vrf18_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vrf18 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vrf18 don't have da_en_cb\n");
+		pr_debug("ldo vrf18 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -4131,7 +4131,7 @@ static int pmic_ldo_vrf18_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vrf18 don't have vol_cb\n");
+		pr_debug("ldo vrf18 don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -4151,7 +4151,7 @@ static int pmic_ldo_vrf18_get_voltage_sel(
 
 	PMICLOG("ldo vrf18 get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vrf18 don't have da_vol_cb\n");
+		pr_debug("ldo vrf18 don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -4193,7 +4193,7 @@ static int pmic_ldo_vsram_md_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vsram_md don't have en_cb\n");
+		pr_debug("ldo vsram_md don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -4218,7 +4218,7 @@ static int pmic_ldo_vsram_md_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vsram_md don't have enable callback\n");
+			pr_debug("ldo vsram_md don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -4236,7 +4236,7 @@ static int pmic_ldo_vsram_md_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vsram_md is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vsram_md don't have da_en_cb\n");
+		pr_debug("ldo vsram_md don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -4260,7 +4260,7 @@ static int pmic_ldo_vsram_md_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(selector);
 	else {
-		pr_notice("ldo vsram_md don't have vol_cb\n");
+		pr_debug("ldo vsram_md don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -4277,7 +4277,7 @@ static int pmic_ldo_vsram_md_get_voltage_sel(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vsram_md get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vsram_md don't have da_vol_cb\n");
+		pr_debug("ldo vsram_md don't have da_vol_cb\n");
 		return -1;
 	}
 
@@ -4297,7 +4297,7 @@ static int pmic_ldo_vufs_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vufs don't have en_cb\n");
+		pr_debug("ldo vufs don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -4322,7 +4322,7 @@ static int pmic_ldo_vufs_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vufs don't have enable callback\n");
+			pr_debug("ldo vufs don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -4340,7 +4340,7 @@ static int pmic_ldo_vufs_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vufs is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vufs don't have da_en_cb\n");
+		pr_debug("ldo vufs don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -4367,7 +4367,7 @@ static int pmic_ldo_vufs_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vufs don't have vol_cb\n");
+		pr_debug("ldo vufs don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -4387,7 +4387,7 @@ static int pmic_ldo_vufs_get_voltage_sel(
 
 	PMICLOG("ldo vufs get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vufs don't have da_vol_cb\n");
+		pr_debug("ldo vufs don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -4429,7 +4429,7 @@ static int pmic_ldo_vm18_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vm18 don't have en_cb\n");
+		pr_debug("ldo vm18 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -4454,7 +4454,7 @@ static int pmic_ldo_vm18_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vm18 don't have enable callback\n");
+			pr_debug("ldo vm18 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -4472,7 +4472,7 @@ static int pmic_ldo_vm18_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vm18 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vm18 don't have da_en_cb\n");
+		pr_debug("ldo vm18 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -4499,7 +4499,7 @@ static int pmic_ldo_vm18_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vm18 don't have vol_cb\n");
+		pr_debug("ldo vm18 don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -4519,7 +4519,7 @@ static int pmic_ldo_vm18_get_voltage_sel(
 
 	PMICLOG("ldo vm18 get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vm18 don't have da_vol_cb\n");
+		pr_debug("ldo vm18 don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -4561,7 +4561,7 @@ static int pmic_ldo_vbbck_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vbbck don't have en_cb\n");
+		pr_debug("ldo vbbck don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -4586,7 +4586,7 @@ static int pmic_ldo_vbbck_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vbbck don't have enable callback\n");
+			pr_debug("ldo vbbck don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -4604,7 +4604,7 @@ static int pmic_ldo_vbbck_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vbbck is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vbbck don't have da_en_cb\n");
+		pr_debug("ldo vbbck don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -4631,7 +4631,7 @@ static int pmic_ldo_vbbck_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vbbck don't have vol_cb\n");
+		pr_debug("ldo vbbck don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -4651,7 +4651,7 @@ static int pmic_ldo_vbbck_get_voltage_sel(
 
 	PMICLOG("ldo vbbck get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vbbck don't have da_vol_cb\n");
+		pr_debug("ldo vbbck don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -4693,7 +4693,7 @@ static int pmic_ldo_vsram_proc1_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vsram_proc1 don't have en_cb\n");
+		pr_debug("ldo vsram_proc1 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -4718,7 +4718,7 @@ static int pmic_ldo_vsram_proc1_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vsram_proc1 don't have enable callback\n");
+			pr_debug("ldo vsram_proc1 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -4736,7 +4736,7 @@ static int pmic_ldo_vsram_proc1_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vsram_proc1 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vsram_proc1 don't have da_en_cb\n");
+		pr_debug("ldo vsram_proc1 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -4760,7 +4760,7 @@ static int pmic_ldo_vsram_proc1_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(selector);
 	else {
-		pr_notice("ldo vsram_proc1 don't have vol_cb\n");
+		pr_debug("ldo vsram_proc1 don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -4777,7 +4777,7 @@ static int pmic_ldo_vsram_proc1_get_voltage_sel(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vsram_proc1 get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vsram_proc1 don't have da_vol_cb\n");
+		pr_debug("ldo vsram_proc1 don't have da_vol_cb\n");
 		return -1;
 	}
 
@@ -4797,7 +4797,7 @@ static int pmic_ldo_vsim2_enable(struct regulator_dev *rdev)
 	if (mreg->en_cb != NULL)
 		ret = (mreg->en_cb)(1);
 	else {
-		pr_notice("ldo vsim2 don't have en_cb\n");
+		pr_debug("ldo vsim2 don't have en_cb\n");
 		ret = -1;
 	}
 
@@ -4822,7 +4822,7 @@ static int pmic_ldo_vsim2_disable(struct regulator_dev *rdev)
 		if (mreg->en_cb != NULL)
 			ret = (mreg->en_cb)(0);
 		else {
-			pr_notice("ldo vsim2 don't have enable callback\n");
+			pr_debug("ldo vsim2 don't have enable callback\n");
 			ret = -1;
 		}
 	}
@@ -4840,7 +4840,7 @@ static int pmic_ldo_vsim2_is_enabled(struct regulator_dev *rdev)
 
 	PMICLOG("ldo vsim2 is_enabled\n");
 	if (mreg->da_en_cb == NULL) {
-		pr_notice("ldo vsim2 don't have da_en_cb\n");
+		pr_debug("ldo vsim2 don't have da_en_cb\n");
 		return -1;
 	}
 
@@ -4867,7 +4867,7 @@ static int pmic_ldo_vsim2_set_voltage_sel(
 	if (mreg->vol_cb != NULL)
 		ret = (mreg->vol_cb)(idx);
 	else {
-		pr_notice("ldo vsim2 don't have vol_cb\n");
+		pr_debug("ldo vsim2 don't have vol_cb\n");
 		ret = -1;
 	}
 
@@ -4887,7 +4887,7 @@ static int pmic_ldo_vsim2_get_voltage_sel(
 
 	PMICLOG("ldo vsim2 get_voltage_sel\n");
 	if (mreg->da_vol_cb == NULL) {
-		pr_notice("ldo vsim2 don't have da_vol_cb\n");
+		pr_debug("ldo vsim2 don't have da_vol_cb\n");
 		ret = -1;
 	} else {
 		ret = -1;
@@ -4940,7 +4940,7 @@ static int pmic_buck_set_mode(struct regulator_dev *rdev, unsigned int mode)
 	case REGULATOR_MODE_FAST:
 		if (curr_mode == REGULATOR_MODE_IDLE) {
 			WARN_ON(1);
-			pr_notice("BUCK %s is LP mode, can't FPWM\n",
+			pr_debug("BUCK %s is LP mode, can't FPWM\n",
 				mreg->desc.name);
 			return -EIO;
 		}
@@ -4962,7 +4962,7 @@ static int pmic_buck_set_mode(struct regulator_dev *rdev, unsigned int mode)
 	case REGULATOR_MODE_IDLE:
 		if (curr_mode == REGULATOR_MODE_FAST) {
 			WARN_ON(1);
-			pr_notice("BUCK %s is FPWM mode, can't enter LP\n",
+			pr_debug("BUCK %s is FPWM mode, can't enter LP\n",
 				mreg->desc.name);
 			return -EIO;
 		}
@@ -5483,7 +5483,7 @@ static ssize_t show_regulator_voltage(
 							mreg->desc.uV_step *
 							regVal;
 		} else
-			pr_notice("[EM] %s_VOLTAGE have no da_vol_cb\n",
+			pr_debug("[EM] %s_VOLTAGE have no da_vol_cb\n",
 							mreg->desc.name);
 	} else {
 		if (mreg->pvoltages != NULL) {
@@ -5492,7 +5492,7 @@ static ssize_t show_regulator_voltage(
 		} else if (mreg->desc.fixed_uV)
 			ret_value = mreg->desc.fixed_uV;
 		else
-			pr_notice("[EM] %s_VOLTAGE have no pVolatges\n",
+			pr_debug("[EM] %s_VOLTAGE have no pVolatges\n",
 							mreg->desc.name);
 	}
 

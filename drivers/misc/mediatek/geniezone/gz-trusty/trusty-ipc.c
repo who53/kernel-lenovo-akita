@@ -338,7 +338,7 @@ static struct tipc_msg_buf *vds_get_txbuf(struct tipc_virtio_dev *vds,
 	/* sanity check */
 	ret = is_valid_vds(vds);
 	if (unlikely(ret < 0)) {
-		pr_info("%s: error vds 0x%p ret:%d\n", __func__, vds, ret);
+		pr_debug("%s: error vds 0x%p ret:%d\n", __func__, vds, ret);
 		return ERR_PTR(ret);
 	}
 
@@ -538,7 +538,7 @@ struct tipc_msg_buf *tipc_chan_get_rxbuf(struct tipc_chan *chan)
 {
 	/* sanity check */
 	if (unlikely(!virt_addr_valid(chan))) {
-		pr_info("%s: error channel 0x%p\n", __func__, chan);
+		pr_debug("%s: error channel 0x%p\n", __func__, chan);
 		return ERR_PTR(-EFAULT);
 	}
 	return vds_alloc_msg_buf(chan->vds);
@@ -549,7 +549,7 @@ void tipc_chan_put_rxbuf(struct tipc_chan *chan, struct tipc_msg_buf *mb)
 {
 	/* sanity check */
 	if (unlikely(!virt_addr_valid(chan)))
-		pr_info("%s: error channel 0x%p\n", __func__, chan);
+		pr_debug("%s: error channel 0x%p\n", __func__, chan);
 	else
 		vds_free_msg_buf(chan->vds, mb);
 }
@@ -560,7 +560,7 @@ struct tipc_msg_buf *tipc_chan_get_txbuf_timeout(struct tipc_chan *chan,
 {
 	/* sanity check */
 	if (unlikely(!virt_addr_valid(chan))) {
-		pr_info("%s: error channel 0x%p\n", __func__, chan);
+		pr_debug("%s: error channel 0x%p\n", __func__, chan);
 		return ERR_PTR(-EFAULT);
 	}
 	return vds_get_txbuf(chan->vds, timeout);
@@ -571,7 +571,7 @@ void tipc_chan_put_txbuf(struct tipc_chan *chan, struct tipc_msg_buf *mb)
 {
 	/* sanity check */
 	if (unlikely(!virt_addr_valid(chan)))
-		pr_info("%s: error channel 0x%p\n", __func__, chan);
+		pr_debug("%s: error channel 0x%p\n", __func__, chan);
 	else
 		vds_put_txbuf(chan->vds, mb);
 }
@@ -583,7 +583,7 @@ int tipc_chan_queue_msg(struct tipc_chan *chan, struct tipc_msg_buf *mb)
 
 	/* sanity check */
 	if (unlikely(!virt_addr_valid(chan))) {
-		pr_info("%s: error channel 0x%p\n", __func__, chan);
+		pr_debug("%s: error channel 0x%p\n", __func__, chan);
 		return -EFAULT;
 	}
 
@@ -594,7 +594,7 @@ int tipc_chan_queue_msg(struct tipc_chan *chan, struct tipc_msg_buf *mb)
 		err = vds_queue_txbuf(chan->vds, mb);
 		if (err) {
 			/* this should never happen */
-			pr_info("%s: failed to queue tx buffer (%d)\n",
+			pr_debug("%s: failed to queue tx buffer (%d)\n",
 				__func__, err);
 		}
 		break;
@@ -607,7 +607,7 @@ int tipc_chan_queue_msg(struct tipc_chan *chan, struct tipc_msg_buf *mb)
 		break;
 	default:
 		err = -EBADFD;
-		pr_info("%s: unexpected channel state %d\n",
+		pr_debug("%s: unexpected channel state %d\n",
 			__func__, chan->state);
 	}
 	mutex_unlock(&chan->lock);
@@ -626,7 +626,7 @@ int tipc_chan_connect(struct tipc_chan *chan, const char *name)
 
 	/* sanity check */
 	if (unlikely(!virt_addr_valid(chan))) {
-		pr_info("%s: error channel 0x%p\n", __func__, chan);
+		pr_debug("%s: error channel 0x%p\n", __func__, chan);
 		return -EFAULT;
 	}
 
@@ -655,7 +655,7 @@ int tipc_chan_connect(struct tipc_chan *chan, const char *name)
 		err = vds_queue_txbuf(chan->vds, txbuf);
 		if (err) {
 			/* this should never happen */
-			pr_info("%s: failed to queue tx buffer (%d)\n",
+			pr_debug("%s: failed to queue tx buffer (%d)\n",
 				__func__, err);
 		} else {
 			chan->state = TIPC_CONNECTING;
@@ -678,7 +678,7 @@ int tipc_chan_connect(struct tipc_chan *chan, const char *name)
 		break;
 	default:
 		err = -EBADFD;
-		pr_info("%s: unexpected channel state %d\n",
+		pr_debug("%s: unexpected channel state %d\n",
 			__func__, chan->state);
 		break;
 	}
@@ -700,12 +700,12 @@ int tipc_chan_shutdown(struct tipc_chan *chan)
 
 	/* sanity check */
 	if (unlikely(!virt_addr_valid(chan))) {
-		pr_info("%s: error channel 0x%p\n", __func__, chan);
+		pr_debug("%s: error channel 0x%p\n", __func__, chan);
 		return -EFAULT;
 	}
 
 	if (unlikely(!virt_addr_valid(chan->vds))) {
-		pr_info("%s: error vds 0x%p\n", __func__, chan->vds);
+		pr_debug("%s: error vds 0x%p\n", __func__, chan->vds);
 		return -EFAULT;
 	}
 
@@ -728,7 +728,7 @@ int tipc_chan_shutdown(struct tipc_chan *chan)
 		err = vds_queue_txbuf(chan->vds, txbuf);
 		if (err) {
 			/* this should never happen */
-			pr_info("%s: failed to queue tx buffer (%d)\n",
+			pr_debug("%s: failed to queue tx buffer (%d)\n",
 				__func__, err);
 		}
 	} else {
@@ -803,7 +803,7 @@ struct tipc_msg_buf *dn_handle_msg(void *data, struct tipc_msg_buf *rxbuf)
 			 * return an old buffer effectively discarding
 			 * incoming message
 			 */
-			pr_info("%s: discard incoming message\n", __func__);
+			pr_debug("%s: discard incoming message\n", __func__);
 			newbuf = rxbuf;
 		}
 	}
@@ -871,7 +871,7 @@ static void dn_handle_event(void *data, int event)
 		break;
 
 	default:
-		pr_info("%s: unhandled event %d\n", __func__, event);
+		pr_debug("%s: unhandled event %d\n", __func__, event);
 		break;
 	}
 }
@@ -960,7 +960,7 @@ static int dn_connect_ioctl(struct tipc_dn_chan *dn, char __user *usr_name)
 	/* copy in service name from user space */
 	err = strncpy_from_user(name, usr_name, sizeof(name));
 	if (err < 0) {
-		pr_info("%s: copy_from_user (%p) failed (%d)\n",
+		pr_debug("%s: copy_from_user (%p) failed (%d)\n",
 			__func__, usr_name, err);
 		return err;
 	}
@@ -994,12 +994,12 @@ static long tipc_ioctl(struct file *filp,
 	case TIPC_IOC_CONNECT:
 		ret = dn_connect_ioctl(dn, user_req);
 		if (ret) {
-			pr_info("%s: TIPC_IOC_CONNECT error (%d)!\n",
+			pr_debug("%s: TIPC_IOC_CONNECT error (%d)!\n",
 				__func__, ret);
 		}
 		break;
 	default:
-		pr_info("%s: Unhandled ioctl cmd: 0x%x\n", __func__, cmd);
+		pr_debug("%s: Unhandled ioctl cmd: 0x%x\n", __func__, cmd);
 		ret = -EINVAL;
 	}
 	return ret;
@@ -1250,7 +1250,7 @@ static struct tipc_virtio_dev *port_lookup_vds(const char *port)
 	ret = port_lookup_tid(port, &tee_id);
 
 	if (ret) {
-		pr_info("[%s] get tee_id failed %d ret %d, may cause failure\n",
+		pr_debug("[%s] get tee_id failed %d ret %d, may cause failure\n",
 			__func__, tee_id, ret);
 	}
 
@@ -1271,7 +1271,7 @@ static int tipc_open_channel(struct tipc_dn_chan **o_dn, const char *port)
 	vds = port_lookup_vds(port);
 
 	if (IS_ERR(vds)) {
-		pr_info("[%s] ERROR: virtio device not found\n", __func__);
+		pr_debug("[%s] ERROR: virtio device not found\n", __func__);
 		ret = -ENOENT;
 		goto err_vds_lookup;
 	}
@@ -1418,12 +1418,12 @@ ssize_t tipc_k_write(struct tipc_k_handle *h, void *buf, size_t len,
 
 	/* sanity check */
 	if (unlikely(!virt_addr_valid(dn))) {
-		pr_info("%s: error handle 0x%p\n", __func__, dn);
+		pr_debug("%s: error handle 0x%p\n", __func__, dn);
 		return -EFAULT;
 	}
 
 	if (unlikely(!virt_addr_valid(dn->chan))) {
-		pr_info("%s: error channel 0x%p\n", __func__, dn->chan);
+		pr_debug("%s: error channel 0x%p\n", __func__, dn->chan);
 		return -EFAULT;
 	}
 
@@ -1535,7 +1535,7 @@ static void create_cdev_node(struct tipc_virtio_dev *vds,
 		kref_get(&vds->refcount);
 		err = _create_cdev_node(&vds->vdev->dev, cdn, vds->cdev_name);
 		if (err) {
-			dev_info(&vds->vdev->dev,
+			dev_dbg(&vds->vdev->dev,
 				 "failed (%d) to create cdev node\n", err);
 			kref_put(&vds->refcount, _free_vds);
 		}
@@ -1575,7 +1575,7 @@ static void _go_online(struct tipc_virtio_dev *vds)
 
 	create_cdev_node(vds, &vds->cdev_node);
 
-	dev_info(&vds->vdev->dev, "is online\n");
+	dev_dbg(&vds->vdev->dev, "is online\n");
 }
 
 static void _go_offline(struct tipc_virtio_dev *vds)
@@ -1606,7 +1606,7 @@ static void _go_offline(struct tipc_virtio_dev *vds)
 
 	/* shutdown device node */
 	destroy_cdev_node(vds, &vds->cdev_node);
-	dev_info(&vds->vdev->dev, "is offline\n");
+	dev_dbg(&vds->vdev->dev, "is offline\n");
 }
 
 static void _handle_conn_rsp(struct tipc_virtio_dev *vds,
@@ -1615,7 +1615,7 @@ static void _handle_conn_rsp(struct tipc_virtio_dev *vds,
 	struct tipc_chan *chan;
 
 	if (sizeof(*rsp) != len) {
-		dev_info(&vds->vdev->dev, "%s: Invalid response length %zd\n",
+		dev_dbg(&vds->vdev->dev, "%s: Invalid response length %zd\n",
 			 __func__, len);
 		return;
 	}
@@ -1654,7 +1654,7 @@ static void _handle_disc_req(struct tipc_virtio_dev *vds,
 	struct tipc_chan *chan;
 
 	if (sizeof(*req) != len) {
-		dev_info(&vds->vdev->dev, "%s: Invalid request length %zd\n",
+		dev_dbg(&vds->vdev->dev, "%s: Invalid request length %zd\n",
 			 __func__, len);
 		return;
 	}
@@ -1682,7 +1682,7 @@ static void _handle_ctrl_msg(struct tipc_virtio_dev *vds,
 	struct tipc_ctrl_msg *msg = data;
 
 	if ((len < sizeof(*msg)) || (sizeof(*msg) + msg->body_len != len)) {
-		dev_info(&vds->vdev->dev,
+		dev_dbg(&vds->vdev->dev,
 			 "%s: Invalid message length ( %d vs. %d)\n",
 			 __func__, (int)(sizeof(*msg) + msg->body_len), len);
 		return;
@@ -1712,7 +1712,7 @@ static void _handle_ctrl_msg(struct tipc_virtio_dev *vds,
 		break;
 
 	default:
-		dev_info(&vds->vdev->dev,
+		dev_dbg(&vds->vdev->dev,
 			 "%s: Unexpected message type: %d\n",
 			 __func__, msg->type);
 	}
@@ -1728,12 +1728,12 @@ static int _handle_rxbuf(struct tipc_virtio_dev *vds,
 
 	/* message sanity check */
 	if (rxlen > rxbuf->buf_sz) {
-		dev_info(dev, "inbound msg is too big: %zd\n", rxlen);
+		dev_dbg(dev, "inbound msg is too big: %zd\n", rxlen);
 		goto drop_it;
 	}
 
 	if (rxlen < sizeof(*msg)) {
-		dev_info(dev, "inbound msg is too short: %zd\n", rxlen);
+		dev_dbg(dev, "inbound msg is too short: %zd\n", rxlen);
 		goto drop_it;
 	}
 
@@ -1744,7 +1744,7 @@ static int _handle_rxbuf(struct tipc_virtio_dev *vds,
 	/* get message header */
 	msg = mb_get_data(rxbuf, sizeof(*msg));
 	if (mb_avail_data(rxbuf) != msg->len) {
-		dev_info(dev, "inbound msg length mismatch: (%d vs. %d)\n",
+		dev_dbg(dev, "inbound msg length mismatch: (%d vs. %d)\n",
 			 (uint) mb_avail_data(rxbuf), (uint) msg->len);
 		goto drop_it;
 	}
@@ -1770,7 +1770,7 @@ static int _handle_rxbuf(struct tipc_virtio_dev *vds,
 drop_it:
 
 	if (!rxbuf) {
-		dev_info(dev, "rxbuf is null. failed\n");
+		dev_dbg(dev, "rxbuf is null. failed\n");
 		return -ENOMEM;
 	}
 	/* add the buffer back to the virtqueue */
@@ -1778,7 +1778,7 @@ drop_it:
 	err = virtqueue_add_inbuf(vds->rxvq, &sg, 1, rxbuf, GFP_KERNEL);
 
 	if (err < 0) {
-		dev_info(dev, "failed to add a virtqueue buffer: %d\n", err);
+		dev_dbg(dev, "failed to add a virtqueue buffer: %d\n", err);
 		return err;
 	}
 
@@ -1850,7 +1850,7 @@ static int tipc_virtio_probe(struct virtio_device *vdev)
 	char *vq_names[2];
 	int tee_id = vdev->dev.id;
 
-	dev_info(&vdev->dev, "--- init trusty-ipc for MTEE %d ---\n",
+	dev_dbg(&vdev->dev, "--- init trusty-ipc for MTEE %d ---\n",
 		 tee_id);
 
 	vds = kzalloc(sizeof(*vds), GFP_KERNEL);
@@ -1911,7 +1911,7 @@ static int tipc_virtio_probe(struct virtio_device *vdev)
 
 		rxbuf = _alloc_msg_buf(vds->msg_buf_max_sz);
 		if (!rxbuf) {
-			dev_info(&vdev->dev, "failed to allocate rx buffer\n");
+			dev_dbg(&vdev->dev, "failed to allocate rx buffer\n");
 			err = -ENOMEM;
 			goto err_free_rx_buffers;
 		}
@@ -2004,7 +2004,7 @@ static int __init tipc_init(void)
 
 	ret = alloc_chrdev_region(&dev, 0, MAX_DEVICES, KBUILD_MODNAME);
 	if (ret) {
-		pr_info("%s: alloc_chrdev_region failed: %d\n", __func__, ret);
+		pr_debug("%s: alloc_chrdev_region failed: %d\n", __func__, ret);
 		return ret;
 	}
 
@@ -2012,19 +2012,19 @@ static int __init tipc_init(void)
 	tipc_class = class_create(THIS_MODULE, KBUILD_MODNAME);
 	if (IS_ERR(tipc_class)) {
 		ret = PTR_ERR(tipc_class);
-		pr_info("%s: class_create failed: %d\n", __func__, ret);
+		pr_debug("%s: class_create failed: %d\n", __func__, ret);
 		goto err_class_create;
 	}
 
 	ret = register_virtio_driver(&virtio_tipc_driver);
 	if (ret) {
-		pr_info("Register virtio driver failed: %d\n", ret);
+		pr_debug("Register virtio driver failed: %d\n", ret);
 		goto err_register_virtio_drv;
 	}
 
 	ret = register_virtio_driver(&virtio_nebula_driver);
 	if (ret) {
-		pr_info("Register nebula virtio driver failed: %d\n", ret);
+		pr_debug("Register nebula virtio driver failed: %d\n", ret);
 		goto err_register_nebula_drv;
 	}
 

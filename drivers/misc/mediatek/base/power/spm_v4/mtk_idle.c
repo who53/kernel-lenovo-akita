@@ -566,7 +566,7 @@ static bool soidle3_can_enter(int cpu, int reason)
 			reason = BY_BOOT;
 			goto out;
 		} else {
-			pr_warn("SODI3: blocking by uptime, count = %d\n",
+			pr_debug("SODI3: blocking by uptime, count = %d\n",
 					sodi3_by_uptime_count);
 			sodi3_by_uptime_count = -1;
 		}
@@ -632,7 +632,7 @@ static bool soidle_can_enter(int cpu, int reason)
 			reason = BY_BOOT;
 			goto out;
 		} else {
-			pr_warn("SODI: blocking by uptime, count = %d\n",
+			pr_debug("SODI: blocking by uptime, count = %d\n",
 					sodi_by_uptime_count);
 			sodi_by_uptime_count = -1;
 		}
@@ -1201,7 +1201,7 @@ int dpidle_enter(int cpu)
 
 		if ((current_ts - dpidle_gs_dump_req_ts)
 				>= dpidle_gs_dump_delay_ms) {
-			pr_warn("dpidle dump LP golden\n");
+			pr_debug("dpidle dump LP golden\n");
 
 			dpidle_gs_dump_req = 0;
 			operation_cond |= DEEPIDLE_OPT_DUMP_LP_GOLDEN;
@@ -1620,7 +1620,7 @@ static ssize_t dpidle_state_write(
 			dpidle_by_pass_cg = param;
 		else if (!strcmp(cmd, "bypass_pg")) {
 			dpidle_by_pass_pg = param;
-			pr_warn("bypass_pg = %d\n", dpidle_by_pass_pg);
+			pr_debug("bypass_pg = %d\n", dpidle_by_pass_pg);
 		} else if (!strcmp(cmd, "golden")) {
 			dpidle_gs_dump_req = param;
 
@@ -1886,7 +1886,7 @@ static ssize_t soidle_state_write(
 			idle_dbg("bypass = %d\n", soidle_by_pass_cg);
 		} else if (!strcmp(cmd, "bypass_pg")) {
 			soidle_by_pass_pg = param;
-			pr_warn("bypass_pg = %d\n", soidle_by_pass_pg);
+			pr_debug("bypass_pg = %d\n", soidle_by_pass_pg);
 		} else if (!strcmp(cmd, "bypass_en")) {
 			soidle_by_pass_en = param;
 			idle_dbg("bypass_en = %d\n", soidle_by_pass_en);
@@ -2020,35 +2020,35 @@ static int mtk_idle_hotplug_cb_init(void)
 #if defined(CONFIG_MACH_MT6763)
 void mtk_spm_dump_debug_info(void)
 {
-	pr_info("SPM_POWER_ON_VAL0     0x%08x\n", spm_read(SPM_POWER_ON_VAL0));
-	pr_info("SPM_POWER_ON_VAL1     0x%08x\n", spm_read(SPM_POWER_ON_VAL1));
-	pr_info("PCM_PWR_IO_EN         0x%08x\n", spm_read(PCM_PWR_IO_EN));
-	pr_info("PCM_REG0_DATA         0x%08x\n", spm_read(PCM_REG0_DATA));
-	pr_info("PCM_REG7_DATA         0x%08x\n", spm_read(PCM_REG7_DATA));
-	pr_info("PCM_REG12_DATA        0x%08x\n", spm_read(PCM_REG12_DATA));
-	pr_info("PCM_REG13_DATA        0x%08x\n", spm_read(PCM_REG13_DATA));
-	pr_info("PCM_REG15_DATA        0x%08x\n", spm_read(PCM_REG15_DATA));
-	pr_info("SPM_MAS_PAUSE_MASK_B  0x%08x\n",
+	pr_debug("SPM_POWER_ON_VAL0     0x%08x\n", spm_read(SPM_POWER_ON_VAL0));
+	pr_debug("SPM_POWER_ON_VAL1     0x%08x\n", spm_read(SPM_POWER_ON_VAL1));
+	pr_debug("PCM_PWR_IO_EN         0x%08x\n", spm_read(PCM_PWR_IO_EN));
+	pr_debug("PCM_REG0_DATA         0x%08x\n", spm_read(PCM_REG0_DATA));
+	pr_debug("PCM_REG7_DATA         0x%08x\n", spm_read(PCM_REG7_DATA));
+	pr_debug("PCM_REG12_DATA        0x%08x\n", spm_read(PCM_REG12_DATA));
+	pr_debug("PCM_REG13_DATA        0x%08x\n", spm_read(PCM_REG13_DATA));
+	pr_debug("PCM_REG15_DATA        0x%08x\n", spm_read(PCM_REG15_DATA));
+	pr_debug("SPM_MAS_PAUSE_MASK_B  0x%08x\n",
 			spm_read(SPM_MAS_PAUSE_MASK_B));
-	pr_info("SPM_MAS_PAUSE2_MASK_B 0x%08x\n",
+	pr_debug("SPM_MAS_PAUSE2_MASK_B 0x%08x\n",
 			spm_read(SPM_MAS_PAUSE2_MASK_B));
-	pr_info("SPM_SW_FLAG           0x%08x\n", spm_read(SPM_SW_FLAG));
-	pr_info("SPM_DEBUG_FLAG        0x%08x\n", spm_read(SPM_SW_DEBUG));
-	pr_info("SPM_PC_TRACE_G0       0x%08x\n", spm_read(SPM_PC_TRACE_G0));
-	pr_info("SPM_PC_TRACE_G1       0x%08x\n", spm_read(SPM_PC_TRACE_G1));
-	pr_info("SPM_PC_TRACE_G2       0x%08x\n", spm_read(SPM_PC_TRACE_G2));
-	pr_info("SPM_PC_TRACE_G3       0x%08x\n", spm_read(SPM_PC_TRACE_G3));
-	pr_info("SPM_PC_TRACE_G4       0x%08x\n", spm_read(SPM_PC_TRACE_G4));
-	pr_info("SPM_PC_TRACE_G5       0x%08x\n", spm_read(SPM_PC_TRACE_G5));
-	pr_info("SPM_PC_TRACE_G6       0x%08x\n", spm_read(SPM_PC_TRACE_G6));
-	pr_info("SPM_PC_TRACE_G7       0x%08x\n", spm_read(SPM_PC_TRACE_G7));
-	pr_info("DCHA_GATING_LATCH_0   0x%08x\n",
+	pr_debug("SPM_SW_FLAG           0x%08x\n", spm_read(SPM_SW_FLAG));
+	pr_debug("SPM_DEBUG_FLAG        0x%08x\n", spm_read(SPM_SW_DEBUG));
+	pr_debug("SPM_PC_TRACE_G0       0x%08x\n", spm_read(SPM_PC_TRACE_G0));
+	pr_debug("SPM_PC_TRACE_G1       0x%08x\n", spm_read(SPM_PC_TRACE_G1));
+	pr_debug("SPM_PC_TRACE_G2       0x%08x\n", spm_read(SPM_PC_TRACE_G2));
+	pr_debug("SPM_PC_TRACE_G3       0x%08x\n", spm_read(SPM_PC_TRACE_G3));
+	pr_debug("SPM_PC_TRACE_G4       0x%08x\n", spm_read(SPM_PC_TRACE_G4));
+	pr_debug("SPM_PC_TRACE_G5       0x%08x\n", spm_read(SPM_PC_TRACE_G5));
+	pr_debug("SPM_PC_TRACE_G6       0x%08x\n", spm_read(SPM_PC_TRACE_G6));
+	pr_debug("SPM_PC_TRACE_G7       0x%08x\n", spm_read(SPM_PC_TRACE_G7));
+	pr_debug("DCHA_GATING_LATCH_0   0x%08x\n",
 			spm_read(DCHA_GATING_LATCH_0));
-	pr_info("DCHA_GATING_LATCH_5   0x%08x\n",
+	pr_debug("DCHA_GATING_LATCH_5   0x%08x\n",
 			spm_read(DCHA_GATING_LATCH_5));
-	pr_info("DCHB_GATING_LATCH_0   0x%08x\n",
+	pr_debug("DCHB_GATING_LATCH_0   0x%08x\n",
 			spm_read(DCHB_GATING_LATCH_0));
-	pr_info("DCHB_GATING_LATCH_5   0x%08x\n",
+	pr_debug("DCHB_GATING_LATCH_5   0x%08x\n",
 			spm_read(DCHB_GATING_LATCH_5));
 }
 #endif
@@ -2062,7 +2062,7 @@ void mtk_idle_gpt_init(void)
 			GPT_CLK_SRC_SYS, GPT_CLK_DIV_1,
 			0, NULL, GPT_NOAUTOEN);
 	if (err)
-		pr_warn("[%s] fail to request GPT %d\n",
+		pr_debug("[%s] fail to request GPT %d\n",
 				__func__, IDLE_GPT + 1);
 #endif
 }

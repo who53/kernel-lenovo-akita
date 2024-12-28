@@ -319,7 +319,7 @@ static void handle_rpmb_cmd(struct tee_tz *ptee,
 
 		kfree(data_frame);
 	} else {
-		struct tee_rpmb_dev_info *dev_info;
+		struct tee_rpmb_dev_dbg *dev_dbg;
 
 		teec_rpmb_req.type = rpmb_req->cmd;
 		teec_rpmb_req.blk_cnt = 1;
@@ -327,9 +327,9 @@ static void handle_rpmb_cmd(struct tee_tz *ptee,
 		teec_rpmb_req.addr = (uint16_t) 0;
 		teec_rpmb_req.data_frame = (uint8_t *) resp;
 
-		dev_info = (struct tee_rpmb_dev_info *) resp;
+		dev_dbg = (struct tee_rpmb_dev_dbg *) resp;
 
-		dev_info->ret_code =
+		dev_dbg->ret_code =
 			(uint8_t) tkcore_emmc_rpmb_execute(&teec_rpmb_req);
 
 		arg32->ret = TEEC_SUCCESS;
@@ -431,7 +431,7 @@ static u32 handle_rpc(struct tee_tz *ptee, struct smc_param *param)
 		handle_rpc_func_cmd(ptee, param->a1);
 		break;
 	default:
-		pr_warn("Unknown RPC func 0x%x\n",
+		pr_debug("Unknown RPC func 0x%x\n",
 			 (u32) TEESMC_RETURN_GET_RPC_FUNC(param->a0));
 		break;
 	}
@@ -987,7 +987,7 @@ static int register_outercache_mutex(struct tee_tz *ptee, bool reg)
 	smc_xfer(&param);
 
 	if (param.a0 != TEESMC_RETURN_OK) {
-		pr_warn("TZ l2cc mutex disabled: TZ enable failed\n");
+		pr_debug("TZ l2cc mutex disabled: TZ enable failed\n");
 		goto out;
 	}
 	ptee->tz_outer_cache_mutex = vaddr;
@@ -1266,7 +1266,7 @@ static int __init tee_tz_init(void)
 {
 	int rc;
 
-	pr_info("TrustKernel TEE Driver initialization\n");
+	pr_debug("TrustKernel TEE Driver initialization\n");
 
 	rc = tee_init_smc_xfer();
 	if (rc < 0)
@@ -1299,7 +1299,7 @@ err0:
 
 static void __exit tee_tz_exit(void)
 {
-	pr_info("TrustKernel TEE Driver Release\n");
+	pr_debug("TrustKernel TEE Driver Release\n");
 
 	platform_device_unregister(&tz_0_plt_device);
 	platform_driver_unregister(&tz_tee_driver);

@@ -67,10 +67,10 @@ extern atomic_t vol_down_long_press_flag;
 	} while (0)
 #define kpd_info(fmt, arg...)	do { \
 	if (kpd_klog_en) \
-		pr_info(KPD_SAY fmt, ##arg); \
+		pr_debug(KPD_SAY fmt, ##arg); \
 	} while (0)
 #define kpd_notice(fmt, arg...)	 \
-			pr_notice(KPD_SAY fmt, ##arg)
+			pr_debug(KPD_SAY fmt, ##arg)
 
 #else
 #define kpd_print(fmt, arg...)	do {} while (0)

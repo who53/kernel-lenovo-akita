@@ -380,11 +380,11 @@ static bool pdp_odin_clocks_set(struct device *dev,
 
 	core_id = odin_pdp_rreg32(pdp_reg,
 				ODN_PDP_CORE_ID_OFFSET);
-	dev_info(dev, "Odin-PDP CORE_ID  %08X\n", core_id);
+	dev_dbg(dev, "Odin-PDP CORE_ID  %08X\n", core_id);
 
 	core_rev = odin_pdp_rreg32(odn_core_reg,
 				ODN_PDP_CORE_REV_OFFSET);
-	dev_info(dev, "Odin-PDP CORE_REV %08X\n", core_rev);
+	dev_dbg(dev, "Odin-PDP CORE_REV %08X\n", core_rev);
 
 	odispl = get_odin_mode(hdisplay, vdisplay);
 	if (!odispl) {
@@ -598,7 +598,7 @@ static void pdp_odin_set_updates_enabled(struct device *dev,
 		0x0;
 
 #ifdef PDP_VERBOSE
-	dev_info(dev, "Set updates: %s\n",
+	dev_dbg(dev, "Set updates: %s\n",
 			 enable ? "enable" : "disable");
 #endif
 
@@ -613,7 +613,7 @@ static void pdp_odin_set_syncgen_enabled(struct device *dev,
 	u32 value;
 
 #ifdef PDP_VERBOSE
-	dev_info(dev, "Set syncgen: %s\n",
+	dev_dbg(dev, "Set syncgen: %s\n",
 		enable ? "enable" : "disable");
 #endif
 
@@ -652,7 +652,7 @@ static void pdp_odin_set_syncgen_enabled(struct device *dev,
 				"underruns detected. status=0x%08X\n",
 				value);
 		else
-			dev_info(dev,
+			dev_dbg(dev,
 				"no underruns detected\n");
 	}
 }
@@ -663,7 +663,7 @@ static void pdp_odin_set_powerdwn_enabled(struct device *dev,
 	u32 value;
 
 #ifdef PDP_VERBOSE
-	dev_info(dev, "Set powerdwn: %s\n",
+	dev_dbg(dev, "Set powerdwn: %s\n",
 		enable ? "enable" : "disable");
 #endif
 
@@ -686,7 +686,7 @@ static void pdp_odin_set_vblank_enabled(struct device *dev,
 	u32 value;
 
 #ifdef PDP_VERBOSE
-	dev_info(dev, "Set vblank: %s\n",
+	dev_dbg(dev, "Set vblank: %s\n",
 		enable ? "enable" : "disable");
 #endif
 
@@ -731,7 +731,7 @@ static void pdp_odin_set_plane_enabled(struct device *dev,
 	u32 value;
 
 #ifdef PDP_VERBOSE
-	dev_info(dev, "Set plane %u: %s\n",
+	dev_dbg(dev, "Set plane %u: %s\n",
 		 plane, enable ? "enable" : "disable");
 #endif
 
@@ -755,7 +755,7 @@ static void pdp_odin_reset_planes(struct device *dev,
 				void __iomem *pdp_reg)
 {
 #ifdef PDP_VERBOSE
-	dev_info(dev, "Reset planes\n");
+	dev_dbg(dev, "Reset planes\n");
 #endif
 
 	odin_pdp_wreg32(pdp_reg,
@@ -787,7 +787,7 @@ static void pdp_odin_set_surface(struct device *dev,
 	u32 value;
 
 #ifdef PDP_VERBOSE
-	dev_info(dev,
+	dev_dbg(dev,
 		 "Set surface: plane=%d pos=%d:%d size=%dx%d stride=%d format=%d alpha=%d address=0x%x\n",
 		 plane, posx, posy, width, height, stride,
 		 format, alpha, address);
@@ -895,11 +895,11 @@ static void pdp_odin_mode_set(struct device *dev,
 {
 	u32 value;
 
-	dev_info(dev, "Set mode: %dx%d\n", h_display, v_display);
+	dev_dbg(dev, "Set mode: %dx%d\n", h_display, v_display);
 #ifdef PDP_VERBOSE
-	dev_info(dev, " ht: %d hbps %d has %d hlbs %d hfps %d hrbs %d\n",
+	dev_dbg(dev, " ht: %d hbps %d has %d hlbs %d hfps %d hrbs %d\n",
 			 ht, hbps, has, hlbs, hfps, hrbs);
-	dev_info(dev, " vt: %d vbps %d vas %d vtbs %d vfps %d vbbs %d\n",
+	dev_dbg(dev, " vt: %d vbps %d vas %d vtbs %d vfps %d vbbs %d\n",
 			 vt, vbps, vas, vtbs, vfps, vbbs);
 #endif
 

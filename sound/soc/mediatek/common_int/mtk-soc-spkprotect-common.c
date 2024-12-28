@@ -79,7 +79,7 @@ void init_scp_spk_reserved_dram(void)
 	memset_io((void *)scp_spk_dump_reserved_mem.vir_addr, 0,
 		  scp_spk_dump_reserved_mem.size);
 
-	pr_info("reserved dram: pa %p, va %p, size 0x%x, reserved dump dram: pa %p, va %p, size 0x%x\n",
+	pr_debug("reserved dram: pa %p, va %p, size 0x%x, reserved dump dram: pa %p, va %p, size 0x%x\n",
 		scp_spk_reserved_mem.phy_addr,
 		scp_spk_reserved_mem.vir_addr,
 		scp_spk_reserved_mem.size,

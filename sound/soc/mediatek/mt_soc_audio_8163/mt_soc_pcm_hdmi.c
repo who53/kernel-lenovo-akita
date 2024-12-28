@@ -923,7 +923,7 @@ static int mtk_pcm_hdmi_copy(struct snd_pcm_substream *substream,
 
 		if (Afe_WriteIdx_tmp + copy_size < Afe_Block->u4BufferSize) {
 			if (!access_ok(VERIFY_READ, data_w_ptr, copy_size)) {
-				pr_warn("[%s] 0 ptr invalid data_w_ptr = %p, size = %d,",
+				pr_debug("[%s] 0 ptr invalid data_w_ptr = %p, size = %d,",
 					__func__, data_w_ptr, copy_size);
 			} else {
 			if (copy_from_user(
@@ -948,9 +948,9 @@ static int mtk_pcm_hdmi_copy(struct snd_pcm_substream *substream,
 			size_2 = copy_size - size_1;
 
 			if (!access_ok(VERIFY_READ, data_w_ptr, size_1)) {
-				pr_warn("[%s] 1 ptr invalid data_w_ptr = %p, size_1 = %d,",
+				pr_debug("[%s] 1 ptr invalid data_w_ptr = %p, size_1 = %d,",
 					__func__, data_w_ptr, size_1);
-				pr_warn(" u4BufferSize = %d, u4DataRemained = %d\n",
+				pr_debug(" u4BufferSize = %d, u4DataRemained = %d\n",
 					Afe_Block->u4BufferSize,
 					Afe_Block->u4DataRemained);
 			} else {
@@ -973,9 +973,9 @@ static int mtk_pcm_hdmi_copy(struct snd_pcm_substream *substream,
 
 			if (!access_ok(VERIFY_READ,
 				data_w_ptr + size_1, size_2)) {
-				pr_warn("[%s] 2 ptr invalid%p,size_1=%d,sz2 = %d,",
+				pr_debug("[%s] 2 ptr invalid%p,size_1=%d,sz2 = %d,",
 				__func__, data_w_ptr, size_1, size_2);
-				pr_warn(" u4BufferSize = %d, u4DataRemained = %d\n",
+				pr_debug(" u4BufferSize = %d, u4DataRemained = %d\n",
 				Afe_Block->u4BufferSize,
 				Afe_Block->u4DataRemained);
 			} else {

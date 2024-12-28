@@ -1354,7 +1354,7 @@ static void __init mtk_apmixedsys_init(struct device_node *node)
 
 	base = of_iomap(node, 0);
 	if (!base) {
-		pr_notice("%s(): ioremap failed\n", __func__);
+		pr_debug("%s(): ioremap failed\n", __func__);
 		return;
 	}
 
@@ -1367,7 +1367,7 @@ static void __init mtk_apmixedsys_init(struct device_node *node)
 	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
 
 	if (r)
-		pr_notice("%s(): could not register clock provider: %d\n",
+		pr_debug("%s(): could not register clock provider: %d\n",
 			__func__, r);
 	apmixed_base = base;
 
@@ -1390,7 +1390,7 @@ static void __init mtk_topckgen_init(struct device_node *node)
 
 	base = of_iomap(node, 0);
 	if (!base) {
-		pr_notice("%s(): ioremap failed\n", __func__);
+		pr_debug("%s(): ioremap failed\n", __func__);
 		return;
 	}
 
@@ -1411,7 +1411,7 @@ static void __init mtk_topckgen_init(struct device_node *node)
 		mt6761_top_clk_data);
 
 	if (r)
-		pr_info("%s(): could not register clock provider: %d\n",
+		pr_debug("%s(): could not register clock provider: %d\n",
 			__func__, r);
 
 	cksys_base = base;
@@ -1436,7 +1436,7 @@ static void __init mtk_infracfg_ao_init(struct device_node *node)
 	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
 
 	if (r)
-		pr_notice("%s(): could not register clock provider: %d\n",
+		pr_debug("%s(): could not register clock provider: %d\n",
 			__func__, r);
 }
 CLK_OF_DECLARE_DRIVER(mtk_infracfg_ao, "mediatek,infracfg_ao",
@@ -1455,7 +1455,7 @@ static void __init mtk_audio_init(struct device_node *node)
 	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
 
 	if (r)
-		pr_notice("%s(): could not register clock provider: %d\n",
+		pr_debug("%s(): could not register clock provider: %d\n",
 			__func__, r);
 }
 CLK_OF_DECLARE_DRIVER(mtk_audio, "mediatek,audio", mtk_audio_init);
@@ -1472,7 +1472,7 @@ static void __init mtk_camsys_init(struct device_node *node)
 	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
 
 	if (r)
-		pr_notice("%s(): could not register clock provider: %d\n",
+		pr_debug("%s(): could not register clock provider: %d\n",
 			__func__, r);
 }
 CLK_OF_DECLARE_DRIVER(mtk_camsys, "mediatek,camsys", mtk_camsys_init);
@@ -1485,7 +1485,7 @@ static void __init mtk_mmsys_config_init(struct device_node *node)
 
 	base = of_iomap(node, 0);
 	if (!base) {
-		pr_notice("%s(): ioremap failed\n", __func__);
+		pr_debug("%s(): ioremap failed\n", __func__);
 		return;
 	}
 	clk_data = mtk_alloc_clk_data(CLK_MM_NR_CLK);
@@ -1495,7 +1495,7 @@ static void __init mtk_mmsys_config_init(struct device_node *node)
 	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
 
 	if (r)
-		pr_notice("%s(): could not register clock provider: %d\n",
+		pr_debug("%s(): could not register clock provider: %d\n",
 			__func__, r);
 	mmsys_config_base = base;
 }
@@ -1515,7 +1515,7 @@ static void __init mtk_venc_global_con_init(struct device_node *node)
 	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
 
 	if (r)
-		pr_notice("%s(): could not register clock provider: %d\n",
+		pr_debug("%s(): could not register clock provider: %d\n",
 			__func__, r);
 }
 CLK_OF_DECLARE_DRIVER(mtk_venc_global_con, "mediatek,venc_gcon",
@@ -1534,7 +1534,7 @@ static void __init mtk_mipi0a_init(struct device_node *node)
 	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
 
 	if (r)
-		pr_notice("%s(): could not register clock provider: %d\n",
+		pr_debug("%s(): could not register clock provider: %d\n",
 			__func__, r);
 }
 CLK_OF_DECLARE_DRIVER(mtk_mipi0a, "mediatek,mipi_rx_ana_csi0a",
@@ -1553,7 +1553,7 @@ static void __init mtk_mipi0b_init(struct device_node *node)
 	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
 
 	if (r)
-		pr_notice("%s(): could not register clock provider: %d\n",
+		pr_debug("%s(): could not register clock provider: %d\n",
 			__func__, r);
 }
 CLK_OF_DECLARE_DRIVER(mtk_mipi0b, "mediatek,mipi_rx_ana_csi0b",
@@ -1572,7 +1572,7 @@ static void __init mtk_mipi1a_init(struct device_node *node)
 	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
 
 	if (r)
-		pr_notice("%s(): could not register clock provider: %d\n",
+		pr_debug("%s(): could not register clock provider: %d\n",
 			__func__, r);
 }
 CLK_OF_DECLARE_DRIVER(mtk_mipi1a, "mediatek,mipi_rx_ana_csi1a",
@@ -1591,7 +1591,7 @@ static void __init mtk_mipi1b_init(struct device_node *node)
 	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
 
 	if (r)
-		pr_notice("%s(): could not register clock provider: %d\n",
+		pr_debug("%s(): could not register clock provider: %d\n",
 			__func__, r);
 }
 CLK_OF_DECLARE_DRIVER(mtk_mipi1b, "mediatek,mipi_rx_ana_csi1b",
@@ -1610,7 +1610,7 @@ static void __init mtk_mipi2a_init(struct device_node *node)
 	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
 
 	if (r)
-		pr_notice("%s(): could not register clock provider: %d\n",
+		pr_debug("%s(): could not register clock provider: %d\n",
 			__func__, r);
 }
 CLK_OF_DECLARE_DRIVER(mtk_mipi2a, "mediatek,mipi_rx_ana_csi2a",
@@ -1629,7 +1629,7 @@ static void __init mtk_mipi2b_init(struct device_node *node)
 	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
 
 	if (r)
-		pr_notice("%s(): could not register clock provider: %d\n",
+		pr_debug("%s(): could not register clock provider: %d\n",
 			__func__, r);
 }
 CLK_OF_DECLARE_DRIVER(mtk_mipi2b, "mediatek,mipi_rx_ana_csi2b",
@@ -1808,7 +1808,7 @@ void clock_force_off(void)
 
 void mmsys_cg_check(void)
 {
-	pr_notice("[MMSYS_CG_CON0]=0x%08x\n", clk_readl(MMSYS_CG_CON0));
+	pr_debug("[MMSYS_CG_CON0]=0x%08x\n", clk_readl(MMSYS_CG_CON0));
 }
 
 void pll_force_off(void)

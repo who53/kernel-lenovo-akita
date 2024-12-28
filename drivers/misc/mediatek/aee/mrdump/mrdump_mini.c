@@ -54,7 +54,7 @@
 		if (aee_in_nested_panic())			\
 			aee_nested_printf(fmt, ##__VA_ARGS__);	\
 		else						\
-			pr_notice(fmt, ##__VA_ARGS__);	\
+			pr_debug(fmt, ##__VA_ARGS__);	\
 	} while (0)
 
 #define LOGV(fmt, msg...)
@@ -361,22 +361,22 @@ int kernel_addr_valid(unsigned long addr)
 	pgd = pgd_offset_k(addr);
 	if (pgd_none(*pgd))
 		return 0;
-	pr_notice("[%08lx] *pgd=%08llx", addr, (long long)pgd_val(*pgd));
+	pr_debug("[%08lx] *pgd=%08llx", addr, (long long)pgd_val(*pgd));
 
 	pud = pud_offset(pgd, addr);
 	if (pud_none(*pud))
 		return 0;
-	pr_notice("*pud=%08llx", (long long)pud_val(*pud));
+	pr_debug("*pud=%08llx", (long long)pud_val(*pud));
 
 	pmd = pmd_offset(pud, addr);
 	if (pmd_none(*pmd))
 		return 0;
-	pr_notice("*pmd=%08llx", (long long)pmd_val(*pmd));
+	pr_debug("*pmd=%08llx", (long long)pmd_val(*pmd));
 
 	pte = pte_offset_kernel(pmd, addr);
 	if (pte_none(*pte))
 		return 0;
-	pr_notice("*pte=%08llx", (long long)pte_val(*pte));
+	pr_debug("*pte=%08llx", (long long)pte_val(*pte));
 
 	return pfn_valid(pte_pfn(*pte));
 }
@@ -1071,7 +1071,7 @@ int mrdump_mini_init(void)
 
 int mini_rdump_reserve_memory(struct reserved_mem *rmem)
 {
-	pr_info("[memblock]%s: 0x%llx - 0x%llx (0x%llx)\n",
+	pr_debug("[memblock]%s: 0x%llx - 0x%llx (0x%llx)\n",
 		"mediatek,minirdump",
 		 (unsigned long long)rmem->base,
 		 (unsigned long long)rmem->base +

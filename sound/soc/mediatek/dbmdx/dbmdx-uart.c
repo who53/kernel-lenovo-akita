@@ -524,7 +524,7 @@ int send_uart_cmd_boot(struct dbmdx_private *p,  u32 command)
 	u8 send[3];
 	int ret;
 
-	dev_info(uart_p->dev, "%s: command = %x\n", __func__, command);
+	dev_dbg(uart_p->dev, "%s: command = %x\n", __func__, command);
 
 	send[0] = (command >> 16) & 0xff;
 	send[1] = (command >>  8) & 0xff;
@@ -669,7 +669,7 @@ int uart_verify_chip_id(struct dbmdx_private *p)
 		return -EILSEQ;
 	}
 
-	dev_info(uart_p->dev,
+	dev_dbg(uart_p->dev,
 			"%s: Chip ID was successfully verified: 0x%2x%2x\n",
 				__func__,
 				recv_chip_rev_id_high,
@@ -1047,7 +1047,7 @@ int uart_set_speed_host_only(struct dbmdx_private *p, int index)
 		goto out;
 	}
 
-	dev_info(p->dev, "%s: Configure tty to: %us%up%uf%u\n",
+	dev_dbg(p->dev, "%s: Configure tty to: %us%up%uf%u\n",
 			__func__,
 			p->pdata->va_speed_cfg[index].uart_baud,
 			uart_p->normal_parity,
@@ -1095,7 +1095,7 @@ int uart_set_speed(struct dbmdx_private *p, int index)
 		goto out;
 	}
 
-	dev_info(p->dev, "%s: Configure tty to: %us%up%uf%u\n",
+	dev_dbg(p->dev, "%s: Configure tty to: %us%up%uf%u\n",
 			__func__,
 			p->pdata->va_speed_cfg[index].uart_baud,
 			uart_p->normal_parity,
@@ -1348,11 +1348,11 @@ int uart_common_probe(struct platform_device *pdev, const char threadnamefmt[])
 
 	/* check for software flow control option */
 	if (of_find_property(np, "software-flow-control", NULL)) {
-		dev_info(p->dev, "%s: Software flow control enabled\n",
+		dev_dbg(p->dev, "%s: Software flow control enabled\n",
 			__func__);
 		pdata->software_flow_control = 1;
 	} else
-		dev_info(p->dev, "%s: Software flow control disabled\n",
+		dev_dbg(p->dev, "%s: Software flow control disabled\n",
 			__func__);
 #else
 	pdata = dev_get_platdata(&pdev->dev);
@@ -1366,7 +1366,7 @@ int uart_common_probe(struct platform_device *pdev, const char threadnamefmt[])
 		 * read-chunk-size not set, set it to default
 		 */
 		pdata->read_chunk_size = DEFAULT_UART_READ_CHUNK_SIZE;
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: Setting uart read chunk to default val: %u bytes\n",
 			__func__, pdata->read_chunk_size);
 	}
@@ -1376,7 +1376,7 @@ int uart_common_probe(struct platform_device *pdev, const char threadnamefmt[])
 	if (pdata->read_chunk_size == 0)
 		pdata->read_chunk_size = DEFAULT_UART_READ_CHUNK_SIZE;
 
-	dev_info(p->dev, "%s: Setting uart read chunk to %u bytes\n",
+	dev_dbg(p->dev, "%s: Setting uart read chunk to %u bytes\n",
 			__func__, pdata->read_chunk_size);
 
 #ifdef CONFIG_OF
@@ -1387,7 +1387,7 @@ int uart_common_probe(struct platform_device *pdev, const char threadnamefmt[])
 		 * write-chunk-size not set, set it to default
 		 */
 		pdata->write_chunk_size = DEFAULT_UART_WRITE_CHUNK_SIZE;
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: Setting uart write chunk to default val: %u bytes\n",
 			__func__, pdata->write_chunk_size);
 	}
@@ -1397,7 +1397,7 @@ int uart_common_probe(struct platform_device *pdev, const char threadnamefmt[])
 	if (pdata->write_chunk_size == 0)
 		pdata->write_chunk_size = DEFAULT_UART_WRITE_CHUNK_SIZE;
 
-	dev_info(p->dev, "%s: Setting uart write chunk to %u bytes\n",
+	dev_dbg(p->dev, "%s: Setting uart write chunk to %u bytes\n",
 			__func__, pdata->write_chunk_size);
 
 	p->pdata = pdata;
@@ -1452,7 +1452,7 @@ int uart_common_probe(struct platform_device *pdev, const char threadnamefmt[])
 		goto out_err_kfree;
 	}
 
-	dev_info(p->dev, "%s: successfully probed\n", __func__);
+	dev_dbg(p->dev, "%s: successfully probed\n", __func__);
 
 	ret = 0;
 	goto out;

@@ -34,7 +34,7 @@
 #define VOW_ASSERT(exp) \
 	do { \
 		if (!(exp)) { \
-			pr_notice("ASSERT("#exp")fail:\""__FILE__"\", %uL\n", \
+			pr_debug("ASSERT("#exp")fail:\""__FILE__"\", %uL\n", \
 			__LINE__); \
 		} \
 	} while (0)

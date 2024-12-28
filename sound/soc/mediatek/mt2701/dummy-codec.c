@@ -131,7 +131,7 @@ static int dummy_codec_probe(struct platform_device *pdev)
 	#ifdef CONFIG_OF
 		if (dev->of_node) {
 			dev_set_name(dev, "%s", "dummy-codec");
-			pr_notice("%s set dev name %s\n", __func__,
+			pr_debug("%s set dev name %s\n", __func__,
 				  dev_name(dev));
 		}
 	#endif

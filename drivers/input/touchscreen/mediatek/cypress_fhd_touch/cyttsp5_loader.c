@@ -358,7 +358,7 @@ static int cyttsp5_load_app_(struct device *dev, const u8 *fw, int fw_size)
 		goto _cyttsp5_load_app_error;
 	}
 
-	dev_info(dev, "%s: start load app\n", __func__);
+	dev_dbg(dev, "%s: start load app\n", __func__);
 #ifdef TTHE_TUNER_SUPPORT
 	cmd->request_tthe_print(dev, NULL, 0, "start load app");
 #endif
@@ -373,7 +373,7 @@ static int cyttsp5_load_app_(struct device *dev, const u8 *fw, int fw_size)
 
 	cmd->request_stop_wd(dev);
 
-	dev_info(dev, "%s: Send BL Loader Enter\n", __func__);
+	dev_dbg(dev, "%s: Send BL Loader Enter\n", __func__);
 #ifdef TTHE_TUNER_SUPPORT
 	cmd->request_tthe_print(dev, NULL, 0, "Send BL Loader Enter");
 #endif
@@ -400,7 +400,7 @@ static int cyttsp5_load_app_(struct device *dev, const u8 *fw, int fw_size)
 		goto _cyttsp5_load_app_exit;
 	}
 
-	dev_info(dev, "%s: Send BL Loader Blocks\n", __func__);
+	dev_dbg(dev, "%s: Send BL Loader Blocks\n", __func__);
 #ifdef TTHE_TUNER_SUPPORT
 	cmd->request_tthe_print(dev, NULL, 0, "Send BL Loader Blocks");
 #endif
@@ -445,7 +445,7 @@ static int cyttsp5_load_app_(struct device *dev, const u8 *fw, int fw_size)
 	}
 
 	/* exit loader */
-	dev_info(dev, "%s: Send BL Loader Terminate\n", __func__);
+	dev_dbg(dev, "%s: Send BL Loader Terminate\n", __func__);
 #ifdef TTHE_TUNER_SUPPORT
 	cmd->request_tthe_print(dev, NULL, 0, "Send BL Loader Terminate");
 #endif
@@ -460,7 +460,7 @@ static int cyttsp5_load_app_(struct device *dev, const u8 *fw, int fw_size)
 			dev_err(dev, "%s: ldr_verify_chksum fail r=%d\n",
 				__func__, rc_tmp);
 		else
-			dev_info(dev, "%s: APP Checksum Verified\n", __func__);
+			dev_dbg(dev, "%s: APP Checksum Verified\n", __func__);
 	}
 
 _cyttsp5_load_app_exit:
@@ -553,7 +553,7 @@ static int cyttsp5_check_firmware_version_platform(struct device *dev,
 	int upgrade;
 
 	if (!ld->si) {
-		dev_info(dev, "%s: No firmware infomation found, device FW may be corrupted\n",
+		dev_dbg(dev, "%s: No firmware infomation found, device FW may be corrupted\n",
 			__func__);
 		return CYTTSP5_AUTO_LOAD_FOR_CORRUPTED_FW;
 	}
@@ -684,7 +684,7 @@ static int cyttsp5_check_firmware_version_builtin(struct device *dev,
 	int upgrade;
 
 	if (!ld->si) {
-		dev_info(dev, "%s: No firmware infomation found, device FW may be corrupted\n",
+		dev_dbg(dev, "%s: No firmware infomation found, device FW may be corrupted\n",
 			__func__);
 		return CYTTSP5_AUTO_LOAD_FOR_CORRUPTED_FW;
 	}
@@ -715,7 +715,7 @@ static int cyttsp5_check_firmware_config_version(struct device *dev, u16 fw_conf
 		     __func__, fw_config_ver_img, fw_config_ver_new);
 
 	if (fw_config_ver_new != fw_config_ver_img) {
-		dev_info(dev, "%s: Image config is different, will upgrade\n", __func__);
+		dev_dbg(dev, "%s: Image config is different, will upgrade\n", __func__);
 		return 1;
 	}
 
@@ -736,7 +736,7 @@ static int cyttsp5_check_firmware_version_builtin(struct device *dev, const stru
 	int upgrade;
 
 	if (!ld->si) {
-		dev_info(dev,
+		dev_dbg(dev,
 			 "%s: No firmware infomation found, device FW may be "
 			 "corrupted\n",
 			 __func__);
@@ -800,7 +800,7 @@ static void _cyttsp5_firmware_cont_builtin(const struct firmware *fw,
 	int upgrade;
 
 	if (!fw) {
-		dev_info(dev, "%s: No builtin firmware\n", __func__);
+		dev_dbg(dev, "%s: No builtin firmware\n", __func__);
 		goto _cyttsp5_firmware_cont_builtin_exit;
 	}
 
@@ -1137,7 +1137,7 @@ static int cyttsp5_check_ttconfig_version_platform(struct device *dev,
 	u32 fw_revctrl_config;
 
 	if (!ld->si) {
-		dev_info(dev, "%s: No firmware infomation found, device FW may be corrupted\n",
+		dev_dbg(dev, "%s: No firmware infomation found, device FW may be corrupted\n",
 			__func__);
 		return 0;
 	}
@@ -1175,7 +1175,7 @@ static struct cyttsp5_touch_config *cyttsp5_get_platform_ttconfig(
 	panel_id = cyttsp5_get_panel_id(dev);
 	if (panel_id == PANEL_ID_NOT_ENABLED) {
 		/* TODO: Make debug message */
-		dev_info(dev, "%s: Panel ID not enabled, using legacy ttconfig\n",
+		dev_dbg(dev, "%s: Panel ID not enabled, using legacy ttconfig\n",
 			__func__);
 		return ld->loader_pdata->ttconfig;
 	}
@@ -1188,7 +1188,7 @@ static struct cyttsp5_touch_config *cyttsp5_get_platform_ttconfig(
 	while ((ttconfig = *ttconfigs++)) {
 		if (ttconfig->panel_id == panel_id) {
 			/* TODO: Make debug message */
-			dev_info(dev, "%s: Found matching ttconfig:%p with Panel ID: 0x%02X\n",
+			dev_dbg(dev, "%s: Found matching ttconfig:%p with Panel ID: 0x%02X\n",
 				__func__, ttconfig, ttconfig->panel_id);
 			return ttconfig;
 		}
@@ -1209,29 +1209,29 @@ static int upgrade_ttconfig_from_platform(struct device *dev)
 	int upgrade;
 
 	if (!ld->loader_pdata) {
-		dev_info(dev, "%s: No loader platform data\n", __func__);
+		dev_dbg(dev, "%s: No loader platform data\n", __func__);
 		return rc;
 	}
 
 	ttconfig = cyttsp5_get_platform_ttconfig(dev);
 	if (!ttconfig) {
-		dev_info(dev, "%s: No ttconfig data\n", __func__);
+		dev_dbg(dev, "%s: No ttconfig data\n", __func__);
 		return rc;
 	}
 
 	param_regs = ttconfig->param_regs;
 	if (!param_regs) {
-		dev_info(dev, "%s: No touch parameters\n", __func__);
+		dev_dbg(dev, "%s: No touch parameters\n", __func__);
 		return rc;
 	}
 
 	if (!param_regs->data || !param_regs->size) {
-		dev_info(dev, "%s: Invalid touch parameters\n", __func__);
+		dev_dbg(dev, "%s: Invalid touch parameters\n", __func__);
 		return rc;
 	}
 
 	if (!ttconfig->fw_ver || !ttconfig->fw_vsize) {
-		dev_info(dev, "%s: Invalid FW version for touch parameters\n",
+		dev_dbg(dev, "%s: Invalid FW version for touch parameters\n",
 			__func__);
 		return rc;
 	}
@@ -1423,7 +1423,7 @@ static void cyttsp5_fw_and_config_upgrade(
 		dev_err(dev, "%s: Fail get sysinfo pointer from core\n",
 			__func__);
 #if !CYTTSP5_FW_UPGRADE
-	dev_info(dev, "%s: No FW upgrade method selected!\n", __func__);
+	dev_dbg(dev, "%s: No FW upgrade method selected!\n", __func__);
 #endif
 
 #ifdef CONFIG_TOUCHSCREEN_CYPRESS_CYTTSP5_PLATFORM_FW_UPGRADE
@@ -1580,7 +1580,7 @@ static int cyttsp5_loader_probe(struct device *dev, void **data)
 	schedule_work(&ld->fw_and_config_upgrade);
 #endif
 
-	dev_info(dev, "%s: Successful probe %s\n", __func__, dev_name(dev));
+	dev_dbg(dev, "%s: Successful probe %s\n", __func__, dev_name(dev));
 	return 0;
 
 #ifdef CONFIG_TOUCHSCREEN_CYPRESS_CYTTSP5_MANUAL_TTCONFIG_UPGRADE
@@ -1649,7 +1649,7 @@ static int __init cyttsp5_loader_init(void)
 			return rc;
 	}
 
-	pr_info("%s: Parade TTSP FW Loader Driver (Built %s) rc=%d\n",
+	pr_debug("%s: Parade TTSP FW Loader Driver (Built %s) rc=%d\n",
 		 __func__, CY_DRIVER_VERSION, rc);
 	return 0;
 }

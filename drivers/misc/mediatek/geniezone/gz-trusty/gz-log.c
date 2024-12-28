@@ -83,13 +83,13 @@ static struct gz_log_context glctx;
 static int __init gz_log_context_init(struct reserved_mem *rmem)
 {
 	if (!rmem) {
-		pr_info("[%s] ERROR: invalid reserved memory\n", __func__);
+		pr_debug("[%s] ERROR: invalid reserved memory\n", __func__);
 		return -EFAULT;
 	}
 	glctx.paddr = rmem->base;
 	glctx.size = rmem->size;
 	glctx.flag = STATIC;
-	pr_info("[%s] rmem:%s base(%pa) size(0x%zx)\n",
+	pr_debug("[%s] rmem:%s base(%pa) size(0x%zx)\n",
 		__func__, rmem->name, &glctx.paddr, glctx.size);
 	return 0;
 }
@@ -104,13 +104,13 @@ static int gz_log_page_init(void)
 		glctx.virt = ioremap(glctx.paddr, glctx.size);
 
 		if (!glctx.virt) {
-			pr_info("[%s] ERROR: ioremap failed, use dynamic\n",
+			pr_debug("[%s] ERROR: ioremap failed, use dynamic\n",
 				__func__);
 			glctx.flag = DYNAMIC;
 			goto dynamic_alloc;
 		}
 
-		pr_info("[%s] set by static, virt addr:%p, sz:0x%zx\n",
+		pr_debug("[%s] set by static, virt addr:%p, sz:0x%zx\n",
 			__func__, glctx.virt, glctx.size);
 	} else {
 dynamic_alloc:
@@ -121,7 +121,7 @@ dynamic_alloc:
 			return -ENOMEM;
 
 		glctx.paddr = virt_to_phys(glctx.virt);
-		pr_info("[%s] set by dynamic, virt:%p, sz:0x%zx\n",
+		pr_debug("[%s] set by dynamic, virt:%p, sz:0x%zx\n",
 			__func__, glctx.virt, glctx.size);
 	}
 
@@ -136,12 +136,12 @@ void get_gz_log_buffer(unsigned long *addr, unsigned long *paddr,
 
 	if (!glctx.virt) {
 		*addr = *paddr = *size = *start = 0;
-		pr_info("[%s] ERR gz_log init failed\n", __func__);
+		pr_debug("[%s] ERR gz_log init failed\n", __func__);
 		return;
 	}
 	*addr = (unsigned long)glctx.virt;
 	*paddr = (unsigned long)glctx.paddr;
-	pr_info("[%s] virtual address:0x%lx, paddr:0x%lx\n",
+	pr_debug("[%s] virtual address:0x%lx, paddr:0x%lx\n",
 		__func__, (unsigned long)*addr, *paddr);
 	*size = glctx.size;
 	*start = 0;
@@ -172,7 +172,7 @@ static int trusty_log_panic_notify(struct notifier_block *nb,
 	 * Don't grab the spin lock to hold up the panic notifier, even
 	 * though this is racy.
 	 */
-	pr_info("trusty-log panic notifier - trusty version %s",
+	pr_debug("trusty-log panic notifier - trusty version %s",
 		trusty_version_str_get(gls->trusty_dev));
 	atomic_inc(&gls->gz_log_event_count);
 	wake_up_interruptible(&gls->gz_log_wq);
@@ -187,20 +187,20 @@ static bool trusty_supports_logging(struct device *device)
 				MTEE_SMCNR(SMCF_SC_SHARED_LOG_VERSION, device),
 				TRUSTY_LOG_API_VERSION, 0, 0);
 	if (ret == SM_ERR_UNDEFINED_SMC) {
-		pr_info("trusty-log not supported on secure side.\n");
+		pr_debug("trusty-log not supported on secure side.\n");
 		return false;
 	} else if (ret < 0) {
-		pr_info("trusty std call (GZ_SHARED_LOG_VERSION) failed: %d\n",
+		pr_debug("trusty std call (GZ_SHARED_LOG_VERSION) failed: %d\n",
 		       ret);
 		return false;
 	}
 
 	if (ret == TRUSTY_LOG_API_VERSION) {
-		pr_info("trusty-log API supported: %d\n", ret);
+		pr_debug("trusty-log API supported: %d\n", ret);
 		return true;
 	}
 
-	pr_info("trusty-log unsupported api version: %d, supported: %d\n",
+	pr_debug("trusty-log unsupported api version: %d, supported: %d\n",
 		ret, TRUSTY_LOG_API_VERSION);
 	return false;
 }
@@ -255,7 +255,7 @@ static int do_gz_log_read(struct gz_log_state *gls,
 	alloc = log->alloc;
 
 	if (alloc - get > log->sz) {
-		pr_notice("trusty: log overflow, lose some msg.");
+		pr_debug("trusty: log overflow, lose some msg.");
 		get = alloc - log->sz;
 	}
 
@@ -275,7 +275,7 @@ static int do_gz_log_read(struct gz_log_state *gls,
 		ret = copy_to_user(buf + copy_chars, gls->line_buffer,
 				   read_chars);
 		if (ret) {
-			pr_notice("[%s] copy_to_user failed ret %d\n",
+			pr_debug("[%s] copy_to_user failed ret %d\n",
 				  __func__, ret);
 			break;
 		}
@@ -357,9 +357,9 @@ static int trusty_gz_log_probe(struct platform_device *pdev)
 
 	ret = of_property_read_u32(pnode, "tee-id", &tee_id);
 	if (ret != 0)
-		dev_info(&pdev->dev, "tee_id is not set\n");
+		dev_dbg(&pdev->dev, "tee_id is not set\n");
 	else
-		dev_info(&pdev->dev, "--- init gz-log for MTEE %d ---\n",
+		dev_dbg(&pdev->dev, "--- init gz-log for MTEE %d ---\n",
 			 tee_id);
 
 	gz_log_page_init();
@@ -384,7 +384,7 @@ static int trusty_gz_log_probe(struct platform_device *pdev)
 			(u32)(glctx.paddr), (u32)((u64)glctx.paddr >> 32),
 			glctx.size);
 		if (ret < 0) {
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				"std call(GZ_SHARED_LOG_ADD) failed: %d %pa\n",
 				ret, &glctx.paddr);
 			goto error_std_call;
@@ -392,7 +392,7 @@ static int trusty_gz_log_probe(struct platform_device *pdev)
 	}
 
 	gls->log = glctx.virt;
-	dev_info(&pdev->dev, "gls->log virtual address:%p\n", gls->log);
+	dev_dbg(&pdev->dev, "gls->log virtual address:%p\n", gls->log);
 	if (!gls->log) {
 		ret = -ENOMEM;
 		goto error_alloc_log;
@@ -403,7 +403,7 @@ static int trusty_gz_log_probe(struct platform_device *pdev)
 	ret = trusty_call_notifier_register(gls->trusty_dev,
 					       &gls->call_notifier);
 	if (ret < 0) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "can not register trusty call notifier\n");
 		goto error_call_notifier;
 	}
@@ -412,7 +412,7 @@ static int trusty_gz_log_probe(struct platform_device *pdev)
 	ret = atomic_notifier_chain_register(&panic_notifier_list,
 					     &gls->panic_notifier);
 	if (ret < 0) {
-		dev_info(&pdev->dev, "failed to register panic notifier\n");
+		dev_dbg(&pdev->dev, "failed to register panic notifier\n");
 		goto error_panic_notifier;
 	}
 	init_waitqueue_head(&gls->gz_log_wq);
@@ -424,7 +424,7 @@ static int trusty_gz_log_probe(struct platform_device *pdev)
 	gls->proc = proc_create_data("gz_log", 0444, NULL, &proc_gz_log_fops,
 				     gls);
 	if (!gls->proc) {
-		dev_info(&pdev->dev, "gz_log proc_create failed!\n");
+		dev_dbg(&pdev->dev, "gz_log proc_create failed!\n");
 		return -ENOMEM;
 	}
 
@@ -453,7 +453,7 @@ static int trusty_gz_log_remove(struct platform_device *pdev)
 	int ret = 0;
 	struct gz_log_state *gls = platform_get_drvdata(pdev);
 
-	dev_info(&pdev->dev, "%s\n", __func__);
+	dev_dbg(&pdev->dev, "%s\n", __func__);
 
 	proc_remove(gls->proc);
 	atomic_notifier_chain_unregister(&panic_notifier_list,
@@ -464,7 +464,7 @@ static int trusty_gz_log_remove(struct platform_device *pdev)
 			MTEE_SMCNR(SMCF_SC_SHARED_LOG_RM, gls->trusty_dev),
 			(u32)glctx.paddr, (u32)((u64)glctx.paddr >> 32), 0);
 	if (ret)
-		pr_info("std call(GZ_SHARED_LOG_RM) failed: %d\n", ret);
+		pr_debug("std call(GZ_SHARED_LOG_RM) failed: %d\n", ret);
 
 	if (glctx.flag == STATIC)
 		iounmap(glctx.virt);

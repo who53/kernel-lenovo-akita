@@ -228,7 +228,7 @@ static int audio_scp_voice_Irqcnt_Set(struct snd_kcontrol *kcontrol,
 				Soc_Aud_IRQ_MCU_MODE_IRQ7_MCU_MODE, 0,
 				scp_voice_irq_cnt);
 	else
-		pr_notice(
+		pr_debug(
 			"warn, cannot update irq counter, user_id = %p, irq1_cnt = %d\n",
 			scp_voice_irq_user_id, scp_voice_irq_cnt);
 
@@ -568,7 +568,7 @@ static int mtk_pcm_scp_voice_open(struct snd_pcm_substream *substream)
 	runtime->hw.info |= SNDRV_PCM_INFO_NONINTERLEAVED;
 
 	if (ret < 0) {
-		pr_warn("mtk_pcm_voice_scp_close\n");
+		pr_debug("mtk_pcm_voice_scp_close\n");
 		mtk_pcm_voice_scp_close(substream);
 		return ret;
 	}
@@ -577,7 +577,7 @@ static int mtk_pcm_scp_voice_open(struct snd_pcm_substream *substream)
 	mscp_voice_iv_meminterface_type =
 		get_usage_digital_block(AUDIO_USAGE_SCP_SPK_IV_DATA);
 	if (mscp_voice_iv_meminterface_type < 0) {
-		pr_info("%s get_pcm_mem_id err using VUL_Data2 as default\n",
+		pr_debug("%s get_pcm_mem_id err using VUL_Data2 as default\n",
 			__func__);
 		mscp_voice_iv_meminterface_type =
 			Soc_Aud_Digital_Block_MEM_VUL_DATA2;

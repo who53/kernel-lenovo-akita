@@ -2480,7 +2480,7 @@ static int dummy_start(struct usb_hcd *hcd)
 static void dummy_stop(struct usb_hcd *hcd)
 {
 	device_remove_file(dummy_dev(hcd_to_dummy_hcd(hcd)), &dev_attr_urbs);
-	dev_info(dummy_dev(hcd_to_dummy_hcd(hcd)), "stopped\n");
+	dev_dbg(dummy_dev(hcd_to_dummy_hcd(hcd)), "stopped\n");
 }
 
 /*-------------------------------------------------------------------------*/
@@ -2624,7 +2624,7 @@ static int dummy_hcd_probe(struct platform_device *pdev)
 	struct usb_hcd		*ss_hcd;
 	int			retval;
 
-	dev_info(&pdev->dev, "%s, driver " DRIVER_VERSION "\n", driver_desc);
+	dev_dbg(&pdev->dev, "%s, driver " DRIVER_VERSION "\n", driver_desc);
 	dum = *((void **)dev_get_platdata(&pdev->dev));
 
 	if (mod_data.is_super_speed)

@@ -833,7 +833,7 @@ static long admin_ioctl(struct file *file, unsigned int cmd,
 		if (service) {
 			/* Update TGID as it changes upon becoming a daemon */
 			if (service->tgid != current->tgid) {
-				mc_dev_info("admin TGID changed %d -> %d\n",
+				mc_dev_dbg("admin TGID changed %d -> %d\n",
 					    service->tgid, current->tgid);
 				service->tgid = current->tgid;
 			}
@@ -965,7 +965,7 @@ static long admin_ioctl(struct file *file, unsigned int cmd,
 
 		if (!ret) {
 			service->role = role;
-			mc_dev_info("TGID %d has taken role %d\n",
+			mc_dev_dbg("TGID %d has taken role %d\n",
 				    current->tgid, service->role);
 			if (role == TEE_ROLE_LISTENER)
 				server_state_change(READY);
@@ -1022,7 +1022,7 @@ static int admin_release(struct inode *inode, struct file *file)
 		mutex_unlock(&g_request.states_mutex);
 	}
 
-	mc_dev_info("admin connection closed, TGID %d\n", service->tgid);
+	mc_dev_dbg("admin connection closed, TGID %d\n", service->tgid);
 	mutex_lock(&admin_ctx.services_mutex);
 	memset(service, 0, sizeof(*service));
 	mutex_unlock(&admin_ctx.services_mutex);
@@ -1080,7 +1080,7 @@ static int admin_open(struct inode *inode, struct file *file)
 		return ret;
 
 	/* Requests from driver to daemon */
-	mc_dev_info("admin connection open, TGID %d\n", service->tgid);
+	mc_dev_dbg("admin connection open, TGID %d\n", service->tgid);
 	return 0;
 }
 

@@ -250,7 +250,7 @@ static void zmc_memory_lowpower_init(struct cma *zmc_cma)
 
 #ifdef MEMORY_LOWPOWER_FULLNESS
 	/* try to grab the last pageblock */
-	pr_info("%s: memory-lowpower-fullness\n", __func__);
+	pr_debug("%s: memory-lowpower-fullness\n", __func__);
 	if (cma != NULL)
 		memory_lowpower_fullness(memory_lowpower_base(),
 					memory_lowpower_size());
@@ -386,7 +386,7 @@ static int __init memory_lowpower_debug_init(void)
 	dentry = debugfs_create_file("memory-lowpower", 0444, NULL, NULL,
 			&memory_lowpower_fops);
 	if (!dentry)
-		pr_warn("Failed to create debugfs memory_lowpower_debug_init file\n");
+		pr_debug("Failed to create debugfs memory_lowpower_debug_init file\n");
 
 	return 0;
 }

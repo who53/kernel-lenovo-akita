@@ -50,7 +50,7 @@ extern int chr_get_debug_level(void);
 #define chr_err(fmt, args...)					\
 do {								\
 	if (chr_get_debug_level() >= CHRLOG_ERROR_LEVEL) {	\
-		pr_notice(fmt, ##args);				\
+		pr_debug(fmt, ##args);				\
 	}							\
 } while (0)
 
@@ -64,7 +64,7 @@ do {								\
 #define chr_debug(fmt, args...)					\
 do {								\
 	if (chr_get_debug_level() >= CHRLOG_DEBUG_LEVEL) {	\
-		pr_notice(fmt, ##args);				\
+		pr_debug(fmt, ##args);				\
 	}							\
 } while (0)
 
@@ -448,7 +448,7 @@ enum usb_state_enum {
 
 bool __attribute__((weak)) is_usb_rdy(void)
 {
-	pr_info("%s is not defined\n", __func__);
+	pr_debug("%s is not defined\n", __func__);
 	return false;
 }
 

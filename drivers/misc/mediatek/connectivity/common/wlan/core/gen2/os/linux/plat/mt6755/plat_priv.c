@@ -41,7 +41,7 @@ int kalBoostCpu(P_GLUE_INFO_T prGlueInfo, unsigned int core_num)
 
 	if (core_num > MAX_CPU_CORE_NUM)
 		core_num = MAX_CPU_CORE_NUM;
-	pr_warn("enter kalBoostCpu, core_num:%d, freq:%ld\n", core_num, freq);
+	pr_debug("enter kalBoostCpu, core_num:%d, freq:%ld\n", core_num, freq);
 
 	mt_ppm_sysboost_core(BOOST_BY_WIFI, core_num);
 	mt_ppm_sysboost_freq(BOOST_BY_WIFI, freq);
@@ -51,7 +51,7 @@ int kalBoostCpu(P_GLUE_INFO_T prGlueInfo, unsigned int core_num)
 
 int kalSetCpuNumFreq(unsigned int core_num, unsigned int freq)
 {
-	pr_warn("enter kalSetCpuNumFreq, core_num:%d, freq:%d\n", core_num, freq);
+	pr_debug("enter kalSetCpuNumFreq, core_num:%d, freq:%d\n", core_num, freq);
 
 	g_force_core_num = core_num;
 	g_force_core_freq = freq;

@@ -65,11 +65,11 @@ do { if (gDbgLevel >= UART_LOG_DBG)	\
 } while (0)
 #define UART_PR_INFO(fmt, arg...)	\
 do { if (gDbgLevel >= UART_LOG_INFO)	\
-		pr_info(PFX "%s: "  fmt, __func__, ##arg);	\
+		pr_debug(PFX "%s: "  fmt, __func__, ##arg);	\
 } while (0)
 #define UART_PR_WARN(fmt, arg...)	\
 do { if (gDbgLevel >= UART_LOG_WARN)	\
-		pr_warn(PFX "%s: "  fmt, __func__, ##arg);	\
+		pr_debug(PFX "%s: "  fmt, __func__, ##arg);	\
 } while (0)
 #define UART_PR_ERR(fmt, arg...)	\
 do { if (gDbgLevel >= UART_LOG_ERR)	\
@@ -348,7 +348,7 @@ static VOID stp_uart_tty_receive(struct tty_struct *tty, const unsigned char *da
 		struct timeval now;
 
 		do_gettimeofday(&now);
-		pr_warn("[+STP][  ][R] %4d --> sec = %lu, --> usec --> %lu\n",
+		pr_debug("[+STP][  ][R] %4d --> sec = %lu, --> usec --> %lu\n",
 			count, now.tv_sec, now.tv_usec);
 	}
 #endif
@@ -373,7 +373,7 @@ static VOID stp_uart_tty_receive(struct tty_struct *tty, const unsigned char *da
 		struct timeval now;
 
 		do_gettimeofday(&now);
-		pr_warn("[-STP][  ][R] %4d --> sec = %lu, --> usec --> %lu\n",
+		pr_debug("[-STP][  ][R] %4d --> sec = %lu, --> usec --> %lu\n",
 			count, now.tv_sec, now.tv_usec);
 	}
 #endif

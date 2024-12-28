@@ -42,12 +42,12 @@ int gCmbStubLogLevel = CMB_STUB_INFO_LOG;
 #define CMB_STUB_LOG_PR_INFO(fmt, arg...) \
 do { \
 	if (gCmbStubLogLevel >= CMB_STUB_INFO_LOG) \
-		pr_info(fmt, ##arg); \
+		pr_debug(fmt, ##arg); \
 } while (0)
 #define CMB_STUB_LOG_PR_WARN(fmt, arg...) \
 do { \
 	if (gCmbStubLogLevel >= CMB_STUB_WARN_LOG) \
-		pr_warn(fmt, ##arg); \
+		pr_debug(fmt, ##arg); \
 } while (0)
 #define CMB_STUB_LOG_PR_DBG(fmt, arg...) \
 do { \
@@ -543,7 +543,7 @@ static void mtk_wcn_cmb_sdio_on(int sdio_port_num)
 
 	/* 2. call sd callback */
 	if (mtk_wcn_cmb_sdio_pm_cb) {
-		/* pr_warn("mtk_wcn_cmb_sdio_pm_cb(PM_EVENT_USER_RESUME, 0x%p, 0x%p)\n",
+		/* pr_debug("mtk_wcn_cmb_sdio_pm_cb(PM_EVENT_USER_RESUME, 0x%p, 0x%p)\n",
 		 * mtk_wcn_cmb_sdio_pm_cb, mtk_wcn_cmb_sdio_pm_data);
 		 */
 		mtk_wcn_cmb_sdio_pm_cb(state, mtk_wcn_cmb_sdio_pm_data);
@@ -559,7 +559,7 @@ static void mtk_wcn_cmb_sdio_off(int sdio_port_num)
 
 	/* 1. call sd callback */
 	if (mtk_wcn_cmb_sdio_pm_cb) {
-		/* pr_warn("mtk_wcn_cmb_sdio_off(PM_EVENT_USER_SUSPEND, 0x%p, 0x%p)\n",
+		/* pr_debug("mtk_wcn_cmb_sdio_off(PM_EVENT_USER_SUSPEND, 0x%p, 0x%p)\n",
 		 * mtk_wcn_cmb_sdio_pm_cb, mtk_wcn_cmb_sdio_pm_data);
 		*/
 		mtk_wcn_cmb_sdio_pm_cb(state, mtk_wcn_cmb_sdio_pm_data);

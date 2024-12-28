@@ -2968,16 +2968,16 @@ static int mt6355_parse_dt(struct mt6355_gauge *info, struct device *dev)
 {
 	struct device_node *np = dev->of_node;
 
-	pr_notice("%s: starts\n", __func__);
+	pr_debug("%s: starts\n", __func__);
 
 	if (!np) {
-		pr_notice("%s: no device node\n", __func__);
+		pr_debug("%s: no device node\n", __func__);
 		return -EINVAL;
 	}
 
 	if (of_property_read_string(np, "gauge_name",
 		&info->gauge_dev_name) < 0) {
-		pr_notice("%s: no charger name\n", __func__);
+		pr_debug("%s: no charger name\n", __func__);
 		info->gauge_dev_name = "gauge";
 	}
 
@@ -2990,7 +2990,7 @@ static int mt6355_gauge_probe(struct platform_device *pdev)
 	int ret = 0;
 	struct mt6355_gauge *info;
 
-	pr_notice("%s: starts\n", __func__);
+	pr_debug("%s: starts\n", __func__);
 
 	info = devm_kzalloc(&pdev->dev,
 		sizeof(struct mt6355_gauge), GFP_KERNEL);

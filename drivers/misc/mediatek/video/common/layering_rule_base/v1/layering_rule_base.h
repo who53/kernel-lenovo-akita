@@ -166,7 +166,7 @@ struct layering_rule_ops {
 #define HRT_GET_PATH_ID(hrt_path) (hrt_path & 0x1F)
 
 int layering_rule_start(struct disp_layer_info *disp_info, int debug_mode);
-extern int hdmi_get_dev_info(int is_sf, void *info);
+extern int hdmi_get_dev_dbg(int is_sf, void *info);
 int gen_hrt_pattern(void);
 int set_hrt_state(enum HRT_SYS_STATE sys_state, int en);
 void register_layering_rule_ops(struct layering_rule_ops *ops,

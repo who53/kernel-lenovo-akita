@@ -57,13 +57,13 @@ static void prepare_poweron_cluster1(void)
 
 	rc = regulator_enable(regulator_vproc11);
 	if (rc) {
-		pr_notice("failed to enable regulator: vproc11\n");
+		pr_debug("failed to enable regulator: vproc11\n");
 		return;
 	}
 
 	rc = regulator_enable(regulator_vsram11);
 	if (rc) {
-		pr_notice("failed to enable regulator: vsram11\n");
+		pr_debug("failed to enable regulator: vsram11\n");
 		return;
 	}
 
@@ -139,31 +139,31 @@ int cpuhp_platform_init(void)
 
 	cpu_dev = get_cpu_device(0);
 	if (!cpu_dev) {
-		pr_notice("failed to get cpu0 device\n");
+		pr_debug("failed to get cpu0 device\n");
 		return -ENODEV;
 	}
 
 	regulator_vproc11 = regulator_get(cpu_dev, "vproc11");
 	if (IS_ERR(regulator_vproc11)) {
-		pr_notice("failed to get regulator: vproc11\n");
+		pr_debug("failed to get regulator: vproc11\n");
 		goto vproc11_fail;
 	}
 
 	regulator_vsram11 = regulator_get(cpu_dev, "vsram_proc11");
 	if (IS_ERR(regulator_vsram11)) {
-		pr_notice("failed to get regulator: vsram_proc11\n");
+		pr_debug("failed to get regulator: vsram_proc11\n");
 		goto vsram11_fail;
 	}
 
 	rc = regulator_enable(regulator_vproc11);
 	if (rc) {
-		pr_notice("failed to enable regulator: vproc11\n");
+		pr_debug("failed to enable regulator: vproc11\n");
 		goto enable_fail;
 	}
 
 	rc = regulator_enable(regulator_vsram11);
 	if (rc) {
-		pr_notice("failed to enable regulator: vsram11\n");
+		pr_debug("failed to enable regulator: vsram11\n");
 		goto enable_fail;
 	}
 

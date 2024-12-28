@@ -278,7 +278,7 @@ static int mtk_mrgrx_awb_pcm_open(struct snd_pcm_substream *substream)
 		 SNDRV_PCM_HW_PARAM_PERIODS);
 
 	if (ret < 0)
-		pr_warn("snd_pcm_hw_constraint_integer failed\n");
+		pr_debug("snd_pcm_hw_constraint_integer failed\n");
 
 	pr_debug("mtk_mrgrx_awb_pcm_open runtime rate = %d channels = %d\n",
 		runtime->rate, runtime->channels);
@@ -294,7 +294,7 @@ static int mtk_mrgrx_awb_pcm_open(struct snd_pcm_substream *substream)
 	AudDrv_Emi_Clk_On();
 
 	if (ret < 0) {
-		pr_warn("mtk_mrgrx_awb_pcm_close\n");
+		pr_debug("mtk_mrgrx_awb_pcm_close\n");
 		mtk_mrgrx_awb_pcm_close(substream);
 		return ret;
 	}
@@ -364,7 +364,7 @@ static int mtk_mrgrx_awb_pcm_copy(struct snd_pcm_substream *substream,
 	Awb_Block = &(pAWB_MEM_ConTrol->rBlock);
 
 	if (pAWB_MEM_ConTrol == NULL) {
-		pr_warn("cannot find MEM control !!!!!!!\n");
+		pr_debug("cannot find MEM control !!!!!!!\n");
 		msleep(50);
 		return 0;
 	}
@@ -375,7 +375,7 @@ static int mtk_mrgrx_awb_pcm_copy(struct snd_pcm_substream *substream,
 	}
 
 	if (CheckNullPointer((void *)Awb_Block->pucVirtBufAddr)) {
-		pr_warn("CheckNullPointer pucVirtBufAddr = %p\n",
+		pr_debug("CheckNullPointer pucVirtBufAddr = %p\n",
 			 Awb_Block->pucVirtBufAddr);
 		return 0;
 	}
@@ -398,7 +398,7 @@ static int mtk_mrgrx_awb_pcm_copy(struct snd_pcm_substream *substream,
 			 substream);
 
 	if (DMA_Read_Ptr >= Awb_Block->u4BufferSize) {
-		pr_warn("AudDrv_MEMIF_Read 1, DMA_Read_Ptr out of bound\n");
+		pr_debug("AudDrv_MEMIF_Read 1, DMA_Read_Ptr out of bound\n");
 		DMA_Read_Ptr %= Awb_Block->u4BufferSize;
 	}
 	spin_unlock_irqrestore(&auddrv_AWBInCtl_lock, flags);
@@ -460,7 +460,7 @@ static int mtk_mrgrx_awb_pcm_copy(struct snd_pcm_substream *substream,
 		Set_Mem_CopySizeByStream(Soc_Aud_Digital_Block_MEM_AWB,
 			 substream, size_1);
 		if (DMA_Read_Ptr >= Awb_Block->u4BufferSize) {
-			pr_warn("AudDrv_MEMIF_Read 2, DMA_Read_Ptr out of bound\n");
+			pr_debug("AudDrv_MEMIF_Read 2, DMA_Read_Ptr out of bound\n");
 			DMA_Read_Ptr %= Awb_Block->u4BufferSize;
 		}
 		spin_unlock(&auddrv_AWBInCtl_lock);

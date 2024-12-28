@@ -1089,7 +1089,7 @@ void dump_rbuf_bridge(struct ringbuf_bridge *ring_buffer_bridge)
 	if (ring_buffer_bridge == NULL)
 		return;
 #if defined(__linux__)
-	pr_info("%s pBufBase = 0x%llx pBufEnd = 0x%llx pRead = 0x%llx pWrite = 0x%llx bufLen=%llu readidx = %llu writeidx = %llu\n",
+	pr_debug("%s pBufBase = 0x%llx pBufEnd = 0x%llx pRead = 0x%llx pWrite = 0x%llx bufLen=%llu readidx = %llu writeidx = %llu\n",
 		 __func__, ring_buffer_bridge->pBufBase,
 		 ring_buffer_bridge->pBufEnd, ring_buffer_bridge->pRead,
 		 ring_buffer_bridge->pWrite, ring_buffer_bridge->bufLen,
@@ -1119,7 +1119,7 @@ void dump_rbuf_bridge_s(const char *appendingstring,
 	if (ring_buffer_bridge == NULL)
 		return;
 #if defined(__linux__)
-	pr_info("%s %s pBufBase = 0x%llx pBufEnd = 0x%llx pRead = 0x%llx pWrite = 0x%llx bufLen=%llu readidx = %llu writeidx = %llu\n",
+	pr_debug("%s %s pBufBase = 0x%llx pBufEnd = 0x%llx pRead = 0x%llx pWrite = 0x%llx bufLen=%llu readidx = %llu writeidx = %llu\n",
 		appendingstring, __func__, ring_buffer_bridge->pBufBase,
 		ring_buffer_bridge->pBufEnd, ring_buffer_bridge->pRead,
 		ring_buffer_bridge->pWrite, ring_buffer_bridge->bufLen,
@@ -1148,7 +1148,7 @@ void dump_rbuf(struct RingBuf *ring_buffer)
 	if (ring_buffer == NULL)
 		return;
 #if defined(__linux__)
-	pr_info("%s Base[%p] End[%p] R[%p] w[%p] Len[%d] count[%d]\n",
+	pr_debug("%s Base[%p] End[%p] R[%p] w[%p] Len[%d] count[%d]\n",
 		__func__,
 		ring_buffer->pBufBase,
 		ring_buffer->pBufEnd,
@@ -1173,7 +1173,7 @@ void dump_rbuf_s(const char *appendingstring, struct RingBuf *ring_buffer)
 	if (ring_buffer == NULL)
 		return;
 #if defined(__linux__)
-	pr_info("%s %s Base[%p] End[%p] R[%p] w[%p] Len[%d] count[%d]\n",
+	pr_debug("%s %s Base[%p] End[%p] R[%p] w[%p] Len[%d] count[%d]\n",
 		appendingstring, __func__,
 		ring_buffer->pBufBase,
 		ring_buffer->pBufEnd,
@@ -1235,7 +1235,7 @@ void dump_audio_hwbuffer(struct audio_hw_buffer *audio_hwbuf)
 void dump_ring_bufinfo(struct RingBuf *buf)
 {
 #if defined(__linux__)
-	pr_info(
+	pr_debug(
 		"pBufBase = %p pBufEnd = %p  pread = %p p write = %p DataCount = %u freespace = %u\n",
 		buf->pBufBase, buf->pBufEnd, buf->pRead, buf->pWrite,
 		RingBuf_getDataCount(buf), RingBuf_getFreeSpace(buf));

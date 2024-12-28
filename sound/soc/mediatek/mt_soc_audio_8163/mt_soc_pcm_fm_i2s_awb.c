@@ -298,7 +298,7 @@ static int mtk_fm_i2s_awb_pcm_open(struct snd_pcm_substream *substream)
 		SNDRV_PCM_HW_PARAM_PERIODS);
 
 	if (ret < 0)
-		pr_warn("snd_pcm_hw_constraint_integer failed\n");
+		pr_debug("snd_pcm_hw_constraint_integer failed\n");
 
 	pr_debug("runtime->rate = %d, channels = %d\n",
 		runtime->rate, runtime->channels);

@@ -87,7 +87,7 @@ int spi_set_speed(struct dbmdx_private *p, int index)
 		spi_p->pdata->bits_per_word = spi->bits_per_word;
 		spi_p->pdata->bytes_per_word = spi->bits_per_word / 8;
 
-		dev_info(spi_p->dev,
+		dev_dbg(spi_p->dev,
 			"%s Update SPI Max Speed to %d Hz, bpw: %d, mode: %d\n",
 			__func__,
 			spi->max_speed_hz,
@@ -721,7 +721,7 @@ int spi_verify_chip_id(struct dbmdx_private *p)
 		return -EILSEQ;
 	}
 
-	dev_info(spi_p->dev,
+	dev_dbg(spi_p->dev,
 			"%s: Chip ID was successfully verified: 0x%2x%2x\n",
 				__func__,
 				recv_chip_rev_id_high,
@@ -1185,7 +1185,7 @@ int spi_common_probe(struct spi_device *client)
 		 * read-chunk-size not set, set it to default
 		 */
 		pdata->read_chunk_size = DEFAULT_SPI_READ_CHUNK_SIZE;
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: Setting spi read chunk to default val: %u bytes\n",
 			__func__, pdata->read_chunk_size);
 	}
@@ -1198,7 +1198,7 @@ int spi_common_probe(struct spi_device *client)
 	if (pdata->read_chunk_size == 0)
 		pdata->read_chunk_size = DEFAULT_SPI_READ_CHUNK_SIZE;
 
-	dev_info(p->dev, "%s: Setting spi read chunk to %u bytes\n",
+	dev_dbg(p->dev, "%s: Setting spi read chunk to %u bytes\n",
 			__func__, pdata->read_chunk_size);
 
 #ifdef CONFIG_OF
@@ -1209,7 +1209,7 @@ int spi_common_probe(struct spi_device *client)
 		 * write-chunk-size not set, set it to default
 		 */
 		pdata->write_chunk_size = DEFAULT_SPI_WRITE_CHUNK_SIZE;
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: Setting spi write chunk to default val: %u bytes\n",
 			__func__, pdata->write_chunk_size);
 	}
@@ -1222,7 +1222,7 @@ int spi_common_probe(struct spi_device *client)
 	if (pdata->write_chunk_size == 0)
 		pdata->write_chunk_size = DEFAULT_SPI_WRITE_CHUNK_SIZE;
 
-	dev_info(p->dev, "%s: Setting spi write chunk to %u bytes\n",
+	dev_dbg(p->dev, "%s: Setting spi write chunk to %u bytes\n",
 			__func__, pdata->write_chunk_size);
 
 #ifdef CONFIG_OF
@@ -1233,7 +1233,7 @@ int spi_common_probe(struct spi_device *client)
 		 * read-chunk-size not set, set it to default
 		 */
 		pdata->dma_min_buffer_size = 0;
-		dev_info(p->dev,
+		dev_dbg(p->dev,
 			"%s: Setting Min DMA Cmd Size to default: %u bytes\n",
 			__func__, pdata->dma_min_buffer_size);
 	}
@@ -1243,7 +1243,7 @@ int spi_common_probe(struct spi_device *client)
 	if (pdata->dma_min_buffer_size < 7 && pdata->dma_min_buffer_size > 0)
 		pdata->dma_min_buffer_size = 7;
 
-	dev_info(p->dev, "%s: Setting Min DMA Cmd Size to default: %u bytes\n",
+	dev_dbg(p->dev, "%s: Setting Min DMA Cmd Size to default: %u bytes\n",
 			__func__, pdata->dma_min_buffer_size);
 
 	p->pdata = pdata;
@@ -1292,7 +1292,7 @@ int spi_common_probe(struct spi_device *client)
 
 	spi_set_drvdata(client,  &p->chip);
 
-	dev_info(&client->dev, "%s: successfully probed\n", __func__);
+	dev_dbg(&client->dev, "%s: successfully probed\n", __func__);
 	ret = 0;
 	goto out;
 out_err_mem_free1:

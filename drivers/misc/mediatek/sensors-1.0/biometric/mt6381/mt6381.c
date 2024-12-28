@@ -817,7 +817,7 @@ store_io_value(struct device_driver *ddri,
 		&address[0], &value[0], &address[1],
 		&value[1], &address[2], &value[2], &address[3], &value[3]);
 
-	pr_notice("(%d, %x, %x, %x, %x, %x, %x, %x, %x)\n",
+	pr_debug("(%d, %x, %x, %x, %x, %x, %x, %x, %x)\n",
 		num, address[0], value[0], address[1],
 		value[1], address[2], value[2], address[3], value[3]);
 	if (num == 1) {
@@ -829,7 +829,7 @@ store_io_value(struct device_driver *ddri,
 
 		/* mt2511_read((u16)address[0], lastRead); */
 		lastAddress = address[0];
-		pr_notice("address[0x04%x] = %x\n",
+		pr_debug("address[0x04%x] = %x\n",
 			address[0], *(u32 *)lastRead);
 	} else if (num >= 2) {
 		data.addr = address[0] >> 8;
@@ -838,7 +838,7 @@ store_io_value(struct device_driver *ddri,
 		data.data_buf = (uint8_t *) &value[0];
 		vsm_driver_write_register(&data);
 		/* mt2511_write((u16)address[0], value[0]); */
-		pr_notice("address[0x04%x] = %x\n", address[0], value[0]);
+		pr_debug("address[0x04%x] = %x\n", address[0], value[0]);
 
 		if (num >= 4) {
 			data.addr = address[1] >> 8;
@@ -847,7 +847,7 @@ store_io_value(struct device_driver *ddri,
 			data.data_buf = (uint8_t *) &value[1];
 			vsm_driver_write_register(&data);
 			/* mt2511_write((u16)address[1], value[1]); */
-			pr_notice("address[0x04%x] = %x\n",
+			pr_debug("address[0x04%x] = %x\n",
 				address[1], value[1]);
 		}
 
@@ -858,7 +858,7 @@ store_io_value(struct device_driver *ddri,
 			data.data_buf = (uint8_t *) &value[2];
 			vsm_driver_write_register(&data);
 			/* mt2511_write((u16)address[2], value[2]); */
-			pr_notice("address[0x04%x] = %x\n",
+			pr_debug("address[0x04%x] = %x\n",
 				address[2], value[2]);
 		}
 
@@ -869,7 +869,7 @@ store_io_value(struct device_driver *ddri,
 			data.data_buf = (uint8_t *) &value[3];
 			vsm_driver_write_register(&data);
 			/* mt2511_write((u16)address[3], value[3]); */
-			pr_notice("address[0x04%x] = %x\n",
+			pr_debug("address[0x04%x] = %x\n",
 				address[3], value[3]);
 		}
 	} else
@@ -1006,7 +1006,7 @@ store_init(struct device_driver *ddri,
 	int addr, value;
 	int num = sscanf(buf, "%x %x", &addr, &value);
 
-	pr_notice("addr = %x, value = %x\n", addr, value);
+	pr_debug("addr = %x, value = %x\n", addr, value);
 	if (num == 2) {
 		if (addr == 0x2330) {
 			set_AFE_TCTRL_CON2 = 1;
@@ -1088,7 +1088,7 @@ store_polling_delay(
 
 	ret = kstrtoint(buf, 10, &delayTime);
 
-	pr_notice("(%d)\n", delayTime);
+	pr_debug("(%d)\n", delayTime);
 	if (0 == ret && 0 <= delayTime)
 		polling_delay = delayTime;
 
@@ -1110,7 +1110,7 @@ store_latency_test(
 	latency_test_data.ppg1_num = latency_test_data.ekg_num;
 	latency_test_data.ppg2_num = latency_test_data.ekg_num;
 
-	pr_notice("first_data = %d, second_data = %d, delay_num = %d\n",
+	pr_debug("first_data = %d, second_data = %d, delay_num = %d\n",
 		latency_test_data.first_data,
 		latency_test_data.second_data, latency_test_data.ekg_num);
 
@@ -2097,7 +2097,7 @@ int32_t vsm_driver_chip_version_get(void)
 		data.length = sizeof(read_data);
 		err = vsm_driver_read_register(&data);
 		if (err == VSM_STATUS_OK) {
-			pr_notice("read back chip version:0x%x", read_data);
+			pr_debug("read back chip version:0x%x", read_data);
 			if (read_data == 0x25110000)
 				vsm_chip_version = CHIP_VERSION_E2;
 			else if (read_data == 0xFFFFFFFF)
@@ -2500,7 +2500,7 @@ static int MT6381_WriteCalibration(struct biometric_cali *cali)
 	dc_offset = (long long)pga6 * (long long)ambdac5_5;
 	dc_offset += 500000;
 	do_div(dc_offset, 1000000);
-	pr_notice("pga6 = %d, ambdac5_5 = %d, dc_offset = %lld\n",
+	pr_debug("pga6 = %d, ambdac5_5 = %d, dc_offset = %lld\n",
 		pga6, ambdac5_5, dc_offset);
 	return 0;
 }
@@ -2520,7 +2520,7 @@ static int MT6381_ReadCalibration(struct biometric_cali *cali)
 {
 	cali->pga6 = pga6;
 	cali->ambdac5_5 = ambdac5_5;
-	pr_notice("pga6 = %d, ambdac5_5 = %d\n", pga6, ambdac5_5);
+	pr_debug("pga6 = %d, ambdac5_5 = %d\n", pga6, ambdac5_5);
 	return 0;
 }
 

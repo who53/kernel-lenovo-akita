@@ -350,7 +350,7 @@ static void apollo_set_clocks(struct tc_device *tc,
 		pll_write_reg(tc, TCF_PLL_PLL_SYS_DRP_GO, val);
 	}
 
-	dev_info(&tc->pdev->dev, "Setting clocks to %uMHz/%uMHz\n",
+	dev_dbg(&tc->pdev->dev, "Setting clocks to %uMHz/%uMHz\n",
 			 core_clock / 1000000,
 			 mem_clock / 1000000);
 	udelay(400);
@@ -371,7 +371,7 @@ static void apollo_set_mem_latency(struct tc_device *tc,
 	{
 		mem_latency -= 4;
 
-		dev_info(&tc->pdev->dev,
+		dev_dbg(&tc->pdev->dev,
 			 "Setting memory read latency to %i cycles\n",
 			 mem_latency);
 	}
@@ -386,7 +386,7 @@ static void apollo_set_mem_latency(struct tc_device *tc,
 	{
 		mem_wresp_latency -= 2;
 
-		dev_info(&tc->pdev->dev,
+		dev_dbg(&tc->pdev->dev,
 			 "Setting memory write response latency to %i cycles\n",
 			 mem_wresp_latency);
 	}
@@ -427,8 +427,8 @@ static void apollo_fpga_update_dut_clk_freq(struct tc_device *tc,
 
 		if ((reg != 0) && (reg != 0xbaadface) && (reg != 0xffffffff))
 		{
-			dev_info(dev, "TCF_CLK_CTRL_DUT_CLK_INFO = %08x\n", reg);
-			dev_info(dev, "Overriding provided DUT clock values: "
+			dev_dbg(dev, "TCF_CLK_CTRL_DUT_CLK_INFO = %08x\n", reg);
+			dev_dbg(dev, "Overriding provided DUT clock values: "
 				 "core %i, mem %i\n",
 				 *core_clock, *mem_clock);
 
@@ -438,7 +438,7 @@ static void apollo_fpga_update_dut_clk_freq(struct tc_device *tc,
 	}
 #endif
 
-	dev_info(dev, "DUT clock values: core %i, mem %i\n",
+	dev_dbg(dev, "DUT clock values: core %i, mem %i\n",
 		 *core_clock, *mem_clock);
 }
 
@@ -595,7 +595,7 @@ static int apollo_hard_reset(struct tc_device *tc,
 				  build_owner, build_inc);
 		}
 
-		dev_info(&tc->pdev->dev, "FPGA Release: %u.%02u\n",
+		dev_dbg(&tc->pdev->dev, "FPGA Release: %u.%02u\n",
 			 reg >> 8 & 0xf, reg & 0xff);
 	}
 

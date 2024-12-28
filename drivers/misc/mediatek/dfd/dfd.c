@@ -38,7 +38,7 @@ int dfd_setup(void)
 		/* get watchdog api */
 		ret = get_wd_api(&wd_api);
 		if (ret < 0) {
-			//pr_notice("[dfd] get_wd_api error\n");
+			//pr_debug("[dfd] get_wd_api error\n");
 			return ret;
 		}
 		wd_api->wd_dfd_count_en(1);

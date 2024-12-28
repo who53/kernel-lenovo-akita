@@ -354,7 +354,7 @@ static int smi_larb_init(unsigned int larb)
 		pr_debug("Init OSTD for larb_base: 0x%lx\n", larb_base);
 		M4U_WriteReg32(larb_base, SMI_LARB_OSTDL_SOFT_EN, 0xffffffff);
 	} else {
-		pr_warn("Larb: 0x%lx is busy : 0x%x , port:0x%x,0x%x ,fail to set OSTD\n",
+		pr_debug("Larb: 0x%lx is busy : 0x%x , port:0x%x,0x%x ,fail to set OSTD\n",
 			larb_base, regval, regval1, regval2);
 		smi_dumpDebugMsg();
 		if (smi_debug_level >= 1) {
@@ -380,7 +380,7 @@ int larb_reg_restore(int larb)
 
 	/* The larb assign doesn't exist */
 	if (larb_base == SMI_ERROR_ADDR) {
-		pr_warn("Can't find the base address for Larb%d\n", larb);
+		pr_debug("Can't find the base address for Larb%d\n", larb);
 		return 0;
 	}
 
@@ -445,7 +445,7 @@ static int ovl_limit_uevent(int bwc_scenario, int ovl_pixel_limit)
 	}
 
 	if (err < 0)
-		pr_warn("[%s] kobject_uevent_env error = %d\n", __func__, err);
+		pr_debug("[%s] kobject_uevent_env error = %d\n", __func__, err);
 
 	return err;
 }
@@ -461,7 +461,7 @@ static int smi_bwc_config(struct MTK_SMI_BWC_CONFIG *p_conf,
 	struct mtk_smi_priv *smicur = (struct mtk_smi_priv *)smi_data->smi_priv;
 
 	if (smi_tuning_mode == 1) {
-		pr_warn("Doesn't change profile in tunning mode");
+		pr_debug("Doesn't change profile in tunning mode");
 		return 0;
 	}
 
@@ -503,7 +503,7 @@ static int smi_bwc_config(struct MTK_SMI_BWC_CONFIG *p_conf,
 	} else {
 		/* turn off certain scenario */
 		if (g_SMIInfo.pu4ConcurrencyTable[p_conf->scenario] == 0) {
-			pr_warn("Too many turning off for global SMI profile:%d,%d\n",
+			pr_debug("Too many turning off for global SMI profile:%d,%d\n",
 				p_conf->scenario,
 				g_SMIInfo.pu4ConcurrencyTable
 				[p_conf->scenario]);
@@ -513,7 +513,7 @@ static int smi_bwc_config(struct MTK_SMI_BWC_CONFIG *p_conf,
 
 		if (pu4LocalCnt != NULL) {
 			if (pu4LocalCnt[p_conf->scenario] == 0) {
-				pr_warn("Process:%s did too many turning off for local SMI profile:%d,%d\n",
+				pr_debug("Process:%s did too many turning off for local SMI profile:%d,%d\n",
 				current->comm, p_conf->scenario,
 				pu4LocalCnt[p_conf->scenario]);
 			} else {
@@ -554,7 +554,7 @@ static int smi_bwc_config(struct MTK_SMI_BWC_CONFIG *p_conf,
 		eFinalScen = SMI_BWC_SCEN_NORMAL;
 
 	if (ePreviousFinalScen == eFinalScen) {
-		pr_warn("Scen equal%d,don't change\n", eFinalScen);
+		pr_debug("Scen equal%d,don't change\n", eFinalScen);
 		goto err_clkoff;
 	} else {
 		ePreviousFinalScen = eFinalScen;
@@ -766,7 +766,7 @@ static long smi_ioctl(struct file *pFile, unsigned int cmd, unsigned long param)
 				(void *)param,
 				sizeof(struct MTK_SMI_BWC_CONFIG));
 			if (ret) {
-				pr_warn(" SMI_BWC_CONFIG, copy_from_user failed: %d\n",
+				pr_debug(" SMI_BWC_CONFIG, copy_from_user failed: %d\n",
 					ret);
 				return -EFAULT;
 			}
@@ -783,7 +783,7 @@ static long smi_ioctl(struct file *pFile, unsigned int cmd, unsigned long param)
 				(void *)param,
 				sizeof(struct MTK_SMI_BWC_INFO_SET));
 			if (ret) {
-				pr_warn(" MTK_IOC_SMI_BWC_INFO_SET, copy_to_user failed: %d\n",
+				pr_debug(" MTK_IOC_SMI_BWC_INFO_SET, copy_to_user failed: %d\n",
 					ret);
 				return -EFAULT;
 			}
@@ -801,7 +801,7 @@ static long smi_ioctl(struct file *pFile, unsigned int cmd, unsigned long param)
 				sizeof(struct MTK_SMI_BWC_MM_INFO));
 
 			if (ret) {
-				pr_warn(" MTK_IOC_SMI_BWC_INFO_GET, copy_to_user failed: %d\n",
+				pr_debug(" MTK_IOC_SMI_BWC_INFO_GET, copy_to_user failed: %d\n",
 					ret);
 				return -EFAULT;
 			}
@@ -1229,7 +1229,7 @@ static int mtk_smi_larb_fb_suspend(void)
 	int i;
 
 	if (!smi_data || !smi_data->larb_nr) {
-		pr_warn("smi fb suspend, smi or smi larb did not probed\n");
+		pr_debug("smi fb suspend, smi or smi larb did not probed\n");
 		return 0;
 	}
 
@@ -1248,12 +1248,12 @@ static int mtk_smi_larb_fb_resume(void)
 	int i;
 
 	if (!smi_suspend) {
-		pr_warn("resume without suspend\n");
+		pr_debug("resume without suspend\n");
 		return 0;
 	}
 
 	if (!smi_data || !smi_data->larb_nr) {
-		pr_warn("smi fb resume, smi or smi larb did not probed\n");
+		pr_debug("smi fb resume, smi or smi larb did not probed\n");
 		return 0;
 	}
 
@@ -1408,7 +1408,7 @@ static void smi_dumpLarbDebugMsg(unsigned int u4Index)
 	u4Base = get_larb_base_addr(u4Index);
 
 	if (u4Base == SMI_ERROR_ADDR) {
-		pr_warn("Doesn't support reg dump for Larb%d\n", u4Index);
+		pr_debug("Doesn't support reg dump for Larb%d\n", u4Index);
 	} else {
 		unsigned int u4Offset = 0;
 
@@ -1502,7 +1502,7 @@ static void smi_dumpLarb(unsigned int index)
 	u4Base = get_larb_base_addr(index);
 
 	if (u4Base == SMI_ERROR_ADDR) {
-		pr_warn("Doesn't support reg dump for Larb%d\n",
+		pr_debug("Doesn't support reg dump for Larb%d\n",
 			index);
 
 	} else {

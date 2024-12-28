@@ -46,7 +46,7 @@ static int mtk_simple_regulator_set_voltage_sel(struct regulator_dev *rdev,
 	if (selector >= rdev->desc->n_voltages)
 		return -EINVAL;
 
-	pr_info("%s: (%s) Vout = %d\n", __func__, rdev->desc->name,
+	pr_debug("%s: (%s) Vout = %d\n", __func__, rdev->desc->name,
 		mtk_simple_regulator_list_voltage(rdev, selector));
 	data = selector;
 	data <<= mreg_desc->vol_shift;
@@ -359,16 +359,16 @@ int mtk_simple_regulator_register(struct mtk_simple_regulator_desc *mreg_desc,
 	if (init_data->constraints.name == NULL) {
 		init_data = mreg_desc->def_init_data;
 		if (init_data == NULL) {
-			pr_notice("%s: (%s) no init data specified\n", __func__,
+			pr_debug("%s: (%s) no init data specified\n", __func__,
 					mreg_desc->rdesc.name);
 			return -ENODEV;
 		}
 		if (init_data->constraints.name == NULL) {
 			init_data->constraints.name = mreg_desc->rdesc.name;
-			pr_info("%s: (%s) init_data without name, use name from rdesc\n"
+			pr_debug("%s: (%s) init_data without name, use name from rdesc\n"
 				, __func__, init_data->constraints.name);
 		}
-		pr_info("%s: (%s) use default init_data\n", __func__,
+		pr_debug("%s: (%s) use default init_data\n", __func__,
 				init_data->constraints.name);
 	}
 
@@ -388,7 +388,7 @@ int mtk_simple_regulator_register(struct mtk_simple_regulator_desc *mreg_desc,
 		mreg_desc->mreg_dev = mtk_simple_regulator_device_register(
 			init_data->constraints.name, dev, mreg_desc);
 		if (IS_ERR(mreg_desc->mreg_dev)) {
-			pr_info("%s: (%s) unable to register mreg device\n",
+			pr_debug("%s: (%s) unable to register mreg device\n",
 				__func__, init_data->constraints.name);
 			mreg_desc->mreg_dev = NULL;
 		}

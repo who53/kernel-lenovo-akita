@@ -111,7 +111,7 @@ static void mt8173_init_setting(struct mtk_smi_data *smidev,
 	 */
 	if ((M4U_ReadReg32(LARB1_BASE, 0x20) != 0x2) ||
 	   (M4U_ReadReg32(LARB0_BASE, 0x20) != 0x0)) {
-		pr_warn("warning setting failed. please check clk. 0x%x-0x%x\n",
+		pr_debug("warning setting failed. please check clk. 0x%x-0x%x\n",
 			M4U_ReadReg32(LARB1_BASE, 0x20),
 			M4U_ReadReg32(LARB0_BASE, 0x20));
 	}

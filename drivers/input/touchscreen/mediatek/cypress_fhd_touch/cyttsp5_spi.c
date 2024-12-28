@@ -236,7 +236,7 @@ static int __init cyttsp5_spi_init(void)
 {
 	int err = spi_register_driver(&cyttsp5_spi_driver);
 
-	pr_info("%s: Parade TTSP SPI Driver (Built %s) rc=%d\n",
+	pr_debug("%s: Parade TTSP SPI Driver (Built %s) rc=%d\n",
 		 __func__, CY_DRIVER_VERSION, err);
 	return err;
 }

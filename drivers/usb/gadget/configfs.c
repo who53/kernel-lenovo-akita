@@ -302,7 +302,7 @@ static int unregister_gadget(struct gadget_info *gi)
 	if (!gi->composite.gadget_driver.udc_name)
 		return -ENODEV;
 
-	pr_info("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 
 	ret = usb_gadget_unregister_driver(&gi->composite.gadget_driver);
 	if (ret)
@@ -325,7 +325,7 @@ static ssize_t gadget_dev_desc_UDC_store(struct config_item *item,
 	if (name[len - 1] == '\n')
 		name[len - 1] = '\0';
 
-	pr_info("%s write %s\n", __func__, name);
+	pr_debug("%s write %s\n", __func__, name);
 
 	mutex_lock(&gi->lock);
 
@@ -449,7 +449,7 @@ static int config_usb_cfg_link(
 	struct usb_function *f;
 	int ret;
 
-	pr_info("%s %s<-->%s\n", __func__, usb_cfg_ci->ci_name,
+	pr_debug("%s %s<-->%s\n", __func__, usb_cfg_ci->ci_name,
 		usb_func_ci->ci_name);
 
 	mutex_lock(&gi->lock);
@@ -501,7 +501,7 @@ static int config_usb_cfg_unlink(
 			struct usb_function_instance, group);
 	struct usb_function *f;
 
-	pr_info("%s %s<-/->%s\n", __func__, usb_cfg_ci->ci_name,
+	pr_debug("%s %s<-/->%s\n", __func__, usb_cfg_ci->ci_name,
 		usb_func_ci->ci_name);
 
 	/*
@@ -622,7 +622,7 @@ static struct config_group *function_make(
 	if (ret >= MAX_NAME_LEN)
 		return ERR_PTR(-ENAMETOOLONG);
 
-	pr_info("%s name=%s\n", __func__, name);
+	pr_debug("%s name=%s\n", __func__, name);
 
 	func_name = buf;
 	instance_name = strchr(func_name, '.');
@@ -665,7 +665,7 @@ static void function_drop(
 	struct usb_function_instance *fi = to_usb_function_instance(item);
 	struct gadget_info *gi;
 
-	pr_info("%s name=%s\n", __func__, item->ci_name);
+	pr_debug("%s name=%s\n", __func__, item->ci_name);
 
 	gi = container_of(group, struct gadget_info, functions_group);
 
@@ -716,7 +716,7 @@ static struct config_group *config_desc_make(
 	u8 num;
 	int ret;
 
-	pr_info("%s name=%s\n", __func__, name);
+	pr_debug("%s name=%s\n", __func__, name);
 
 	gi = container_of(group, struct gadget_info, configs_group);
 	ret = snprintf(buf, MAX_NAME_LEN, "%s", name);
@@ -846,7 +846,7 @@ static ssize_t os_desc_use_store(struct config_item *item, const char *page,
 	}
 	mutex_unlock(&gi->lock);
 
-	pr_info("%s %s OS DESC\n", __func__, (use?"Use":"NO use"));
+	pr_debug("%s %s OS DESC\n", __func__, (use?"Use":"NO use"));
 
 	return ret;
 }
@@ -872,7 +872,7 @@ static ssize_t os_desc_b_vendor_code_store(struct config_item *item,
 	}
 	mutex_unlock(&gi->lock);
 
-	pr_info("%s Vendor Code=%d\n", __func__, b_vendor_code);
+	pr_debug("%s Vendor Code=%d\n", __func__, b_vendor_code);
 
 	return ret;
 }
@@ -1195,7 +1195,7 @@ static ssize_t interf_grp_compatible_id_store(struct config_item *item,
 	if (desc->opts_mutex)
 		mutex_unlock(desc->opts_mutex);
 
-	pr_info("%s ext_compat_id=%s\n", __func__, desc->ext_compat_id);
+	pr_debug("%s ext_compat_id=%s\n", __func__, desc->ext_compat_id);
 
 	return len;
 }
@@ -1223,7 +1223,7 @@ static ssize_t interf_grp_sub_compatible_id_store(struct config_item *item,
 	if (desc->opts_mutex)
 		mutex_unlock(desc->opts_mutex);
 
-	pr_info("%s ext_compat_id=%s\n", __func__, desc->ext_compat_id);
+	pr_debug("%s ext_compat_id=%s\n", __func__, desc->ext_compat_id);
 
 	return len;
 }
@@ -1299,7 +1299,7 @@ static void purge_configs_funcs(struct gadget_info *gi)
 {
 	struct usb_configuration	*c;
 
-	pr_info("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 
 	list_for_each_entry(c, &gi->cdev.configs, list) {
 		struct usb_function *f, *tmp;
@@ -1338,7 +1338,7 @@ static int configfs_composite_bind(struct usb_gadget *gadget,
 	unsigned			i;
 	int				ret;
 
-	pr_info("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 
 	/* the gi->lock is hold by the caller */
 	gi->unbind = 0;
@@ -1506,26 +1506,26 @@ static void android_work(struct work_struct *data)
 	if (status[0]) {
 		kobject_uevent_env(&android_device->kobj,
 					KOBJ_CHANGE, connected);
-		pr_info("%s: sent uevent %s\n", __func__, connected[0]);
+		pr_debug("%s: sent uevent %s\n", __func__, connected[0]);
 		uevent_sent = true;
 	}
 
 	if (status[1]) {
 		kobject_uevent_env(&android_device->kobj,
 					KOBJ_CHANGE, configured);
-		pr_info("%s: sent uevent %s\n", __func__, configured[0]);
+		pr_debug("%s: sent uevent %s\n", __func__, configured[0]);
 		uevent_sent = true;
 	}
 
 	if (status[2]) {
 		kobject_uevent_env(&android_device->kobj,
 					KOBJ_CHANGE, disconnected);
-		pr_info("%s: sent uevent %s\n", __func__, disconnected[0]);
+		pr_debug("%s: sent uevent %s\n", __func__, disconnected[0]);
 		uevent_sent = true;
 	}
 
 	if (!uevent_sent) {
-		pr_info("%s: did not send uevent (%d %d %p)\n", __func__,
+		pr_debug("%s: did not send uevent (%d %d %p)\n", __func__,
 			gi->connected, gi->sw_connected, cdev->config);
 	}
 
@@ -1549,7 +1549,7 @@ static void configfs_composite_unbind(struct usb_gadget *gadget)
 	struct gadget_info		*gi;
 	unsigned long flags;
 
-	pr_info("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 
 	/* the gi->lock is hold by the caller */
 
@@ -1624,7 +1624,7 @@ static void android_disconnect(struct usb_gadget *gadget)
 	struct usb_composite_dev        *cdev = get_gadget_data(gadget);
 	struct gadget_info *gi = container_of(cdev, struct gadget_info, cdev);
 
-	pr_info("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 
 	/* FIXME: There's a race between usb_gadget_udc_stop() which is likely
 	 * to set the gadget driver to NULL in the udc driver and this drivers
@@ -1648,7 +1648,7 @@ static void android_disconnect(struct usb_gadget *gadget)
 #endif
 	gi->connected = 0;
 	if (strstr(current->comm, "init") && !in_interrupt())
-		pr_notice("%s, skip work\n", __func__);
+		pr_debug("%s, skip work\n", __func__);
 	else
 		schedule_work(&gi->work);
 	composite_disconnect(gadget);
@@ -1698,7 +1698,7 @@ static void do_usb_state_monitor_work(struct work_struct *work)
 		usb_state = "DISCONNECTED";
 	spin_unlock_irqrestore(&cdev->lock, flags);
 
-	pr_info("usb_state<%s>\n", usb_state);
+	pr_debug("usb_state<%s>\n", usb_state);
 	schedule_delayed_work(&usb_state_monitor_dw,
 		msecs_to_jiffies(USB_STATE_MONITOR_DELAY));
 }
@@ -1730,7 +1730,7 @@ field ## _store(struct device *dev, struct device_attribute *attr,	\
 {	\
 	if (size >= MAX_USB_STRING_LEN)	\
 		return -EINVAL;	\
-	pr_info("%s %s len=%zu\n", __func__, buf, size); \
+	pr_debug("%s %s len=%zu\n", __func__, buf, size); \
 	return strlcpy(buffer, buf, MAX_USB_STRING_LEN);	\
 }									\
 static DEVICE_ATTR(field, 0644, field ## _show, field ## _store)
@@ -1760,7 +1760,7 @@ static ssize_t state_show(struct device *pdev, struct device_attribute *attr,
 		state = "CONNECTED";
 	spin_unlock_irqrestore(&cdev->lock, flags);
 
-	pr_info("%s %s\n", __func__, state);
+	pr_debug("%s %s\n", __func__, state);
 out:
 	return sprintf(buf, "%s\n", state);
 }
@@ -1805,11 +1805,11 @@ static int android_device_create(struct gadget_info *gi)
 
 #if defined(CONFIG_MTK_USB2JTAG_SUPPORT)
 	if (usb2jtag_mode())
-		pr_info("[USB2JTAG] in usb2jtag mode, not to initialize usb driver\n");
+		pr_debug("[USB2JTAG] in usb2jtag mode, not to initialize usb driver\n");
 	else
 		usb_state_monitor_work();
 #elif defined(CONFIG_FPGA_EARLY_PORTING)
-	pr_info("SKIP usb_state_monitor_work\n");
+	pr_debug("SKIP usb_state_monitor_work\n");
 #else
 	usb_state_monitor_work();
 #endif

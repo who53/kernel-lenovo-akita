@@ -442,7 +442,7 @@ struct mag_dev_info_t {
 
 struct sensorInfo_t {
 	char name[16];
-	struct mag_dev_info_t mag_dev_info;
+	struct mag_dev_info_t mag_dev_dbg;
 };
 
 struct scp_sensor_hub_get_sensor_info {

@@ -31,12 +31,12 @@
 	dev_err(g_ctx.mcd, "ERROR %d %s: " fmt "\n", \
 		__ret__, __func__, ##__VA_ARGS__)
 
-#define mc_dev_info(fmt, ...) \
-	dev_info(g_ctx.mcd, "%s: " fmt "\n", __func__, ##__VA_ARGS__)
+#define mc_dev_dbg(fmt, ...) \
+	dev_dbg(g_ctx.mcd, "%s: " fmt "\n", __func__, ##__VA_ARGS__)
 
 #ifdef DEBUG
 #define mc_dev_devel(fmt, ...) \
-	dev_info(g_ctx.mcd, "%s: " fmt "\n", __func__, ##__VA_ARGS__)
+	dev_dbg(g_ctx.mcd, "%s: " fmt "\n", __func__, ##__VA_ARGS__)
 #else /* DEBUG */
 #define mc_dev_devel(...)		do {} while (0)
 #endif /* !DEBUG */

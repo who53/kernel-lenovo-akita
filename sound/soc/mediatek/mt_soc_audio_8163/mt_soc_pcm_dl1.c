@@ -321,7 +321,7 @@ static int mtk_pcm_dl1_open(struct snd_pcm_substream *substream)
 					 &constraints_sample_rates);
 
 	if (ret < 0)
-		pr_warn("snd_pcm_hw_constraint_integer failed\n");
+		pr_debug("snd_pcm_hw_constraint_integer failed\n");
 
 	if (ret < 0) {
 		pr_err("ret < 0 mtk_soc_pcm_dl1_close\n");
@@ -798,7 +798,7 @@ static int Auddrv_Reg_map_new(void)
 		pr_debug("[mt_soc_pcm_dl1] AFE_BASE_ADDRESS=0x%p\n",
 			 AFE_BASE_ADDRESS);
 	} else
-		pr_warn("[mt_soc_pcm_dl1]NULL, can't iomapAFE_BASE!\n");
+		pr_debug("[mt_soc_pcm_dl1]NULL, can't iomapAFE_BASE!\n");
 
 	of_property_read_u32(node, "reg", &AFE_BASE_PHY);
 	pr_debug("[mt_soc_pcm_dl1] AFE_BASE_PHY=0x%x\n", AFE_BASE_PHY);
@@ -837,122 +837,122 @@ static int Auddrv_OF_ParseGPIO(void)
 		if (of_property_read_u32_index(node,
 			 "audclk-gpio", 0, &pin_audclk)) {
 			if_config1 = 0;
-			pr_warn("audclk-gpio get pin fail!!!\n");
+			pr_debug("audclk-gpio get pin fail!!!\n");
 		}
 		if (of_property_read_u32_index(node,
 			 "audclk-gpio", 1, &pin_mode_audclk)) {
 			if_config1 = 0;
-			pr_warn("audclk-gpio get pin_mode fail!!!\n");
+			pr_debug("audclk-gpio get pin_mode fail!!!\n");
 		}
 
 		if (of_property_read_u32_index(node,
 			 "audmiso-gpio", 0, &pin_audmiso)) {
 			if_config2 = 0;
-			pr_warn("audmiso-gpio get pin fail!!!\n");
+			pr_debug("audmiso-gpio get pin fail!!!\n");
 		}
 		if (of_property_read_u32_index(node,
 			 "audmiso-gpio", 1, &pin_mode_audmiso)) {
 			if_config2 = 0;
-			pr_warn("audmiso-gpio get pin_mode fail!!!\n");
+			pr_debug("audmiso-gpio get pin_mode fail!!!\n");
 		}
 
 		if (of_property_read_u32_index(node,
 			 "audmosi-gpio", 0, &pin_audmosi)) {
 			if_config3 = 0;
-			pr_warn("audmosi-gpio get pin fail!!!\n");
+			pr_debug("audmosi-gpio get pin fail!!!\n");
 		}
 		if (of_property_read_u32_index(node,
 			 "audmosi-gpio", 1, &pin_mode_audmosi)) {
 			if_config3 = 0;
-			pr_warn("audmosi-gpio get pin_mode fail!!!\n");
+			pr_debug("audmosi-gpio get pin_mode fail!!!\n");
 		}
 
 		if (of_property_read_u32_index(node,
 			 "vowclk-gpio", 0, &pin_vowclk)) {
 			if_config4 = 0;
-			pr_warn("vowclk-gpio get pin fail!!!\n");
+			pr_debug("vowclk-gpio get pin fail!!!\n");
 		}
 		if (of_property_read_u32_index(node,
 			 "vowclk-gpio", 1, &pin_mode_vowclk)) {
 			if_config4 = 0;
-			pr_warn("vowclk-gpio get pin_mode fail!!!\n");
+			pr_debug("vowclk-gpio get pin_mode fail!!!\n");
 		}
 
 		if (of_property_read_u32_index(node,
 			 "extspkamp-gpio", 0, &pin_extspkamp)) {
 			if_config5 = 0;
-			pr_warn("extspkamp-gpio get pin fail!!!\n");
+			pr_debug("extspkamp-gpio get pin fail!!!\n");
 		}
 		if (of_property_read_u32_index(node,
 			 "extspkamp-gpio", 1, &pin_mode_extspkamp)) {
 			if_config5 = 0;
-			pr_warn("extspkamp-gpio get pin_mode fail!!!\n");
+			pr_debug("extspkamp-gpio get pin_mode fail!!!\n");
 		}
 
 		if (of_property_read_u32_index(node,
 			 "i2s1clk-gpio", 0, &pin_i2s1clk)) {
 			if_config6 = 0;
-			pr_warn("i2s1clk-gpio get pin fail!!!\n");
+			pr_debug("i2s1clk-gpio get pin fail!!!\n");
 		}
 		if (of_property_read_u32_index(node,
 			 "i2s1clk-gpio", 1, &pin_mode_i2s1clk)) {
 			if_config6 = 0;
-			pr_warn("i2s1clk-gpio get pin_mode fail!!!\n");
+			pr_debug("i2s1clk-gpio get pin_mode fail!!!\n");
 		}
 
 		if (of_property_read_u32_index(node,
 			 "i2s1dat-gpio", 0, &pin_i2s1dat)) {
 			if_config7 = 0;
-			pr_warn("i2s1dat-gpio get pin fail!!!\n");
+			pr_debug("i2s1dat-gpio get pin fail!!!\n");
 		}
 		if (of_property_read_u32_index(node,
 			 "i2s1dat-gpio", 1, &pin_mode_i2s1dat)) {
 			if_config7 = 0;
-			pr_warn("i2s1dat-gpio get pin_mode fail!!!\n");
+			pr_debug("i2s1dat-gpio get pin_mode fail!!!\n");
 		}
 
 		if (of_property_read_u32_index(node, "i2s1mclk-gpio",
 			 0, &pin_i2s1mclk)) {
 			if_config8 = 0;
-			pr_warn("i2s1mclk-gpio get pin fail!!!\n");
+			pr_debug("i2s1mclk-gpio get pin fail!!!\n");
 		}
 		if (of_property_read_u32_index(node, "i2s1mclk-gpio",
 			 1, &pin_mode_i2s1mclk)) {
 			if_config8 = 0;
-			pr_warn("i2s1mclk-gpio get pin_mode fail!!!\n");
+			pr_debug("i2s1mclk-gpio get pin_mode fail!!!\n");
 		}
 
 		if (of_property_read_u32_index(node,
 			 "i2s1ws-gpio", 0, &pin_i2s1ws)) {
 			if_config9 = 0;
-			pr_warn("i2s1ws-gpio get pin fail!!!\n");
+			pr_debug("i2s1ws-gpio get pin fail!!!\n");
 		}
 		if (of_property_read_u32_index(node,
 			 "i2s1ws-gpio", 1, &pin_mode_i2s1ws)) {
 			if_config9 = 0;
-			pr_warn("i2s1ws-gpio get pin_mode fail!!!\n");
+			pr_debug("i2s1ws-gpio get pin_mode fail!!!\n");
 		}
 
 		if (of_property_read_u32_index(node,
 			 "extspkamp_2-gpio", 0, &pin_extspkamp_2)) {
 			if_config10 = 0;
-			pr_warn("extspkamp_2-gpio get pin fail!!!\n");
+			pr_debug("extspkamp_2-gpio get pin fail!!!\n");
 		}
 		if (of_property_read_u32_index(node,
 			 "extspkamp_2-gpio", 1, &pin_mode_extspkamp_2)) {
 			if_config10 = 0;
-			pr_warn("extspkamp_2-gpio get pin_mode fail!!!\n");
+			pr_debug("extspkamp_2-gpio get pin_mode fail!!!\n");
 		}
 
 		if (of_property_read_u32_index(node,
 			 "rcvspkswitch-gpio", 0, &pin_rcvspkswitch)) {
 			if_config11 = 0;
-			pr_warn("rcvspkswitch-gpio get pin fail!!!\n");
+			pr_debug("rcvspkswitch-gpio get pin fail!!!\n");
 		}
 		if (of_property_read_u32_index
 		    (node, "rcvspkswitch-gpio", 1, &pin_mode_rcvspkswitch)) {
 			if_config11 = 0;
-			pr_warn("rcvspkswitch-gpio get pin_mode fail!!!\n");
+			pr_debug("rcvspkswitch-gpio get pin_mode fail!!!\n");
 		}
 
 		pr_debug("AuddrvParseGPIOaudclk=%d, miso=%d, mosi=%d\n",
@@ -975,7 +975,7 @@ int GetGPIO_Info(int type, int *pin, int *pinmode)
 			*pin = pin_audclk | 0x80000000;
 			*pinmode = pin_mode_audclk;
 		} else {
-			pr_warn("GetGPIO_Info type %d fail!!!\n", type);
+			pr_debug("GetGPIO_Info type %d fail!!!\n", type);
 			*pin = -1;
 			*pinmode = -1;
 		}
@@ -986,7 +986,7 @@ int GetGPIO_Info(int type, int *pin, int *pinmode)
 			*pin = pin_audmiso | 0x80000000;
 			*pinmode = pin_mode_audmiso;
 		} else {
-			pr_warn("GetGPIO_Info type %d fail!!!\n", type);
+			pr_debug("GetGPIO_Info type %d fail!!!\n", type);
 			*pin = -1;
 			*pinmode = -1;
 		}
@@ -997,7 +997,7 @@ int GetGPIO_Info(int type, int *pin, int *pinmode)
 			*pin = pin_audmosi | 0x80000000;
 			*pinmode = pin_mode_audmosi;
 		} else {
-			pr_warn("GetGPIO_Info type %d fail!!!\n", type);
+			pr_debug("GetGPIO_Info type %d fail!!!\n", type);
 			*pin = -1;
 			*pinmode = -1;
 		}
@@ -1008,7 +1008,7 @@ int GetGPIO_Info(int type, int *pin, int *pinmode)
 			*pin = pin_vowclk | 0x80000000;
 			*pinmode = pin_mode_vowclk;
 		} else {
-			pr_warn("GetGPIO_Info type %d fail!!!\n", type);
+			pr_debug("GetGPIO_Info type %d fail!!!\n", type);
 			*pin = -1;
 			*pinmode = -1;
 		}
@@ -1019,7 +1019,7 @@ int GetGPIO_Info(int type, int *pin, int *pinmode)
 			*pin = pin_extspkamp | 0x80000000;
 			*pinmode = pin_mode_extspkamp;
 		} else {
-			pr_warn("GetGPIO_Info type %d fail!!!\n", type);
+			pr_debug("GetGPIO_Info type %d fail!!!\n", type);
 			*pin = -1;
 			*pinmode = -1;
 		}
@@ -1030,7 +1030,7 @@ int GetGPIO_Info(int type, int *pin, int *pinmode)
 			*pin = pin_i2s1clk | 0x80000000;
 			*pinmode = pin_mode_i2s1clk;
 		} else {
-			pr_warn("GetGPIO_Info type %d fail!!!\n", type);
+			pr_debug("GetGPIO_Info type %d fail!!!\n", type);
 			*pin = -1;
 			*pinmode = -1;
 		}
@@ -1041,7 +1041,7 @@ int GetGPIO_Info(int type, int *pin, int *pinmode)
 			*pin = pin_i2s1dat | 0x80000000;
 			*pinmode = pin_mode_i2s1dat;
 		} else {
-			pr_warn("GetGPIO_Info type %d fail!!!\n", type);
+			pr_debug("GetGPIO_Info type %d fail!!!\n", type);
 			*pin = -1;
 			*pinmode = -1;
 		}
@@ -1052,7 +1052,7 @@ int GetGPIO_Info(int type, int *pin, int *pinmode)
 			*pin = pin_i2s1mclk | 0x80000000;
 			*pinmode = pin_mode_i2s1mclk;
 		} else {
-			pr_warn("GetGPIO_Info type %d fail!!!\n", type);
+			pr_debug("GetGPIO_Info type %d fail!!!\n", type);
 			*pin = -1;
 			*pinmode = -1;
 		}
@@ -1063,7 +1063,7 @@ int GetGPIO_Info(int type, int *pin, int *pinmode)
 			*pin = pin_i2s1ws | 0x80000000;
 			*pinmode = pin_mode_i2s1ws;
 		} else {
-			pr_warn("GetGPIO_Info type %d fail!!!\n", type);
+			pr_debug("GetGPIO_Info type %d fail!!!\n", type);
 			*pin = -1;
 			*pinmode = -1;
 		}
@@ -1074,7 +1074,7 @@ int GetGPIO_Info(int type, int *pin, int *pinmode)
 			*pin = pin_extspkamp_2 | 0x80000000;
 			*pinmode = pin_mode_extspkamp_2;
 		} else {
-			pr_warn("GetGPIO_Info type %d fail!!!\n", type);
+			pr_debug("GetGPIO_Info type %d fail!!!\n", type);
 			*pin = -1;
 			*pinmode = -1;
 		}
@@ -1085,7 +1085,7 @@ int GetGPIO_Info(int type, int *pin, int *pinmode)
 			*pin = pin_rcvspkswitch | 0x80000000;
 			*pinmode = pin_mode_rcvspkswitch;
 		} else {
-			pr_warn("GetGPIO_Info type %d fail!!!\n", type);
+			pr_debug("GetGPIO_Info type %d fail!!!\n", type);
 			*pin = -1;
 			*pinmode = -1;
 		}

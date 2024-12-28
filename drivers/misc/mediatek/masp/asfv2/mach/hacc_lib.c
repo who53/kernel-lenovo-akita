@@ -129,6 +129,6 @@ error:
 	/* try to release hacc lock */
 	osal_hacc_unlock();
 
-	pr_notice("[%s] masp_hal_secure_algo error (0x%x)\n", MOD, err);
+	pr_debug("[%s] masp_hal_secure_algo error (0x%x)\n", MOD, err);
 	WARN_ON(!(0));
 }

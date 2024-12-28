@@ -59,7 +59,7 @@ static void tee_prepare_suspend(void)
 		wait_event(awake_done, atomic_read(&tee_wakeup_cnt) == 0);
 	}
 
-	pr_warn("tee_wakeup_cnt unexpected value: %d\n", r);
+	pr_debug("tee_wakeup_cnt unexpected value: %d\n", r);
 }
 
 #ifdef CONFIG_TRUSTKERNEL_TEE_RPMB_SUPPORT

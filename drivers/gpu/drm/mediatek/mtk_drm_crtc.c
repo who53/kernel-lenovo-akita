@@ -501,7 +501,7 @@ int mtk_drm_crtc_create(struct drm_device *drm_dev,
 
 		node = priv->comp_node[comp_id];
 		if (!node) {
-			dev_info(dev,
+			dev_dbg(dev,
 				 "Not creating crtc %d because component %d is disabled or missing\n",
 				 pipe, comp_id);
 			return 0;

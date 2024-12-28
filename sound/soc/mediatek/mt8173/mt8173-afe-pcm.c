@@ -451,7 +451,7 @@ static int mt8173_afe_hdmi_trigger(struct snd_pcm_substream *substream, int cmd,
 	struct snd_soc_pcm_runtime *rtd = substream->private_data;
 	struct mtk_base_afe *afe = snd_soc_platform_get_drvdata(rtd->platform);
 
-	dev_info(afe->dev, "%s cmd=%d %s\n", __func__, cmd, dai->name);
+	dev_dbg(afe->dev, "%s cmd=%d %s\n", __func__, cmd, dai->name);
 
 	switch (cmd) {
 	case SNDRV_PCM_TRIGGER_START:
@@ -1204,7 +1204,7 @@ static int mt8173_afe_pcm_dev_probe(struct platform_device *pdev)
 	if (ret)
 		goto err_comp;
 
-	dev_info(&pdev->dev, "MT8173 AFE driver initialized.\n");
+	dev_dbg(&pdev->dev, "MT8173 AFE driver initialized.\n");
 	return 0;
 
 err_comp:

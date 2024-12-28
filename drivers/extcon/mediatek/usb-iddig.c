@@ -118,7 +118,7 @@ static int otg_iddig_probe(struct platform_device *pdev)
 
 	pinctrl = devm_pinctrl_get(dev);
 	if (IS_ERR(pinctrl)) {
-		dev_info(&pdev->dev, "No find id pinctrl!\n");
+		dev_dbg(&pdev->dev, "No find id pinctrl!\n");
 		return -1;
 	}
 
@@ -126,16 +126,16 @@ static int otg_iddig_probe(struct platform_device *pdev)
 
 	info->id_init = pinctrl_lookup_state(pinctrl, "id_init");
 	if (IS_ERR(info->id_init))
-		dev_info(&pdev->dev, "No find pinctrl id_init\n");
+		dev_dbg(&pdev->dev, "No find pinctrl id_init\n");
 	else
 		pinctrl_select_state(info->pinctrl, info->id_init);
 
 	info->id_enable = pinctrl_lookup_state(pinctrl, "id_enable");
 	info->id_disable = pinctrl_lookup_state(pinctrl, "id_disable");
 	if (IS_ERR(info->id_enable))
-		dev_info(&pdev->dev, "No find pinctrl iddig_enable\n");
+		dev_dbg(&pdev->dev, "No find pinctrl iddig_enable\n");
 	if (IS_ERR(info->id_disable))
-		dev_info(&pdev->dev, "No find pinctrl iddig_disable\n");
+		dev_dbg(&pdev->dev, "No find pinctrl iddig_disable\n");
 
 	ret = of_property_read_u32_array(node, "debounce",
 		ints, ARRAY_SIZE(ints));
@@ -149,7 +149,7 @@ static int otg_iddig_probe(struct platform_device *pdev)
 	ret = devm_request_irq(dev, info->id_irq, iddig_eint_isr,
 					0, pdev->name, info);
 	if (ret < 0) {
-		dev_info(dev, "failed to request handler for ID IRQ\n");
+		dev_dbg(dev, "failed to request handler for ID IRQ\n");
 		return ret;
 	}
 

@@ -1060,7 +1060,7 @@ static int detect_impedance(void)
 
 			if ((dcSum / kDetectTimes) >
 			    hpdet_param.auxadc_upper_bound) {
-				pr_info(
+				pr_debug(
 				    "%s(), dcValue == 0, auxadc value %d > auxadc_upper_bound %d\n",
 				    __func__, dcSum / kDetectTimes,
 				    hpdet_param.auxadc_upper_bound);
@@ -1076,7 +1076,7 @@ static int detect_impedance(void)
 			detectSum = audio_get_auxadc_value();
 
 			if ((dcSum / kDetectTimes) == detectSum) {
-				pr_info("%s(), dcSum / kDetectTimes %d == detectSum %d\n",
+				pr_debug("%s(), dcSum / kDetectTimes %d == detectSum %d\n",
 					__func__, dcSum / kDetectTimes,
 					detectSum);
 				impedance = auxcable_impedance;
@@ -3488,7 +3488,7 @@ static int hp_plugged_in_set(struct snd_kcontrol *kcontrol,
 
 	if (ucontrol->value.integer.value[0] == 1) {
 		mic_vinp_mv = get_accdet_auxadc();
-		pr_info("%s(), mic_vinp_mv = %d\n", __func__, mic_vinp_mv);
+		pr_debug("%s(), mic_vinp_mv = %d\n", __func__, mic_vinp_mv);
 	}
 
 	hp_plugged = ucontrol->value.integer.value[0];

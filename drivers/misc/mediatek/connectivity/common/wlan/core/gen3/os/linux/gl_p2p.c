@@ -228,7 +228,7 @@ static const iw_handler rP2PIwStandardHandler[] = {
 
 #if 0
 static const iw_handler rP2PIwPrivHandler[] = {
-	[IOC_P2P_CFG_DEVICE - SIOCIWFIRSTPRIV] = mtk_p2p_wext_set_local_dev_info,
+	[IOC_P2P_CFG_DEVICE - SIOCIWFIRSTPRIV] = mtk_p2p_wext_set_local_dev_dbg,
 	[IOC_P2P_PROVISION_COMPLETE - SIOCIWFIRSTPRIV] = mtk_p2p_wext_set_provision_complete,
 	[IOC_P2P_START_STOP_DISCOVERY - SIOCIWFIRSTPRIV] = mtk_p2p_wext_start_stop_discovery,
 	[IOC_P2P_DISCOVERY_RESULTS - SIOCIWFIRSTPRIV] = mtk_p2p_wext_discovery_results,
@@ -239,7 +239,7 @@ static const iw_handler rP2PIwPrivHandler[] = {
 	[IOC_P2P_SET_INT - SIOCIWFIRSTPRIV] = mtk_p2p_wext_set_int,
 	[IOC_P2P_GET_STRUCT - SIOCIWFIRSTPRIV] = mtk_p2p_wext_get_struct,
 	[IOC_P2P_SET_STRUCT - SIOCIWFIRSTPRIV] = mtk_p2p_wext_set_struct,
-	[IOC_P2P_GET_REQ_DEVICE_INFO - SIOCIWFIRSTPRIV] = mtk_p2p_wext_request_dev_info,
+	[IOC_P2P_GET_REQ_DEVICE_INFO - SIOCIWFIRSTPRIV] = mtk_p2p_wext_request_dev_dbg,
 };
 #endif
 
@@ -1069,7 +1069,7 @@ static int p2pOpen(IN struct net_device *prDev)
 
 	ASSERT(prDev);
 
-#if 0				/* Move after device name set. (mtk_p2p_set_local_dev_info) */
+#if 0				/* Move after device name set. (mtk_p2p_set_local_dev_dbg) */
 	prGlueInfo = *((P_GLUE_INFO_T *) netdev_priv(prDev));
 	ASSERT(prGlueInfo);
 
@@ -2369,7 +2369,7 @@ mtk_p2p_wext_get_powermode(IN struct net_device *prNetDev,
 */
 /*----------------------------------------------------------------------------*/
 int
-mtk_p2p_wext_set_local_dev_info(IN struct net_device *prDev,
+mtk_p2p_wext_set_local_dev_dbg(IN struct net_device *prDev,
 				IN struct iw_request_info *info, IN OUT union iwreq_data *wrqu, IN OUT char *extra)
 {
 	P_ADAPTER_T prAdapter = NULL;
@@ -2438,7 +2438,7 @@ mtk_p2p_wext_set_local_dev_info(IN struct net_device *prDev,
 	mboxSendMsg(prAdapter, MBOX_ID_0, (P_MSG_HDR_T) prFuncSwitch, MSG_SEND_METHOD_BUF);
 #endif
 	return 0;
-}				/* end of mtk_p2p_wext_set_local_dev_info() */
+}				/* end of mtk_p2p_wext_set_local_dev_dbg() */
 
 /*----------------------------------------------------------------------------*/
 /*!
@@ -2819,7 +2819,7 @@ mtk_p2p_wext_password_ready(IN struct net_device *prDev,
 */
 /*----------------------------------------------------------------------------*/
 int
-mtk_p2p_wext_request_dev_info(IN struct net_device *prDev,
+mtk_p2p_wext_request_dev_dbg(IN struct net_device *prDev,
 			      IN struct iw_request_info *info, IN OUT union iwreq_data *wrqu, IN OUT char *extra)
 {
 	P_ADAPTER_T prAdapter = NULL;
@@ -2848,7 +2848,7 @@ mtk_p2p_wext_request_dev_info(IN struct net_device *prDev,
 	prDeviceReq->active_config_method = prGlueInfo->prP2PInfo->i4ConnReqActiveConfigMethod;
 
 	return 0;
-}				/* end of mtk_p2p_wext_request_dev_info() */
+}				/* end of mtk_p2p_wext_request_dev_dbg() */
 
 /*----------------------------------------------------------------------------*/
 /*!

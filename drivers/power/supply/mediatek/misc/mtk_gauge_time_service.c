@@ -42,21 +42,21 @@ static struct timespec gtimer_suspend_time;
 #define ft_err(fmt, args...)   \
 do {									\
 	if (ftlog_level >= FTLOG_ERROR_LEVEL) {			\
-		pr_notice(fmt, ##args); \
+		pr_debug(fmt, ##args); \
 	}								   \
 } while (0)
 
 #define ft_debug(fmt, args...)   \
 do {									\
 	if (ftlog_level >= FTLOG_DEBUG_LEVEL) {		\
-		pr_notice(fmt, ##args); \
+		pr_debug(fmt, ##args); \
 	}								   \
 } while (0)
 
 #define ft_trace(fmt, args...)\
 do {									\
 	if (ftlog_level >= FTLOG_TRACE_LEVEL) {			\
-		pr_notice(fmt, ##args);\
+		pr_debug(fmt, ##args);\
 	}						\
 } while (0)
 

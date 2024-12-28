@@ -52,7 +52,7 @@ static void scp_met_handler(int id, void *data, unsigned int len)
 
 	memcpy((void *)&met_trace_info[tmp->cpu_id], data
 			, sizeof(met_trace_info_t));
-	pr_notice("[scp_trace] cpu_id:0x%x start addr:0x%x end addr:0x%x\n"
+	pr_debug("[scp_trace] cpu_id:0x%x start addr:0x%x end addr:0x%x\n"
 			, tmp->cpu_id
 			, met_trace_info[tmp->cpu_id].trace_data_start
 			, met_trace_info[tmp->cpu_id].trace_data_end);
@@ -89,7 +89,7 @@ static ssize_t scp_trace_run_store(struct device *dev
 	if (kstrtoint(buf, 10, &scp_trace_run_flag) != 0)
 		return -EINVAL;
 
-	pr_notice("[scp_trace] status:%d\n", scp_trace_run_flag);
+	pr_debug("[scp_trace] status:%d\n", scp_trace_run_flag);
 	if (prev_run_state == 0 && scp_trace_run_flag == 1) {
 		value = MET_OP|MET_OP_START;
 		if (scp_trace_run_command & (1<<SCP_A_ID))
@@ -142,7 +142,7 @@ static ssize_t scp_trace_setup_store(struct device *dev
 	if (kstrtoint(buf, 10, &scp_trace_run_command) != 0)
 		return -EINVAL;
 
-	pr_notice("[scp_trace] command:%d\n", scp_trace_run_command);
+	pr_debug("[scp_trace] command:%d\n", scp_trace_run_command);
 
 	mutex_unlock(&dev->mutex);
 
@@ -173,7 +173,7 @@ static ssize_t scp_trace_select_store(struct device *dev
 	if (kstrtoint(buf, 10, &trace_data_selected_id) != 0)
 		return -EINVAL;
 
-	pr_notice("[scp_trace] trace_data_selected_id:%d\n"
+	pr_debug("[scp_trace] trace_data_selected_id:%d\n"
 					, trace_data_selected_id);
 
 	mutex_unlock(&dev->mutex);
@@ -191,7 +191,7 @@ ssize_t scp_trace_read(char __user *data, size_t len)
 	unsigned int *reg;
 
 
-	pr_notice("[scp_trace] selected id:%d\n", trace_data_selected_id);
+	pr_debug("[scp_trace] selected id:%d\n", trace_data_selected_id);
 	reg = (unsigned int *) (scpreg.cfg + SCP_LOCK_OFS);
 	lock = *reg;
 	*reg &= ~SCP_TCM_LOCK_BIT;
@@ -209,7 +209,7 @@ ssize_t scp_trace_read(char __user *data, size_t len)
 		- met_trace_info[trace_data_selected_id].trace_data_start
 		- trace_r_pos[trace_data_selected_id];
 
-	pr_notice("[scp_trace] len:%d\n", (int) len);
+	pr_debug("[scp_trace] len:%d\n", (int) len);
 	scp_base = (unsigned int *) buf;
 	/*SCP keep awake */
 	scp_awake_lock(trace_data_selected_id);
@@ -241,7 +241,7 @@ static ssize_t scp_trace_if_read(struct file *file
 #if 0
 	buff = (unsigned int *)data;
 	for (i = 0; i < 0x1000; i++)
-		pr_notice("0x%x\n", buff[i]);
+		pr_debug("0x%x\n", buff[i]);
 #endif
 
 	return ret;
@@ -256,7 +256,7 @@ static ssize_t scp_trace_if_write(struct file *file
 	if (kstrtoint(data, 10, &trace_data_selected_id) != 0)
 		return -EINVAL;
 
-	pr_notice("[scp_trace] selected id:%d\n", trace_data_selected_id);
+	pr_debug("[scp_trace] selected id:%d\n", trace_data_selected_id);
 
 	return ret;
 }

@@ -162,7 +162,7 @@
  */
 
 #define rtc_xinfo(fmt, args...)		\
-	pr_notice(fmt, ##args)
+	pr_debug(fmt, ##args)
 
 static struct rtc_device *rtc;
 static DEFINE_SPINLOCK(rtc_lock);
@@ -171,7 +171,7 @@ static void rtc_save_pwron_time(bool enable, struct rtc_time *tm, bool logo);
 
 void __attribute__((weak)) arch_reset(char mode, const char *cmd)
 {
-	pr_info("arch_reset is not ready\n");
+	pr_debug("arch_reset is not ready\n");
 }
 
 
@@ -463,14 +463,14 @@ void rtc_bbpu_power_down(void)
 			rtc_time_now.tm_mon--;
 			rtc_time_alarm.tm_year += RTC_MIN_YEAR_OFFSET;
 			rtc_time_alarm.tm_mon--;
-			pr_notice("now = %04d/%02d/%02d %02d:%02d:%02d\n",
+			pr_debug("now = %04d/%02d/%02d %02d:%02d:%02d\n",
 				rtc_time_now.tm_year + 1900,
 				rtc_time_now.tm_mon + 1,
 				rtc_time_now.tm_mday,
 				rtc_time_now.tm_hour,
 				rtc_time_now.tm_min,
 				rtc_time_now.tm_sec);
-			pr_notice("alarm = %04d/%02d/%02d %02d:%02d:%02d\n",
+			pr_debug("alarm = %04d/%02d/%02d %02d:%02d:%02d\n",
 				rtc_time_alarm.tm_year + 1900,
 				rtc_time_alarm.tm_mon + 1,
 				rtc_time_alarm.tm_mday,
@@ -484,14 +484,14 @@ void rtc_bbpu_power_down(void)
 				ktime_alarm = ktime_sub_ms(ktime_alarm,
 					MSEC_PER_SEC * 60);
 				if (ktime_after(ktime_alarm, ktime_now))
-					pr_notice("Alarm will happen after 1 minute\n");
+					pr_debug("Alarm will happen after 1 minute\n");
 				else {
 					ktime_alarm = ktime_add_ms(ktime_now,
 						MSEC_PER_SEC * 15);
-					pr_notice("Alarm will happen in 15 seconds\n");
+					pr_debug("Alarm will happen in 15 seconds\n");
 				}
 				rtc_time_alarm = rtc_ktime_to_tm(ktime_alarm);
-				pr_notice("new alarm = %04d/%02d/%02d %02d:%02d:%02d\n",
+				pr_debug("new alarm = %04d/%02d/%02d %02d:%02d:%02d\n",
 					rtc_time_alarm.tm_year + 1900,
 					rtc_time_alarm.tm_mon + 1,
 					rtc_time_alarm.tm_mday,
@@ -503,9 +503,9 @@ void rtc_bbpu_power_down(void)
 				hal_rtc_set_pwron_alarm_time(&rtc_time_alarm);
 				hal_rtc_set_alarm(&rtc_time_alarm);
 			} else
-				pr_notice("Alarm has happened before\n");
+				pr_debug("Alarm has happened before\n");
 		} else
-			pr_notice("No power-off alarm is set\n");
+			pr_debug("No power-off alarm is set\n");
 	}
 
 	spin_lock_irqsave(&rtc_lock, flags);
@@ -693,7 +693,7 @@ static void rtc_reset_to_deftime(struct rtc_time *tm)
 	hal_rtc_set_alarm(&defaulttm);
 	spin_unlock_irqrestore(&rtc_lock, flags);
 
-	pr_info("reset to default date %04d/%02d/%02d\n",
+	pr_debug("reset to default date %04d/%02d/%02d\n",
 	       RTC_DEFAULT_YEA, RTC_DEFAULT_MTH, RTC_DEFAULT_DOM);
 }
 #endif

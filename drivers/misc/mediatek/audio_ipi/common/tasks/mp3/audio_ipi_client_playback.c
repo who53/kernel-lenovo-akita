@@ -143,7 +143,7 @@ void playback_open_dump_file(void)
 
 	file_decode_pcm = filp_open(path_decode_pcm, O_CREAT | O_WRONLY, 0);
 	if (IS_ERR(file_decode_pcm)) {
-		pr_info("file_decode_pcm < 0,path_decode_pcm = %s\n",
+		pr_debug("file_decode_pcm < 0,path_decode_pcm = %s\n",
 			path_decode_pcm);
 		return;
 	}
@@ -158,7 +158,7 @@ void playback_open_dump_file(void)
 		playback_dump_task = kthread_create(dump_kthread, NULL,
 						    "dump_kthread");
 		if (IS_ERR(playback_dump_task))
-			pr_notice("can not create playback_dump_task kthread\n");
+			pr_debug("can not create playback_dump_task kthread\n");
 
 		b_enable_dump = true;
 		wake_up_process(playback_dump_task);
@@ -314,7 +314,7 @@ static int dump_kthread(void *data)
 			break;
 		}
 		default: {
-			pr_info("current_idx = %d, idx_r = %d, idx_w = %d, type = %d\n",
+			pr_debug("current_idx = %d, idx_r = %d, idx_w = %d, type = %d\n",
 				current_idx,
 				dump_queue->idx_r, dump_queue->idx_w,
 				dump_package->dump_data_type);
@@ -333,7 +333,7 @@ void audio_ipi_client_playback_init(void)
 			   "playback_pcm_dump_wake_lock");
 	dump_workqueue[DUMP_DECODE] = create_workqueue("dump_decode_pcm");
 	if (dump_workqueue[DUMP_DECODE] == NULL)
-		pr_notice("dump_workqueue[DUMP_DECODE] = %p\n",
+		pr_debug("dump_workqueue[DUMP_DECODE] = %p\n",
 			  dump_workqueue[DUMP_DECODE]);
 	AUD_ASSERT(dump_workqueue[DUMP_DECODE] != NULL);
 

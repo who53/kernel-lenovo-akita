@@ -200,18 +200,18 @@ long dfrc_reg_policy_locked(const struct DFRC_DRV_POLICY *policy)
 	struct DFRC_DRV_POLICY_STATISTICS *ps;
 
 	if (policy == NULL) {
-		pr_warn("reg_policy: parameter is null\n");
+		pr_debug("reg_policy: parameter is null\n");
 		return -EINVAL;
 	} else if (policy->mode >= DFRC_DRV_MODE_MAXIMUM ||
 			policy->mode < DFRC_DRV_MODE_DEFAULT) {
-		pr_warn("reg_policy: policy mode is invalid\n");
+		pr_debug("reg_policy: policy mode is invalid\n");
 		return -EINVAL;
 	} else if (policy->api >= DFRC_DRV_API_MAXIMUM ||
 			policy->api <= DFRC_DRV_API_UNKNOWN) {
-		pr_warn("reg_policy: policy api is invalid\n");
+		pr_debug("reg_policy: policy api is invalid\n");
 		return -EINVAL;
 	} else if (g_num_fps_policy >= MAX_POLICY_NUMBER) {
-		pr_info("reg_policy: policy number is over threshold %d\n",
+		pr_debug("reg_policy: policy number is over threshold %d\n",
 				g_num_fps_policy);
 		return -EBUSY;
 	}
@@ -227,10 +227,10 @@ long dfrc_reg_policy_locked(const struct DFRC_DRV_POLICY *policy)
 	if (is_new) {
 		node = vmalloc(sizeof(struct DFRC_DRV_POLICY_NODE));
 		if (node == NULL) {
-			pr_warn("reg_fps_policy: failed to allocate memory\n");
+			pr_debug("reg_fps_policy: failed to allocate memory\n");
 			res = -ENOMEM;
 		} else {
-			pr_info("reg_fps_policy: reg policy[%llu]\n",
+			pr_debug("reg_fps_policy: reg policy[%llu]\n",
 					policy->sequence);
 			INIT_LIST_HEAD(&node->list);
 			INIT_LIST_HEAD(&node->list_statistics);
@@ -252,7 +252,7 @@ long dfrc_reg_policy_locked(const struct DFRC_DRV_POLICY *policy)
 					ps->num_policy);
 		}
 	} else {
-		pr_info("reg_fps_policy: the policy[%llu] is existed\n",
+		pr_debug("reg_fps_policy: the policy[%llu] is existed\n",
 				policy->sequence);
 	}
 
@@ -316,15 +316,15 @@ long dfrc_set_policy_locked(const struct DFRC_DRV_POLICY *policy)
 	int mode = DFRC_DRV_MODE_DEFAULT;
 
 	if (policy == NULL) {
-		pr_warn("set_policy: parameter is null\n");
+		pr_debug("set_policy: parameter is null\n");
 		return -EINVAL;
 	} else if (policy->mode >= DFRC_DRV_MODE_MAXIMUM ||
 			policy->mode < DFRC_DRV_MODE_DEFAULT) {
-		pr_warn("set_policy: policy mode is invalid\n");
+		pr_debug("set_policy: policy mode is invalid\n");
 		return -EINVAL;
 	} else if (policy->api >= DFRC_DRV_API_MAXIMUM ||
 			policy->api <= DFRC_DRV_API_UNKNOWN) {
-		pr_warn("set_policy: policy api is invalid\n");
+		pr_debug("set_policy: policy api is invalid\n");
 		return -EINVAL;
 	}
 
@@ -340,7 +340,7 @@ long dfrc_set_policy_locked(const struct DFRC_DRV_POLICY *policy)
 					policy->gl_context_id ||
 					node->policy.flag != policy->flag) {
 				change = true;
-				pr_info("set_policy: [%llu] fps:%d mode:%d t_pid:%d gl_id:%llu flag:%x\n",
+				pr_debug("set_policy: [%llu] fps:%d mode:%d t_pid:%d gl_id:%llu flag:%x\n",
 						policy->sequence,
 						policy->fps,
 						policy->mode,
@@ -410,7 +410,7 @@ long dfrc_set_policy_locked(const struct DFRC_DRV_POLICY *policy)
 	}
 
 	if (is_new) {
-		pr_warn("set_policy: can not find policy[%llu]\n",
+		pr_debug("set_policy: can not find policy[%llu]\n",
 				policy->sequence);
 		res = -ENODEV;
 	} else if (change) {
@@ -444,7 +444,7 @@ long dfrc_unreg_policy(const unsigned long long sequence)
 		node = list_entry(iter, struct DFRC_DRV_POLICY_NODE, list);
 		if (node->policy.sequence == sequence) {
 			is_new = false;
-			pr_info("dfrc_unreg_policy: unreg policy[%llu]\n",
+			pr_debug("dfrc_unreg_policy: unreg policy[%llu]\n",
 					sequence);
 			g_num_fps_policy--;
 			list_del(&node->list);
@@ -468,7 +468,7 @@ long dfrc_unreg_policy(const unsigned long long sequence)
 	}
 
 	if (is_new) {
-		pr_warn("unreg_fps_policy: can not find policy[%llu]\n",
+		pr_debug("unreg_fps_policy: can not find policy[%llu]\n",
 				sequence);
 		res = -ENODEV;
 	} else {
@@ -545,7 +545,7 @@ long dfrc_get_request_set(struct DFRC_DRC_REQUEST_SET *request_set)
 		size = num * sizeof(struct DFRC_DRV_POLICY);
 		if (copy_to_user((void *)request_set->policy,
 					g_request_policy, size)) {
-			pr_warn("get_request_set: failed to copy data to user\n");
+			pr_debug("get_request_set: failed to copy data to user\n");
 			res = -EFAULT;
 		}
 	}
@@ -642,13 +642,13 @@ long dfrc_set_kernel_policy(
 	mutex_lock(&g_mutex_data);
 	if (!g_init_done) {
 		res = -ENODEV;
-		pr_warn("api_%d failed to set %d fps: not ready\n", api, fps);
+		pr_debug("api_%d failed to set %d fps: not ready\n", api, fps);
 		goto set_kernel_policy_exit;
 	}
 
 	if (rrc_fps_is_invalid_fps_locked(fps, mode)) {
 		res = -EINVAL;
-		pr_warn("api_%d failed to set %d fps: fps is invalid\n",
+		pr_debug("api_%d failed to set %d fps: fps is invalid\n",
 				api, fps);
 		goto set_kernel_policy_exit;
 	}
@@ -667,7 +667,7 @@ long dfrc_set_kernel_policy(
 		temp = &g_policy_loading;
 		break;
 	default:
-		pr_warn("api_%d failed to set %d fps: api is invalid\n",
+		pr_debug("api_%d failed to set %d fps: api is invalid\n",
 				api, fps);
 		temp = NULL;
 		res = -EINVAL;
@@ -694,11 +694,11 @@ long dfrc_get_panel_info_number(int *num)
 	mutex_lock(&g_mutex_data);
 	if (!g_init_done) {
 		res = -ENODEV;
-		pr_warn("failed to get info number: does not init\n");
+		pr_debug("failed to get info number: does not init\n");
 	}
 
 	if (g_fps_info.num == 0) {
-		pr_warn("failed to get info number: size is 0\n");
+		pr_debug("failed to get info number: size is 0\n");
 		*num = 1;
 	} else {
 		*num = g_fps_info.num;
@@ -715,7 +715,7 @@ long dfrc_get_panel_fps(struct DFRC_DRV_REFRESH_RANGE *range)
 	mutex_lock(&g_mutex_data);
 	if (!g_init_done) {
 		res = -ENODEV;
-		pr_warn("failed to get panel fps: does not init\n");
+		pr_debug("failed to get panel fps: does not init\n");
 	} else {
 		if (g_fps_info.num == 0) {
 			range->min_fps = 60;
@@ -917,38 +917,38 @@ static long dfrc_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	switch (cmd) {
 	case DFRC_IOCTL_CMD_REG_POLICY:
 		if (copy_from_user(&policy, (void *)arg, sizeof(policy))) {
-			pr_warn("reg_fps_policy : failed to copy data from user\n");
+			pr_debug("reg_fps_policy : failed to copy data from user\n");
 			return -EFAULT;
 		}
 		res = dfrc_reg_policy(&policy);
 		if (res)
-			pr_warn("reg_fps_policy : failed to register fps policy\n");
+			pr_debug("reg_fps_policy : failed to register fps policy\n");
 		break;
 
 	case DFRC_IOCTL_CMD_SET_POLICY:
 		if (copy_from_user(&policy, (void *)arg, sizeof(policy))) {
-			pr_warn("set_fps_policy : failed to copy data from user\n");
+			pr_debug("set_fps_policy : failed to copy data from user\n");
 			return -EFAULT;
 		}
 		res = dfrc_set_policy(&policy);
 		if (res)
-			pr_warn("set_fps_policy : failed to set fps policy with %dfps\n",
+			pr_debug("set_fps_policy : failed to set fps policy with %dfps\n",
 					policy.fps);
 		break;
 
 	case DFRC_IOCTL_CMD_UNREG_POLICY:
 		if (copy_from_user(&sequence, (void *)arg, sizeof(sequence))) {
-			pr_warn("set_unreg_policy : failed to copy data from user\n");
+			pr_debug("set_unreg_policy : failed to copy data from user\n");
 			return -EFAULT;
 		}
 		res = dfrc_unreg_policy(sequence);
 		if (res)
-			pr_warn("set_unreg_policy : failed to unreg fps policy\n");
+			pr_debug("set_unreg_policy : failed to unreg fps policy\n");
 		break;
 
 	case DFRC_IOCTL_CMD_SET_HWC_INFO:
 		if (copy_from_user(&hwc_info, (void *)arg, sizeof(hwc_info))) {
-			pr_warn("set_hwc_info : failed to copy data from user\n");
+			pr_debug("set_hwc_info : failed to copy data from user\n");
 			return -EFAULT;
 		}
 		dfrc_set_hwc_info(&hwc_info);
@@ -957,7 +957,7 @@ static long dfrc_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	case DFRC_IOCTL_CMD_SET_INPUT_WINDOW:
 		if (copy_from_user(&input_window_info, (void *)arg,
 				sizeof(input_window_info))) {
-			pr_warn("set_input_window_info : failed to copy data from user\n");
+			pr_debug("set_input_window_info : failed to copy data from user\n");
 			return -EFAULT;
 		}
 		dfrc_set_input_window(&input_window_info);
@@ -970,25 +970,25 @@ static long dfrc_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	case DFRC_IOCTL_CMD_GET_REQUEST_SET:
 		if (copy_from_user(&request_set, (void *)arg,
 				sizeof(request_set))) {
-			pr_warn("get_request_set: failed to copy data from user\n");
+			pr_debug("get_request_set: failed to copy data from user\n");
 			return -EFAULT;
 		}
 		res = dfrc_get_request_set(&request_set);
 		if (copy_to_user((void *)arg, &request_set,
 				sizeof(request_set))) {
-			pr_warn("get_request_set: failed to copy data to user\n");
+			pr_debug("get_request_set: failed to copy data to user\n");
 			return -EFAULT;
 		}
 		break;
 
 	case DFRC_IOCTL_CMD_GET_VSYNC_REQUEST:
 		if (copy_from_user(&request, (void *)arg, sizeof(request))) {
-			pr_warn("get_vsync_request: failed to copy data from user\n");
+			pr_debug("get_vsync_request: failed to copy data from user\n");
 			return -EFAULT;
 		}
 		dfrc_get_vsync_request(&request);
 		if (copy_to_user((void *)arg, &request, sizeof(request))) {
-			pr_warn("get_vsync_request: failed to copy data to user\n");
+			pr_debug("get_vsync_request: failed to copy data to user\n");
 			return -EFAULT;
 		}
 		break;
@@ -997,19 +997,19 @@ static long dfrc_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 		dfrc_get_panel_info(&panel_info);
 		if (copy_to_user((void *)arg, &panel_info,
 				sizeof(panel_info))) {
-			pr_warn("get_panel_info: failed to copy data to user\n");
+			pr_debug("get_panel_info: failed to copy data to user\n");
 			return -EFAULT;
 		}
 		break;
 
 	case DFRC_IOCTL_CMD_GET_REFRESH_RANGE:
 		if (copy_from_user(&range, (void *)arg, sizeof(range))) {
-			pr_warn("get_refresh_range: failed to copy data from user\n");
+			pr_debug("get_refresh_range: failed to copy data from user\n");
 			return -EFAULT;
 		}
 		dfrc_get_panel_fps(&range);
 		if (copy_to_user((void *)arg, &range, sizeof(range))) {
-			pr_warn("get_refresh_range: failed to copy data to user\n");
+			pr_debug("get_refresh_range: failed to copy data to user\n");
 			return -EFAULT;
 		}
 		break;
@@ -1017,7 +1017,7 @@ static long dfrc_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	case DFRC_IOCTL_CMD_SET_WINDOW_STATE:
 		if (copy_from_user(&window_state, (void *)arg,
 				sizeof(window_state))) {
-			pr_warn("set_window_state : failed to copy data from user\n");
+			pr_debug("set_window_state : failed to copy data from user\n");
 			return -EFAULT;
 		}
 		dfrc_set_window_state(&window_state);
@@ -1026,7 +1026,7 @@ static long dfrc_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	case DFRC_IOCTL_CMD_SET_FOREGROUND_WINDOW:
 		if (copy_from_user(&fg_window_info, (void *)arg,
 				sizeof(fg_window_info))) {
-			pr_warn("set_fg_window : failed to copy data from user\n");
+			pr_debug("set_fg_window : failed to copy data from user\n");
 			return -EFAULT;
 		}
 		dfrc_set_fg_window(&fg_window_info);
@@ -1035,7 +1035,7 @@ static long dfrc_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	case DFRC_IOCTL_CMD_FORBID_ADJUSTING_VSYNC:
 		if (copy_from_user(&forbid_vsync, (void *)arg,
 				sizeof(forbid_vsync))) {
-			pr_warn("forbid_adjusting_vsync : failed to copy data from user\n");
+			pr_debug("forbid_adjusting_vsync : failed to copy data from user\n");
 			return -EFAULT;
 		}
 		dfrc_forbid_adjusting_vsync(forbid_vsync);
@@ -1463,7 +1463,7 @@ static void dfrc_adjust_vsync_locked(
 			dfrc_pack_choosed_frr_policy(size, new_policy,
 					expected_policy->frr_statistics);
 		} else {
-			pr_warn("Failed to allocate new policy for adjusting FRR\n");
+			pr_debug("Failed to allocate new policy for adjusting FRR\n");
 			change = true;
 		}
 	} else if ((expected_policy->mode == DFRC_DRV_MODE_ARR ||
@@ -1497,7 +1497,7 @@ static void dfrc_adjust_vsync_locked(
 		if (new_policy) {
 			*new_policy = *expected_policy->arr_policy;
 		} else {
-			pr_warn("Failed to allocate new policy for adjusting ARR\n");
+			pr_debug("Failed to allocate new policy for adjusting ARR\n");
 			change = true;
 		}
 	} else if (expected_policy->mode == DFRC_DRV_MODE_INTERNAL_SW) {
@@ -1517,7 +1517,7 @@ static void dfrc_adjust_vsync_locked(
 		if (new_policy) {
 			*new_policy = *expected_policy->isw_policy;
 		} else {
-			pr_warn("Failed to allocate new policy for adjusting ISW\n");
+			pr_debug("Failed to allocate new policy for adjusting ISW\n");
 			change = true;
 		}
 	}
@@ -1578,7 +1578,7 @@ static void dfrc_adjust_vsync_locked(
 #endif
 
 	if (change) {
-		pr_info("adjust vsync: [%d|%d|%d] -> [%d|%d|%d]\n",
+		pr_debug("adjust vsync: [%d|%d|%d] -> [%d|%d|%d]\n",
 				g_current_fps, g_current_sw_mode,
 				g_current_hw_mode, fps,
 				sw_mode, hw_mode);
@@ -1670,7 +1670,7 @@ static int dfrc_open(struct inode *inode, struct file *file)
 
 	mutex_lock(&g_mutex_fop);
 	if (g_has_opened) {
-		pr_warn("device is busy\n");
+		pr_debug("device is busy\n");
 		res = -EBUSY;
 		goto open_exit;
 	}
@@ -1776,7 +1776,7 @@ static int dfrc_probe(struct platform_device *pdev)
 	int ret = 0;
 
 	if (primary_get_dpmgr_handle() == NULL) {
-		pr_info("Display does not start probe\n");
+		pr_debug("Display does not start probe\n");
 		return -EPROBE_DEFER;
 	}
 
@@ -1784,7 +1784,7 @@ static int dfrc_probe(struct platform_device *pdev)
 	if (ret)
 		pr_err("Can't Get Major number for FPS policy Device\n");
 	else
-		pr_info("Get FPS policy Device Major number (%d)\n",
+		pr_debug("Get FPS policy Device Major number (%d)\n",
 				dfrc_devno);
 	dfrc_cdev = cdev_alloc();
 	dfrc_cdev->owner = THIS_MODULE;
@@ -1825,7 +1825,7 @@ static int dfrc_probe(struct platform_device *pdev)
 		}
 #endif
 	} else {
-		pr_info("failed to create REFRESH_RANGE, use default value");
+		pr_debug("failed to create REFRESH_RANGE, use default value");
 		g_fps_info.range = &g_default_fps_info;
 	}
 
@@ -1892,7 +1892,7 @@ static int __init dfrc_init(void)
 {
 	int res = 0;
 
-	pr_info("start to initialize fps policy\n");
+	pr_debug("start to initialize fps policy\n");
 
 	pr_debug("register fps policy device\n");
 	if (platform_device_register(&dfrc_device)) {

@@ -468,12 +468,12 @@ static int mtk_pcm_dl1bt_copy(struct snd_pcm_substream *substream,
 				size_1, size_2);
 
 			if (!access_ok(VERIFY_READ, data_w_ptr, size_1)) {
-				pr_warn("AudDrv_write 1 ptr invalid\n");
-				pr_warn("data_w_ptr=%p\n", data_w_ptr);
-				pr_warn("size_1=%d\n", size_1);
-				pr_warn("AudDrv_write u4BufferSize=%d\n",
+				pr_debug("AudDrv_write 1 ptr invalid\n");
+				pr_debug("data_w_ptr=%p\n", data_w_ptr);
+				pr_debug("size_1=%d\n", size_1);
+				pr_debug("AudDrv_write u4BufferSize=%d\n",
 					Afe_Block->u4BufferSize);
-				pr_warn("u4DataRemained=%d\n",
+				pr_debug("u4DataRemained=%d\n",
 					Afe_Block->u4DataRemained);
 			} else {
 				pr_debug

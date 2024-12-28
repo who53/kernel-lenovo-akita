@@ -556,30 +556,30 @@ static struct bq2560x_platform_data *bq2560x_parse_dt(struct device_node *np,
 	bq->pogo_otg_ctrl = devm_pinctrl_get(bq->dev);
 	
 	if (IS_ERR(bq->pogo_otg_ctrl)) {
-		pr_warn("cannot find pogo_otgctrl\n");	
+		pr_debug("cannot find pogo_otgctrl\n");	
 	}else{
 		bq->pogo_otg_default = pinctrl_lookup_state(bq->pogo_otg_ctrl, "default");
 		if (IS_ERR(bq->pogo_otg_default)) {
-			pr_warn("cannot find  pogo_otg_default\n");
+			pr_debug("cannot find  pogo_otg_default\n");
 		}
 		bq->pogo_otg_on = pinctrl_lookup_state(bq->pogo_otg_ctrl, "pogo_otg_on");
 		if (IS_ERR(bq->pogo_otg_on)) {
-			pr_warn("cannot find pogo_otg_on\n");
+			pr_debug("cannot find pogo_otg_on\n");
 		}
 		bq->pogo_otg_off = pinctrl_lookup_state(bq->pogo_otg_ctrl, "pogo_otg_off");
 		if (IS_ERR(bq->pogo_otg_on)) {
-			pr_warn("cannot find pogo_otg_off\n");
+			pr_debug("cannot find pogo_otg_off\n");
 		}	
 	}
 #endif
 	if (of_property_read_string(np, "charger_name", &bq->chg_dev_name) < 0) {
 		bq->chg_dev_name = "primary_chg";
-		pr_warn("no charger name\n");
+		pr_debug("no charger name\n");
 	}
 
 	if (of_property_read_string(np, "eint_name", &bq->eint_name) < 0) {
 		bq->eint_name = "chr_stat";
-		pr_warn("no eint name\n");
+		pr_debug("no eint name\n");
 	}
 
 	bq->chg_det_enable =
@@ -724,7 +724,7 @@ static int bq2560x_inform_charger_type(struct bq2560x *bq)
 					&propval);
 
 	if (ret < 0)
-		pr_notice("inform power supply online failed:%d\n", ret);
+		pr_debug("inform power supply online failed:%d\n", ret);
 
 	propval.intval = bq->chg_type;
 
@@ -733,7 +733,7 @@ static int bq2560x_inform_charger_type(struct bq2560x *bq)
 					&propval);
 
 	if (ret < 0)
-		pr_notice("inform power supply charge type failed:%d\n", ret);
+		pr_debug("inform power supply charge type failed:%d\n", ret);
 
 	return ret;
 }
@@ -754,9 +754,9 @@ static irqreturn_t bq2560x_irq_handler(int irq, void *data)
 	bq->power_good = !!(reg_val & REG08_PG_STAT_MASK);
 
 	if (!prev_pg && bq->power_good)
-		pr_notice("adapter/usb inserted\n");
+		pr_debug("adapter/usb inserted\n");
 	else if (prev_pg && !bq->power_good)
-		pr_notice("adapter/usb removed\n");
+		pr_debug("adapter/usb removed\n");
 
 	prev_chg_type = bq->chg_type;
 
@@ -780,7 +780,7 @@ static int bq2560x_register_interrupt(struct bq2560x *bq)
 		return -ENODEV;
 	}
 
-	pr_info("irq = %d\n", bq->irq);
+	pr_debug("irq = %d\n", bq->irq);
 
 	ret = devm_request_threaded_irq(bq->dev, bq->irq, NULL,
 					bq2560x_irq_handler,
@@ -1312,7 +1312,7 @@ static int bq2560x_charger_probe(struct i2c_client *client,
 	}
 
 	if (bq->part_no != *(int *)match->data)
-		pr_info("part no mismatch, hw:%s, devicetree:%s\n",
+		pr_debug("part no mismatch, hw:%s, devicetree:%s\n",
 			pn_str[bq->part_no], pn_str[*(int *) match->data]);
 
 	bq->platform_data = bq2560x_parse_dt(node, bq);
