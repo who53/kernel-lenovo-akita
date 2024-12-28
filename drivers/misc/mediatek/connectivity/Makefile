@@ -45,6 +45,8 @@ endif
     export WIFI_ECO_VER=1
     export ADAPTOR_OPTS=$(MTK_COMBO_CHIP)
 
+    # Remove debugging
+    export TARGET_BUILD_VARIANT=user
 
     # Do build-in for Makefile checking
     # export CONFIG_WLAN_DRV_BUILD_IN=y
