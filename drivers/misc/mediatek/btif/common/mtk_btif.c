@@ -98,10 +98,12 @@ static unsigned int btif_bbs_read(struct _btif_buf_str_ *p_bbs,
 #endif
 static unsigned int btif_bbs_write(struct _btif_buf_str_ *p_bbs,
 			    unsigned char *p_buf, unsigned int buf_len);
+#if 0
 static void btif_dump_bbs_str(unsigned char *p_str,
 				struct _btif_buf_str_ *p_bbs);
 static int _btif_dump_memory(char *str, unsigned char *p_buf,
 			     unsigned int buf_len);
+#endif
 static int _btif_rx_btm_deinit(struct _mtk_btif_ *p_btif);
 static int _btif_rx_btm_sched(struct _mtk_btif_ *p_btif);
 static int _btif_rx_btm_init(struct _mtk_btif_ *p_btif);
@@ -1094,6 +1096,7 @@ irqreturn_t btif_rx_dma_irq_handler(int irq, void *data)
 	struct _mtk_btif_dma_ *p_rx_dma = p_btif->p_rx_dma;
 	struct _MTK_DMA_INFO_STR_ *p_rx_dma_info = p_rx_dma->p_dma_info;
 	static unsigned long cnt;
+#if 0
 	static DEFINE_RATELIMIT_STATE(_rs, 2 * HZ, 1);
 
 	BTIF_DBG_FUNC("++, p_btif(0x%p)\n", data);
@@ -1104,6 +1107,7 @@ irqreturn_t btif_rx_dma_irq_handler(int irq, void *data)
 			BTIF_READ32((unsigned long)
 				(p_btif->p_btif_info->base + 0x8)));
 	}
+#endif
 
 	_btif_irq_ctrl(p_rx_dma_info->p_irq, false);
 
@@ -1129,7 +1133,9 @@ irqreturn_t btif_rx_dma_irq_handler(int irq, void *data)
 		_btif_rx_btm_sched(p_btif);
 
 	cnt--;
+#if 0
 	BTIF_DBG_FUNC("--\n");
+#endif
 
 	return IRQ_HANDLED;
 }
@@ -2672,13 +2678,14 @@ static int _btif_rx_btm_deinit(struct _mtk_btif_ *p_btif)
 	return 0;
 }
 
-
+#if 0
 void btif_dump_bbs_str(unsigned char *p_str, struct _btif_buf_str_ *p_bbs)
 {
 	BTIF_INFO_FUNC
 	    ("%s UBS:%p\n  Size:%d\n  read:0x%08x\n  write:0x%08x\n",
 	     p_str, p_bbs, p_bbs->size, p_bbs->rd_idx, p_bbs->wr_idx);
 }
+#endif
 
 unsigned int btif_bbs_write(struct _btif_buf_str_ *p_bbs,
 			    unsigned char *p_buf, unsigned int buf_len)
@@ -2689,6 +2696,7 @@ unsigned int btif_bbs_write(struct _btif_buf_str_ *p_bbs,
 
 	unsigned int emp_len = BBS_LEFT(p_bbs);
 	unsigned int ava_len = emp_len - 1;
+#if 0
 	struct _mtk_btif_ *p_btif = container_of(p_bbs, struct _mtk_btif_,
 						 btif_buf);
 	static DEFINE_RATELIMIT_STATE(_rs, 1 * HZ, 1);
@@ -2736,6 +2744,17 @@ unsigned int btif_bbs_write(struct _btif_buf_str_ *p_bbs,
 			hal_dma_dump_reg(p_btif->p_rx_dma->p_dma_info, REG_ALL);
 			_btif_dump_memory("<DMA Rx vFIFO>", p_buf, buf_len);
 		}
+		BBS_INIT(p_bbs);
+	}
+#endif
+	if (ava_len <= 0) {
+		return 0;
+	}
+
+	wr_len = min(buf_len, ava_len);
+	btif_bbs_wr_direct(p_bbs, p_buf, wr_len);
+
+	if (BBS_COUNT(p_bbs) >= g_max_pding_data_size) {
 		BBS_INIT(p_bbs);
 	}
 
@@ -2895,6 +2914,7 @@ int _btif_pio_write(struct _mtk_btif_ *p_btif,
 	return i_ret;
 }
 
+#if 0
 int _btif_dump_memory(char *str, unsigned char *p_buf, unsigned int buf_len)
 {
 	unsigned int idx = 0;
@@ -2908,6 +2928,7 @@ int _btif_dump_memory(char *str, unsigned char *p_buf, unsigned int buf_len)
 	}
 	return 0;
 }
+#endif
 
 int btif_send_data(struct _mtk_btif_ *p_btif,
 		   const unsigned char *p_buf, unsigned int buf_len)
@@ -2976,6 +2997,7 @@ int _btif_send_data(struct _mtk_btif_ *p_btif,
 
 int btif_dump_reg(struct _mtk_btif_ *p_btif, enum _ENUM_BTIF_REG_ID_ flag)
 {
+#if 0
 	int i_ret = 0;
 	unsigned int ori_state = 0;
 
@@ -3038,10 +3060,13 @@ dmp_reg_err:
 
 	BTIF_STATE_RELEASE(p_btif);
 	return i_ret;
+#endif
+	return 0;
 }
 
 int btif_rx_notify_reg(struct _mtk_btif_ *p_btif, MTK_BTIF_RX_NOTIFY rx_notify)
 {
+#if 0
 	if (p_btif->rx_notify) {
 		BTIF_WARN_FUNC
 		    ("rx cb already exist, rewrite from (0x%p) to (0x%p)\n",
@@ -3050,10 +3075,13 @@ int btif_rx_notify_reg(struct _mtk_btif_ *p_btif, MTK_BTIF_RX_NOTIFY rx_notify)
 	p_btif->rx_notify = rx_notify;
 
 	return 0;
+#endif
+	return 0;
 }
 
 int btif_dump_data(char *p_buf, int len)
 {
+#if 0
 	unsigned int idx = 0;
 	unsigned char str[30];
 	unsigned char *p_str;
@@ -3075,11 +3103,14 @@ int btif_dump_data(char *p_buf, int len)
 		pr_debug("%s", str);
 	}
 	return 0;
+#endif
+	return 0;
 }
 
 int btif_log_buf_dmp_in(struct _btif_log_queue_t_ *p_log_que,
 			const char *p_buf, int len)
 {
+#if 0
 	struct _btif_log_buf_t_ *p_log_buf = NULL;
 	char *dir = NULL;
 	struct timeval *p_timer = NULL;
@@ -3137,10 +3168,13 @@ int btif_log_buf_dmp_in(struct _btif_log_queue_t_ *p_log_que,
 	BTIF_DBG_FUNC("--\n");
 
 	return 0;
+#endif
+	return 0;
 }
 
 static void btif_log_buf_dmp_out_work(struct work_struct *work)
 {
+#if 0
 	struct _btif_log_queue_t_ *p_log_que = container_of(work,
 		struct _btif_log_queue_t_, dump_work);
 	struct _btif_log_buf_t_ *p_log_buf = NULL;
@@ -3183,10 +3217,12 @@ static void btif_log_buf_dmp_out_work(struct work_struct *work)
 	kfree(p_log_que->p_dump_queue);
 	p_log_que->p_dump_queue = NULL;
 	BTIF_DBG_FUNC("--\n");
+#endif
 }
 
 int btif_log_buf_dmp_out(struct _btif_log_queue_t_ *p_log_que)
 {
+#if 0
 	unsigned int out_index = 0;
 	unsigned int in_index = 0;
 	unsigned int dump_size = 0;
@@ -3235,6 +3271,8 @@ int btif_log_buf_dmp_out(struct _btif_log_queue_t_ *p_log_que)
 	schedule_work(&p_log_que->dump_work);
 	BTIF_DBG_FUNC("log dump is scheduled %d\n", dump_size);
 
+	return 0;
+#endif
 	return 0;
 }
 
