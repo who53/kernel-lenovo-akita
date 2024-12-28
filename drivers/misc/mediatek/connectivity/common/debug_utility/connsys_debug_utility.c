@@ -700,8 +700,10 @@ static void connlog_log_data_handler(struct work_struct *work)
 	int ret = 0;
 	int i;
 	int module = 0;
+#if 0
 	static DEFINE_RATELIMIT_STATE(_rs, 10 * HZ, 1);
 	static DEFINE_RATELIMIT_STATE(_rs2, 2 * HZ, 1);
+#endif
 
 	do {
 		ret = 0;
@@ -717,15 +719,19 @@ static void connlog_log_data_handler(struct work_struct *work)
 				module |= (1 << i);
 				/* ret++; */
 			} else {
+#if 0
 				if (__ratelimit(&_rs))
 					pr_debug("[connlog] %s emi ring is empty!!\n", type_to_title[i]);
+#endif
 			}
 		}
 	} while (ret);
 
+#if 0
 	if (__ratelimit(&_rs2))
 		pr_debug("[connlog] irq counter=%d module=0x%04x\n",
 			EMI_READ32(gDev.virAddrEmiLogBase + CONNLOG_IRQ_COUNTER_BASE), module);
+#endif
 	spin_lock_irqsave(&gDev.irq_lock, gDev.flags);
 	if (gDev.eirqOn)
 		mod_timer(&gDev.workTimer, jiffies + 1);

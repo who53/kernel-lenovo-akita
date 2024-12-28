@@ -517,7 +517,9 @@ static void axiFreeHifMem(struct platform_device *pdev)
 static irqreturn_t mtk_axi_interrupt(int irq, void *dev_instance)
 {
 	struct GLUE_INFO *prGlueInfo = NULL;
+#if 0
 	static DEFINE_RATELIMIT_STATE(_rs, 2 * HZ, 1);
+#endif
 	prGlueInfo = (struct GLUE_INFO *)dev_instance;
 	if (!prGlueInfo) {
 		DBGLOG(HAL, INFO, "No glue info in mtk_axi_interrupt()\n");
@@ -533,8 +535,10 @@ static irqreturn_t mtk_axi_interrupt(int irq, void *dev_instance)
 
 	kalSetIntEvent(prGlueInfo);
 
+#if 0
 	if (__ratelimit(&_rs))
 		pr_debug("[wlan] In HIF ISR.\n");
+#endif
 
 	return IRQ_HANDLED;
 }
