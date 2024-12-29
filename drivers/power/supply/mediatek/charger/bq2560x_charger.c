@@ -206,7 +206,7 @@ int bq2560x_set_hz_mode(struct charger_device *chg_dev, bool en)
 	}else{
 		bq2560x_exit_hiz_mode(bq);
 	}
-	pr_err("bq2560x_set_hz_mode:%s\n",en ? "enable":"disable");
+	pr_debug("bq2560x_set_hz_mode:%s\n",en ? "enable":"disable");
 
 	return 0;
 }
@@ -866,6 +866,7 @@ static int bq2560x_detect_device(struct bq2560x *bq)
 
 static void bq2560x_dump_regs(struct bq2560x *bq)
 {
+#if 0
 	int addr;
 	u8 val;
 	int ret;
@@ -876,6 +877,7 @@ static void bq2560x_dump_regs(struct bq2560x *bq)
 		if (!ret)
 	        	pr_err("Reg[%.2x] = 0x%.2x\n", addr, val);
 	}
+#endif
 }
 
 static ssize_t
@@ -948,7 +950,7 @@ static int bq2560x_charging(struct charger_device *chg_dev, bool enable)
 	else
 		ret = bq2560x_disable_charger(bq);
 
-	pr_err("%s charger %s\n", enable ? "enable" : "disable",
+	pr_debug("%s charger %s\n", enable ? "enable" : "disable",
 	       !ret ? "successfully" : "failed");
 
 	ret = bq2560x_read_byte(bq, BQ2560X_REG_01, &val);
@@ -1022,7 +1024,7 @@ static int bq2560x_set_ichg(struct charger_device *chg_dev, u32 curr)
 {
 	struct bq2560x *bq = dev_get_drvdata(&chg_dev->dev);
 
-	pr_err("charge curr = %d\n", curr);
+	pr_debug("charge curr = %d\n", curr);
 
 	return bq2560x_set_chargecurrent(bq, curr / 1000);
 }
@@ -1055,7 +1057,7 @@ static int bq2560x_set_vchg(struct charger_device *chg_dev, u32 volt)
 {
 	struct bq2560x *bq = dev_get_drvdata(&chg_dev->dev);
 
-	pr_err("charge volt = %d\n", volt);
+	pr_debug("charge volt = %d\n", volt);
 
 	return bq2560x_set_chargevolt(bq, volt / 1000);
 }
@@ -1081,7 +1083,7 @@ static int bq2560x_set_ivl(struct charger_device *chg_dev, u32 volt)
 {
 	struct bq2560x *bq = dev_get_drvdata(&chg_dev->dev);
 
-	pr_err("vindpm volt = %d\n", volt);
+	pr_debug("vindpm volt = %d\n", volt);
 
 	return bq2560x_set_input_volt_limit(bq, volt / 1000);
 
@@ -1091,7 +1093,7 @@ static int bq2560x_set_icl(struct charger_device *chg_dev, u32 curr)
 {
 	struct bq2560x *bq = dev_get_drvdata(&chg_dev->dev);
 
-	pr_err("indpm curr = %d\n", curr);
+	pr_debug("indpm curr = %d\n", curr);
 
 	return bq2560x_set_input_current_limit(bq, curr / 1000);
 }
@@ -1138,7 +1140,7 @@ static int bq2560x_set_otg(struct charger_device *chg_dev, bool en)
 		ret = bq2560x_disable_otg(bq);
 	}
 
-	pr_err("%s OTG %s\n", en ? "enable" : "disable",
+	pr_debug("%s OTG %s\n", en ? "enable" : "disable",
 	       !ret ? "successfully" : "failed");
 
 	return ret;
@@ -1177,7 +1179,7 @@ static int bq2560x_set_boost_ilmt(struct charger_device *chg_dev, u32 curr)
 	struct bq2560x *bq = dev_get_drvdata(&chg_dev->dev);
 	int ret;
 
-	pr_err("otg curr = %d\n", curr);
+	pr_debug("otg curr = %d\n", curr);
 
 	ret = bq2560x_set_boost_current(bq, curr / 1000);
 
@@ -1284,7 +1286,7 @@ static int bq2560x_charger_probe(struct i2c_client *client,
 
 	int ret = 0;
 
-	pr_err("bq2560x probe start\n");
+	pr_debug("bq2560x probe start\n");
 
 	bq = devm_kzalloc(&client->dev, sizeof(struct bq2560x), GFP_KERNEL);
 	if (!bq)
@@ -1351,7 +1353,7 @@ static int bq2560x_charger_probe(struct i2c_client *client,
 
 	hardwareinfo_set_prop(HARDWARE_CHARGER_IC_INFO, "BQ25601");
 
-	pr_err("bq2560x probe successfully, Part Num:%d, Revision:%d\n!",
+	pr_debug("bq2560x probe successfully, Part Num:%d, Revision:%d\n!",
 	       bq->part_no, bq->revision);
 
 	return 0;
@@ -1371,7 +1373,7 @@ static int bq2560x_charger_remove(struct i2c_client *client)
 static void bq2560x_charger_shutdown(struct i2c_client *client)
 {
 	u8 reg_val;
-	pr_err("[%s][%d] shipping mode flag = %d\n", __func__, __LINE__, ship_bq->ship_mode);
+	pr_debug("[%s][%d] shipping mode flag = %d\n", __func__, __LINE__, ship_bq->ship_mode);
 
 	if (ship_bq->ship_mode) {
 		reg_val = REG07_BATFET_DLY_10S << REG07_BATFET_DLY_SHIFT;
@@ -1381,7 +1383,7 @@ static void bq2560x_charger_shutdown(struct i2c_client *client)
 		bq2560x_update_bits(ship_bq, BQ2560X_REG_07, REG07_BATFET_DIS_MASK, reg_val);
 		mdelay(10);
 		bq2560x_read_byte(ship_bq, BQ2560X_REG_07, &reg_val);
-		pr_err("[%s][%d] reg_val = %d\n", __func__, __LINE__, reg_val);
+		pr_debug("[%s][%d] reg_val = %d\n", __func__, __LINE__, reg_val);
 		mdelay(200);
 	}
 
