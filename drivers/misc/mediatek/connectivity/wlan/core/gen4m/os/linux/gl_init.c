@@ -4038,7 +4038,9 @@ static int32_t wlanOnAtReset(void)
 		ADAPTER_START_FAIL,
 		NET_REGISTER_FAIL,
 		PROC_INIT_FAIL,
+#if (CFG_MET_PACKET_TRACE_SUPPORT == 1)
 		FAIL_MET_INIT_PROCFS,
+#endif
 		FAIL_REASON_NUM
 	} eFailReason = FAIL_REASON_NUM;
 
@@ -4267,7 +4269,9 @@ static int32_t wlanProbe(void *pvData, void *pvDriverData)
 		ADAPTER_START_FAIL,
 		NET_REGISTER_FAIL,
 		PROC_INIT_FAIL,
+#if (CFG_MET_PACKET_TRACE_SUPPORT == 1)
 		FAIL_MET_INIT_PROCFS,
+#endif
 		FAIL_REASON_NUM
 	} eFailReason;
 	struct WLANDEV_INFO *prWlandevInfo = NULL;
@@ -4414,8 +4418,10 @@ static int32_t wlanProbe(void *pvData, void *pvDriverData)
 		DBGLOG(INIT, ERROR, "wlanProbe: probe failed, reason:%d\n",
 		       eFailReason);
 		switch (eFailReason) {
+#if (CFG_MET_PACKET_TRACE_SUPPORT == 1)
 		case FAIL_MET_INIT_PROCFS:
 			kalMetRemoveProcfs();
+#endif
 		case PROC_INIT_FAIL:
 			wlanNetUnregister(prWdev);
 		case NET_REGISTER_FAIL:
