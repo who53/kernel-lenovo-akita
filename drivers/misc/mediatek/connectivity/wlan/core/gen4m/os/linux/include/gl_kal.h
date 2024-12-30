@@ -302,7 +302,7 @@ enum ENUM_KAL_MEM_ALLOCATION_TYPE_E {
 	MEM_TYPE_NUM
 };
 
-#ifdef CONFIG_ANDROID		/* Defined in Android kernel source */
+#if defined(CONFIG_ANDROID) && (CFG_ENABLE_WAKE_LOCK) 		/* Defined in Android kernel source */
 #if (KERNEL_VERSION(4, 9, 0) <= LINUX_VERSION_CODE)
 #define KAL_WAKE_LOCK_T struct wakeup_source
 #else
