@@ -431,10 +431,12 @@ void
 MTK_PVRSRVDebugRequestSetSilence(IMG_BOOL bEnable)
 {
 	bQuiet = bEnable;
+#if defined(MTK_DEBUG_PROC_PRINT)
 	if (bQuiet == IMG_TRUE)
 		g_use_id = MTKPP_ID_SHOT_FW;
 	else
 		g_use_id = MTKPP_ID_FW;
+#endif
 }
 
 void
@@ -477,10 +479,12 @@ PVRSRVDebugRequest(PVRSRV_DEVICE_NODE *psDevNode,
 
 	PVR_DUMPDEBUG_LOG("Time now: %" IMG_UINT64_FMTSPEC "us", \
 			OSClockus64());
+#if defined(MTK_DEBUG_PROC_PRINT)
 	if (!pfnDumpDebugPrintf)
 	{
 		MTKPP_LOGTIME(g_use_id, "Dump Debug Data");
 	}
+#endif
 
 	switch (psPVRSRVData->eServicesState)
 	{
