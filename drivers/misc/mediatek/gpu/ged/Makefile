@@ -14,11 +14,11 @@
 GED_TOP = $(srctree)/drivers/misc/mediatek/gpu/ged
 MTK_TOP = $(srctree)/drivers/misc/mediatek/
 
-VER:=eng
+VER:=user
 
 #ccflags-y += -DGED_KPI_DEBUG
 ifneq (,$(filter $(CONFIG_MTK_PLATFORM), "mt6759" "mt6799" "mt6763" "mt6739" "mt6758" "mt6775" "mt6771" "mt6765" "mt6761" "mt3967" "mt6779"))
-ccflags-y += -DGED_KPI_MET_DEBUG
+#ccflags-y += -DGED_KPI_MET_DEBUG
 ccflags-y += -DMTK_GED_KPI
 ccflags-y += -DGED_KPI_CPU_BOOST
 endif
@@ -131,7 +131,7 @@ ccflags-y += -DENABLE_GED_SYSTRACE_UTIL
 endif
 
 
-ccflags-y += -DGED_DVFS_DEBUG_BUF
+#ccflags-y += -DGED_DVFS_DEBUG_BUF
 
 ifeq ($(VER),eng)
 ccflags-y += -DGED_DEBUG_IOCTL_LOCK
