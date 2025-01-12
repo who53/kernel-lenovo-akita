@@ -904,6 +904,10 @@ KBUILD_CFLAGS   += $(call cc-option,-Werror=incompatible-pointer-types)
 # use the deterministic mode of AR if available
 KBUILD_ARFLAGS := $(call ar-option,D)
 
+# tune for cortex-a53
+KBUILD_CFLAGS += -march=armv8-a+crypto+crc 
+KBUILD_AFLAGS += -mtune=cortex-a53
+
 include scripts/Makefile.kasan
 include scripts/Makefile.extrawarn
 include scripts/Makefile.ubsan
