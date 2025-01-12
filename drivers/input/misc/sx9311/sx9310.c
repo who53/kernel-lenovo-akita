@@ -67,10 +67,10 @@ int wifi_status = 198;
 int tel_status = 199;
 /*----------------------------------------------------------------------------*/
 #define CAP_TAG                  "[sx9310] "
-#define CAP_FUN(f)               printk(KERN_INFO 	CAP_TAG"%s\n", __FUNCTION__)
-#define CAP_ERR(fmt, args...)    printk(KERN_ERR  	CAP_TAG"%s %d : "fmt, __FUNCTION__, __LINE__, ##args)
-#define CAP_LOG(fmt, args...)    printk(KERN_ERR	CAP_TAG fmt, ##args)
-#define CAP_DBG(fmt, args...)    printk(KERN_INFO 	CAP_TAG fmt, ##args)    
+#define CAP_FUN(f)               pr_debug(KERN_INFO 	CAP_TAG"%s\n", __FUNCTION__)
+#define CAP_ERR(fmt, args...)    pr_debug(KERN_ERR  	CAP_TAG"%s %d : "fmt, __FUNCTION__, __LINE__, ##args)
+#define CAP_LOG(fmt, args...)    pr_debug(KERN_ERR	CAP_TAG fmt, ##args)
+#define CAP_DBG(fmt, args...)    pr_debug(KERN_INFO 	CAP_TAG fmt, ##args)    
 /*----------------------------------------------------------------------------*/
 /*! \struct sx9310
  * Specialized struct containing input event data, platform data, and
@@ -98,7 +98,7 @@ static int sx9310_suspend(struct device *dev)
 	psx93XX_t this = i2c_get_clientdata(client);
 
 	CAP_FUN();
-    printk("gjx sx9310 suspend\n");
+    pr_debug("gjx sx9310 suspend\n");
 	sx93XX_suspend(this);
 	return 0;
 }
@@ -109,7 +109,7 @@ static int sx9310_resume(struct device *dev)
 	psx93XX_t this = i2c_get_clientdata(client);
 
 	CAP_FUN();
-    printk("gjx sx9310 resume\n");
+    pr_debug("gjx sx9310 resume\n");
 	sx93XX_resume(this);
 	return 0;
 }
@@ -241,7 +241,7 @@ static ssize_t manual_offset_calibration_show(struct device *dev,
 	u8 reg_value = 0;
 	psx93XX_t this = dev_get_drvdata(dev);
 
-	dev_info(this->pdev, "Reading IRQSTAT_REG\n");
+	dev_dbg(this->pdev, "Reading IRQSTAT_REG\n");
 	read_register(this,sx9310_IRQSTAT_REG,&reg_value);
 	return sprintf(buf, "%d\n", reg_value);
 }
@@ -255,7 +255,7 @@ static ssize_t manual_offset_calibration_store(struct device *dev,
 		return -EINVAL;
 
 	if (val) {
-		dev_info( this->pdev, "Performing manual_offset_calibration()\n");
+		dev_dbg( this->pdev, "Performing manual_offset_calibration()\n");
 		manual_offset_calibration(this);
 	}
 	return count;
@@ -442,7 +442,7 @@ static void touchProcess(psx93XX_t this)
   {
     CAP_DBG("Inside touchProcess()\n");
     read_register(this, sx9310_STAT0_REG, &i);
-    printk("gjx sx9310_STAT0_REG = 0x%x",i);
+    pr_debug("gjx sx9310_STAT0_REG = 0x%x",i);
     buttons = pDevice->pbuttonInformation->buttons;
     input = pDevice->pbuttonInformation->input;
     numberOfButtons = pDevice->pbuttonInformation->buttonSize;
@@ -458,14 +458,14 @@ static void touchProcess(psx93XX_t this)
         CAP_ERR("ERROR!! current button at index: %d NULL!!!\n", counter);
         return;
       }
-	  printk("gjx counter = %d, numberOfButtons = %d, pCurrentButton->state = %d",counter,numberOfButtons,pCurrentButton->state);
+	  pr_debug("gjx counter = %d, numberOfButtons = %d, pCurrentButton->state = %d",counter,numberOfButtons,pCurrentButton->state);
       switch (pCurrentButton->state) {
         case IDLE: /* Button is not being touched! */
           if (((i & pCurrentButton->mask) == pCurrentButton->mask)) {
 		  	if(counter == 0)  //CS0 don't report value
 				break;
             /* User pressed button */
-            dev_info(this->pdev, "cap button %d touched\n", counter);
+            dev_dbg(this->pdev, "cap button %d touched\n", counter);
             input_report_key(input, pCurrentButton->keycode, 1);
             pCurrentButton->state = ACTIVE;
             if(counter == 2){
@@ -531,7 +531,7 @@ static int sx9310_init_platform_hw(struct i2c_client *client)
         if (gpio_is_valid(this->irq_num)) {
        		ret = gpio_request(this->irq_num, "sar-sensor");
         	if (ret) {
-            	printk("Could not request irq gpio.\n");
+            	pr_debug("Could not request irq gpio.\n");
             	return ret;
         	}
     	}
@@ -679,7 +679,7 @@ static ssize_t reg_dump_store(struct class *class,
 
 	if (sscanf(buf, "%x,%x", &reg, &val) == 2) 
 	{		
-		printk("%s,reg = 0x%02x, val = 0x%02x\n",	__func__, *(u8 *)&reg, *(u8 *)&val);
+		pr_debug("%s,reg = 0x%02x, val = 0x%02x\n",	__func__, *(u8 *)&reg, *(u8 *)&val);
 		write_register(this, *((u8 *)&reg), *((u8 *)&val));	
 	}
     return count;
@@ -802,7 +802,7 @@ static int sx9310_i2c_probe(struct i2c_client *client, const struct i2c_device_i
 	}
 
         if(sx9311_check_id(client) != 1){
-            printk("sx9311 sar check id failed\n");
+            pr_debug("sx9311 sar check id failed\n");
             return -ENODEV;
         }
 
@@ -928,29 +928,29 @@ static int sx9310_i2c_probe(struct i2c_client *client, const struct i2c_device_i
 	}
 	err = class_register(&sar_class);
 	if (err < 0) {
-		printk("Create sysfs class failed (%d)\n", err);
+		pr_debug("Create sysfs class failed (%d)\n", err);
 		return err;
 	}
 	err = class_create_file(&sar_class, &class_attr_wifi_status);
 	if (err < 0) {
-		printk("Create wifi_status file failed (%d)\n", err);
+		pr_debug("Create wifi_status file failed (%d)\n", err);
 		return err;
 	}
 	err = class_create_file(&sar_class, &class_attr_tel_status);
 	if (err < 0) {
-		printk("Create tel_status file failed (%d)\n", err);
+		pr_debug("Create tel_status file failed (%d)\n", err);
 		return err;
 	}
 /*
 	err = class_create_file(&sar_class, &class_attr_reg);
 	if (err < 0) {
-		printk("Create reg  file failed (%d)\n", err);
+		pr_debug("Create reg  file failed (%d)\n", err);
 		return err;
 	}
 */
 	err = class_create_file(&sar_class, &class_attr_enable);
 	if (err < 0) {
-		printk("Create enable  file failed (%d)\n", err);
+		pr_debug("Create enable  file failed (%d)\n", err);
 		return err;
 	}
 	sx93XX_init(this);
@@ -1068,7 +1068,7 @@ static void sx93XX_worker_func(struct work_struct *work)
   if (work) {
     this = container_of(work,sx93XX_t,dworker.work);
     if (!this) {
-      printk(KERN_ERR "sx93XX_worker_func, NULL sx93XX_t\n");
+      pr_debug(KERN_ERR "sx93XX_worker_func, NULL sx93XX_t\n");
       return;
     }
     if ((!this->get_nirq_low) || (!this->get_nirq_low())) {
@@ -1187,7 +1187,7 @@ void sx93XX_suspend(psx93XX_t this)
 	//write_register(this,sx9310_CTRL1_REG,0x20);//make sx9310 in Sleep mode
     read_register(this,sx9310_CPS_CTRL0_REG,&data);
     write_register(this,sx9310_CPS_CTRL0_REG,(data&0xF0));//make sx9310 in Sleep mode
-    printk("sx9310 sx93XX_suspend end\n ");
+    pr_debug("sx9310 sx93XX_suspend end\n ");
 }
 
 void sx93XX_resume(psx93XX_t this)
@@ -1208,7 +1208,7 @@ void sx93XX_resume(psx93XX_t this)
 
 	enable_irq(this->irq);
     write_register(this,sx9310_CPS_CTRL0_REG,0x27);
-    printk("sx9310 sx93XX_resume end\n ");
+    pr_debug("sx9310 sx93XX_resume end\n ");
   }
 }
 
@@ -1248,7 +1248,7 @@ void sx93XX_invalid_func(struct work_struct *work)
     int invalid = 0;
     u8 value = 0;
 
-    printk("sx9311 check sensor invalid func in\n");
+    pr_debug("sx9311 check sensor invalid func in\n");
 
     pDevice = this->pDevice;
     buttons = pDevice->pbuttonInformation->buttons;
@@ -1275,7 +1275,7 @@ void sx93XX_invalid_func(struct work_struct *work)
         input_sync(input);
         read_register(this,sx9310_CPS_CTRL0_REG,&value);
         write_register(this,sx9310_CPS_CTRL0_REG,(value&0xF0));//make sx9310 in Sleep mode
-        printk("sx9311 sar-sensor is invalid . invalid = 0x%x\n",invalid);
+        pr_debug("sx9311 sar-sensor is invalid . invalid = 0x%x\n",invalid);
         cancel_delayed_work(&this->invalid_worker);
         return;
     }
@@ -1283,7 +1283,7 @@ void sx93XX_invalid_func(struct work_struct *work)
     cancel_delayed_work(&this->invalid_worker);
     schedule_delayed_work(&this->invalid_worker,msecs_to_jiffies(5000));
 
-    printk("sx9311 check sensor invalid func out\n");
+    pr_debug("sx9311 check sensor invalid func out\n");
 }
 #endif
 
