@@ -53,12 +53,12 @@ KERNEL_IMAGE_DTB = arch/arm64/boot/dts/mediatek/mt6761.dtb
 
 # Whether to include a DTB Overlay. Use 0 (no) or 1.
 # GKI devices should set this to 0
-KERNEL_IMAGE_WITH_DTB_OVERLAY = 1
+# KERNEL_IMAGE_WITH_DTB_OVERLAY = 1
 
 # Path to the DTB overlay.
 # If you leave this undefined, an attempt to find it automatically
 # will be made.
-KERNEL_IMAGE_DTB_OVERLAY = arch/arm64/boot/dts/mediatek/akita_row_call.dtb
+# KERNEL_IMAGE_DTB_OVERLAY = arch/arm64/boot/dts/mediatek/akita_row_call.dtb
 
 # Whether to include the DTB Overlay into the kernel image
 # Use 0 (no, default) or 1.
