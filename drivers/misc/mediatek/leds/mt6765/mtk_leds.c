@@ -978,7 +978,7 @@ void mt_mt65xx_led_set(struct led_classdev *led_cdev, enum led_brightness level)
 
 			for(i=0; i<lcm_backlight_cust_count;i++)
 			{
-				//printk("led lcm backlight cust[i] : %d %d %d %d\n", lcm_backlight_cust[i].min_bl_lvl, lcm_backlight_cust[i].max_bl_lvl,
+				//pr_debug("led lcm backlight cust[i] : %d %d %d %d\n", lcm_backlight_cust[i].min_bl_lvl, lcm_backlight_cust[i].max_bl_lvl,
 				//				lcm_backlight_cust[i].min_brightness, lcm_backlight_cust[i].max_brightness);
 				if(( level >= lcm_backlight_cust[i].min_brightness ) && (level <=  lcm_backlight_cust[i].max_brightness ))
 					break;
@@ -1012,17 +1012,17 @@ void mt_mt65xx_led_set(struct led_classdev *led_cdev, enum led_brightness level)
 			backlight_debug_log(led_data->level, level);
 
 
-		//	printk("led -0 level: %d, bl_lvl: %d \n", level, bl_lvl);
+		//	pr_debug("led -0 level: %d, bl_lvl: %d \n", level, bl_lvl);
 			for(i=0; i<lcm_backlight_cust_count;i++)
 			{
-				//printk("led lcm backlight cust[i] : %d %d %d %d\n", lcm_backlight_cust[i].min_bl_lvl, lcm_backlight_cust[i].max_bl_lvl,
+				//pr_debug("led lcm backlight cust[i] : %d %d %d %d\n", lcm_backlight_cust[i].min_bl_lvl, lcm_backlight_cust[i].max_bl_lvl,
 				//			lcm_backlight_cust[i].min_brightness, lcm_backlight_cust[i].max_brightness);
 				if(( level >= lcm_backlight_cust[i].min_brightness ) && (level <=  lcm_backlight_cust[i].max_brightness ))
 					break;
 			}
 			WINGTECH_MDSS_BRIGHT_TO_BL(bl_lvl, level, lcm_backlight_cust[i].min_bl_lvl, lcm_backlight_cust[i].max_bl_lvl,
 					lcm_backlight_cust[i].min_brightness, lcm_backlight_cust[i].max_brightness);
-		//	printk("led -1 level: %d, bl_lvl: %d \n", level, bl_lvl);
+		//	pr_debug("led -1 level: %d, bl_lvl: %d \n", level, bl_lvl);
 
 			if(bl_lvl && !level)bl_lvl = 0;
 			if(!bl_lvl && level) bl_lvl = 4;
@@ -1108,18 +1108,18 @@ int mt_mt65xx_blink_set(struct led_classdev *led_cdev,
 int gpio_set_leds_level(char *name,int level)
 {
 	if (IS_ERR(ledctrl)) {
-		printk("cannot find ledctrl\n");
+		pr_debug("cannot find ledctrl\n");
 		return 0;
 	}
 
 	if ((IS_ERR(red_on)) ||(IS_ERR(red_off))
 	||(IS_ERR(green_on))||(IS_ERR(green_off)))
 	{
-		printk("cannot find led node\n");
+		pr_debug("cannot find led node\n");
 		return 0;
 	}
 
-	printk("leds_pin:(%s)(%d)\n",name,level);
+	pr_debug("leds_pin:(%s)(%d)\n",name,level);
 
 	if (strcmp(name, "red") == 0){
 		if (level == 0){		
@@ -1145,32 +1145,32 @@ int gpio_set_leds_level(char *name,int level)
 
 static int led_pinctrl_probe(struct platform_device *pdev)
 {
-	printk("led_probe is enter.\n");
+	pr_debug("led_probe is enter.\n");
 	ledctrl = devm_pinctrl_get(&pdev->dev);
 	if (IS_ERR(ledctrl)) {
-		printk("cannot find ledctrl\n");
+		pr_debug("cannot find ledctrl\n");
 		return 0;
 	}
 
 	led_default = pinctrl_lookup_state(ledctrl, "default");
 	if (IS_ERR(led_default)) {
-		printk("cannot find ledctrl led_default\n");
+		pr_debug("cannot find ledctrl led_default\n");
 	}
 	red_on = pinctrl_lookup_state(ledctrl, "red_on");
 	if (IS_ERR(red_on)) {
-		printk("cannot find ledctrl red_on\n");
+		pr_debug("cannot find ledctrl red_on\n");
 	}
 	red_off = pinctrl_lookup_state(ledctrl, "red_off");
 	if (IS_ERR(red_off)) {
-		printk("cannot find ledctrl red_off\n");
+		pr_debug("cannot find ledctrl red_off\n");
 	}
 	green_on = pinctrl_lookup_state(ledctrl, "green_on");
 	if (IS_ERR(green_on)) {
-		printk("cannot find ledctrl green_on\n");
+		pr_debug("cannot find ledctrl green_on\n");
 	}
 	green_off = pinctrl_lookup_state(ledctrl, "green_off");
 	if (IS_ERR(green_off)) {
-		printk("cannot find ledctrl green_off\n");
+		pr_debug("cannot find ledctrl green_off\n");
 	}
 
 	return 0;
@@ -1205,11 +1205,11 @@ static int __init led_pinctrl_init(void)
 {
 	int ret;
 
-	printk("led_pinctrl_init\n");
+	pr_debug("led_pinctrl_init\n");
 
 	ret = platform_driver_register(&led_pinctrl_driver);
 	if (ret) {
-		printk("Unable to register driver (%d)\n", ret);
+		pr_debug("Unable to register driver (%d)\n", ret);
 		return ret;
 	}
 		return 0;
