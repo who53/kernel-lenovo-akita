@@ -133,6 +133,7 @@ static unsigned int backlight_PWM_div_hal = CLK_DIV1;
 /****************************************************************************
  * func:return global variables
  ***************************************************************************/
+#if 0
 static unsigned long long current_t, last_time;
 static int count;
 static char buffer[4096] = "[BL] Set Backlight directly ";
@@ -159,6 +160,7 @@ static void backlight_debug_log(int level, int mappingLevel)
 
 	last_time = sched_clock();
 }
+#endif
 
 void mt_leds_wake_lock_init(void)
 {
@@ -964,7 +966,9 @@ void mt_mt65xx_led_set(struct led_classdev *led_cdev, enum led_brightness level)
 				    (level * CONFIG_LIGHTNESS_MAPPING_VALUE) /
 				    255;
 			}
+#if 0
 			backlight_debug_log(led_data->level, level);
+#endif
 
 			/* Workaround for AARON-561. Only used on FHD */
 			if(boardid_get()) {
@@ -1009,8 +1013,9 @@ void mt_mt65xx_led_set(struct led_classdev *led_cdev, enum led_brightness level)
 				    (level * CONFIG_LIGHTNESS_MAPPING_VALUE) /
 				    255;
 			}
+#if 0
 			backlight_debug_log(led_data->level, level);
-
+#endif
 
 		//	pr_debug("led -0 level: %d, bl_lvl: %d \n", level, bl_lvl);
 			for(i=0; i<lcm_backlight_cust_count;i++)
