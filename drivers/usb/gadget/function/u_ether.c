@@ -100,7 +100,7 @@ static inline int qlen(struct usb_gadget *gadget, unsigned qmult)
 #undef INFO
 
 #define xprintk(d, level, fmt, args...) \
-	printk(level "%s: " fmt , (d)->net->name , ## args)
+	pr_debug(level "%s: " fmt , (d)->net->name , ## args)
 
 #ifdef DEBUG
 #undef DEBUG
