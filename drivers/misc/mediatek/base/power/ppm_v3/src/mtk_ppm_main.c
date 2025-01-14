@@ -710,7 +710,6 @@ int mt_ppm_main(void)
 				!= last_req->cpu_limit[i].max_cpu_core)
 				|| force_update_to_hps) {
 					notify_hps = true;
-					log_print = true;
 					force_update_to_hps = 0;
 				}
 				if ((c_req->cpu_limit[i].min_cpufreq_idx
@@ -719,7 +718,6 @@ int mt_ppm_main(void)
 				!= last_req->cpu_limit[i].max_cpufreq_idx)
 				|| c_req->cpu_limit[i].has_advise_freq) {
 					notify_dvfs = true;
-					log_print = true;
 				}
 
 				if (notify_hps && notify_dvfs)
