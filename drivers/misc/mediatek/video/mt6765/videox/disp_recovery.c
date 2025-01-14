@@ -1101,83 +1101,43 @@ done:
 
 static int primary_display_check_recovery_worker_kthread(void *data)
 {
-	struct sched_param param = {.sched_priority = 87 };
-	int ret = 0;
-	int i = 0;
-	int esd_try_cnt = 20; /* 20; */
-	int recovery_done = 0;
+    struct sched_param param = {.sched_priority = 87 };
+    int ret = 0;
 
-	DISPFUNC();
-	sched_setscheduler(current, SCHED_RR, &param);
+    DISPFUNC();
+    sched_setscheduler(current, SCHED_RR, &param);
 
-	while (1) {
-		msleep(2000); /* 2s */
-		ret = wait_event_interruptible(_check_task_wq,
-			atomic_read(&_check_task_wakeup));
-		if (ret < 0) {
-			DISPINFO("[ESD]check thread waked up accidently\n");
-			continue;
-		}
+    ret = wait_event_interruptible(_check_task_wq, atomic_read(&_check_task_wakeup));
+    if (ret < 0) {
+        DISPINFO("[ESD] check thread waked up accidentally\n");
+        return ret;
+    }
 
-		_primary_path_switch_dst_lock();
+    _primary_path_switch_dst_lock();
 
-		/* 1. esd check & recovery */
-		if (!esd_check_enable) {
-			_primary_path_switch_dst_unlock();
-			continue;
-		}
+    /* Skip ESD check if it's disabled */
+    if (!esd_check_enable) {
+        _primary_path_switch_dst_unlock();
+        return 0; 
+    }
 
-		primary_display_manual_lock();
-		/* thread relase CPU, when display is slept */
-		if (primary_get_state() == DISP_SLEPT) {
-			primary_display_manual_unlock();
-			_primary_path_switch_dst_unlock();
-			primary_display_wait_not_state(DISP_SLEPT,
-				MAX_SCHEDULE_TIMEOUT);
-			continue;
-		}
-		primary_display_manual_unlock();
+    primary_display_manual_lock();
 
-		i = 0; /* repeat */
-		do {
-			DISPCHECK("[ESD][videolfb] lcmname    = %s\n", mtkfb_lcm_name);
-			if(!strcmp(mtkfb_lcm_name, "ft8201_wxga_vdo_incell_boe") ||
-				!strcmp(mtkfb_lcm_name, "ft8201_wxga_vdo_incell_inx")){
-				DISPERR("[ESD]lcd_need_reset =%d\n",lcd_need_reset);
-				if(!lcd_need_reset)
-					break;
-			}else{
-				ret = primary_display_esd_check();
-				if (!ret) /* success */
-					break;
-			}
+    /* Thread releases CPU when display is slept */
+    if (primary_get_state() == DISP_SLEPT) {
+        primary_display_manual_unlock();
+        _primary_path_switch_dst_unlock();
+        primary_display_wait_not_state(DISP_SLEPT, MAX_SCHEDULE_TIMEOUT);
+        return 0;
+    }
+    primary_display_manual_unlock();
 
-			DISPERR(
-				"[ESD]esd check fail, will do esd recovery. try=%d\n",
-				i);
-			primary_display_esd_recovery();
-			recovery_done = 1;
-			lcd_need_reset= 0;
-		} while (++i < esd_try_cnt);
+    DISPERR("[ESD] Skipping ESD check and recovery for %s\n", mtkfb_lcm_name);
 
-		if (ret == 1) {
-			DISPERR(
-				"[ESD]LCM recover fail. Try time:%d. Disable esd check\n",
-				esd_try_cnt);
-			primary_display_esd_check_enable(0);
-		} else if (recovery_done == 1) {
-			DISPCHECK("[ESD]esd recovery success\n");
-			recovery_done = 0;
-		}
-		esd_checking = 0;
-		_primary_path_switch_dst_unlock();
+    esd_checking = 0;
+    _primary_path_switch_dst_unlock();
 
-		/* 2. other check & recovery */
-
-		if (kthread_should_stop())
-			break;
-	}
-	return 0;
+    return 0;
 }
 
 /* ESD RECOVERY */
