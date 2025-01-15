@@ -43,13 +43,15 @@ int __attribute__((weak)) mtk_idle_cond_append_info(
 /* idle ratio */
 static bool idle_ratio_en;
 static unsigned long long idle_ratio_profile_start_time;
+#if 0
 static unsigned long long idle_ratio_profile_duration;
 
 /* idle block information */
 static unsigned long long idle_block_log_prev_time;
-static unsigned int idle_block_log_time_criteria = 5000;    /* 5 sec */
 static unsigned long long idle_cnt_dump_prev_time;
 static unsigned int idle_cnt_dump_criteria = 5000;          /* 5 sec */
+static unsigned int idle_block_log_time_criteria = 5000;    /* 5 sec */
+#endif
 
 /*External weak functions: implemented in mtk_cpufreq_api.c*/
 unsigned int __attribute__((weak))
@@ -64,7 +66,6 @@ struct mtk_idle_buf {
 	char *p_idx;
 };
 
-static struct mtk_idle_buf idle_log;
 static struct mtk_idle_buf idle_state_log;
 
 #define reset_idle_buf(idle) \
@@ -75,9 +76,12 @@ static struct mtk_idle_buf idle_state_log;
 			(idle).p_idx\
 			, IDLE_LOG_BUF_LEN - strlen((idle).buf), fmt, ##args))
 
+#if 0
+static struct mtk_idle_buf idle_log;
 #define reset_log()              reset_idle_buf(idle_log)
 #define get_log()                get_idle_buf(idle_log)
 #define append_log(fmt, args...) idle_buf_append(idle_log, fmt, ##args)
+#endif
 
 struct mtk_idle_block {
 	u64 prev_time;
@@ -285,6 +289,7 @@ void mtk_idle_enable_ratio_calc(void)
 	}
 }
 
+#if 0
 static void mtk_idle_dump_cnt(int type)
 {
 	static struct mtk_idle_buf buf;
@@ -325,9 +330,11 @@ static void mtk_idle_dump_cnt(int type)
 }
 
 static DEFINE_SPINLOCK(idle_dump_cnt_spin_lock);
+#endif
 
 void mtk_idle_dump_cnt_in_interval(void)
 {
+#if 0
 	int i = 0;
 	unsigned long long idle_cnt_dump_curr_time = 0;
 	unsigned long flags;
@@ -381,6 +388,7 @@ void mtk_idle_dump_cnt_in_interval(void)
 		pr_debug("Power/swap %s\n", get_log());
 		idle_ratio_profile_start_time = idle_get_current_time_ms();
 	}
+#endif
 }
 
 static DEFINE_SPINLOCK(idle_blocking_spin_lock);
@@ -413,6 +421,7 @@ bool mtk_idle_select_state(int type, int reason)
 
 	spin_lock_irqsave(&idle_blocking_spin_lock, flags);
 
+#if 0
 	dump_block_info	=
 		((curr_time - p_idle->prev_time) > p_idle->time_critera) &&
 		((curr_time - idle_block_log_prev_time) >
@@ -422,6 +431,7 @@ bool mtk_idle_select_state(int type, int reason)
 		p_idle->prev_time = curr_time;
 		idle_block_log_prev_time = curr_time;
 	}
+#endif
 
 	spin_unlock_irqrestore(&idle_blocking_spin_lock, flags);
 
