@@ -869,7 +869,11 @@ int mt_mt65xx_led_set_cust(struct cust_mt65xx_led *cust, int level)
 
 	case MT65XX_LED_MODE_GPIO:
 		LEDS_DEBUG("brightness_set_cust:go GPIO mode!!!!!\n");
-		return ((cust_set_gpio) (cust->data)) (cust->name,level);
+		if ((strcmp(cust->name, "lcd-backlight")  == 0)) {
+			LEDS_DEBUG("skip lcd-backlight in GPIO mode.\n");
+		} else {
+			return ((cust_set_gpio) (cust->data)) (cust->name,level);
+		}
 
 	case MT65XX_LED_MODE_PMIC:
 		/* for button baclight used SINK channel, when set button ISINK,
