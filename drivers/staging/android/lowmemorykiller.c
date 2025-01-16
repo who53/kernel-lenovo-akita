@@ -47,6 +47,7 @@
 #include <linux/slab.h>
 #include <linux/freezer.h>
 #include <linux/ratelimit.h>
+#include <linux/poll.h>
 
 #define MTK_LMK_USER_EVENT
 
