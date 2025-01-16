@@ -48,7 +48,7 @@ obj-y += smi_legacy.o
 SUPPORT_QOS := true
 FORCE_STEP0 := true
 SKIP_SMI_CONFIG := false
-SUPPORT_MET_SMI := true
+SUPPORT_MET_SMI := false
 
 ifneq (,$(filter $(CONFIG_MTK_PLATFORM), "mt6757" "kiboplus"))
 SUPPORT_QOS := false
