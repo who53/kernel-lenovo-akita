@@ -7741,7 +7741,6 @@ unlock:
 	return target_cpu;
 }
 
-#ifdef CONFIG_MTK_SCHED_TRACERS
 #define SELECT_TASK_RQ_FAIR __select_task_rq_fair
 static int
 SELECT_TASK_RQ_FAIR(struct task_struct *p, int prev_cpu,
@@ -7766,9 +7765,6 @@ select_task_rq_fair(struct task_struct *p,
 	return cpu;
 
 }
-#else
-#define SELECT_TASK_RQ_FAIR select_task_rq_fair
-#endif
 
 /*
  * select_task_rq_fair: Select target runqueue for the waking task in domains
