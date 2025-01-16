@@ -30,9 +30,9 @@ endif
 endif
 
 # Enable MET
-ccflags-y += -DMET_USER_EVENT_SUPPORT
+#ccflags-y += -DMET_USER_EVENT_SUPPORT
 
 # Enable AEE
-ccflags-y += -DCMDQ_AEE_READY
+#ccflags-y += -DCMDQ_AEE_READY
 
 obj-y += cmdq_mdp.o

@@ -100,6 +100,7 @@ struct cmdq_task {
 	u64			exec_time;
 };
 
+#if 0
 struct cmdq_buf_dump {
 	struct cmdq		*cmdq;
 	struct work_struct	dump_work;
@@ -108,13 +109,16 @@ struct cmdq_buf_dump {
 	size_t			cmd_buf_size;
 	u32			pa_offset; /* pa_curr - pa_base */
 };
+#endif
 
 struct cmdq {
 	struct mbox_controller	mbox;
 	void __iomem		*base;
 	phys_addr_t		base_pa;
 	u32			irq;
+#if 0
 	struct workqueue_struct	*buf_dump_wq;
+#endif
 	struct cmdq_thread	thread[CMDQ_THR_MAX_COUNT];
 	u32			prefetch;
 	struct clk		*clock;
@@ -509,6 +513,7 @@ static void cmdq_task_exec_done(struct cmdq_task *task, s32 err)
 	list_del(&task->list_entry);
 }
 
+#if 0
 static void cmdq_buf_dump_schedule(struct cmdq_task *task, bool timeout,
 				   u32 pa_curr)
 {
@@ -529,6 +534,7 @@ static void cmdq_buf_dump_schedule(struct cmdq_task *task, bool timeout,
 		task->pkt->cmd_buf_size, pa_curr,
 		inst ? *inst : -1);
 }
+#endif
 
 static void cmdq_task_handle_error(struct cmdq_task *task, u32 pa_curr)
 {
@@ -536,7 +542,9 @@ static void cmdq_task_handle_error(struct cmdq_task *task, u32 pa_curr)
 	struct cmdq_task *next_task;
 
 	cmdq_err("task 0x%p pkt 0x%p error", task, task->pkt);
+#if 0
 	cmdq_buf_dump_schedule(task, false, pa_curr);
+#endif
 	WARN_ON(cmdq_thread_suspend(task->cmdq, thread) < 0);
 	next_task = list_first_entry_or_null(&thread->task_busy_list,
 			struct cmdq_task, list_entry);
@@ -770,7 +778,9 @@ static void cmdq_thread_handle_timeout_work(struct work_struct *work_item)
 		bool curr_task = cmdq_task_is_current_run(pa_curr, task->pkt);
 
 		if (first_task) {
+#if 0
 			cmdq_buf_dump_schedule(task, true, pa_curr);
+#endif
 			first_task = false;
 		}
 
@@ -841,6 +851,7 @@ static void cmdq_thread_handle_timeout(unsigned long data)
 	}
 }
 
+#if 0
 void cmdq_thread_dump_err(struct mbox_chan *chan)
 {
 	struct cmdq_thread *thread = (struct cmdq_thread *)chan->con_priv;
@@ -912,6 +923,7 @@ void cmdq_thread_dump_err(struct mbox_chan *chan)
 	}
 }
 EXPORT_SYMBOL(cmdq_thread_dump_err);
+#endif
 
 void cmdq_mbox_thread_remove_task(struct mbox_chan *chan,
 	struct cmdq_pkt *pkt)
@@ -1090,7 +1102,9 @@ static int cmdq_remove(struct platform_device *pdev)
 {
 	struct cmdq *cmdq = platform_get_drvdata(pdev);
 
+#if 0
 	destroy_workqueue(cmdq->buf_dump_wq);
+#endif
 	mbox_controller_unregister(&cmdq->mbox);
 	clk_unprepare(cmdq->clock);
 	return 0;
@@ -1265,9 +1279,11 @@ static int cmdq_probe(struct platform_device *pdev)
 		return err;
 	}
 
+#if 0
 	cmdq->buf_dump_wq = alloc_ordered_workqueue(
 			"%s", WQ_MEM_RECLAIM | WQ_HIGHPRI,
 			"cmdq_buf_dump");
+#endif
 
 	cmdq->timeout_wq = create_singlethread_workqueue(
 		"cmdq_timeout_handler");

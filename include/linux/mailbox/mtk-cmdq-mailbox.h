@@ -161,7 +161,9 @@ do { \
 	pr_notice("[cmdq][err] "fmt"\n", ##args)
 
 void cmdq_mbox_channel_stop(struct mbox_chan *chan);
+#if 0
 void cmdq_thread_dump_err(struct mbox_chan *chan);
+#endif
 void cmdq_mbox_thread_remove_task(struct mbox_chan *chan,
 	struct cmdq_pkt *pkt);
 s32 cmdq_mbox_thread_reset(void *chan);

@@ -98,17 +98,7 @@ static struct smi_mmp_event_t smi_mmp_event;
 
 #define SMIDBG(string, args...) pr_debug(string, ##args)
 
-#if IS_ENABLED(CONFIG_MTK_CMDQ) && !defined(CONFIG_MACH_MT6757)
-#include <cmdq_core.h>
-#define SMIWRN(cmdq, string, args...) \
-	do { \
-		if (cmdq != 0) \
-			cmdq_core_save_first_dump(string, ##args); \
-		pr_debug(string, ##args); \
-	} while (0)
-#else
 #define SMIWRN(cmdq, string, args...) pr_debug(string, ##args)
-#endif
 
 #define SMIERR(string, args...) \
 	do { \

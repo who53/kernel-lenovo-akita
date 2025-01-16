@@ -90,7 +90,6 @@ struct DumpFirstErrorStruct {
 #define CMDQ_LOG(string, args...) \
 do {			\
 	pr_debug("[CMDQ]"string, ##args); \
-	cmdq_core_save_first_dump("[CMDQ]"string, ##args); \
 } while (0)
 
 #define CMDQ_MSG(string, args...) \
@@ -111,7 +110,6 @@ if (cmdq_core_should_print_msg()) { \
 #define CMDQ_ERR(string, args...) \
 do {			\
 	pr_debug("[CMDQ][ERR]"string, ##args); \
-	cmdq_core_save_first_dump("[CMDQ][ERR]"string, ##args); \
 } while (0)
 
 #define CMDQ_CHECK_AND_BREAK_STATUS(status)\
@@ -144,16 +142,12 @@ do { \
 
 #else
 #define CMDQ_AEE(tag, string, args...) \
-{		\
-do {			\
-	char dispatchedTag[50]; \
-	snprintf(dispatchedTag, 50, "CRDISPATCH_KEY:%s", tag); \
-	pr_debug("[CMDQ][AEE] AEE not READY!!!"); \
-	pr_debug("[CMDQ][AEE]"string, ##args); \
-	cmdq_core_save_first_dump("[CMDQ][AEE]"string, ##args); \
-	cmdq_core_turnoff_first_dump(); \
-} while (0);	\
-}
+do { \
+    (void)(tag); \
+    (void)(string); \
+    (void)sizeof((int[]){args}); \
+} while (0)
+
 #endif
 
 /*#define CMDQ_PROFILE*/
@@ -201,16 +195,11 @@ do {if (1) mmprofile_log_ex(args); } while (0);	\
 
 /* CMDQ FTRACE */
 #define CMDQ_TRACE_FORCE_BEGIN(fmt, args...) do { \
-	preempt_disable(); \
-	event_trace_printk(cmdq_get_tracing_mark(), \
-		"B|%d|"fmt, current->tgid, ##args); \
-	preempt_enable();\
+    (void)(fmt);                                  \
+    (void)(args);                                 \
 } while (0)
 
 #define CMDQ_TRACE_FORCE_END() do { \
-	preempt_disable(); \
-	event_trace_printk(cmdq_get_tracing_mark(), "E\n"); \
-	preempt_enable(); \
 } while (0)
 
 

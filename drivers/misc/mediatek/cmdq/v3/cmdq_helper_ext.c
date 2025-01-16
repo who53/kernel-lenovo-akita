@@ -1136,9 +1136,12 @@ s32 cmdq_core_parse_instruction(const u32 *pCmd, char *textBuf, int bufLen)
 
 bool cmdq_core_should_print_msg(void)
 {
+#if 0
 	bool logLevel = (cmdq_ctx.logLevel & (1 << CMDQ_LOG_LEVEL_MSG)) ?
 		(1) : (0);
 	return logLevel;
+#endif
+	return 0; // dumbass
 }
 
 bool cmdq_core_should_full_error(void)
@@ -1175,7 +1178,10 @@ bool cmdq_core_met_enabled(void)
 
 bool cmdq_core_ftrace_enabled(void)
 {
+#if 0
 	return cmdq_ctx.enableProfile & (1 << CMDQ_PROFILE_FTRACE);
+#endif
+	return 0;
 }
 
 void cmdq_long_string_init(bool force, char *buf, u32 *offset, s32 *max_size)
