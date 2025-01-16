@@ -23,6 +23,7 @@
 #include <linux/module.h>
 #include <linux/miscdevice.h>	/* for misc_register, and SYNTH_MINOR */
 #include <linux/proc_fs.h>
+#include <linux/uaccess.h>
 
 #ifdef CONFIG_TRACING
 #include <linux/kallsyms.h>
@@ -118,14 +119,18 @@ static void enable_cpu_loading_timer(void)
 
 	ktime = ktime_set(poltime_secs, poltime_nsecs);
 	hrtimer_start(&hrt1, ktime, HRTIMER_MODE_REL);
+#ifdef CONFIG_TRACING
 	trace_cpu_loading_log("cpu_loading", "enable timer");
+#endif
 }
 
 /*close hrtimer*/
 static void disable_cpu_loading_timer(void)
 {
 	hrtimer_cancel(&hrt1);
+#ifdef CONFIG_TRACING
 	trace_cpu_loading_log("cpu_loading", "disable timer");
+#endif
 }
 
 static enum hrtimer_restart handle_cpu_loading_timeout(struct hrtimer *timer)
@@ -152,7 +157,9 @@ bool sentuevent(const char *src)
 		strlcpy(event_string, src, string_size);
 		if (event_string[0] == '\0') { /*string is null*/
 
+#ifdef CONFIG_TRACING
 			trace_cpu_loading_log("cpu_loading", "string is null");
+#endif
 			return false;
 		}
 
@@ -160,7 +167,9 @@ bool sentuevent(const char *src)
 				&cpu_loading_object->mdev.this_device->kobj,
 				KOBJ_CHANGE, envp);
 		if (ret != 0) {
+#ifdef CONFIG_TRACING
 			trace_cpu_loading_log("cpu_loading", "uevent failed");
+#endif
 			if (debug_enable)
 				pr_debug("uevent failed");
 			return false;
@@ -168,8 +177,10 @@ bool sentuevent(const char *src)
 		if (debug_enable)
 			pr_debug("sent uevent success:%s", src);
 
+#ifdef CONFIG_TRACING
 		trace_cpu_loading_log("cpu_loading",
 			 "sent uevent success:%s", src);
+#endif
 	}
 
 	return true;
@@ -184,7 +195,9 @@ int update_cpu_loading(void)
 
 	mutex_lock(&cpu_loading_lock);
 
+#ifdef CONFIG_TRACING
 	trace_cpu_loading_log("cpu_loading", "update cpu_loading");
+#endif
 
 	if (debug_enable)
 		pr_debug("update cpu_loading");
@@ -193,13 +206,17 @@ int update_cpu_loading(void)
 		cur_idle_time[j].time = get_cpu_idle_time(j,
 				&cur_wall_time[j].time, 1);
 
+#ifdef CONFIG_TRACING
 		trace_cpu_loading_log("cpu_loading",
 			"cur_idle_time[%d].time:%llu cur_wall_time[%d].time:%llu\n",
 			j, cur_idle_time[j].time, j, cur_wall_time[j].time);
+#endif
 	}
 
 	if (reset_flag) {
+#ifdef CONFIG_TRACING
 		trace_cpu_loading_log("cpu_loading", "return reset");
+#endif
 
 		reset_flag = false;
 		/*meet global value at first,and then set info to false  */
@@ -213,18 +230,22 @@ int update_cpu_loading(void)
 		wall_time += cur_wall_time[i].time - prev_wall_time[i].time;
 		idle_time += cur_idle_time[i].time - prev_idle_time[i].time;
 
+#ifdef CONFIG_TRACING
 		trace_cpu_loading_log("cpu_loading",
 			"cur_idle_time[%d].time:%llu cur_wall_time[%d].time:%llu\n",
 			i, cur_idle_time[i].time, i, cur_wall_time[i].time);
+#endif
 	}
 
 	if (wall_time > 0 && wall_time > idle_time)
 		tmp_cpu_loading = div_u64((100 * (wall_time - idle_time)),
 			wall_time);
 
+#ifdef CONFIG_TRACING
 	trace_cpu_loading_log("cpu_loading",
 			"tmp_cpu_loading:%d prev_cpu_loading:%d previous state:%d\n",
 			tmp_cpu_loading, prev_cpu_loading, state);
+#endif
 	if (debug_enable)
 		pr_debug("tmp_cpu_loading:%d prev_cpu_loading:%d previous state:%d\n",
 			tmp_cpu_loading, prev_cpu_loading, state);
@@ -262,7 +283,9 @@ int update_cpu_loading(void)
 	}
 	if (debug_enable)
 		pr_debug("current state:%d\n", state);
+#ifdef CONFIG_TRACING
 	trace_cpu_loading_log("cpu_loading", "current state:%d\n", state);
+#endif
 	prev_cpu_loading = tmp_cpu_loading;
 	mutex_unlock(&cpu_loading_lock);
 	return 3;
@@ -276,7 +299,9 @@ static void notify_cpu_loading_timeout(void)
 	if (reset_flag) {
 		int i;
 
+#ifdef CONFIG_TRACING
 		trace_cpu_loading_log("cpu_loading", "reset_cpu_loading");
+#endif
 		for_each_possible_cpu(i) {
 			cur_wall_time[i].time = prev_wall_time[i].time = 0;
 			cur_idle_time[i].time = prev_idle_time[i].time = 0;
@@ -287,7 +312,9 @@ static void notify_cpu_loading_timeout(void)
 	} else {
 		int i;
 
+#ifdef CONFIG_TRACING
 		trace_cpu_loading_log("cpu_loading", "not_reset_cpu_loading");
+#endif
 		for_each_possible_cpu(i) {
 			prev_wall_time[i].time = cur_wall_time[i].time;
 			prev_idle_time[i].time = cur_idle_time[i].time;
@@ -428,17 +455,21 @@ static ssize_t cpu_loading_poltime_secs_proc_write(
 
 	if (val < 0) {
 
+#ifdef CONFIG_TRACING
 		trace_cpu_loading_log("cpu_loading",
 				"out of range val:%d", val);
+#endif
 		return -EINVAL;
 	}
 
 	/*check both poltime_secs and poltime_nsecs can't be zero */
 	if (!(poltime_nsecs | val)) {
 
+#ifdef CONFIG_TRACING
 		trace_cpu_loading_log("cpu_loading",
 				"both 0, val:%d poltime_nsecs:%lu",
 				val, poltime_nsecs);
+#endif
 
 		return -EINVAL;
 	}
@@ -482,16 +513,20 @@ static ssize_t cpu_loading_poltime_nsecs_proc_write(
 
 	if (val >  UINT_MAX || val < 0) {
 
+#ifdef CONFIG_TRACING
 		trace_cpu_loading_log("cpu_loading",
 				"out of range val:%lu", val);
+#endif
 		return -EINVAL;
 	}
 	/*check both poltime_secs and poltime_nsecs can't be zero */
 	if (!(poltime_secs | val)) {
 
+#ifdef CONFIG_TRACING
 		trace_cpu_loading_log("cpu_loading",
 				"both 0, val:%lu poltime_secs:%d",
 				val, poltime_secs);
+#endif
 		return -EINVAL;
 	}
 
@@ -689,7 +724,9 @@ static int init_cpu_loading_kobj(void)
 	cpu_loading_object =
 		kzalloc(sizeof(struct cpu_loading_context), GFP_KERNEL);
 
+#ifdef CONFIG_TRACING
 	trace_cpu_loading_log("cpu_loading", "init_cpu_loading_obj start");
+#endif
 	/* dev init */
 
 	cpu_loading_object->mdev.name = "cpu_loading";
@@ -703,7 +740,9 @@ static int init_cpu_loading_kobj(void)
 			&cpu_loading_object->mdev.this_device->kobj, KOBJ_ADD);
 
 	if (ret) {
+#ifdef CONFIG_TRACING
 		trace_cpu_loading_log("cpu_loading", "uevent creat  fail");
+#endif
 		return -4;
 	}
 
@@ -767,7 +806,9 @@ static int __init init_cpu_loading(void)
 	/*workqueue init*/
 	wq = create_singlethread_workqueue("cpu_loading_work");
 	if (!wq) {
+#ifdef CONFIG_TRACING
 		trace_cpu_loading_log("cpu_loading", "work create fail");
+#endif
 		return -ENOMEM;
 	}
 
