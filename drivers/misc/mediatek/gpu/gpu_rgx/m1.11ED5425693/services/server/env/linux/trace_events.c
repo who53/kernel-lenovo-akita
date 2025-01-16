@@ -49,6 +49,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 static bool fence_update_event_enabled, fence_check_event_enabled;
 
+#ifdef CONFIG_EVENT_TRACING
 bool trace_rogue_are_fence_updates_traced(void)
 {
 	return fence_update_event_enabled;
@@ -58,6 +59,7 @@ bool trace_rogue_are_fence_checks_traced(void)
 {
 	return fence_check_event_enabled;
 }
+#endif
 
 /*
  * Call backs referenced from rogue_trace_events.h. Note that these are not
@@ -102,6 +104,7 @@ void trace_fence_check_disabled_callback(void)
 }
 
 #if defined(SUPPORT_RGX)
+#ifdef CONFIG_EVENT_TRACING
 /* This is a helper that calls trace_rogue_fence_update for each fence in an
  * array.
  */
@@ -216,6 +219,7 @@ void trace_rogue_ufo_checks_fail(IMG_UINT64 ui64OSTimestamp,
 				+ sizeof(puData->sCheckFail));
 	}
 }
+#endif
 #endif
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 10, 0))
