@@ -1038,6 +1038,7 @@ static int perfmgr_debug_schedplus_down_throttle_proc_show(
 }
 #endif
 
+#if 0
 /* Add procfs to control sysctl_sched_migration_cost */
 /* sysctl_sched_migration_cost: eas_ctrl_plat.h */
 static ssize_t perfmgr_m_sched_migrate_cost_n_proc_write(struct file *filp,
@@ -1088,6 +1089,7 @@ static int perfmgr_sched_big_task_rotation_proc_show(struct seq_file *m,
 
 	return 0;
 }
+#endif
 
 static ssize_t perfmgr_sched_stune_task_thresh_proc_write(struct file *filp,
 		const char *ubuf, size_t cnt, loff_t *pos)
@@ -1175,8 +1177,10 @@ PROC_FOPS_RW(debug_schedplus_sync_flag);
 
 /* others */
 PROC_FOPS_RW(perfserv_ext_launch_mon);
+#if 0
 PROC_FOPS_RW(m_sched_migrate_cost_n);
 PROC_FOPS_RW(sched_big_task_rotation);
+#endif
 PROC_FOPS_RW(sched_stune_task_thresh);
 PROC_FOPS_RW(perfmgr_log);
 
@@ -1229,8 +1233,10 @@ int eas_ctrl_init(struct proc_dir_entry *parent)
 		/*--ext_launch--*/
 		PROC_ENTRY(perfserv_ext_launch_mon),
 		/*--sched migrate cost n--*/
+#if 0
 		PROC_ENTRY(m_sched_migrate_cost_n),
 		PROC_ENTRY(sched_big_task_rotation),
+#endif
 		PROC_ENTRY(sched_stune_task_thresh),
 	};
 	mutex_init(&boost_eas);
