@@ -105,7 +105,7 @@
 #include "bootprof.h"
 #endif
 
-#if (CONFIG_MICROTRUST_TZ_DRIVER_MTK_BOOTPROF && CONFIG_MTPROF)
+#if (defined (CONFIG_MICROTRUST_TZ_DRIVER_MTK_BOOTPROF) && CONFIG_MTPROF)
 #define TEEI_BOOT_FOOTPRINT(str) log_boot(str)
 #else
 #define TEEI_BOOT_FOOTPRINT(str) IMSG_PRINTK("%s\n", str)
@@ -744,13 +744,13 @@ int set_soter_version(void)
 	unsigned int versionlen = 0;
 	char *version = NULL;
 
-	memcpy(&versionlen, message_buff, sizeof(unsigned int));
+	memcpy(&versionlen, (const void *)message_buff, sizeof(unsigned int));
 	if (versionlen > 0 && versionlen < 100) {
 		version = kmalloc(versionlen + 1, GFP_KERNEL);
 		if (version == NULL)
 			return -1;
 		memset(version, 0, versionlen + 1);
-		memcpy(version, message_buff + 4, versionlen);
+		memcpy(version, (const void *)message_buff + 4, versionlen);
 	} else {
 		return -2;
 	}
