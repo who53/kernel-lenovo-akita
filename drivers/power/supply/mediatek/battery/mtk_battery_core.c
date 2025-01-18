@@ -81,7 +81,6 @@
 #endif
 
 #include "mtk_auxadc.h"
-#include <linux/hardware_info.h>
 
 /* ============================================================ */
 /* global variable */
@@ -913,9 +912,7 @@ void battery_setprop(const char *battery_name)
 {
        if(battery_name==NULL){
 		     gm.battery_id = BATTERY_PROFILE_ID;
-		     hardwareinfo_set_prop(HARDWARE_BATTERY_ID, "Generic_Battery");
 	 }else{
-		     hardwareinfo_set_prop(HARDWARE_BATTERY_ID, battery_name);
 	}
 }
 

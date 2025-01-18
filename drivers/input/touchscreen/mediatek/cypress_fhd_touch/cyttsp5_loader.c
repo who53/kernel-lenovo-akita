@@ -28,7 +28,6 @@
 
 #include "cyttsp5_regs.h"
 #include <linux/firmware.h>
-#include <linux/hardware_info.h> //samir add 20190708
 #define CYTTSP5_LOADER_NAME "cyttsp5_loader"
 #define CY_FW_MANUAL_UPGRADE_FILE_NAME "cyttsp5_fw_manual_upgrade"
 
@@ -767,31 +766,6 @@ static int cyttsp5_check_firmware_version_builtin(struct device *dev, const stru
 extern int cyttsp5_hid_output_get_sysinfo(struct cyttsp5_core_data *cd);
 extern struct cyttsp5_core_data *g_cd; 
 
-static void hardwareinfo_set(void)
-{
-    int err;
-    char firmware_ver[HARDWARE_MAX_ITEM_LONGTH];
-    char vendor_for_id[HARDWARE_MAX_ITEM_LONGTH];
-    char ic_name[HARDWARE_MAX_ITEM_LONGTH];
-    char hardwareinfo[HARDWARE_MAX_ITEM_LONGTH];
-    err = cyttsp5_hid_output_get_sysinfo(g_cd);
-    if(err){
-       printk("factory get tp firmware info faie .\n");
-       return ;
-    }
-    printk("cyttsp fw_ver_major:%d, fw_ver_minor:%d, revctrl:%d, fw_ver_conf:%d \n",g_cd->sysinfo.cydata.fw_ver_major,g_cd->sysinfo.cydata.fw_ver_minor,g_cd->sysinfo.cydata.revctrl,g_cd->sysinfo.cydata.fw_ver_conf);
-    snprintf(firmware_ver,HARDWARE_MAX_ITEM_LONGTH,"%d.%d.%d.%d",g_cd->sysinfo.cydata.fw_ver_major,g_cd->sysinfo.cydata.fw_ver_minor,g_cd->sysinfo.cydata.revctrl,g_cd->sysinfo.cydata.fw_ver_conf);
-    snprintf(vendor_for_id,HARDWARE_MAX_ITEM_LONGTH,"AUO");
-    snprintf(ic_name,HARDWARE_MAX_ITEM_LONGTH,"TT41701");
-    snprintf(hardwareinfo,HARDWARE_MAX_ITEM_LONGTH,"%s,%s,FW:%s",vendor_for_id,ic_name,firmware_ver);
-    printk("hardwareinfo=%s\n", hardwareinfo);
-
-    err = hardwareinfo_set_prop(HARDWARE_TP,hardwareinfo);
-    if(err < 0)
-        return ;
-    return ;
-}
-/*samir end 20190708*/
 static void _cyttsp5_firmware_cont_builtin(const struct firmware *fw,
 		void *context)
 {
@@ -816,13 +790,9 @@ static void _cyttsp5_firmware_cont_builtin(const struct firmware *fw,
 		_cyttsp5_firmware_cont(fw, dev);
 		ld->builtin_bin_fw_status = 0;
 		complete(&ld->builtin_bin_fw_complete);
-                /*samir add 20190708*/
-                hardwareinfo_set();
 		return;
 	}
 _cyttsp5_firmware_cont_builtin_exit:
-        /*samir add 20190708*/
-        hardwareinfo_set();
 	release_firmware(fw);
 
 	ld->builtin_bin_fw_status = -EINVAL;

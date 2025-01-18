@@ -34,7 +34,6 @@
 *****************************************************************************/
 #include "focaltech_core.h"
 #include "focaltech_flash.h"
-#include <linux/hardware_info.h> //type,liutongxing.wt,add,20190523,tp update fw display hardwareinfo.
 
 /*****************************************************************************
 * Static variables
@@ -1905,45 +1904,6 @@ static void fts_fwupg_init_ic_detail(struct fts_upgrade *upg)
     }
 }
 
-//+type,liutongxing.wt,add,20190523,tp update fw display hardwareinfo.
-void hardwareinfo_set(void)
-{
-    char firmware_ver[HARDWARE_MAX_ITEM_LONGTH];
-    char vendor_for_id[HARDWARE_MAX_ITEM_LONGTH];
-    char ic_name[HARDWARE_MAX_ITEM_LONGTH];
-    int err;
-    u8 fw_ver;
-    u8 vendor_id;
-    u8 ic_type;
-
-    fts_read_reg(FTS_REG_FW_VER, &fw_ver);
-    fts_read_reg(FTS_REG_VENDOR_ID, &vendor_id);
-    fts_read_reg(FTS_REG_CHIP_ID, &ic_type);
-    printk("factory ftsss_probe ic_type:0x%x ,vendor_id:0x%x ,fw_ver:0x%x\n",ic_type,vendor_id,fw_ver);
-    if(vendor_id== BOE_VENDOR)
-    {
-        snprintf(vendor_for_id,HARDWARE_MAX_ITEM_LONGTH,"BOE");
-    }else if(vendor_id == AUO_VENDOR){
-        snprintf(vendor_for_id,HARDWARE_MAX_ITEM_LONGTH,"AUO");
-    }else {
-        snprintf(vendor_for_id,HARDWARE_MAX_ITEM_LONGTH,"Other vendor");
-    }
-    if(ic_type == TP_IC_FT3528)
-    {
-        snprintf(ic_name,HARDWARE_MAX_ITEM_LONGTH,"FT3528");
-    }else{
-        snprintf(ic_name,HARDWARE_MAX_ITEM_LONGTH,"Other IC");
-    }
-    snprintf(firmware_ver,HARDWARE_MAX_ITEM_LONGTH,"%s,%s,FW:0x%x",vendor_for_id,ic_name,fw_ver);
-    FTS_INFO("firmware_ver=%s\n", firmware_ver);
-
-    err = hardwareinfo_set_prop(HARDWARE_TP,firmware_ver);
-    if (err < 0)
-        return ;
-    return ;
-}
-//-type,liutongxing.wt,add,20190523,tp update fw display hardwareinfo.
-
 /*****************************************************************************
  *  Name: fts_fwupg_work
  *  Brief: 1. get fw image/file
@@ -1989,8 +1949,6 @@ static void fts_fwupg_work(struct work_struct *work)
 #if FTS_ESDCHECK_EN
     fts_esdcheck_switch(ENABLE);
 #endif
-
-    hardwareinfo_set();//type,liutongxing.wt,add,20190523,tp update fw display hardwareinfo.
 
     fts_irq_enable();
     upg->ts_data->fw_loading = 0;

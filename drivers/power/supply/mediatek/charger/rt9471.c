@@ -32,9 +32,7 @@
 #ifdef CONFIG_RT_REGMAP
 #include <mt-plat/rt-regmap.h>
 #endif
-#include <linux/hardware_info.h>
 
-#include <linux/hardware_info.h>
 #include "mtk_charger_intf.h"
 #include "rt9471.h"
 #define RT9471_DRV_VERSION	"1.0.5_MTK"
@@ -2505,7 +2503,6 @@ static int rt9471_probe(struct i2c_client *client,
 #else
 	__rt9471_dump_registers(chip);
 #endif
-	hardwareinfo_set_prop(HARDWARE_CHARGER_IC_INFO, "RT9471");
 	dev_dbg(chip->dev, "%s successfully\n", __func__);
 	return 0;
 

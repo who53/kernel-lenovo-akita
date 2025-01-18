@@ -169,7 +169,6 @@ static struct aw87519 *aw87519;
 static struct aw87519_container *aw87519_kspk_cnt;
 static struct aw87519_container *aw87519_drcv_cnt;
 static struct aw87519_container *aw87519_hvload_cnt;
-extern char* boardid_get(void);
 static char *aw87519_kspk_name = "aw87519_right_spk_anna.bin";
 static char *aw87519_drcv_name = "aw87519_drcv.bin";
 static char *aw87519_hvload_name = "aw87519_hvload.bin";

@@ -1028,9 +1028,6 @@ void load_lcm_resources_from_DT(struct LCM_DRIVER *lcm_drv)
 }
 #endif
 
-#include "linux/hardware_info.h"
-extern char Lcm_name[HARDWARE_MAX_ITEM_LONGTH];
-
 struct disp_lcm_handle *disp_lcm_probe(char *plcm_name,
 	enum LCM_INTERFACE_ID lcm_id, int is_lcm_inited)
 {
@@ -1048,10 +1045,6 @@ struct disp_lcm_handle *disp_lcm_probe(char *plcm_name,
 
 	DISPFUNC();
 	DISPCHECK("plcm_name=%s, is_lcm_inited %d\n", plcm_name, is_lcm_inited);
-
-	if (is_lcm_inited == 1){
-		strncpy(Lcm_name,plcm_name,strlen(plcm_name)+1);
-	}
 
 #if defined(MTK_LCM_DEVICE_TREE_SUPPORT)
 	if (check_lcm_node_from_DT() == 0) {

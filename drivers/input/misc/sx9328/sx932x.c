@@ -31,11 +31,6 @@
 #include <linux/pm_wakeup.h>
 #include "sx932x.h" 	/* main struct, interrupt,init,pointers */
 
-#define WT_ADD_SAR_HARDWARE_INFO
-#ifdef WT_ADD_SAR_HARDWARE_INFO
-#include <linux/hardware_info.h>
-#endif
-
 #define IDLE			0
 #define ACTIVE			1
 
@@ -856,9 +851,6 @@ static int sx932x_probe(struct i2c_client *client, const struct i2c_device_id *i
 {    
 	int i = 0;
 	int err = 0;
-#ifdef WT_ADD_SAR_HARDWARE_INFO
-    char firmware_ver[HARDWARE_MAX_ITEM_LONGTH];
-#endif
 	psx93XX_t this = 0;
 	psx932x_t pDevice = 0;
 	psx932x_platform_data_t pplatData = 0;
@@ -1017,12 +1009,7 @@ static int sx932x_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sx932x_Hardware_Check(this);
 	pplatData->exit_platform_hw = sx932x_exit_platform_hw;
 
-#ifdef WT_ADD_SAR_HARDWARE_INFO
-    snprintf(firmware_ver,HARDWARE_MAX_ITEM_LONGTH,"SX9328");
-	hardwareinfo_set_prop(HARDWARE_SAR,firmware_ver);
-#endif
-
-	dev_info(&client->dev, "sx932x_probe() Done\n");
+	dev_dbg(&client->dev, "sx932x_probe() Done\n");
 
 	return 0;
 }

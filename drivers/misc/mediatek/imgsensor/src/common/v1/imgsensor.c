@@ -54,7 +54,6 @@
 #include "imgsensor_proc.h"
 #include "imgsensor_clk.h"
 #include "imgsensor.h"
-#include <linux/hardware_info.h>//bug, guoyang.wt, add, 20190223, add factory camera info
 
 #define PDAF_DATA_SIZE 4096
 
@@ -463,47 +462,6 @@ static inline int imgsensor_check_is_alive(struct IMGSENSOR_SENSOR *psensor)
 		err = ERROR_SENSOR_CONNECT_FAIL;
 	} else {
 		pr_debug(" Sensor found ID = 0x%x\n", sensorID);
-
-		//+bug, guoyang.wt, add, 20190223, add factory camera info
-		pr_debug("sensor_name:%s\n", psensor_inst->psensor_name);
-		if(!strcmp(psensor_inst->psensor_name, "s5k4h7_mipi_raw")){
-			hardwareinfo_set_prop(HARDWARE_BACK_CAM, "S5K4H7YX03-FGX9");
-			hardwareinfo_set_prop(HARDWARE_BACK_CAM_MOUDULE_ID, "L4H7A00");
-		}else if(!strcmp(psensor_inst->psensor_name, "hi556_mipi_raw")){
-			hardwareinfo_set_prop(HARDWARE_BACK_CAM, "HI556D");
-			hardwareinfo_set_prop(HARDWARE_BACK_CAM_MOUDULE_ID, "HS6472B1D");
-		}else if(!strcmp(psensor_inst->psensor_name, "s5k4h7_qtech_mipi_raw")){
-			hardwareinfo_set_prop(HARDWARE_BACK_CAM, "S5K4H7");
-			hardwareinfo_set_prop(HARDWARE_BACK_CAM_MOUDULE_ID, "F4H7YAZ");
-		}else if(!strcmp(psensor_inst->psensor_name, "hi556f_mipi_raw")){
-			hardwareinfo_set_prop(HARDWARE_FRONT_CAM, "HI556D");
-			hardwareinfo_set_prop(HARDWARE_FRONT_CAM_MOUDULE_ID, "HS6471A1D");
-		}else if(!strcmp(psensor_inst->psensor_name, "gc2375h_mipi_raw")){
-			hardwareinfo_set_prop(HARDWARE_FRONT_CAM, "GC2375H");
-			hardwareinfo_set_prop(HARDWARE_FRONT_CAM_MOUDULE_ID, "ST-WTP98328AA1FF");
-		}else if(!strcmp(psensor_inst->psensor_name, "gc2375_mipi_raw")){
-			hardwareinfo_set_prop(HARDWARE_FRONT_CAM, "GC2375");
-			hardwareinfo_set_prop(HARDWARE_FRONT_CAM_MOUDULE_ID, "CXT");
-                }else if(!strcmp(psensor_inst->psensor_name, "gc02m1_mipi_raw")){
-                        hardwareinfo_set_prop(HARDWARE_FRONT_CAM, psensor_inst->psensor_name);
-                        hardwareinfo_set_prop(HARDWARE_FRONT_CAM_MOUDULE_ID, "Union");
-		}else if(!strcmp(psensor_inst->psensor_name, "gc5035_mipi_raw")){
-			hardwareinfo_set_prop(HARDWARE_BACK_CAM, "GC5035");
-			hardwareinfo_set_prop(HARDWARE_BACK_CAM_MOUDULE_ID, "qunhui");
-		}else if(!strcmp(psensor_inst->psensor_name, "gc5035f_mipi_raw")){
-			hardwareinfo_set_prop(HARDWARE_FRONT_CAM, "GC5035");
-			hardwareinfo_set_prop(HARDWARE_FRONT_CAM_MOUDULE_ID, "qunhui");
-		}else if(!strcmp(psensor_inst->psensor_name, "ov13b10_mipi_raw")){
-			hardwareinfo_set_prop(HARDWARE_BACK_CAM, "OV13B10-GA5A-Z");
-			hardwareinfo_set_prop(HARDWARE_BACK_CAM_MOUDULE_ID, "L13BA00");
-		}else if(!strcmp(psensor_inst->psensor_name, "ov13b10s_mipi_raw")){
-			hardwareinfo_set_prop(HARDWARE_BACK_CAM, "OV13B10-GA5A-Z");
-			hardwareinfo_set_prop(HARDWARE_BACK_CAM_MOUDULE_ID, "F13B10AD");
-		}else if(!strcmp(psensor_inst->psensor_name, "gc5035b_mipi_raw")){
-			hardwareinfo_set_prop(HARDWARE_BACK_CAM, "GC5035");
-			hardwareinfo_set_prop(HARDWARE_BACK_CAM_MOUDULE_ID, "qunhui");
-		}
-		//-bug, guoyang.wt, add, 20190223, add factory camera info
 
 		err = ERROR_NONE;
 	}

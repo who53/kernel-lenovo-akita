@@ -34,12 +34,7 @@
 #include <SCP_sensorHub.h>
 #endif
 
-#define WT_ADD_SAR_HARDWARE_INFO
 #define USE_SENSOR_INVALID_DETECT 1
-
-#ifdef WT_ADD_SAR_HARDWARE_INFO
-#include <linux/hardware_info.h>
-#endif
 
 //#include <mach/mt_typedefs.h>
 //#include <mach/mt_gpio.h>
@@ -782,9 +777,6 @@ static int sx9310_i2c_probe(struct i2c_client *client, const struct i2c_device_i
 {
 	int i = 0;
 	int err = 0;
-#ifdef WT_ADD_SAR_HARDWARE_INFO
-        char firmware_ver[HARDWARE_MAX_ITEM_LONGTH];
-#endif
 	psx93XX_t this = 0;
 	psx9310_t pDevice = 0;
 	psx9310_platform_data_t pplatData = 0;
@@ -954,10 +946,6 @@ static int sx9310_i2c_probe(struct i2c_client *client, const struct i2c_device_i
 		return err;
 	}
 	sx93XX_init(this);
-#ifdef WT_ADD_SAR_HARDWARE_INFO
-        snprintf(firmware_ver,HARDWARE_MAX_ITEM_LONGTH,"SX9311");
-	hardwareinfo_set_prop(HARDWARE_SAR,firmware_ver);
-#endif
 
 #if USE_SENSOR_INVALID_DETECT
         //cancel_delayed_work(&this->invalid_worker);

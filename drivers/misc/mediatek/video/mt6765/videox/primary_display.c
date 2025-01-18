@@ -4508,8 +4508,6 @@ int suspend_to_full_roi(void)
 	return ret;
 }
 
-#include "linux/hardware_info.h"
-extern char Lcm_name[HARDWARE_MAX_ITEM_LONGTH];
 extern int lcm_power_disable_vdd3(void);
 int primary_display_suspend(void)
 {
@@ -4658,11 +4656,6 @@ int primary_display_suspend(void)
 	dpmgr_path_power_off(pgc->dpmgr_handle, CMDQ_DISABLE);
 	if (disp_helper_get_option(DISP_OPT_MET_LOG))
 		set_enterulps(1);
-
-	if (0 == strcmp(Lcm_name, "nt51021b_wuxga_vdo_oncell_auo")) {
-		pr_debug("FHD-AUO, turn off vdd3\n");
-		lcm_power_disable_vdd3();
-	}
 
 #ifdef MTK_FB_MMDVFS_SUPPORT
 	mmprofile_log_ex(ddp_mmp_get_events()->primary_pm_qos,

@@ -25,7 +25,6 @@
 #include "sensor_list.h"
 #include "SCP_power_monitor.h"
 #include "hwmsensor.h"
-#include <linux/hardware_info.h>
 
 struct sensorlist_info_t {
 	char name[16];
@@ -214,33 +213,6 @@ static const struct file_operations sensorlist_fops = {
 	.open		= sensorlist_open,
 	.read		= sensorlist_read,
 };
-
-int sensorlist_set_hardware_info(int cmd)
-{
-	int handle = -1;
-	char name[40] = {'\0'};
-
-	switch (cmd) {
-	case HARDWARE_ACCELEROMETER: handle = accel;break;
-	case HARDWARE_ALSPS: handle = als;break;
-	case HARDWARE_GYROSCOPE: handle = gyro;break;
-	case HARDWARE_MAGNETOMETER: handle = mag;break;
-	}
-	if (handle == -1)
-		return -1;
-
-	spin_lock(&sensorlist_info_lock);
-	pr_err("cmd=%d, name:%s\n", cmd, sensorlist_info[handle].name);
-	if (handle == als)
-		sprintf(name, "%s, %s", sensorlist_info[ps].name, sensorlist_info[als].name);
-	else
-		sprintf(name, "%s", sensorlist_info[handle].name);
-	hardwareinfo_set_prop(cmd, name);
-	spin_unlock(&sensorlist_info_lock);
-
-	return 0;
-}
-EXPORT_SYMBOL_GPL(sensorlist_set_hardware_info);
 
 static struct miscdevice sensorlist_miscdev = {
 	.minor = MISC_DYNAMIC_MINOR,

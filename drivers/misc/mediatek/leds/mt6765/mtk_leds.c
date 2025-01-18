@@ -46,9 +46,6 @@
 #include <mt-plat/met_drv.h>
 #endif
 
-extern char* boardid_get(void);
-#define BOARDID_FHD	"Aaron"
-
 struct pinctrl* ledctrl = NULL;
 struct pinctrl_state* led_default = NULL;
 struct pinctrl_state* red_on = NULL;
@@ -973,16 +970,6 @@ void mt_mt65xx_led_set(struct led_classdev *led_cdev, enum led_brightness level)
 #if 0
 			backlight_debug_log(led_data->level, level);
 #endif
-
-			/* Workaround for AARON-561. Only used on FHD */
-			if(boardid_get()) {
-				if(!strncmp(boardid_get(), BOARDID_FHD, 5)) {
-					if((level > 0) && (level <= 27)) {
-						level = 10;
-					}
-					pr_debug("%s: board-FHD level = %d", __func__, level);
-				}
-			}
 
 			for(i=0; i<lcm_backlight_cust_count;i++)
 			{

@@ -31,7 +31,6 @@
 #include <linux/bitops.h>
 #include <linux/math64.h>
 #include <mt-plat/charger_type.h>
-#include <linux/hardware_info.h>
 
 #include "mtk_charger_intf.h"
 #include "bq2560x_reg.h"
@@ -1350,8 +1349,6 @@ static int bq2560x_charger_probe(struct i2c_client *client,
 #if 0
 	determine_initial_status(bq);
 #endif
-
-	hardwareinfo_set_prop(HARDWARE_CHARGER_IC_INFO, "BQ25601");
 
 	pr_debug("bq2560x probe successfully, Part Num:%d, Revision:%d\n!",
 	       bq->part_no, bq->revision);
