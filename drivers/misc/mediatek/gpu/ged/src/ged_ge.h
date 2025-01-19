@@ -18,7 +18,7 @@
 
 #include <ged_type.h>
 
-#define GE_ALLOC_STRUCT_NUM 14
+#define GE_ALLOC_STRUCT_NUM 10
 
 int ged_ge_init(void);
 int ged_ge_exit(void);
