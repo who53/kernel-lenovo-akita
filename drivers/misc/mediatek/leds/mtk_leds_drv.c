@@ -63,12 +63,9 @@ static bool pmic_chrind_en = true;
 /****************************************************************************
  * DEBUG MACROS
  ***************************************************************************/
-static int debug_enable_led = 1;
 /* #define pr_fmt(fmt) "[LED_DRV]"fmt */
 #define LEDS_DRV_DEBUG(format, args...) do { \
-	if (debug_enable_led) {	\
-		pr_debug(format, ##args);\
-	} \
+	pr_debug(format, ##args);\
 } while (0)
 
 /****************************************************************************
@@ -884,7 +881,6 @@ static void __exit mt65xx_leds_exit(void)
 /* platform_device_unregister(&mt65xx_leds_device); */
 }
 
-module_param(debug_enable_led, int, 0644);
 /* delay leds init, for (1)display has delayed to use clock upstream.
  * (2)to fix repeat switch battary and power supply caused BL KE issue,
  * battary calling bl .shutdown whitch need to call disp_pwm and display
