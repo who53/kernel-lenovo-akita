@@ -35,7 +35,7 @@
 #include <linux/of_irq.h>
 #include <linux/clk.h>
 
-#define I2C_DEBUG_FS
+// #define I2C_DEBUG_FS
 
 #define I2C_BUS_ERR			(0x01 << 8)
 #define I2C_IBI				(0x01 << 7)
