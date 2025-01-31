@@ -241,7 +241,7 @@ static const char *CHIP;
 
 /* too wordy: dev_printk(level , &(d)->gadget->dev , fmt , ## args) */
 #define xprintk(d,level,fmt,args...) \
-	printk(level "%s: " fmt , shortname , ## args)
+	pr_debug(level "%s: " fmt , shortname , ## args)
 
 #ifdef DEBUG
 #define DBG(dev,fmt,args...) \
