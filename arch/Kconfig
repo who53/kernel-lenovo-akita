@@ -650,6 +650,9 @@ config PGTABLE_LEVELS
 	int
 	default 2
 
+config ARCH_HAS_SET_MEMORY
+	bool
+
 config ARCH_HAS_ELF_RANDOMIZE
 	bool
 	help
