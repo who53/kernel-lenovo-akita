@@ -951,90 +951,44 @@ void mt_mt65xx_led_set(struct led_classdev *led_cdev, enum led_brightness level)
 	/* unsigned long flags; */
 	/* spin_lock_irqsave(&leds_lock, flags); */
 
-#ifdef CONFIG_MTK_AAL_SUPPORT
-	if (led_data->level != level) {
-		led_data->level = level;
-		if (strcmp(led_data->cust.name, "lcd-backlight") != 0) {
-			LEDS_DEBUG("Set NLED directly %d at time %lu\n",
-				   led_data->level, jiffies);
-			schedule_work(&led_data->work);
-		} else {
-			if (level != 0
-			    && level * CONFIG_LIGHTNESS_MAPPING_VALUE < 255) {
-				level = 1;
-			} else {
-				level =
-				    (level * CONFIG_LIGHTNESS_MAPPING_VALUE) /
-				    255;
-			}
-#if 0
-			backlight_debug_log(led_data->level, level);
-#endif
-
-			for(i=0; i<lcm_backlight_cust_count;i++)
-			{
-				//pr_debug("led lcm backlight cust[i] : %d %d %d %d\n", lcm_backlight_cust[i].min_bl_lvl, lcm_backlight_cust[i].max_bl_lvl,
-				//				lcm_backlight_cust[i].min_brightness, lcm_backlight_cust[i].max_brightness);
-				if(( level >= lcm_backlight_cust[i].min_brightness ) && (level <=  lcm_backlight_cust[i].max_brightness ))
-					break;
-			}
-			WINGTECH_MDSS_BRIGHT_TO_BL(bl_lvl, (int)level, lcm_backlight_cust[i].min_bl_lvl, lcm_backlight_cust[i].max_bl_lvl,
-				lcm_backlight_cust[i].min_brightness, lcm_backlight_cust[i].max_brightness);
-			if(bl_lvl && !level) bl_lvl = 0;
-			if(!bl_lvl && level) bl_lvl = 4;
-
-			disp_pq_notify_backlight_changed(bl_lvl);
-			disp_aal_notify_backlight_changed(bl_lvl);
-		}
-	}
-#else
 	/* do something only when level is changed */
-	if (led_data->level != level) {
-		led_data->level = level;
-		if (strcmp(led_data->cust.name, "lcd-backlight") != 0) {
-			LEDS_DEBUG("Set NLED directly %d at time %lu\n",
-				   led_data->level, jiffies);
-			schedule_work(&led_data->work);
-		} else {
-			if (level != 0
-			    && level * CONFIG_LIGHTNESS_MAPPING_VALUE < 255) {
-				level = 1;
-			} else {
-				level =
-				    (level * CONFIG_LIGHTNESS_MAPPING_VALUE) /
-				    255;
-			}
-#if 0
-			backlight_debug_log(led_data->level, level);
-#endif
-
-		//	pr_debug("led -0 level: %d, bl_lvl: %d \n", level, bl_lvl);
-			for(i=0; i<lcm_backlight_cust_count;i++)
-			{
-				//pr_debug("led lcm backlight cust[i] : %d %d %d %d\n", lcm_backlight_cust[i].min_bl_lvl, lcm_backlight_cust[i].max_bl_lvl,
-				//			lcm_backlight_cust[i].min_brightness, lcm_backlight_cust[i].max_brightness);
-				if(( level >= lcm_backlight_cust[i].min_brightness ) && (level <=  lcm_backlight_cust[i].max_brightness ))
-					break;
-			}
-			WINGTECH_MDSS_BRIGHT_TO_BL(bl_lvl, level, lcm_backlight_cust[i].min_bl_lvl, lcm_backlight_cust[i].max_bl_lvl,
-					lcm_backlight_cust[i].min_brightness, lcm_backlight_cust[i].max_brightness);
-		//	pr_debug("led -1 level: %d, bl_lvl: %d \n", level, bl_lvl);
-
-			if(bl_lvl && !level)bl_lvl = 0;
-			if(!bl_lvl && level) bl_lvl = 4;
-
-			disp_pq_notify_backlight_changed(bl_lvl);
-			if (led_data->cust.mode == MT65XX_LED_MODE_CUST_BLS_PWM)
-				mt_mt65xx_led_set_cust(&led_data->cust,
-					bl_lvl);
-			else
-				mt_mt65xx_led_set_cust(&led_data->cust, level);
-		}
+	if (led_data->level == level) {
+		LEDS_DEBUG("no level change,do nothing\n");
+		return;
 	}
-	/* spin_unlock_irqrestore(&leds_lock, flags); */
+
+	led_data->level = level;
+	if (strcmp(led_data->cust.name, "lcd-backlight") != 0) {
+		LEDS_DEBUG("Set NLED directly %d at time %lu\n",
+			   led_data->level, jiffies);
+		schedule_work(&led_data->work);
+		return;
+	}
+
+	sysfs_notify(&led_cdev->dev->kobj, NULL, "brightness");
+
+	if (level != 0 && level * CONFIG_LIGHTNESS_MAPPING_VALUE < 255)
+		level = 1;
+	else
+		level = (level * CONFIG_LIGHTNESS_MAPPING_VALUE) / 255;
+
+#if 0
+	backlight_debug_log(led_data->level, level);
 #endif
-/* if(0!=aee_kernel_Powerkey_is_press()) */
-/* aee_kernel_wdt_kick_Powkey_api("mt_mt65xx_led_set",WDT_SETBY_Backlight); */
+	WINGTECH_MDSS_BRIGHT_TO_BL(bl_lvl, (int)level, lcm_backlight_cust[i].min_bl_lvl, lcm_backlight_cust[i].max_bl_lvl,
+				lcm_backlight_cust[i].min_brightness, lcm_backlight_cust[i].max_brightness);
+	if(bl_lvl && !level) bl_lvl = 0;
+	if(!bl_lvl && level) bl_lvl = 4;
+	disp_pq_notify_backlight_changed(bl_lvl);
+#ifdef CONFIG_MTK_AAL_SUPPORT
+	disp_aal_notify_backlight_changed(bl_lvl);
+#else
+	if (led_data->cust.mode == MT65XX_LED_MODE_CUST_BLS_PWM)
+		mt_mt65xx_led_set_cust(&led_data->cust,
+			bl_lvl);
+	else
+		mt_mt65xx_led_set_cust(&led_data->cust, level);
+#endif
 }
 
 int mt_mt65xx_blink_set(struct led_classdev *led_cdev,
