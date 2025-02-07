@@ -134,10 +134,6 @@ static struct platform_driver emi_ctrl = {
 	},
 };
 
-__weak void plat_debug_api_init(void)
-{
-}
-
 static int emi_probe(struct platform_device *pdev)
 {
 	struct resource *res;
@@ -179,7 +175,6 @@ static int emi_probe(struct platform_device *pdev)
 		}
 	}
 
-	plat_debug_api_init();
 #endif
 	pr_debug("[EMI] get CEN_EMI_BASE @ %p\n", mt_cen_emi_base_get());
 	pr_debug("[EMI] get EMI_MPU_BASE @ %p\n", mt_emi_mpu_base_get());
