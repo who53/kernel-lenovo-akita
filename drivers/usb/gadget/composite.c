@@ -262,7 +262,7 @@ int usb_add_function(struct usb_configuration *config,
 {
 	int	value = -EINVAL;
 
-	INFO(config->cdev, "adding '%s'/%p to config '%s'/%p\n",
+	DBG(config->cdev, "adding '%s'/%p to config '%s'/%p\n",
 			function->name, function,
 			config->label, config);
 
@@ -304,7 +304,7 @@ int usb_add_function(struct usb_configuration *config,
 
 done:
 	if (value)
-		INFO(config->cdev, "adding '%s'/%p --> %d\n",
+		DBG(config->cdev, "adding '%s'/%p --> %d\n",
 				function->name, function, value);
 	return value;
 }
@@ -793,7 +793,7 @@ static int set_config(struct usb_composite_dev *cdev,
 		result = 0;
 	}
 
-	INFO(cdev, "%s config #%d: %s\n",
+	DBG(cdev, "%s config #%d: %s\n",
 	     usb_speed_string(gadget->speed),
 	     number, c ? c->label : "unconfigured");
 
@@ -1024,7 +1024,7 @@ void usb_remove_config(struct usb_composite_dev *cdev,
 	if (config->cdev != NULL)
 		list_del(&config->list);
 	else
-		INFO(cdev, "%s: config->list has been delete!!!\n", __func__);
+		DBG(cdev, "%s: config->list has been delete!!!\n", __func__);
 
 	spin_unlock_irqrestore(&cdev->lock, flags);
 
@@ -1777,7 +1777,7 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 			break;
 
 		if (!cdev->config) {
-			INFO(cdev, "%s: cdev->config = NULL\n", __func__);
+			DBG(cdev, "%s: cdev->config = NULL\n", __func__);
 			break;
 		}
 
@@ -1885,13 +1885,13 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 		}
 		break;
 	case USB_REQ_SET_SEL:
-		INFO(cdev, "[COM]USB_REQ_SET_SEL Pretend success\n");
+		DBG(cdev, "[COM]USB_REQ_SET_SEL Pretend success\n");
 		value = 0;
 		break;
 	default:
 unknown:
 		if (__ratelimit(&ratelimit))
-			INFO(cdev,
+			DBG(cdev,
 					"[ratelimit]non-core control req%02x.%02x v%04x i%04x l%d\n",
 					ctrl->bRequestType, ctrl->bRequest,
 					w_value, w_index, w_length);
@@ -2347,7 +2347,7 @@ static int composite_bind(struct usb_gadget *gadget,
 	if (composite->needs_serial && !cdev->desc.iSerialNumber)
 		WARNING(cdev, "userspace failed to provide iSerialNumber\n");
 
-	INFO(cdev, "%s ready\n", composite->name);
+	DBG(cdev, "%s ready\n", composite->name);
 	return 0;
 
 fail:
