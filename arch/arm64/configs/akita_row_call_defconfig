@@ -461,3 +461,5 @@ CONFIG_VETH=y
 CONFIG_VIRT_WIFI=y
 CONFIG_VT=y
 CONFIG_ANDROID_BINDER_DEVICES="binder,hwbinder,vndbinder,anbox-binder,anbox-hwbinder,anbox-vndbinder"
+CONFIG_CONNECTOR=y
+CONFIG_PROC_EVENTS=y
