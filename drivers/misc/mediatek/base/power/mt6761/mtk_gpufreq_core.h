@@ -17,9 +17,9 @@
 /**************************************************
  * MT6761 : GPU DVFS OPP table Setting
  **************************************************/
-#define GPU_DVFS_FREQ0			(680000)/* KHz */
+#define GPU_DVFS_FREQ0			(660000)/* KHz */
 #define GPU_DVFS_FREQ1			(500000)/* KHz */
-#define GPU_DVFS_FREQ2			(400000)/* KHz */
+#define GPU_DVFS_FREQ2			(390000)/* KHz */
 
 #define GPU_DVFS_VOLT0			(80000)	/* mV x 100 */
 #define GPU_DVFS_VOLT1			(70000)	/* mV x 100 */
