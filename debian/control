@@ -1,7 +1,7 @@
 Source: linux-android-lenovo-akita
 Section: kernel
 Priority: optional
-Maintainer: Deeepkk <duxedcontact@gmail.com>
+Maintainer: Deepak Meena <who53@disroot.org>
 XS-Droidian-Host-Arch: arm64
 XS-Droidian-Build-On: amd64
 Build-Depends: build-essential,
@@ -25,8 +25,8 @@ Build-Depends: build-essential,
                lz4,
                linux-initramfs-halium-generic:arm64, binutils-aarch64-linux-gnu, clang-android-9.0-r353983c, gcc-4.9-aarch64-linux-android, g++-4.9-aarch64-linux-android, libgcc-4.9-dev-aarch64-linux-android-cross
 Standards-Version: 4.5.0.3
-Vcs-Browser: https://github.com/droidian-devices/linux-android-lenovo-akita
-Vcs-Git: https://github.com/droidian-devices/linux-android-lenovo-akita.git
+Vcs-Browser: https://github.com/who53/kernel-lenovo-akita
+Vcs-Git: https://github.com/who53/kernel-lenovo-akita.git
 
 Package: linux-image-4.9.190-lenovo-akita
 Architecture: arm64
