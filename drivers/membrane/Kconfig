@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: GPL-2.0-only
+
+config DRM_MEMBRANE
+        tristate "Membrane DRM Driver"
+        depends on DRM
+	    select DRM_KMS_HELPER
+        help
+          Membrane DRM Driver for libhybris devices to run
+          applications using standard DRM APIs.
