@@ -114,6 +114,7 @@ static int dma_buf_mmap_internal(struct file *file, struct vm_area_struct *vma)
 	return dmabuf->ops->mmap(dmabuf, vma);
 }
 
+#if 0
 static loff_t dma_buf_llseek(struct file *file, loff_t offset, int whence)
 {
 	struct dma_buf *dmabuf;
@@ -139,6 +140,7 @@ static loff_t dma_buf_llseek(struct file *file, loff_t offset, int whence)
 
 	return base + offset;
 }
+#endif
 
 static void dma_buf_poll_cb(struct fence *fence, struct fence_cb *cb)
 {
@@ -316,7 +318,9 @@ static long dma_buf_ioctl(struct file *file,
 static const struct file_operations dma_buf_fops = {
 	.release	= dma_buf_release,
 	.mmap		= dma_buf_mmap_internal,
+#if 0
 	.llseek		= dma_buf_llseek,
+#endif
 	.poll		= dma_buf_poll,
 	.unlocked_ioctl	= dma_buf_ioctl,
 #ifdef CONFIG_COMPAT
